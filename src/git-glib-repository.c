@@ -1,34 +1,34 @@
 /*
- * git2-glib-repository.c
+ * git-glib-repository.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
  *
- * libgit2-glib is free software; you can redistribute it and/or modify
+ * libgit-glib is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
- * libgit2-glib is distributed in the hope that it will be useful,
+ * libgit-glib is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with libgit2-glib; if not, write to the Free Software
+ * along with libgit-glib; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor,
  * Boston, MA  02110-1301  USA
  */
 
 
-#include "git2-glib-repository.h"
+#include "git-glib-repository.h"
 #include <git2/repository.h>
 #include <gio/gio.h>
 
 
-#define GIT2_GLIB_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT2_TYPE_GLIB_REPOSITORY, Git2GlibRepositoryPrivate))
+#define GIT_GLIB_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_REPOSITORY, GitGlibRepositoryPrivate))
 
-struct _Git2GlibRepositoryPrivate
+struct _GitGlibRepositoryPrivate
 {
 	git_repository *repository;
 	gchar *path;
@@ -40,30 +40,30 @@ enum
 	PROP_PATH
 };
 
-static void         git2_glib_repository_initable_iface_init (GInitableIface  *iface);
+static void         git_glib_repository_initable_iface_init (GInitableIface  *iface);
 
-G_DEFINE_TYPE_EXTENDED (Git2GlibRepository, git2_glib_repository, G_TYPE_OBJECT,
+G_DEFINE_TYPE_EXTENDED (GitGlibRepository, git_glib_repository, G_TYPE_OBJECT,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
-                                               git2_glib_repository_initable_iface_init))
+                                               git_glib_repository_initable_iface_init))
 
 static void
-git2_glib_repository_finalize (GObject *object)
+git_glib_repository_finalize (GObject *object)
 {
-	Git2GlibRepositoryPrivate *priv = GIT2_GLIB_REPOSITORY (object)->priv;
+	GitGlibRepositoryPrivate *priv = GIT_GLIB_REPOSITORY (object)->priv;
 
 	g_free (priv->path);
 	git_repository_free (priv->repository);
 
-	G_OBJECT_CLASS (git2_glib_repository_parent_class)->finalize (object);
+	G_OBJECT_CLASS (git_glib_repository_parent_class)->finalize (object);
 }
 
 static void
-git2_glib_repository_class_init (Git2GlibRepositoryClass *klass)
+git_glib_repository_class_init (GitGlibRepositoryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = git2_glib_repository_finalize;
+	object_class->finalize = git_glib_repository_finalize;
 
 	g_object_class_install_property (object_class,
 	                                 PROP_PATH,
@@ -74,21 +74,21 @@ git2_glib_repository_class_init (Git2GlibRepositoryClass *klass)
 	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
 
-	g_type_class_add_private (object_class, sizeof (Git2GlibRepositoryPrivate));
+	g_type_class_add_private (object_class, sizeof (GitGlibRepositoryPrivate));
 }
 
 static void
-git2_glib_repository_init (Git2GlibRepository *repository)
+git_glib_repository_init (GitGlibRepository *repository)
 {
-	repository->priv = GIT2_GLIB_REPOSITORY_GET_PRIVATE (repository);
+	repository->priv = GIT_GLIB_REPOSITORY_GET_PRIVATE (repository);
 }
 
 static gboolean
-git2_glib_repository_initable_init (GInitable *initable,
-                                    GCancellable *cancellable,
-                                    GError  **error)
+git_glib_repository_initable_init (GInitable *initable,
+                                   GCancellable *cancellable,
+                                   GError  **error)
 {
-	Git2GlibRepository *repository;
+	GitGlibRepository *repository;
 	gboolean success = TRUE;
 	gint errno;
 
@@ -99,7 +99,7 @@ git2_glib_repository_initable_init (GInitable *initable,
 		return FALSE;
 	}
 
-	repository = GIT2_GLIB_REPOSITORY (initable);
+	repository = GIT_GLIB_REPOSITORY (initable);
 
 	if (repository->priv->path != NULL)
 	{
@@ -119,15 +119,15 @@ git2_glib_repository_initable_init (GInitable *initable,
 }
 
 static void
-git2_glib_repository_initable_iface_init (GInitableIface *iface)
+git_glib_repository_initable_iface_init (GInitableIface *iface)
 {
-	iface->init = git2_glib_repository_initable_init;
+	iface->init = git_glib_repository_initable_init;
 }
 
-Git2GlibRepository *
-git2_glib_repository_open (const gchar *path,
-                           GError     **error)
+GitGlibRepository *
+git_glib_repository_open (const gchar *path,
+                          GError     **error)
 {
-	return g_initable_new (GIT2_TYPE_GLIB_REPOSITORY, NULL, error,
+	return g_initable_new (GIT_TYPE_GLIB_REPOSITORY, NULL, error,
 	                       "path", path, NULL);
 }

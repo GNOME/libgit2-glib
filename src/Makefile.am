@@ -15,12 +15,12 @@ libgit2_glib_1_0_la_LDFLAGS = \
 libgit2_glib_1_0_la_LIBADD = $(GITG_LIBS)
 
 INST_H_FILES =			\
-	git2-glib-repository.h
+	git-glib-repository.h
 
 NOINST_H_FILES =
 
 C_FILES =				\
-	git2-glib-repository.c
+	git-glib-repository.c
 
 libgit2_glib_1_0_la_SOURCES = 	\
 	$(INST_H_FILES)		\
