@@ -22,7 +22,6 @@
 
 
 #include "git-glib-repository.h"
-#include <git2/repository.h>
 #include <gio/gio.h>
 
 #include <errno.h>
@@ -34,12 +33,16 @@ struct _GitGlibRepositoryPrivate
 {
 	git_repository *repository;
 	gchar *path;
+	gboolean is_bare;
+	gboolean init;
 };
 
 enum
 {
 	PROP_0,
-	PROP_PATH
+	PROP_PATH,
+	PROP_IS_BARE,
+	PROP_INIT
 };
 
 static void         git_glib_repository_initable_iface_init (GInitableIface  *iface);
@@ -61,11 +64,64 @@ git_glib_repository_finalize (GObject *object)
 }
 
 static void
+git_glib_repository_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+	GitGlibRepositoryPrivate *priv = GIT_GLIB_REPOSITORY (object)->priv;
+
+	switch (prop_id)
+	{
+		case PROP_PATH:
+			g_value_set_string (value, priv->path);
+			break;
+		case PROP_IS_BARE:
+			g_value_set_boolean (value, priv->is_bare);
+			break;
+		case PROP_INIT:
+			g_value_set_boolean (value, priv->init);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
+}
+
+static void
+git_glib_repository_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+	GitGlibRepositoryPrivate *priv = GIT_GLIB_REPOSITORY (object)->priv;
+
+	switch (prop_id)
+	{
+		case PROP_PATH:
+			g_free (priv->path);
+			priv->path = g_value_dup_string (value);
+			break;
+		case PROP_IS_BARE:
+			priv->is_bare = g_value_get_boolean (value);
+			break;
+		case PROP_INIT:
+			priv->init = g_value_get_boolean (value);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
+}
+
+static void
 git_glib_repository_class_init (GitGlibRepositoryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = git_glib_repository_finalize;
+	object_class->get_property = git_glib_repository_get_property;
+	object_class->set_property = git_glib_repository_set_property;
 
 	g_object_class_install_property (object_class,
 	                                 PROP_PATH,
@@ -75,6 +131,24 @@ git_glib_repository_class_init (GitGlibRepositoryClass *klass)
 	                                                      NULL,
 	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_IS_BARE,
+	                                 g_param_spec_boolean ("is-bare",
+	                                                       "Is bare",
+	                                                       "Is a bare repository",
+	                                                       FALSE,
+	                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+	                                                       G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_INIT,
+	                                 g_param_spec_boolean ("init",
+	                                                       "Init",
+	                                                       "Wether to initalize a repository",
+	                                                       FALSE,
+	                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+	                                                       G_PARAM_STATIC_STRINGS));
 
 	g_type_class_add_private (object_class, sizeof (GitGlibRepositoryPrivate));
 }
@@ -90,7 +164,7 @@ git_glib_repository_initable_init (GInitable *initable,
                                    GCancellable *cancellable,
                                    GError  **error)
 {
-	GitGlibRepository *repository;
+	GitGlibRepositoryPrivate *priv;
 	gboolean success = TRUE;
 	gint err;
 
@@ -101,12 +175,18 @@ git_glib_repository_initable_init (GInitable *initable,
 		return FALSE;
 	}
 
-	repository = GIT_GLIB_REPOSITORY (initable);
+	priv = GIT_GLIB_REPOSITORY (initable)->priv;
 
-	if (repository->priv->path != NULL)
+	if (priv->init == TRUE)
 	{
-		err = git_repository_open (&repository->priv->repository,
-		                           repository->priv->path);
+		err = git_repository_init (&priv->repository,
+		                           priv->path,
+		                           priv->is_bare);
+	}
+	else if (priv->path != NULL)
+	{
+		err = git_repository_open (&priv->repository,
+		                           priv->path);
 	}
 
 	if (err != 0)
@@ -160,7 +240,7 @@ git_glib_repository_error_quark (void)
  *	The method will automatically detect if 'path' is a normal
  *	or bare repository or fail is 'path' is neither.
  *
- * @Returns: a newly created #GitGlibRepository
+ * @Returns: (transfer full): a newly created #GitGlibRepository
  */
 GitGlibRepository *
 git_glib_repository_open (const gchar *path,
@@ -168,6 +248,34 @@ git_glib_repository_open (const gchar *path,
 {
 	return g_initable_new (GIT_TYPE_GLIB_REPOSITORY, NULL, error,
 	                       "path", path, NULL);
+}
+
+/**
+ * git_glib_repository_init_repository:
+ * @path: the path to the repository
+ * @is_bare: if %TRUE, a Git repository without a working directory is created
+ *           at the pointed path. If %FALSE, provided path will be considered as the working
+ *           directory into which the .git directory will be created.
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Creates a new Git repository in the given folder.
+ *
+ * TODO:
+ *	- Reinit the repository
+ *	- Create config files
+ *
+ * @Returns: (transfer full): a newly created #GitGlibRepository
+ */
+GitGlibRepository *
+git_glib_repository_init_repository (const gchar *path,
+                                     gboolean     is_bare,
+                                     GError     **error)
+{
+	return g_initable_new (GIT_TYPE_GLIB_REPOSITORY, NULL, error,
+	                       "path", path,
+	                       "is-bare", is_bare,
+	                       "init", TRUE,
+	                       NULL);
 }
 
 /**
@@ -203,4 +311,110 @@ git_glib_repository_head_detached (GitGlibRepository *repository,
 	return ret;
 }
 
+/**
+ * git_glib_repository_head_orphan:
+ * @repository: a #GitGlibRepository
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Check if the current branch is an orphan
+ *
+ * An orphan branch is one named from HEAD but which doesn't exist in
+ * the refs namespace, because it doesn't have any commit to point to.
+ *
+ * @Returns: %TRUE if the current branch is an orphan.
+ */
+gboolean
+git_glib_repository_head_orphan (GitGlibRepository *repository,
+                                 GError           **error)
+{
+	gboolean ret;
 
+	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+
+	ret = git_repository_head_orphan (repository->priv->repository);
+
+	if (errno != -1)
+	{
+		g_set_error (error, GIT_GLIB_REPOSITORY_ERROR,
+		             GIT_GLIB_REPOSITORY_ERROR_REPORTING,
+		             "Error: %s",
+		             g_strerror (errno));
+	}
+
+	return ret;
+}
+
+/**
+ * git_glib_repository_is_empty:
+ * @repository: a #GitGlibRepository
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Check if a repository is empty
+ *
+ * An empty repository has just been initialized and contains
+ * no commits.
+ *
+ * @Returns: %TRUE if the repository is empty.
+ */
+gboolean
+git_glib_repository_is_empty (GitGlibRepository *repository,
+                              GError           **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+
+	ret = git_repository_is_empty (repository->priv->repository);
+
+	if (errno != -1)
+	{
+		g_set_error (error, GIT_GLIB_REPOSITORY_ERROR,
+		             GIT_GLIB_REPOSITORY_ERROR_REPORTING,
+		             "Error: %s",
+		             g_strerror (errno));
+	}
+
+	return ret;
+}
+
+/**
+ * git_glib_repository_path:
+ * @repository: a #GitGlibRepository
+ * @id: The ID of the path to return
+ *
+ * Get one of the paths to the repository
+ *
+ * Possible values for `id`:
+ *
+ *	GIT_REPO_PATH: return the path to the repository
+ *	GIT_REPO_PATH_INDEX: return the path to the index
+ *	GIT_REPO_PATH_ODB: return the path to the ODB
+ *	GIT_REPO_PATH_WORKDIR: return the path to the working
+ *		directory
+ *
+ * @Returns: absolute path of the requested id
+ */
+const gchar *
+git_glib_repository_path (GitGlibRepository  *repository,
+                          GitRepositoryPathid id)
+{
+	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), NULL);
+
+	return git_repository_path (repository->priv->repository, id);
+}
+
+/**
+ * git_glib_repository_is_bare:
+ * @repository: a #GitGlibRepository
+ *
+ * Check if a repository is bare
+ *
+ * @Returns: %TRUE if the repository is empty.
+ */
+gboolean
+git_glib_repository_is_bare (GitGlibRepository  *repository)
+{
+	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+
+	return git_repository_is_bare (repository->priv->repository);
+}

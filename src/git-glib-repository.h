@@ -25,6 +25,7 @@
 #define __GIT_GLIB_REPOSITORY_H__
 
 #include <glib-object.h>
+#include <git2/repository.h>
 
 G_BEGIN_DECLS
 
@@ -60,6 +61,8 @@ enum
 	GIT_GLIB_REPOSITORY_NUM_ERRORS
 };
 
+typedef git_repository_pathid GitRepositoryPathid;
+
 GType                     git_glib_repository_get_type          (void) G_GNUC_CONST;
 
 GQuark                    git_glib_repository_error_quark       (void);
@@ -67,8 +70,23 @@ GQuark                    git_glib_repository_error_quark       (void);
 GitGlibRepository        *git_glib_repository_open              (const gchar *path,
                                                                  GError     **error);
 
+GitGlibRepository        *git_glib_repository_init_repository   (const gchar *path,
+                                                                 gboolean     is_bare,
+                                                                 GError     **error);
+
 gboolean                  git_glib_repository_head_detached     (GitGlibRepository *repository,
                                                                  GError           **error);
+
+gboolean                  git_glib_repository_head_orphan       (GitGlibRepository *repository,
+                                                                 GError           **error);
+
+gboolean                  git_glib_repository_is_empty          (GitGlibRepository *repository,
+                                                                 GError           **error);
+
+const gchar              *git_glib_repository_path              (GitGlibRepository  *repository,
+                                                                 GitRepositoryPathid id);
+
+gboolean                  git_glib_repository_is_bare           (GitGlibRepository  *repository);
 
 G_END_DECLS
 
