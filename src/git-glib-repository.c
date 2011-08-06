@@ -137,6 +137,31 @@ git_glib_repository_error_quark (void)
 	return quark;
 }
 
+/**
+ * git_glib_repository_open:
+ * @path: the path to the repository
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Open a git repository.
+ *
+ * The 'path' argument must point to an existing git repository
+ * folder, e.g.
+ *
+ *		/path/to/my_repo/.git/	(normal repository)
+ *							objects/
+ *							index
+ *							HEAD
+ *
+ *		/path/to/bare_repo/		(bare repository)
+ *						objects/
+ *						index
+ *						HEAD
+ *
+ *	The method will automatically detect if 'path' is a normal
+ *	or bare repository or fail is 'path' is neither.
+ *
+ * @Returns: a newly created #GitGlibRepository
+ */
 GitGlibRepository *
 git_glib_repository_open (const gchar *path,
                           GError     **error)
@@ -145,6 +170,18 @@ git_glib_repository_open (const gchar *path,
 	                       "path", path, NULL);
 }
 
+/**
+ * git_glib_repository_head_detached:
+ * @repository: a #GitGlibRepository
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Check if a repository's HEAD is detached
+ *
+ * A repository's HEAD is detached when it points directly to a commit
+ * instead of a branch.
+ *
+ * @Returns: %TRUE if HEAD is detached.
+ */
 gboolean
 git_glib_repository_head_detached (GitGlibRepository *repository,
                                    GError           **error)
@@ -165,3 +202,5 @@ git_glib_repository_head_detached (GitGlibRepository *repository,
 
 	return ret;
 }
+
+
