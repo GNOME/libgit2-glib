@@ -28,6 +28,7 @@ AC_PROG_CC
 PKG_CHECK_MODULES(LIBGIT2_GLIB, [
 	gobject-2.0 >= 2.26.0
 	glib-2.0 >= 2.26.0
+	gio-2.0 >= 2.26.0
 	libgit2 >= 0.14.0
 ])
 
