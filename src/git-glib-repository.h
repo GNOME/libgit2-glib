@@ -52,10 +52,23 @@ struct _GitGlibRepositoryClass
 	GObjectClass parent_class;
 };
 
-GType                     git_glib_repository_get_type      (void) G_GNUC_CONST;
+#define GIT_GLIB_REPOSITORY_ERROR git_glib_repository_error_quark ()
 
-GitGlibRepository        *git_glib_repository_open          (const gchar *path,
-                                                             GError     **error);
+enum
+{
+	GIT_GLIB_REPOSITORY_ERROR_REPORTING,
+	GIT_GLIB_REPOSITORY_NUM_ERRORS
+};
+
+GType                     git_glib_repository_get_type          (void) G_GNUC_CONST;
+
+GQuark                    git_glib_repository_error_quark       (void);
+
+GitGlibRepository        *git_glib_repository_open              (const gchar *path,
+                                                                 GError     **error);
+
+gboolean                  git_glib_repository_head_detached     (GitGlibRepository *repository,
+                                                                 GError           **error);
 
 G_END_DECLS
 

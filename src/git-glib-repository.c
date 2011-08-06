@@ -25,6 +25,8 @@
 #include <git2/repository.h>
 #include <gio/gio.h>
 
+#include <errno.h>
+
 
 #define GIT_GLIB_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_REPOSITORY, GitGlibRepositoryPrivate))
 
@@ -90,7 +92,7 @@ git_glib_repository_initable_init (GInitable *initable,
 {
 	GitGlibRepository *repository;
 	gboolean success = TRUE;
-	gint errno;
+	gint err;
 
 	if (cancellable != NULL)
 	{
@@ -103,15 +105,15 @@ git_glib_repository_initable_init (GInitable *initable,
 
 	if (repository->priv->path != NULL)
 	{
-		errno = git_repository_open (&repository->priv->repository,
-		                             repository->priv->path);
+		err = git_repository_open (&repository->priv->repository,
+		                           repository->priv->path);
 	}
 
-	if (errno != 0)
+	if (err != 0)
 	{
 		g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED,
 		             "Failed to open repository: %s",
-		             g_strerror (errno));
+		             g_strerror (err));
 		success = FALSE;
 	}
 
@@ -124,10 +126,42 @@ git_glib_repository_initable_iface_init (GInitableIface *iface)
 	iface->init = git_glib_repository_initable_init;
 }
 
+GQuark
+git_glib_repository_error_quark (void)
+{
+	static GQuark quark = 0;
+
+	if (G_UNLIKELY (quark == 0))
+		quark = g_quark_from_static_string ("git-glib-repository-error");
+
+	return quark;
+}
+
 GitGlibRepository *
 git_glib_repository_open (const gchar *path,
                           GError     **error)
 {
 	return g_initable_new (GIT_TYPE_GLIB_REPOSITORY, NULL, error,
 	                       "path", path, NULL);
+}
+
+gboolean
+git_glib_repository_head_detached (GitGlibRepository *repository,
+                                   GError           **error)
+{
+	gboolean ret;
+
+	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+
+	ret = git_repository_head_detached (repository->priv->repository);
+
+	if (errno != -1)
+	{
+		g_set_error (error, GIT_GLIB_REPOSITORY_ERROR,
+		             GIT_GLIB_REPOSITORY_ERROR_REPORTING,
+		             "Error: %s",
+		             g_strerror (errno));
+	}
+
+	return ret;
 }
