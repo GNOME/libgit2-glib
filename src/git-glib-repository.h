@@ -53,19 +53,9 @@ struct _GitGlibRepositoryClass
 	GObjectClass parent_class;
 };
 
-#define GIT_GLIB_REPOSITORY_ERROR git_glib_repository_error_quark ()
-
-enum
-{
-	GIT_GLIB_REPOSITORY_ERROR_REPORTING,
-	GIT_GLIB_REPOSITORY_NUM_ERRORS
-};
-
 typedef git_repository_pathid GitRepositoryPathid;
 
 GType                     git_glib_repository_get_type          (void) G_GNUC_CONST;
-
-GQuark                    git_glib_repository_error_quark       (void);
 
 GitGlibRepository        *git_glib_repository_open              (const gchar *path,
                                                                  GError     **error);

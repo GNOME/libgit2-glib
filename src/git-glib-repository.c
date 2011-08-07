@@ -20,12 +20,11 @@
  * Boston, MA  02110-1301  USA
  */
 
-
-#include "git-glib-repository.h"
 #include <gio/gio.h>
 
-#include <errno.h>
-
+#include "git-glib-repository.h"
+#include "git-glib-error.h"
+#include <git2/errors.h>
 
 #define GIT_GLIB_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_REPOSITORY, GitGlibRepositoryPrivate))
 
@@ -193,7 +192,7 @@ git_glib_repository_initable_init (GInitable *initable,
 	{
 		g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED,
 		             "Failed to open repository: %s",
-		             g_strerror (err));
+		             git_lasterror ());
 		success = FALSE;
 	}
 
@@ -204,17 +203,6 @@ static void
 git_glib_repository_initable_iface_init (GInitableIface *iface)
 {
 	iface->init = git_glib_repository_initable_init;
-}
-
-GQuark
-git_glib_repository_error_quark (void)
-{
-	static GQuark quark = 0;
-
-	if (G_UNLIKELY (quark == 0))
-		quark = g_quark_from_static_string ("git-glib-repository-error");
-
-	return quark;
 }
 
 /**
@@ -294,21 +282,20 @@ gboolean
 git_glib_repository_head_detached (GitGlibRepository *repository,
                                    GError           **error)
 {
-	gboolean ret;
+	gint ret;
 
 	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
 
 	ret = git_repository_head_detached (repository->priv->repository);
 
-	if (errno != -1)
+	if (ret < 0)
 	{
-		g_set_error (error, GIT_GLIB_REPOSITORY_ERROR,
-		             GIT_GLIB_REPOSITORY_ERROR_REPORTING,
-		             "Error: %s",
-		             g_strerror (errno));
+		g_set_error_literal (error, GIT_GLIB_ERROR,
+		                     ret,
+		                     git_lasterror ());
 	}
 
-	return ret;
+	return ret == 1;
 }
 
 /**
@@ -327,21 +314,20 @@ gboolean
 git_glib_repository_head_orphan (GitGlibRepository *repository,
                                  GError           **error)
 {
-	gboolean ret;
+	gint ret;
 
 	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
 
 	ret = git_repository_head_orphan (repository->priv->repository);
 
-	if (errno != -1)
+	if (ret < 0)
 	{
-		g_set_error (error, GIT_GLIB_REPOSITORY_ERROR,
-		             GIT_GLIB_REPOSITORY_ERROR_REPORTING,
-		             "Error: %s",
-		             g_strerror (errno));
+		g_set_error_literal (error, GIT_GLIB_ERROR,
+		                     ret,
+		                     git_lasterror ());
 	}
 
-	return ret;
+	return ret == 1;
 }
 
 /**
@@ -360,21 +346,20 @@ gboolean
 git_glib_repository_is_empty (GitGlibRepository *repository,
                               GError           **error)
 {
-	gboolean ret;
+	gint ret;
 
 	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
 
 	ret = git_repository_is_empty (repository->priv->repository);
 
-	if (errno != -1)
+	if (ret < 0)
 	{
-		g_set_error (error, GIT_GLIB_REPOSITORY_ERROR,
-		             GIT_GLIB_REPOSITORY_ERROR_REPORTING,
-		             "Error: %s",
-		             g_strerror (errno));
+		g_set_error_literal (error, GIT_GLIB_ERROR,
+		                     ret,
+		                     git_lasterror ());
 	}
 
-	return ret;
+	return ret == 1;
 }
 
 /**
