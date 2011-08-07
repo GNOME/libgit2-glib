@@ -23,6 +23,9 @@
 
 #include "git-glib-error.h"
 
+#include <errno.h>
+#include <git2/errors.h>
+
 GQuark
 git_glib_error_quark (void)
 {
@@ -32,4 +35,28 @@ git_glib_error_quark (void)
 		quark = g_quark_from_static_string ("git-glib-error");
 
 	return quark;
+}
+
+void
+_git_glib_error_set (GError **error,
+                     gint     err)
+{
+	g_return_if_fail (err < 0);
+
+	if (err == GIT_GLIB_ERROR_NOTFOUND)
+	{
+		return;
+	}
+	else if (err == GIT_GLIB_ERROR_OSERR)
+	{
+		g_set_error_literal (error, GIT_GLIB_ERROR,
+		                     err,
+		                     g_strerror (errno));
+	}
+	else
+	{
+		g_set_error_literal (error, GIT_GLIB_ERROR,
+		                     err,
+		                     git_lasterror ());
+	}
 }

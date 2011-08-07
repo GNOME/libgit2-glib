@@ -128,7 +128,10 @@ enum {
 
 #define GIT_GLIB_ERROR git_glib_error_quark ()
 
-GQuark git_glib_error_quark (void);
+GQuark   git_glib_error_quark (void);
+
+void    _git_glib_error_set   (GError **error,
+                               gint     err);
 
 G_END_DECLS
 

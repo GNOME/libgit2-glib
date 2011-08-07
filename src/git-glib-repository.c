@@ -21,10 +21,10 @@
  */
 
 #include <gio/gio.h>
+#include <git2/errors.h>
 
 #include "git-glib-repository.h"
 #include "git-glib-error.h"
-#include <git2/errors.h>
 
 #define GIT_GLIB_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_REPOSITORY, GitGlibRepositoryPrivate))
 
@@ -290,9 +290,7 @@ git_glib_repository_head_detached (GitGlibRepository *repository,
 
 	if (ret < 0)
 	{
-		g_set_error_literal (error, GIT_GLIB_ERROR,
-		                     ret,
-		                     git_lasterror ());
+		_git_glib_error_set (error, ret);
 	}
 
 	return ret == 1;
@@ -322,9 +320,7 @@ git_glib_repository_head_orphan (GitGlibRepository *repository,
 
 	if (ret < 0)
 	{
-		g_set_error_literal (error, GIT_GLIB_ERROR,
-		                     ret,
-		                     git_lasterror ());
+		_git_glib_error_set (error, ret);
 	}
 
 	return ret == 1;
@@ -354,9 +350,7 @@ git_glib_repository_is_empty (GitGlibRepository *repository,
 
 	if (ret < 0)
 	{
-		g_set_error_literal (error, GIT_GLIB_ERROR,
-		                     ret,
-		                     git_lasterror ());
+		_git_glib_error_set (error, ret);
 	}
 
 	return ret == 1;
