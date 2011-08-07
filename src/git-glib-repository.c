@@ -228,7 +228,7 @@ git_glib_repository_initable_iface_init (GInitableIface *iface)
  *	The method will automatically detect if 'path' is a normal
  *	or bare repository or fail is 'path' is neither.
  *
- * @Returns: (transfer full): a newly created #GitGlibRepository
+ * Returns: (transfer full): a newly created #GitGlibRepository
  */
 GitGlibRepository *
 git_glib_repository_open (const gchar *path,
@@ -252,7 +252,7 @@ git_glib_repository_open (const gchar *path,
  *	- Reinit the repository
  *	- Create config files
  *
- * @Returns: (transfer full): a newly created #GitGlibRepository
+ * Returns: (transfer full): a newly created #GitGlibRepository
  */
 GitGlibRepository *
 git_glib_repository_init_repository (const gchar *path,
@@ -276,7 +276,7 @@ git_glib_repository_init_repository (const gchar *path,
  * A repository's HEAD is detached when it points directly to a commit
  * instead of a branch.
  *
- * @Returns: %TRUE if HEAD is detached.
+ * Returns: %TRUE if HEAD is detached.
  */
 gboolean
 git_glib_repository_head_detached (GitGlibRepository *repository,
@@ -306,7 +306,7 @@ git_glib_repository_head_detached (GitGlibRepository *repository,
  * An orphan branch is one named from HEAD but which doesn't exist in
  * the refs namespace, because it doesn't have any commit to point to.
  *
- * @Returns: %TRUE if the current branch is an orphan.
+ * Returns: %TRUE if the current branch is an orphan.
  */
 gboolean
 git_glib_repository_head_orphan (GitGlibRepository *repository,
@@ -336,7 +336,7 @@ git_glib_repository_head_orphan (GitGlibRepository *repository,
  * An empty repository has just been initialized and contains
  * no commits.
  *
- * @Returns: %TRUE if the repository is empty.
+ * Returns: %TRUE if the repository is empty.
  */
 gboolean
 git_glib_repository_is_empty (GitGlibRepository *repository,
@@ -371,7 +371,7 @@ git_glib_repository_is_empty (GitGlibRepository *repository,
  *	GIT_REPO_PATH_WORKDIR: return the path to the working
  *		directory
  *
- * @Returns: absolute path of the requested id
+ * Returns: absolute path of the requested id
  */
 const gchar *
 git_glib_repository_path (GitGlibRepository  *repository,
@@ -388,7 +388,7 @@ git_glib_repository_path (GitGlibRepository  *repository,
  *
  * Check if a repository is bare
  *
- * @Returns: %TRUE if the repository is empty.
+ * Returns: %TRUE if the repository is empty.
  */
 gboolean
 git_glib_repository_is_bare (GitGlibRepository  *repository)

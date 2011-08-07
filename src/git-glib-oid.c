@@ -82,7 +82,7 @@ git_glib_oid_free (GitGlibOId *oid)
  *
  * Parse a hex formatted object id into a GitGlibOId.
  *
- * @Returns: (transfer full): newly allocated #GitGlibOId or %NULL on error
+ * Returns: (transfer full): newly allocated #GitGlibOId or %NULL on error
  */
 GitGlibOId *
 git_glib_oid_fromstr (const gchar *str)
@@ -131,7 +131,7 @@ git_glib_oid_fromraw (const guchar *raw)
  *
  * Compare two oid structures.
  *
- * @Returns: <0, 0, >0 if a < b, a == b, a > b.
+ * Returns: <0, 0, >0 if a < b, a == b, a > b.
  */
 gint
 git_glib_oid_cmp (GitGlibOId *a,
