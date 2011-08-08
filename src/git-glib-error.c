@@ -26,6 +26,11 @@
 #include <errno.h>
 #include <git2/errors.h>
 
+/**
+ * git_glib_error_quark:
+ *
+ * Returns:
+ */
 GQuark
 git_glib_error_quark (void)
 {

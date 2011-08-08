@@ -12,7 +12,7 @@ INCLUDES =								\
 libgit2_glib_1_0_la_LDFLAGS = \
 	-export-dynamic -no-undefined -export-symbols-regex "^[^_].*"
 
-libgit2_glib_1_0_la_LIBADD = $(GITG_LIBS)
+libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 INST_H_FILES =			\
 	git-glib-error.h	\
@@ -36,3 +36,33 @@ header_DATA = $(INST_H_FILES)
 
 EXTRA_DIST =
 CLEANFILES =
+
+if HAVE_INTROSPECTION
+  -include $(INTROSPECTION_MAKEFILE)
+  INTROSPECTION_GIRS = GitGlib-1.0.gir
+  INTROSPECTION_SCANNER_ARGS = \
+	-I$(top_srcdir) 		\
+	--identifier-prefix=GitGlib	\
+	--warn-all
+
+  introspection_sources = $(INST_H_FILES) $(C_FILES)
+
+  GitGlib-1.0.gir: libgit2-glib-1.0.la
+  GitGlib_1_0_gir_NAMESPACE = GitGlib
+  GitGlib_1_0_gir_INCLUDES = GObject-2.0 GLib-2.0
+  GitGlib_1_0_gir_CFLAGS = $(LIBGIT2_GLIB_CFLAGS)
+  GitGlib_1_0_gir_LIBS = libgit2-glib-1.0.la
+  GitGlib_1_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources))
+  GitGlib_1_0_gir_PACKAGES = gobject-2.0 glib-2.0 libgit2
+  GitGlib_1_0_gir_EXPORT_PACKAGES = libgit2-glib-1.0
+
+  girdir = $(datadir)/gir-1.0
+  gir_DATA = $(INTROSPECTION_GIRS)
+
+  typelibdir = $(libdir)/girepository-1.0
+  typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+  CLEANFILES += \
+	$(gir_DATA)		\
+	$(typelib_DATA)
+endif

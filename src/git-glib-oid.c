@@ -46,7 +46,7 @@ _git_glib_oid_new (git_oid *oid)
  *
  * Copies @oid into a newly allocated #GitGlibOId
  *
- * Returns: (transfer-full): a newly allocated #GitGlibOId.
+ * Returns: (transfer full): a newly allocated #GitGlibOId.
  */
 GitGlibOId *
 git_glib_oid_copy (GitGlibOId *oid)

@@ -374,8 +374,8 @@ git_glib_repository_is_empty (GitGlibRepository *repository,
  * Returns: absolute path of the requested id
  */
 const gchar *
-git_glib_repository_path (GitGlibRepository  *repository,
-                          GitRepositoryPathid id)
+git_glib_repository_path (GitGlibRepository      *repository,
+                          GitGlibRepositoryPathid id)
 {
 	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), NULL);
 

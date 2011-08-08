@@ -53,7 +53,13 @@ struct _GitGlibRepositoryClass
 	GObjectClass parent_class;
 };
 
-typedef git_repository_pathid GitRepositoryPathid;
+typedef enum
+{
+	GIT_GLIB_REPO_PATH,
+	GIT_GLIB_REPO_PATH_INDEX,
+	GIT_GLIB_REPO_PATH_ODB,
+	GIT_GLIB_REPO_PATH_WORKDIR
+} GitGlibRepositoryPathid;
 
 GType                     git_glib_repository_get_type          (void) G_GNUC_CONST;
 
@@ -73,8 +79,8 @@ gboolean                  git_glib_repository_head_orphan       (GitGlibReposito
 gboolean                  git_glib_repository_is_empty          (GitGlibRepository *repository,
                                                                  GError           **error);
 
-const gchar              *git_glib_repository_path              (GitGlibRepository  *repository,
-                                                                 GitRepositoryPathid id);
+const gchar              *git_glib_repository_path              (GitGlibRepository      *repository,
+                                                                 GitGlibRepositoryPathid id);
 
 gboolean                  git_glib_repository_is_bare           (GitGlibRepository  *repository);
 
