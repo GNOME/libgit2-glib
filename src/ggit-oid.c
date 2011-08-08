@@ -1,5 +1,5 @@
 /*
- * git-glib-oid.c
+ * ggit-oid.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
@@ -20,74 +20,74 @@
  * Boston, MA  02110-1301  USA
  */
 
-#include "git-glib-oid.h"
+#include "ggit-oid.h"
 
-struct _GitGlibOId
+struct _GgitOId
 {
 	git_oid oid;
 };
 
-G_DEFINE_BOXED_TYPE (GitGlibOId, git_glib_oid, git_glib_oid_copy, git_glib_oid_free)
+G_DEFINE_BOXED_TYPE (GgitOId, ggit_oid, ggit_oid_copy, ggit_oid_free)
 
-GitGlibOId *
-_git_glib_oid_new (git_oid *oid)
+GgitOId *
+_ggit_oid_new (git_oid *oid)
 {
-	GitGlibOId *glib_oid;
+	GgitOId *glib_oid;
 
-	glib_oid = g_slice_new (GitGlibOId);
+	glib_oid = g_slice_new (GgitOId);
 	git_oid_cpy (&glib_oid->oid, oid);
 
 	return glib_oid;
 }
 
 /**
- * git_glib_oid_copy:
- * @oid: a #GitGlibOId
+ * ggit_oid_copy:
+ * @oid: a #GgitOId
  *
- * Copies @oid into a newly allocated #GitGlibOId
+ * Copies @oid into a newly allocated #GgitOId
  *
- * Returns: (transfer full): a newly allocated #GitGlibOId.
+ * Returns: (transfer full): a newly allocated #GgitOId.
  */
-GitGlibOId *
-git_glib_oid_copy (GitGlibOId *oid)
+GgitOId *
+ggit_oid_copy (GgitOId *oid)
 {
 	if (oid == NULL)
 	{
 		return NULL;
 	}
 
-	return _git_glib_oid_new (&oid->oid);
+	return _ggit_oid_new (&oid->oid);
 }
 
 /**
- * git_glib_oid_free:
- * @oid: a #GitGlibOId
+ * ggit_oid_free:
+ * @oid: a #GgitOId
  *
  * Frees @oid.
  */
 void
-git_glib_oid_free (GitGlibOId *oid)
+ggit_oid_free (GgitOId *oid)
 {
 	if (oid != NULL)
 	{
-		g_slice_free (GitGlibOId, oid);
+		g_slice_free (GgitOId, oid);
 	}
 }
 
 /**
- * git_glib_oid_fromstr:
+ * ggit_oid_fromstr:
  * @str: input hex string; must be pointing at the start of
  *       the hex sequence and have at least the number of bytes
  *       needed for an oid encoded in hex (40 bytes).
  *
- * Parse a hex formatted object id into a GitGlibOId.
+ * Parse a hex formatted object id into a GgitOId.
  *
- * Returns: (transfer full): newly allocated #GitGlibOId or %NULL on error
+ * Returns: (transfer full): newly allocated #GgitOId or %NULL on error
  */
-GitGlibOId *
-git_glib_oid_fromstr (const gchar *str)
+GgitOId *
+ggit_oid_fromstr (const gchar *str)
 {
-	GitGlibOId *glib_oid;
+	GgitOId *glib_oid;
 	git_oid oid;
 	gint ret;
 
@@ -98,7 +98,7 @@ git_glib_oid_fromstr (const gchar *str)
 
 	if (ret == 0)
 	{
-		glib_oid = _git_glib_oid_new (&oid);
+		glib_oid = _ggit_oid_new (&oid);
 	}
 
 	return glib_oid;
@@ -110,10 +110,10 @@ git_glib_oid_fromstr (const gchar *str)
  *
  * Copy an already raw oid into a git_oid structure.
  *
- * Returns: (transfer full): a newly allocated #GitGlibOId
+ * Returns: (transfer full): a newly allocated #GgitOId
  */
-GitGlibOId *
-git_glib_oid_fromraw (const guchar *raw)
+GgitOId *
+ggit_oid_fromraw (const guchar *raw)
 {
 	git_oid oid;
 
@@ -121,21 +121,21 @@ git_glib_oid_fromraw (const guchar *raw)
 
 	git_oid_fromraw (&oid, raw);
 
-	return _git_glib_oid_new (&oid);
+	return _ggit_oid_new (&oid);
 }
 
 /**
- * git_glib_oid_cmp:
- * @a: first #GitGlibOId
- * @b: second #GitGlibOId
+ * ggit_oid_cmp:
+ * @a: first #GgitOId
+ * @b: second #GgitOId
  *
  * Compare two oid structures.
  *
  * Returns: <0, 0, >0 if a < b, a == b, a > b.
  */
 gint
-git_glib_oid_cmp (GitGlibOId *a,
-                  GitGlibOId *b)
+ggit_oid_cmp (GgitOId *a,
+              GgitOId *b)
 {
 	g_return_val_if_fail (a != NULL && b != NULL, 0);
 
@@ -143,15 +143,15 @@ git_glib_oid_cmp (GitGlibOId *a,
 }
 
 /**
- * git_glib_oid_to_string:
- * @oid: a #GitGlibOId
+ * ggit_oid_to_string:
+ * @oid: a #GgitOId
  *
  * Convert @oid to a readable string
  *
  * Returns: (transfer full): a newly allocated string for @oid.
  */
 gchar *
-git_glib_oid_to_string (GitGlibOId *oid)
+ggit_oid_to_string (GgitOId *oid)
 {
 	gchar hex[GIT_OID_HEXSZ];
 

@@ -1,5 +1,5 @@
 /*
- * git-glib-object.h
+ * ggit-object.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
@@ -21,42 +21,42 @@
  */
 
 
-#ifndef __GIT_GLIB_OBJECT_H__
-#define __GIT_GLIB_OBJECT_H__
+#ifndef __GGIT_OBJECT_H__
+#define __GGIT_OBJECT_H__
 
 #include <glib-object.h>
-#include "git-glib-oid.h"
+#include "ggit-oid.h"
 
 G_BEGIN_DECLS
 
-#define GIT_TYPE_GLIB_OBJECT		(git_glib_object_get_type ())
-#define GIT_GLIB_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GIT_TYPE_GLIB_OBJECT, GitGlibObject))
-#define GIT_GLIB_OBJECT_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GIT_TYPE_GLIB_OBJECT, GitGlibObject const))
-#define GIT_GLIB_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GIT_TYPE_GLIB_OBJECT, GitGlibObjectClass))
+#define GIT_TYPE_GLIB_OBJECT		(ggit_object_get_type ())
+#define GGIT_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GIT_TYPE_GLIB_OBJECT, GgitObject))
+#define GGIT_OBJECT_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GIT_TYPE_GLIB_OBJECT, GgitObject const))
+#define GGIT_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GIT_TYPE_GLIB_OBJECT, GgitObjectClass))
 #define GIT_IS_GLIB_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GIT_TYPE_GLIB_OBJECT))
 #define GIT_IS_GLIB_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GIT_TYPE_GLIB_OBJECT))
-#define GIT_GLIB_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GIT_TYPE_GLIB_OBJECT, GitGlibObjectClass))
+#define GGIT_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GIT_TYPE_GLIB_OBJECT, GgitObjectClass))
 
-typedef struct _GitGlibObject		GitGlibObject;
-typedef struct _GitGlibObjectClass	GitGlibObjectClass;
-typedef struct _GitGlibObjectPrivate	GitGlibObjectPrivate;
+typedef struct _GgitObject		GgitObject;
+typedef struct _GgitObjectClass	GgitObjectClass;
+typedef struct _GgitObjectPrivate	GgitObjectPrivate;
 
-struct _GitGlibObject
+struct _GgitObject
 {
 	GObject parent;
 
-	GitGlibObjectPrivate *priv;
+	GgitObjectPrivate *priv;
 };
 
-struct _GitGlibObjectClass
+struct _GgitObjectClass
 {
 	GObjectClass parent_class;
 };
 
-GType              git_glib_object_get_type          (void) G_GNUC_CONST;
+GType              ggit_object_get_type          (void) G_GNUC_CONST;
 
-GitGlibOId        *git_glib_object_id                (GitGlibObject *object);
+GgitOId           *ggit_object_id                (GgitObject *object);
 
 G_END_DECLS
 
-#endif /* __GIT_GLIB_OBJECT_H__ */
+#endif /* __GGIT_OBJECT_H__ */

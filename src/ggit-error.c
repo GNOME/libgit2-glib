@@ -1,5 +1,5 @@
 /*
- * git-glib-error.c
+ * ggit-error.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
@@ -21,46 +21,46 @@
  */
 
 
-#include "git-glib-error.h"
+#include "ggit-error.h"
 
 #include <errno.h>
 #include <git2/errors.h>
 
 /**
- * git_glib_error_quark:
+ * ggit_error_quark:
  *
  * Returns:
  */
 GQuark
-git_glib_error_quark (void)
+ggit_error_quark (void)
 {
 	static GQuark quark = 0;
 
 	if (G_UNLIKELY (quark == 0))
-		quark = g_quark_from_static_string ("git-glib-error");
+		quark = g_quark_from_static_string ("ggit-error");
 
 	return quark;
 }
 
 void
-_git_glib_error_set (GError **error,
-                     gint     err)
+_ggit_error_set (GError **error,
+                 gint     err)
 {
 	g_return_if_fail (err < 0);
 
-	if (err == GIT_GLIB_ERROR_NOTFOUND)
+	if (err == GGIT_ERROR_NOTFOUND)
 	{
 		return;
 	}
-	else if (err == GIT_GLIB_ERROR_OSERR)
+	else if (err == GGIT_ERROR_OSERR)
 	{
-		g_set_error_literal (error, GIT_GLIB_ERROR,
+		g_set_error_literal (error, GGIT_ERROR,
 		                     err,
 		                     g_strerror (errno));
 	}
 	else
 	{
-		g_set_error_literal (error, GIT_GLIB_ERROR,
+		g_set_error_literal (error, GGIT_ERROR,
 		                     err,
 		                     git_lasterror ());
 	}

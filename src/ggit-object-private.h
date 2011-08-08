@@ -1,5 +1,5 @@
 /*
- * git-glib-object-private.h
+ * ggit-object-private.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
@@ -23,7 +23,7 @@
 
 #include <git2/object.h>
 
-struct _GitGlibObjectPrivate
+struct _GgitObjectPrivate
 {
 	git_object *obj;
 };

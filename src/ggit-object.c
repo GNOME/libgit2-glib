@@ -1,5 +1,5 @@
 /*
- * git-glib-object.c
+ * ggit-object.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
@@ -21,43 +21,43 @@
  */
 
 
-#include "git-glib-object.h"
-#include "git-glib-object-private.h"
-#include "git-glib-oid.h"
+#include "ggit-object.h"
+#include "ggit-object-private.h"
+#include "ggit-oid.h"
 
 
-#define GIT_GLIB_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_OBJECT, GitGlibObjectPrivate))
+#define GGIT_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_OBJECT, GgitObjectPrivate))
 
-G_DEFINE_ABSTRACT_TYPE (GitGlibObject, git_glib_object, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GgitObject, ggit_object, G_TYPE_OBJECT)
 
 static void
-git_glib_object_finalize (GObject *object)
+ggit_object_finalize (GObject *object)
 {
-	GitGlibObject *obj = GIT_GLIB_OBJECT (object);
+	GgitObject *obj = GGIT_OBJECT (object);
 
 	git_object_close (obj->priv->obj);
 
-	G_OBJECT_CLASS (git_glib_object_parent_class)->finalize (object);
+	G_OBJECT_CLASS (ggit_object_parent_class)->finalize (object);
 }
 
 static void
-git_glib_object_class_init (GitGlibObjectClass *klass)
+ggit_object_class_init (GgitObjectClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = git_glib_object_finalize;
+	object_class->finalize = ggit_object_finalize;
 
-	g_type_class_add_private (object_class, sizeof (GitGlibObjectPrivate));
+	g_type_class_add_private (object_class, sizeof (GgitObjectPrivate));
 }
 
 static void
-git_glib_object_init (GitGlibObject *object)
+ggit_object_init (GgitObject *object)
 {
-	object->priv = GIT_GLIB_OBJECT_GET_PRIVATE (object);
+	object->priv = GGIT_OBJECT_GET_PRIVATE (object);
 }
 
-GitGlibOId *
-git_glib_object_id (GitGlibObject *object)
+GgitOId *
+ggit_object_id (GgitObject *object)
 {
 	const git_oid *oid;
 
@@ -65,5 +65,5 @@ git_glib_object_id (GitGlibObject *object)
 
 	oid = git_object_id (object->priv->obj);
 
-	return _git_glib_oid_new ((git_oid *)oid);
+	return _ggit_oid_new ((git_oid *)oid);
 }

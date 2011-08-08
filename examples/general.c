@@ -22,14 +22,14 @@
 
 
 #include <glib.h>
-#include "git-glib-repository.h"
-#include "git-glib-oid.h"
+#include "ggit-repository.h"
+#include "ggit-oid.h"
 
 int
 main (int argc, char *argv[])
 {
-	GitGlibRepository *repository;
-	GitGlibOId *oid;
+	GgitRepository *repository;
+	GgitOId *oid;
 	GError *error = NULL;
 	const gchar hex[] = "82576c09c3fac738a54582c6c04a47684882d1a1";
 	gchar *oid_str;
@@ -42,7 +42,7 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	repository = git_glib_repository_open (argv[1], &error);
+	repository = ggit_repository_open (argv[1], &error);
 
 	if (error != NULL)
 	{
@@ -50,13 +50,13 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	oid = git_glib_oid_fromstr (hex);
-	oid_str = git_glib_oid_to_string (oid);
+	oid = ggit_oid_fromstr (hex);
+	oid_str = ggit_oid_to_string (oid);
 
 	g_message ("OId str: %s", oid_str);
 
 	g_free (oid_str);
-	git_glib_oid_free (oid);
+	ggit_oid_free (oid);
 	g_object_unref (repository);
 
 	return 0;
