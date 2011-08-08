@@ -43,6 +43,7 @@ GNOME_COMPILE_WARNINGS([maximum])
 
 AC_OUTPUT([
 	Makefile
+	examples/Makefile
 	src/Makefile
 ])
 
