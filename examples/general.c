@@ -55,6 +55,7 @@ main (int argc, char *argv[])
 
 	g_message ("OId str: %s", oid_str);
 
+	g_free (oid_str);
 	git_glib_oid_free (oid);
 	g_object_unref (repository);
 
