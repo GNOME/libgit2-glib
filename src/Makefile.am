@@ -16,13 +16,16 @@ libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 INST_H_FILES =			\
 	git-glib-error.h	\
+	git-glib-object.h	\
 	git-glib-oid.h		\
 	git-glib-repository.h
 
-NOINST_H_FILES =
+NOINST_H_FILES =			\
+	git-glib-object-private.h
 
 C_FILES =				\
 	git-glib-error.c		\
+	git-glib-object.c		\
 	git-glib-oid.c			\
 	git-glib-repository.c
 
