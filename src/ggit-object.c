@@ -67,3 +67,24 @@ ggit_object_id (GgitObject *object)
 
 	return _ggit_oid_new ((git_oid *)oid);
 }
+
+/**
+ * ggit_object_owner:
+ * @object: a #GgitObject
+ *
+ * Get the repository that owns this object
+ *
+ * Returns: (transfer full): the repository that own this object. The returned
+ * value must be freed calling g_object_unref().
+ */
+GgitRepository *
+ggit_object_owner (GgitObject *object)
+{
+	git_repository *repository;
+
+	g_return_val_if_fail (GIT_IS_GLIB_OBJECT (object), NULL);
+
+	repository = git_object_owner (object->priv->obj);
+
+	return _ggit_repository_new (repository);
+}

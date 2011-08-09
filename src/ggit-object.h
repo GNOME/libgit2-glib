@@ -26,6 +26,7 @@
 
 #include <glib-object.h>
 #include "ggit-oid.h"
+#include "ggit-repository.h"
 
 G_BEGIN_DECLS
 
@@ -56,6 +57,8 @@ struct _GgitObjectClass
 GType              ggit_object_get_type          (void) G_GNUC_CONST;
 
 GgitOId           *ggit_object_id                (GgitObject *object);
+
+GgitRepository    *ggit_object_owner             (GgitObject *object);
 
 G_END_DECLS
 
