@@ -18,7 +18,8 @@ INST_H_FILES =			\
 	ggit-error.h		\
 	ggit-object.h		\
 	ggit-oid.h		\
-	ggit-repository.h
+	ggit-repository.h	\
+	ggit-tag.h
 
 NOINST_H_FILES =		\
 	ggit-object-private.h
@@ -27,7 +28,8 @@ C_FILES =			\
 	ggit-error.c		\
 	ggit-object.c		\
 	ggit-oid.c		\
-	ggit-repository.c
+	ggit-repository.c	\
+	ggit-tag.c
 
 libgit2_glib_1_0_la_SOURCES = 	\
 	$(INST_H_FILES)		\

@@ -56,6 +56,8 @@ struct _GgitObjectClass
 
 GType              ggit_object_get_type          (void) G_GNUC_CONST;
 
+GgitObject       *_ggit_object_new               (git_object *obj);
+
 GgitOId           *ggit_object_id                (GgitObject *object);
 
 GgitRepository    *ggit_object_owner             (GgitObject *object);
