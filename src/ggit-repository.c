@@ -68,15 +68,17 @@ ggit_repository_get_property (GObject    *object,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-	GgitRepositoryPrivate *priv = GGIT_REPOSITORY (object)->priv;
+	GgitRepository *repository = GGIT_REPOSITORY (object);
+	GgitRepositoryPrivate *priv = repository->priv;
 
 	switch (prop_id)
 	{
 		case PROP_PATH:
-			g_value_set_string (value, priv->path);
+			g_value_set_string (value, ggit_repository_path (repository,
+			                                                 GGIT_REPO_PATH));
 			break;
 		case PROP_IS_BARE:
-			g_value_set_boolean (value, priv->is_bare);
+			g_value_set_boolean (value, ggit_repository_is_bare (repository));
 			break;
 		case PROP_INIT:
 			g_value_set_boolean (value, priv->init);
@@ -128,7 +130,8 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                      "Path to repository",
 	                                                      "The path to the repository",
 	                                                      NULL,
-	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
@@ -137,16 +140,18 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                       "Is bare",
 	                                                       "Is a bare repository",
 	                                                       FALSE,
-	                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+	                                                       G_PARAM_READWRITE |
+	                                                       G_PARAM_CONSTRUCT_ONLY |
 	                                                       G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_INIT,
 	                                 g_param_spec_boolean ("init",
 	                                                       "Init",
-	                                                       "Wether to initalize a repository",
+	                                                       "Wether to initialize a repository",
 	                                                       FALSE,
-	                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+	                                                       G_PARAM_READWRITE |
+	                                                       G_PARAM_CONSTRUCT_ONLY |
 	                                                       G_PARAM_STATIC_STRINGS));
 
 	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
