@@ -26,7 +26,7 @@
 #include "ggit-oid.h"
 
 
-#define GGIT_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_OBJECT, GgitObjectPrivate))
+#define GGIT_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_OBJECT, GgitObjectPrivate))
 
 G_DEFINE_ABSTRACT_TYPE (GgitObject, ggit_object, G_TYPE_OBJECT)
 
@@ -61,7 +61,7 @@ ggit_object_id (GgitObject *object)
 {
 	const git_oid *oid;
 
-	g_return_val_if_fail (GIT_IS_GLIB_OBJECT (object), NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT (object), NULL);
 
 	oid = git_object_id (object->priv->obj);
 
@@ -82,7 +82,7 @@ ggit_object_owner (GgitObject *object)
 {
 	git_repository *repository;
 
-	g_return_val_if_fail (GIT_IS_GLIB_OBJECT (object), NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT (object), NULL);
 
 	repository = git_object_owner (object->priv->obj);
 

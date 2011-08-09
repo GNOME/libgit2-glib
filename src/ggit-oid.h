@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-#define GIT_TYPE_GLIB_OID   (ggit_oid_get_type ())
+#define GGIT_TYPE_OID       (ggit_oid_get_type ())
 #define GGIT_OID(obj)       ((GgitOId *)obj)
 #define GGIT_OID_CONST(obj) ((GgitOId const *)obj)
 

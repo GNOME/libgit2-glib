@@ -26,7 +26,7 @@
 #include "ggit-repository.h"
 #include "ggit-error.h"
 
-#define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GIT_TYPE_GLIB_REPOSITORY, GgitRepositoryPrivate))
+#define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
 struct _GgitRepositoryPrivate
 {
@@ -214,7 +214,7 @@ _ggit_repository_new (git_repository *repository)
 {
 	GgitRepository *rep;
 
-	rep = g_object_new (GIT_TYPE_GLIB_REPOSITORY, NULL);
+	rep = g_object_new (GGIT_TYPE_REPOSITORY, NULL);
 	rep->priv->repository = repository;
 
 	return rep;
@@ -249,7 +249,7 @@ GgitRepository *
 ggit_repository_open (const gchar *path,
                       GError     **error)
 {
-	return g_initable_new (GIT_TYPE_GLIB_REPOSITORY, NULL, error,
+	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
 	                       "path", path, NULL);
 }
 
@@ -274,7 +274,7 @@ ggit_repository_init_repository (const gchar *path,
                                  gboolean     is_bare,
                                  GError     **error)
 {
-	return g_initable_new (GIT_TYPE_GLIB_REPOSITORY, NULL, error,
+	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
 	                       "path", path,
 	                       "is-bare", is_bare,
 	                       "init", TRUE,
@@ -299,7 +299,7 @@ ggit_repository_head_detached (GgitRepository *repository,
 {
 	gint ret;
 
-	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 
 	ret = git_repository_head_detached (repository->priv->repository);
 
@@ -329,7 +329,7 @@ ggit_repository_head_orphan (GgitRepository *repository,
 {
 	gint ret;
 
-	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 
 	ret = git_repository_head_orphan (repository->priv->repository);
 
@@ -359,7 +359,7 @@ ggit_repository_is_empty (GgitRepository *repository,
 {
 	gint ret;
 
-	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 
 	ret = git_repository_is_empty (repository->priv->repository);
 
@@ -392,7 +392,7 @@ const gchar *
 ggit_repository_path (GgitRepository      *repository,
                       GgitRepositoryPathid id)
 {
-	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
 	return git_repository_path (repository->priv->repository, id);
 }
@@ -406,9 +406,9 @@ ggit_repository_path (GgitRepository      *repository,
  * Returns: %TRUE if the repository is empty.
  */
 gboolean
-ggit_repository_is_bare (GgitRepository  *repository)
+ggit_repository_is_bare (GgitRepository *repository)
 {
-	g_return_val_if_fail (GIT_IS_GLIB_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 
 	return git_repository_is_bare (repository->priv->repository);
 }

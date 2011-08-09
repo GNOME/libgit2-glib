@@ -29,13 +29,13 @@
 
 G_BEGIN_DECLS
 
-#define GIT_TYPE_GLIB_REPOSITORY		(ggit_repository_get_type ())
-#define GGIT_REPOSITORY(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GIT_TYPE_GLIB_REPOSITORY, GgitRepository))
-#define GGIT_REPOSITORY_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GIT_TYPE_GLIB_REPOSITORY, GgitRepository const))
-#define GGIT_REPOSITORY_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GIT_TYPE_GLIB_REPOSITORY, GgitRepositoryClass))
-#define GIT_IS_GLIB_REPOSITORY(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GIT_TYPE_GLIB_REPOSITORY))
-#define GIT_IS_GLIB_REPOSITORY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GIT_TYPE_GLIB_REPOSITORY))
-#define GGIT_REPOSITORY_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GIT_TYPE_GLIB_REPOSITORY, GgitRepositoryClass))
+#define GGIT_TYPE_REPOSITORY			(ggit_repository_get_type ())
+#define GGIT_REPOSITORY(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REPOSITORY, GgitRepository))
+#define GGIT_REPOSITORY_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REPOSITORY, GgitRepository const))
+#define GGIT_REPOSITORY_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REPOSITORY, GgitRepositoryClass))
+#define GGIT_IS_REPOSITORY(obj)			(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REPOSITORY))
+#define GGIT_IS_REPOSITORY_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REPOSITORY))
+#define GGIT_REPOSITORY_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REPOSITORY, GgitRepositoryClass))
 
 typedef struct _GgitRepository		GgitRepository;
 typedef struct _GgitRepositoryClass	GgitRepositoryClass;
