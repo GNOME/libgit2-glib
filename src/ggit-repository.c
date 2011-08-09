@@ -210,6 +210,17 @@ ggit_repository_initable_iface_init (GInitableIface *iface)
 	iface->init = ggit_repository_initable_init;
 }
 
+GgitRepository *
+_ggit_repository_new (git_repository *repository)
+{
+	GgitRepository *rep;
+
+	rep = g_object_new (GIT_TYPE_GLIB_REPOSITORY, NULL);
+	rep->priv->repository = repository;
+
+	return rep;
+}
+
 /**
  * ggit_repository_open:
  * @path: the path to the repository
