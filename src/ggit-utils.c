@@ -54,3 +54,27 @@ ggit_utils_get_otype_from_gtype (GType gtype)
 
 	return otype;
 }
+
+GgitObject *
+ggit_utils_create_real_object (git_object *obj)
+{
+	GgitObject *object = NULL;
+	git_otype otype;
+
+	otype = git_object_type (obj);
+
+	if (otype == GIT_OBJ_TAG)
+	{
+		object = GGIT_OBJECT (_ggit_tag_new ((git_tag *)obj));
+	}
+	else if (otype == GGIT_TYPE_BLOB)
+	{
+		object = GGIT_OBJECT (_ggit_blob_new ((git_blob *)obj));
+	}
+	else if (otype == GIT_OBJ_COMMIT)
+	{
+		object = GGIT_OBJECT (_ggit_commit_new ((git_commit *)obj));
+	}
+
+	return object;
+}

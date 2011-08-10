@@ -25,6 +25,7 @@
 #include "ggit-object-private.h"
 #include "ggit-error.h"
 #include "ggit-oid.h"
+#include "ggit-utils.h"
 
 
 G_DEFINE_TYPE (GgitTag, ggit_tag, GGIT_TYPE_OBJECT)
@@ -92,7 +93,7 @@ ggit_tag_target (GgitTag *tag,
 	}
 	else
 	{
-		object = _ggit_object_new (obj);
+		object = ggit_utils_create_real_object (obj);
 	}
 
 	return object;

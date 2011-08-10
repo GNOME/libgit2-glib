@@ -28,7 +28,7 @@
 
 #define GGIT_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_OBJECT, GgitObjectPrivate))
 
-G_DEFINE_TYPE (GgitObject, ggit_object, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GgitObject, ggit_object, G_TYPE_OBJECT)
 
 static void
 ggit_object_finalize (GObject *object)
@@ -54,17 +54,6 @@ static void
 ggit_object_init (GgitObject *object)
 {
 	object->priv = GGIT_OBJECT_GET_PRIVATE (object);
-}
-
-GgitObject *
-_ggit_object_new (git_object *obj)
-{
-	GgitObject *object;
-
-	object = g_object_new (GGIT_TYPE_OBJECT, NULL);
-	object->priv->obj = obj;
-
-	return object;
 }
 
 GgitOId *

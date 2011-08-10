@@ -322,7 +322,7 @@ ggit_repository_lookup (GgitRepository *repository,
 
 	if (ret == 0)
 	{
-		object = _ggit_object_new (obj);
+		object = ggit_utils_create_real_object (obj);
 	}
 	else
 	{

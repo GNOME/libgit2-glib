@@ -26,10 +26,14 @@
 #include <glib-object.h>
 #include <git2/common.h>
 #include <git2/types.h>
+#include <git2/object.h>
+#include "ggit-object.h"
 
 G_BEGIN_DECLS
 
 git_otype       ggit_utils_get_otype_from_gtype       (GType gtype);
+
+GgitObject     *ggit_utils_create_real_object         (git_object *obj);
 
 G_END_DECLS
 
