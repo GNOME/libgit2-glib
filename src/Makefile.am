@@ -25,7 +25,8 @@ INST_H_FILES =			\
 	ggit.h
 
 NOINST_H_FILES =		\
-	ggit-object-private.h
+	ggit-object-private.h	\
+	ggit-utils.h
 
 C_FILES =			\
 	ggit-blob.c		\
@@ -34,7 +35,8 @@ C_FILES =			\
 	ggit-object.c		\
 	ggit-oid.c		\
 	ggit-repository.c	\
-	ggit-tag.c
+	ggit-tag.c		\
+	ggit-utils.c
 
 libgit2_glib_1_0_la_SOURCES = 	\
 	$(INST_H_FILES)		\

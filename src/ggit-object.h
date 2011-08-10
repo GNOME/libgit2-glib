@@ -25,6 +25,7 @@
 #define __GGIT_OBJECT_H__
 
 #include <glib-object.h>
+#include <git2/object.h>
 #include "ggit-oid.h"
 #include "ggit-repository.h"
 
@@ -54,11 +55,11 @@ struct _GgitObjectClass
 	GObjectClass parent_class;
 };
 
-GType              ggit_object_get_type          (void) G_GNUC_CONST;
+GType                    ggit_object_get_type          (void) G_GNUC_CONST;
 
-GgitObject       *_ggit_object_new               (git_object *obj);
+GgitObject             *_ggit_object_new               (git_object *obj);
 
-GgitOId           *ggit_object_id                (GgitObject *object);
+GgitOId                 *ggit_object_id                (GgitObject *object);
 
 struct _GgitRepository  *ggit_object_owner             (GgitObject *object);
 

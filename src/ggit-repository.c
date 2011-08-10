@@ -25,9 +25,7 @@
 
 #include "ggit-repository.h"
 #include "ggit-error.h"
-#include "ggit-tag.h"
-#include "ggit-commit.h"
-#include "ggit-blob.h"
+#include "ggit-utils.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -212,35 +210,6 @@ ggit_repository_initable_iface_init (GInitableIface *iface)
 	iface->init = ggit_repository_initable_init;
 }
 
-static git_otype
-get_otype_from_gtype (GType gtype)
-{
-	git_otype otype;
-
-	if (g_type_is_a (gtype, GGIT_TYPE_TAG))
-	{
-		otype = GIT_OBJ_TAG;
-	}
-	else if (g_type_is_a (gtype, GGIT_TYPE_BLOB))
-	{
-		otype = GIT_OBJ_BLOB;
-	}
-	else if (g_type_is_a (gtype, GGIT_TYPE_BLOB))
-	{
-		otype = GIT_OBJ_COMMIT;
-	}
-	else if (g_type_is_a (gtype, G_TYPE_NONE))
-	{
-		otype = GIT_OBJ_ANY;
-	}
-	else
-	{
-		otype = GIT_OBJ_BAD;
-	}
-
-	return otype;
-}
-
 GgitRepository *
 _ggit_repository_new (git_repository *repository)
 {
@@ -346,7 +315,7 @@ ggit_repository_lookup (GgitRepository *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
 	id = (const git_oid *)_ggit_oid_get_oid (oid);
-	otype = get_otype_from_gtype (gtype);
+	otype = ggit_utils_get_otype_from_gtype (gtype);
 
 	ret = git_object_lookup (&obj, repository->priv->repository,
 	                         id, otype);
