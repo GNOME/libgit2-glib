@@ -15,6 +15,7 @@ libgit2_glib_1_0_la_LDFLAGS = \
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 INST_H_FILES =			\
+	ggit-commit.h		\
 	ggit-error.h		\
 	ggit-object.h		\
 	ggit-oid.h		\
@@ -25,6 +26,7 @@ NOINST_H_FILES =		\
 	ggit-object-private.h
 
 C_FILES =			\
+	ggit-commit.c		\
 	ggit-error.c		\
 	ggit-object.c		\
 	ggit-oid.c		\
