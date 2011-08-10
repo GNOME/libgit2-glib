@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libgit2-glib
+Description: libgit2-glib, a a glib wrapper library around the libgit2 git access library.
+Requires: libgit2 >= GIT2_REQUIRED, glib-2.0 >= @GLIB_REQUIRED@, gobject-2.0 >= @GLIB_REQUIRED@, gobject-introspection-1.0 >= @INTROSPECTION_REQUIRED
+Version: @VERSION@
+Cflags: -I${includedir}/libgit2-glib-1.0
+Libs: -L${libdir} -lgit2-glib-1.0
