@@ -26,6 +26,7 @@
 
 #include <glib-object.h>
 #include <git2/repository.h>
+#include "ggit-object.h"
 
 G_BEGIN_DECLS
 
@@ -71,6 +72,11 @@ GgitRepository           *ggit_repository_open              (const gchar *path,
 GgitRepository           *ggit_repository_init_repository   (const gchar *path,
                                                              gboolean     is_bare,
                                                              GError     **error);
+
+struct _GgitObject       *ggit_repository_lookup            (GgitRepository *repository,
+                                                             GgitOId        *oid,
+                                                             GType           gtype,
+                                                             GError        **error);
 
 gboolean                  ggit_repository_head_detached     (GgitRepository *repository,
                                                              GError        **error);

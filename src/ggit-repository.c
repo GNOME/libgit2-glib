@@ -25,6 +25,9 @@
 
 #include "ggit-repository.h"
 #include "ggit-error.h"
+#include "ggit-tag.h"
+#include "ggit-commit.h"
+#include "ggit-blob.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -209,6 +212,35 @@ ggit_repository_initable_iface_init (GInitableIface *iface)
 	iface->init = ggit_repository_initable_init;
 }
 
+static git_otype
+get_otype_from_gtype (GType gtype)
+{
+	git_otype otype;
+
+	if (g_type_is_a (gtype, GGIT_TYPE_TAG))
+	{
+		otype = GIT_OBJ_TAG;
+	}
+	else if (g_type_is_a (gtype, GGIT_TYPE_BLOB))
+	{
+		otype = GIT_OBJ_BLOB;
+	}
+	else if (g_type_is_a (gtype, GGIT_TYPE_BLOB))
+	{
+		otype = GIT_OBJ_COMMIT;
+	}
+	else if (g_type_is_a (gtype, G_TYPE_NONE))
+	{
+		otype = GIT_OBJ_ANY;
+	}
+	else
+	{
+		otype = GIT_OBJ_BAD;
+	}
+
+	return otype;
+}
+
 GgitRepository *
 _ggit_repository_new (git_repository *repository)
 {
@@ -279,6 +311,56 @@ ggit_repository_init_repository (const gchar *path,
 	                       "is-bare", is_bare,
 	                       "init", TRUE,
 	                       NULL);
+}
+
+/**
+ * ggit_repository_lookup:
+ * @repository: a #GgitRepository
+ * @oid: a #GgitOId
+ * @gtype: a GType
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Lookup a reference to one of the objects in a repostory.
+ *
+ * The generated reference must be freed with g_object_unref().
+ *
+ * The 'gtype' parameter must match the type of the object
+ * in the odb; the method will fail otherwise.
+ * The special value 'G_TYPE_NONE' may be passed to let
+ * the method guess the object's type.
+ *
+ * Returns: (transfer full): the specific #GgitObject.
+ */
+GgitObject *
+ggit_repository_lookup (GgitRepository *repository,
+                        GgitOId        *oid,
+                        GType           gtype,
+                        GError        **error)
+{
+	GgitObject *object = NULL;
+	git_object *obj;
+	const git_oid *id;
+	git_otype otype;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+
+	id = (const git_oid *)_ggit_oid_get_oid (oid);
+	otype = get_otype_from_gtype (gtype);
+
+	ret = git_object_lookup (&obj, repository->priv->repository,
+	                         id, otype);
+
+	if (ret == 0)
+	{
+		object = _ggit_object_new (obj);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return object;
 }
 
 /**

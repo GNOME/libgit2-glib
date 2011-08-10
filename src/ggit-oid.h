@@ -39,6 +39,8 @@ GType               ggit_oid_get_type            (void) G_GNUC_CONST;
 
 GgitOId           *_ggit_oid_new                 (git_oid *oid);
 
+git_oid           *_ggit_oid_get_oid             (GgitOId *oid);
+
 GgitOId            *ggit_oid_copy                (GgitOId *oid);
 void                ggit_oid_free                (GgitOId *oid);
 

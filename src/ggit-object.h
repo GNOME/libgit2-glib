@@ -39,7 +39,7 @@ G_BEGIN_DECLS
 #define GGIT_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_OBJECT, GgitObjectClass))
 
 typedef struct _GgitObject		GgitObject;
-typedef struct _GgitObjectClass	GgitObjectClass;
+typedef struct _GgitObjectClass		GgitObjectClass;
 typedef struct _GgitObjectPrivate	GgitObjectPrivate;
 
 struct _GgitObject
@@ -60,7 +60,7 @@ GgitObject       *_ggit_object_new               (git_object *obj);
 
 GgitOId           *ggit_object_id                (GgitObject *object);
 
-GgitRepository    *ggit_object_owner             (GgitObject *object);
+struct _GgitRepository  *ggit_object_owner             (GgitObject *object);
 
 G_END_DECLS
 

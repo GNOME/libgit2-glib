@@ -40,6 +40,12 @@ _ggit_oid_new (git_oid *oid)
 	return glib_oid;
 }
 
+git_oid *
+_ggit_oid_get_oid (GgitOId *oid)
+{
+	return &oid->oid;
+}
+
 /**
  * ggit_oid_copy:
  * @oid: a #GgitOId
