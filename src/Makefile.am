@@ -21,7 +21,8 @@ INST_H_FILES =			\
 	ggit-object.h		\
 	ggit-oid.h		\
 	ggit-repository.h	\
-	ggit-tag.h
+	ggit-tag.h		\
+	ggit.h
 
 NOINST_H_FILES =		\
 	ggit-object-private.h
@@ -52,6 +53,7 @@ if HAVE_INTROSPECTION
   INTROSPECTION_SCANNER_ARGS = \
 	-I$(top_srcdir) 		\
 	--identifier-prefix=Ggit	\
+	--c-include=libgit2-glib/ggit.h	\
 	--warn-all
 
   introspection_sources = $(INST_H_FILES) $(C_FILES)
