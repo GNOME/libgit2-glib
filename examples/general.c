@@ -33,6 +33,7 @@ main (int argc, char *argv[])
 	GError *error = NULL;
 	const gchar hex[] = "82576c09c3fac738a54582c6c04a47684882d1a1";
 	gchar *oid_str;
+	gchar *repo_path;
 
 	g_type_init ();
 
@@ -42,7 +43,17 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	repository = ggit_repository_open (argv[1], &error);
+	repo_path = ggit_repository_discover (argv[1], &error);
+
+	if (error != NULL)
+	{
+		g_message (error->message);
+		return 1;
+	}
+
+	g_message ("Path repository: %s", repo_path);
+	repository = ggit_repository_open (repo_path, &error);
+	g_free (repo_path);
 
 	if (error != NULL)
 	{
