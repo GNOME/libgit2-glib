@@ -50,6 +50,14 @@ GgitSignature        *ggit_signature_copy         (GgitSignature *signature);
 
 void                  ggit_signature_free         (GgitSignature *signature);
 
+const gchar          *ggit_signature_get_name     (GgitSignature *signature);
+
+const gchar          *ggit_signature_get_email    (GgitSignature *signature);
+
+gint64                ggit_signature_get_time     (GgitSignature *signature);
+
+gint                  ggit_signature_get_offset   (GgitSignature *signature);
+
 G_END_DECLS
 
 #endif /* __GGIT_SIGNATURE_H__ */

@@ -148,3 +148,67 @@ ggit_signature_free (GgitSignature *signature)
 	git_signature_free (signature->signature);
 	g_slice_free (GgitSignature, signature);
 }
+
+/**
+ * ggit_signature_get_name:
+ * @signature. a #GgitSignature
+ *
+ * Gets the name of the person
+ *
+ * Returns: the name of the person
+ */
+const gchar *
+ggit_signature_get_name (GgitSignature *signature)
+{
+	g_return_val_if_fail (signature != NULL, NULL);
+
+	return signature->signature->name;
+}
+
+/**
+ * ggit_signature_get_email:
+ * @signature. a #GgitSignature
+ *
+ * Gets the email of the person
+ *
+ * Returns: the email of the person
+ */
+const gchar *
+ggit_signature_get_email (GgitSignature *signature)
+{
+	g_return_val_if_fail (signature != NULL, NULL);
+
+	return signature->signature->email;
+}
+
+/**
+ * ggit_signature_get_time:
+ * @signature. a #GgitSignature
+ *
+ * Gets the time when the action happened
+ *
+ * Returns: the time when the action happened
+ */
+gint64
+ggit_signature_get_time (GgitSignature *signature)
+{
+	g_return_val_if_fail (signature != NULL, 0);
+
+	return signature->signature->when.time;
+}
+
+/**
+ * ggit_signature_get_offset:
+ * @signature. a #GgitSignature
+ *
+ * Gets the timezone offset in minutes for the time
+ *
+ * Returns: the timezone offset in minutes for the time
+ */
+gint
+ggit_signature_get_offset (GgitSignature *signature)
+{
+	g_return_val_if_fail (signature != NULL, 0);
+
+	return signature->signature->when.offset;
+}
