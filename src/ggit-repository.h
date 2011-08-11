@@ -78,6 +78,10 @@ struct _GgitObject       *ggit_repository_lookup            (GgitRepository *rep
                                                              GType           gtype,
                                                              GError        **error);
 
+gchar                    *ggit_repository_discover           (GgitRepository *repository,
+                                                              const gchar    *path,
+                                                              GError        **error);
+
 gboolean                  ggit_repository_head_detached     (GgitRepository *repository,
                                                              GError        **error);
 

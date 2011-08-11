@@ -333,6 +333,44 @@ ggit_repository_lookup (GgitRepository *repository,
 }
 
 /**
+ * ggit_repository_discover:
+ * @repository: a #GgitRepository
+ * @path: the base path where the lookup starts
+ * @error: #GError for error reporting, or %NULL
+ *
+ * Look for a git repository and copy its path in the given buffer. The lookup start
+ * from base_path and walk across parent directories if nothing has been found. The
+ * lookup ends when the first repository is found.
+ *
+ * Returns: (transfer full): the repository path
+ */
+gchar *
+ggit_repository_discover (GgitRepository *repository,
+                          const gchar    *path,
+                          GError        **error)
+{
+	gchar found_path[GIT_PATH_MAX];
+	gchar *rep_path = NULL;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (path != NULL || *path == '\0', NULL);
+
+	ret = git_repository_discover(found_path, sizeof(found_path), path, 0, "");
+
+	if (ret == 0)
+	{
+		rep_path = g_strdup (found_path);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return rep_path;
+}
+
+/**
  * ggit_repository_head_detached:
  * @repository: a #GgitRepository
  * @error: #GError for error reporting, or %NULL
