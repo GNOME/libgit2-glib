@@ -334,7 +334,6 @@ ggit_repository_lookup (GgitRepository *repository,
 
 /**
  * ggit_repository_discover:
- * @repository: a #GgitRepository
  * @path: the base path where the lookup starts
  * @error: #GError for error reporting, or %NULL
  *
@@ -345,15 +344,13 @@ ggit_repository_lookup (GgitRepository *repository,
  * Returns: (transfer full): the repository path
  */
 gchar *
-ggit_repository_discover (GgitRepository *repository,
-                          const gchar    *path,
+ggit_repository_discover (const gchar    *path,
                           GError        **error)
 {
 	gchar found_path[GIT_PATH_MAX];
 	gchar *rep_path = NULL;
 	gint ret;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (path != NULL || *path == '\0', NULL);
 
 	ret = git_repository_discover(found_path, sizeof(found_path), path, 0, "");
