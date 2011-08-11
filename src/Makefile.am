@@ -21,6 +21,7 @@ INST_H_FILES =			\
 	ggit-object.h		\
 	ggit-oid.h		\
 	ggit-repository.h	\
+	ggit-signature.h	\
 	ggit-tag.h		\
 	ggit.h
 
@@ -35,6 +36,7 @@ C_FILES =			\
 	ggit-object.c		\
 	ggit-oid.c		\
 	ggit-repository.c	\
+	ggit-signature.c	\
 	ggit-tag.c		\
 	ggit-utils.c
 
