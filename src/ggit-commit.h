@@ -26,6 +26,7 @@
 
 #include <glib-object.h>
 #include "ggit-object.h"
+#include "ggit-signature.h"
 #include <git2/commit.h>
 
 G_BEGIN_DECLS
@@ -62,6 +63,10 @@ const gchar         *ggit_commit_message           (GgitCommit *commit);
 gint64               ggit_commit_time              (GgitCommit *commit);
 
 gint                 ggit_commit_time_offset       (GgitCommit *commit);
+
+GgitSignature       *ggit_commit_committer         (GgitCommit *commit);
+
+GgitSignature       *ggit_commit_author            (GgitCommit *commit);
 
 GList               *ggit_commit_parents           (GgitCommit *commit);
 

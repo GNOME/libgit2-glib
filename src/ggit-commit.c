@@ -139,6 +139,52 @@ ggit_commit_time_offset (GgitCommit *commit)
 }
 
 /**
+ * ggit_commit_committer:
+ * @commit: a #GgitCommit
+ *
+ * Get the committer of a commit. The returned value must be free with
+ * ggit_signature_free()
+ *
+ * Returns: (transfer full): the committer of a commit
+ */
+GgitSignature *
+ggit_commit_committer (GgitCommit *commit)
+{
+	git_commit *c;
+	const git_signature *signature;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
+
+	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	signature = git_commit_committer (c);
+
+	return _ggit_signature_wrap ((git_signature *)signature);
+}
+
+/**
+ * ggit_commit_author:
+ * @commit: a #GgitCommit
+ *
+ * Get the author of a commit. The returned value must be free with
+ * ggit_signature_free()
+ *
+ * Returns: (transfer full): the author of a commit
+ */
+GgitSignature *
+ggit_commit_author (GgitCommit *commit)
+{
+	git_commit *c;
+	const git_signature *signature;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
+
+	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	signature = git_commit_author (c);
+
+	return _ggit_signature_wrap ((git_signature *)signature);
+}
+
+/**
  * ggit_commit_parents:
  * @commit: a #GgitCommit
  *
