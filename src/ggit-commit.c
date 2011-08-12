@@ -153,7 +153,7 @@ ggit_commit_committer (GgitCommit *commit)
 	git_commit *c;
 	const git_signature *signature;
 
-	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
 	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
 	signature = git_commit_committer (c);
@@ -176,7 +176,7 @@ ggit_commit_author (GgitCommit *commit)
 	git_commit *c;
 	const git_signature *signature;
 
-	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
 	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
 	signature = git_commit_author (c);
