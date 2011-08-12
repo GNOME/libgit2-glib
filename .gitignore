@@ -31,6 +31,7 @@ Makefile.in
 /examples/general
 /gnome-doc-utils.make
 /gtk-doc.make
+/INSTALL
 /install-sh
 /intltool-extract
 /intltool-extract.in
