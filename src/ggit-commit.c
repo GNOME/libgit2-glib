@@ -20,6 +20,7 @@
  * Boston, MA  02110-1301  USA
  */
 
+#include <git2/errors.h>
 
 #include "ggit-commit.h"
 #include "ggit-object-private.h"

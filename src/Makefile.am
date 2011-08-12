@@ -51,3 +51,34 @@ header_DATA = $(INST_H_FILES)
 
 EXTRA_DIST =
 CLEANFILES =
+
+if HAVE_INTROSPECTION
+  -include $(INTROSPECTION_MAKEFILE)
+  INTROSPECTION_GIRS = GGit-1.0.gir
+  INTROSPECTION_SCANNER_ARGS = \
+	-I$(top_srcdir) 		\
+	--identifier-prefix=Ggit	\
+	--c-include=libgit2-glib/ggit.h	\
+	--warn-all
+
+  introspection_sources = $(INST_H_FILES) $(C_FILES)
+
+  GGit-1.0.gir: libgit2-glib-1.0.la
+  GGit_1_0_gir_NAMESPACE = GGit
+  GGit_1_0_gir_INCLUDES = GObject-2.0 GLib-2.0
+  GGit_1_0_gir_CFLAGS = $(LIBGIT2_GLIB_CFLAGS)
+  GGit_1_0_gir_LIBS = libgit2-glib-1.0.la
+  GGit_1_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources))
+  GGit_1_0_gir_PACKAGES = gobject-2.0 glib-2.0 libgit2
+  GGit_1_0_gir_EXPORT_PACKAGES = libgit2-glib-1.0
+
+  girdir = $(datadir)/gir-1.0
+  gir_DATA = $(INTROSPECTION_GIRS)
+
+  typelibdir = $(libdir)/girepository-1.0
+  typelib_DATA = $(INTROSPECTION_GIRS:.gir=.typelib)
+
+  CLEANFILES += \
+	$(gir_DATA)		\
+	$(typelib_DATA)
+endif
