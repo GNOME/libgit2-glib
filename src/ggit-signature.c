@@ -23,7 +23,6 @@
 
 #include "ggit-signature.h"
 #include "ggit-error.h"
-#include <git2/signature.h>
 
 
 struct _GgitSignature
@@ -32,6 +31,17 @@ struct _GgitSignature
 };
 
 G_DEFINE_BOXED_TYPE (GgitSignature, ggit_signature, ggit_signature_copy, ggit_signature_free)
+
+GgitSignature *
+_ggit_signature_wrap (git_signature *signature)
+{
+	GgitSignature *sig;
+
+	sig = g_slice_new (GgitSignature);
+	sig->signature = signature;
+
+	return sig;
+}
 
 /**
  * ggit_signature_new:
@@ -64,8 +74,7 @@ ggit_signature_new (const gchar *name,
 
 	if (ret == 0)
 	{
-		signature = g_slice_new (GgitSignature);
-		signature->signature = sig;
+		signature = _ggit_signature_wrap (sig);
 	}
 	else
 	{
@@ -102,8 +111,7 @@ ggit_signature_now (const gchar *name,
 
 	if (ret == 0)
 	{
-		signature = g_slice_new (GgitSignature);
-		signature->signature = sig;
+		signature = _ggit_signature_wrap (sig);
 	}
 	else
 	{

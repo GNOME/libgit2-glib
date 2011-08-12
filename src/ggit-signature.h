@@ -25,6 +25,7 @@
 #define __GGIT_SIGNATURE_H__
 
 #include <glib-object.h>
+#include <git2/signature.h>
 
 G_BEGIN_DECLS
 
@@ -35,6 +36,8 @@ G_BEGIN_DECLS
 typedef struct _GgitSignature	GgitSignature;
 
 GType                 ggit_signature_get_type     (void) G_GNUC_CONST;
+
+GgitSignature       *_ggit_signature_wrap         (git_signature *signature);
 
 GgitSignature        *ggit_signature_new          (const gchar *name,
                                                    const gchar *email,
