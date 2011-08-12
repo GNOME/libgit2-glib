@@ -25,8 +25,10 @@
 #define __GGIT_BLOB_H__
 
 #include <glib-object.h>
-#include "ggit-object.h"
 #include <git2/blob.h>
+
+#include "ggit-object.h"
+#include "ggit-types.h"
 
 G_BEGIN_DECLS
 
@@ -38,7 +40,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_BLOB_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_BLOB))
 #define GGIT_BLOB_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_BLOB, GgitBlobClass))
 
-typedef struct _GgitBlob	GgitBlob;
 typedef struct _GgitBlobClass	GgitBlobClass;
 typedef struct _GgitBlobPrivate	GgitBlobPrivate;
 
@@ -56,9 +57,9 @@ GType             ggit_blob_get_type         (void) G_GNUC_CONST;
 
 GgitBlob        *_ggit_blob_new              (git_blob *blob);
 
-gconstpointer     ggit_blob_rawcontent       (GgitBlob *blob);
+gconstpointer     ggit_blob_get_raw_content  (GgitBlob *blob);
 
-gint              ggit_blob_rawsize          (GgitBlob *blob);
+gint              ggit_blob_get_raw_size     (GgitBlob *blob);
 
 G_END_DECLS
 

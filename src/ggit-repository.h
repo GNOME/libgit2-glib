@@ -26,7 +26,8 @@
 
 #include <glib-object.h>
 #include <git2/repository.h>
-#include "ggit-object.h"
+
+#include "ggit-types.h"
 
 G_BEGIN_DECLS
 
@@ -38,7 +39,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_REPOSITORY_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REPOSITORY))
 #define GGIT_REPOSITORY_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REPOSITORY, GgitRepositoryClass))
 
-typedef struct _GgitRepository		GgitRepository;
 typedef struct _GgitRepositoryClass	GgitRepositoryClass;
 typedef struct _GgitRepositoryPrivate	GgitRepositoryPrivate;
 
@@ -54,46 +54,38 @@ struct _GgitRepositoryClass
 	GObjectClass parent_class;
 };
 
-typedef enum
-{
-	GGIT_REPO_PATH,
-	GGIT_REPO_PATH_INDEX,
-	GGIT_REPO_PATH_ODB,
-	GGIT_REPO_PATH_WORKDIR
-} GgitRepositoryPathid;
+GType               ggit_repository_get_type          (void) G_GNUC_CONST;
 
-GType                     ggit_repository_get_type          (void) G_GNUC_CONST;
+GgitRepository     *_ggit_repository_new              (git_repository *repository);
 
-GgitRepository          *_ggit_repository_new               (git_repository *repository);
+GgitRepository     *ggit_repository_open              (const gchar           *path,
+                                                       GError               **error);
 
-GgitRepository           *ggit_repository_open              (const gchar *path,
-                                                             GError     **error);
+GgitRepository     *ggit_repository_init_repository   (const gchar           *path,
+                                                       gboolean               is_bare,
+                                                       GError               **error);
 
-GgitRepository           *ggit_repository_init_repository   (const gchar *path,
-                                                             gboolean     is_bare,
-                                                             GError     **error);
+GgitObject         *ggit_repository_lookup            (GgitRepository        *repository,
+                                                       GgitOId               *oid,
+                                                       GType                  gtype,
+                                                       GError               **error);
 
-struct _GgitObject       *ggit_repository_lookup            (GgitRepository *repository,
-                                                             GgitOId        *oid,
-                                                             GType           gtype,
-                                                             GError        **error);
+gchar              *ggit_repository_discover          (const gchar           *path,
+                                                       GError               **error);
 
-gchar                    *ggit_repository_discover           (const gchar    *path,
-                                                              GError        **error);
+gboolean            ggit_repository_is_head_detached  (GgitRepository        *repository,
+                                                       GError               **error);
 
-gboolean                  ggit_repository_head_detached     (GgitRepository *repository,
-                                                             GError        **error);
+gboolean            ggit_repository_is_head_orphan    (GgitRepository        *repository,
+                                                       GError               **error);
 
-gboolean                  ggit_repository_head_orphan       (GgitRepository *repository,
-                                                             GError        **error);
+gboolean            ggit_repository_is_empty          (GgitRepository        *repository,
+                                                       GError               **error);
 
-gboolean                  ggit_repository_is_empty          (GgitRepository *repository,
-                                                             GError        **error);
+const gchar        *ggit_repository_get_path          (GgitRepository        *repository,
+                                                       GgitRepositoryPathid   id);
 
-const gchar              *ggit_repository_path              (GgitRepository      *repository,
-                                                             GgitRepositoryPathid id);
-
-gboolean                  ggit_repository_is_bare           (GgitRepository  *repository);
+gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 
 G_END_DECLS
 

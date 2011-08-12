@@ -23,6 +23,7 @@
 
 #include "ggit-commit.h"
 #include "ggit-object-private.h"
+#include "ggit-signature.h"
 
 
 G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
@@ -58,15 +59,15 @@ _ggit_commit_new (git_commit *commit)
 }
 
 /**
- * ggit_commit_message_short:
- * @commit: a #GgitCommit
+ * ggit_commit_get_short_message:
+ * @commit: a #GgitCommit.
  *
- * Get the short (one line) message of a commit.
+ * Gets the short (one line) message of @commit.
  *
- * Returns: the short (one line) message of a commit.
+ * Returns: the short (one line) message of the commit.
  */
 const gchar *
-ggit_commit_message_short (GgitCommit *commit)
+ggit_commit_get_short_message (GgitCommit *commit)
 {
 	git_commit *c;
 
@@ -78,15 +79,15 @@ ggit_commit_message_short (GgitCommit *commit)
 }
 
 /**
- * ggit_commit_message:
- * @commit: a #GgitCommit
+ * ggit_commit_get_message:
+ * @commit: a #GgitCommit.
  *
- * Get the full message of a commit.
+ * Gets the full message of @commit.
  *
- * Returns: the message of a commit
+ * Returns: the message of the commit.
  */
 const gchar *
-ggit_commit_message (GgitCommit *commit)
+ggit_commit_get_message (GgitCommit *commit)
 {
 	git_commit *c;
 
@@ -99,15 +100,15 @@ ggit_commit_message (GgitCommit *commit)
 
 /* TODO: use gdatetime */
 /**
- * ggit_commit_time:
- * @commit: a #GgitCommit
+ * ggit_commit_get_time:
+ * @commit: a #GgitCommit.
  *
- * Get the commit time (i.e. committer time) of a commit.
+ * Gets the commit time (i.e. committer time) of @commit.
  *
- * Returns: the time of a commit
+ * Returns: the time of the commit.
  */
 gint64
-ggit_commit_time (GgitCommit *commit)
+ggit_commit_get_time (GgitCommit *commit)
 {
 	git_commit *c;
 
@@ -119,15 +120,16 @@ ggit_commit_time (GgitCommit *commit)
 }
 
 /**
- * ggit_commit_time_offset:
- * @commit: a #GgitCommit
+ * ggit_commit_get_time_offset:
+ * @commit: a #GgitCommit.
  *
- * Get the commit timezone offset (i.e. committer's preferred timezone) of a commit.
+ * Gets the commit timezone offset (i.e. committer's preferred timezone)
+ * of @commit.
  *
- * Returns: positive or negative timezone offset, in minutes from UTC
+ * Returns: positive or negative timezone offset, in minutes from UTC.
  */
 gint
-ggit_commit_time_offset (GgitCommit *commit)
+ggit_commit_get_time_offset (GgitCommit *commit)
 {
 	git_commit *c;
 
@@ -139,16 +141,16 @@ ggit_commit_time_offset (GgitCommit *commit)
 }
 
 /**
- * ggit_commit_committer:
- * @commit: a #GgitCommit
+ * ggit_commit_get_committer:
+ * @commit: a #GgitCommit.
  *
- * Get the committer of a commit. The returned value must be free with
- * ggit_signature_free()
+ * Gets the committer of @commit. The returned value must be free'd with
+ * ggit_signature_free().
  *
- * Returns: (transfer full): the committer of a commit
+ * Returns: (transfer full): the committer of the commit.
  */
 GgitSignature *
-ggit_commit_committer (GgitCommit *commit)
+ggit_commit_get_committer (GgitCommit *commit)
 {
 	git_commit *c;
 	const git_signature *signature;
@@ -162,16 +164,16 @@ ggit_commit_committer (GgitCommit *commit)
 }
 
 /**
- * ggit_commit_author:
- * @commit: a #GgitCommit
+ * ggit_commit_get_author:
+ * @commit: a #GgitCommit.
  *
- * Get the author of a commit. The returned value must be free with
- * ggit_signature_free()
+ * Gets the author of @commit. The returned value must be free'd with
+ * ggit_signature_free().
  *
- * Returns: (transfer full): the author of a commit
+ * Returns: (transfer full): the author of the commit.
  */
 GgitSignature *
-ggit_commit_author (GgitCommit *commit)
+ggit_commit_get_author (GgitCommit *commit)
 {
 	git_commit *c;
 	const git_signature *signature;
@@ -185,15 +187,16 @@ ggit_commit_author (GgitCommit *commit)
 }
 
 /**
- * ggit_commit_parents:
- * @commit: a #GgitCommit
+ * ggit_commit_get_parents:
+ * @commit: a #GgitCommit.
  *
- * Get the parents for @commit
+ * Gets the parents for @commit.
  *
- * Returns: (transfer full): the parents for @commit
+ * Returns: (transfer full) (element-type Ggit.Commit):
+ * the parents of the commit.
  */
 GList *
-ggit_commit_parents (GgitCommit *commit)
+ggit_commit_get_parents (GgitCommit *commit)
 {
 	GList *parents = NULL;
 	git_commit *c;
@@ -205,7 +208,7 @@ ggit_commit_parents (GgitCommit *commit)
 
 	num_parents = git_commit_parentcount (c);
 
-	for (i = 0; i < num_parents; i++)
+	for (i = num_parents - 1; i >= 0; --i)
 	{
 		git_commit *p;
 		gint ret;
@@ -217,8 +220,6 @@ ggit_commit_parents (GgitCommit *commit)
 			parents = g_list_prepend (parents, _ggit_commit_new (p));
 		}
 	}
-
-	parents = g_list_reverse (parents);
 
 	return parents;
 }

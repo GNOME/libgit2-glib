@@ -30,5 +30,6 @@
 #include "ggit-oid.h"
 #include "ggit-repository.h"
 #include "ggit-tag.h"
+#include "ggit-types.h"
 
 #endif

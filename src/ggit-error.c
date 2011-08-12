@@ -21,15 +21,17 @@
  */
 
 
-#include "ggit-error.h"
-
 #include <errno.h>
 #include <git2/errors.h>
+
+#include "ggit-error.h"
 
 /**
  * ggit_error_quark:
  *
- * Returns:
+ * Error domain for Ggit functions.
+ * Errors in this domain will be from the GgitError enumeration.
+ * See #GError for information on error domains.
  */
 GQuark
 ggit_error_quark (void)

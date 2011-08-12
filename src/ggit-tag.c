@@ -20,11 +20,13 @@
  * Boston, MA  02110-1301  USA
  */
 
+#include <git2/errors.h>
 
-#include "ggit-tag.h"
-#include "ggit-object-private.h"
 #include "ggit-error.h"
+#include "ggit-object-private.h"
 #include "ggit-oid.h"
+#include "ggit-signature.h"
+#include "ggit-tag.h"
 #include "ggit-utils.h"
 
 
@@ -61,33 +63,33 @@ _ggit_tag_new (git_tag *tag)
 }
 
 /**
- * ggit_tag_target:
- * @tag: a #GgitTag
- * @error: #GError for error reporting, or %NULL
+ * ggit_tag_get_target:
+ * @tag: a #GgitTag.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Get the tagged object of a tag
+ * Gets the target #GgitObject of @tag.
  *
  * This method performs a repository lookup for the
- * given object and returns it
+ * given object and returns it.
  *
- * Returns: (transfer full): the target object
+ * Returns: (transfer full): the target #GgitObject of the tag.
  */
 GgitObject *
-ggit_tag_target (GgitTag *tag,
-                 GError **error)
+ggit_tag_get_target (GgitTag  *tag,
+                     GError  **error)
 {
-	GgitObject *object;
+	GgitObject *object = NULL;
 	git_tag *t;
 	git_object *obj;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	object = NULL;
 	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
 	ret = git_tag_target (&obj, t);
 
-	if (ret != 0)
+	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -100,15 +102,15 @@ ggit_tag_target (GgitTag *tag,
 }
 
 /**
- * ggit_tag_target_oid:
- * @tag: a #GgitTag
+ * ggit_tag_get_target_oid:
+ * @tag: a #GgitTag.
  *
- * Get the OID of the tagged object of a tag
+ * Gets the target #GgitOId of @tag.
  *
- * Returns: (transfer full): the OID of the tagged object of a tag
+ * Returns: (transfer full): the target #GgitOId of the tag.
  */
 GgitOId *
-ggit_tag_target_oid (GgitTag *tag)
+ggit_tag_get_target_oid (GgitTag *tag)
 {
 	const git_oid *oid;
 	git_tag *t;
@@ -122,15 +124,15 @@ ggit_tag_target_oid (GgitTag *tag)
 }
 
 /**
- * ggit_tag_name:
- * @tag: a #GgitTag
+ * ggit_tag_get_name:
+ * @tag: a #GgitTag.
  *
- * Get the name of @tag
+ * Gets the name of @tag.
  *
- * Returns: the name of @tag
+ * Returns: the name of the tag.
  */
 const gchar *
-ggit_tag_name (GgitTag *tag)
+ggit_tag_get_name (GgitTag *tag)
 {
 	git_tag *t;
 
@@ -142,16 +144,16 @@ ggit_tag_name (GgitTag *tag)
 }
 
 /**
- * ggit_tag_tagger:
- * @tag: a #GgitTag
+ * ggit_tag_get_tagger:
+ * @tag: a #GgitTag.
  *
- * Get the tagger (author) of a tag. The returned value must be free with
+ * Get the tagger (author) of @tag. The returned value must be free with
  * ggit_signature_free().
  *
- * Returns: (transfer full): the tagger (author) of a tag
+ * Returns: (transfer full): the tagger (author) of the tag.
  */
 GgitSignature *
-ggit_tag_tagger (GgitTag *tag)
+ggit_tag_get_tagger (GgitTag *tag)
 {
 	const git_signature *signature;
 	git_tag *t;
@@ -165,15 +167,15 @@ ggit_tag_tagger (GgitTag *tag)
 }
 
 /**
- * ggit_tag_message:
- * @tag: a #GgitTag
+ * ggit_tag_get_message:
+ * @tag: a #GgitTag.
  *
- * Get the message of @tag
+ * Gets the message of @tag.
  *
- * Returns: the message of @tag
+ * Returns: the message of the tag.
  */
 const gchar *
-ggit_tag_message (GgitTag *tag)
+ggit_tag_get_message (GgitTag *tag)
 {
 	git_tag *t;
 

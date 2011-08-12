@@ -22,9 +22,11 @@
 
 #include <gio/gio.h>
 #include <git2/errors.h>
+#include <git2/repository.h>
 
-#include "ggit-repository.h"
 #include "ggit-error.h"
+#include "ggit-oid.h"
+#include "ggit-repository.h"
 #include "ggit-utils.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
@@ -75,8 +77,8 @@ ggit_repository_get_property (GObject    *object,
 	switch (prop_id)
 	{
 		case PROP_PATH:
-			g_value_set_string (value, ggit_repository_path (repository,
-			                                                 GGIT_REPO_PATH));
+			g_value_set_string (value, ggit_repository_get_path (repository,
+			                                                     GGIT_REPO_PATH));
 			break;
 		case PROP_IS_BARE:
 			g_value_set_boolean (value, ggit_repository_is_bare (repository));
@@ -149,7 +151,7 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                 PROP_INIT,
 	                                 g_param_spec_boolean ("init",
 	                                                       "Init",
-	                                                       "Wether to initialize a repository",
+	                                                       "Whether to initialize a repository",
 	                                                       FALSE,
 	                                                       G_PARAM_READWRITE |
 	                                                       G_PARAM_CONSTRUCT_ONLY |
@@ -194,7 +196,7 @@ ggit_repository_initable_init (GInitable    *initable,
 		                           priv->path);
 	}
 
-	if (err != 0)
+	if (err != GIT_SUCCESS)
 	{
 		g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED,
 		                     git_lasterror ());
@@ -223,13 +225,12 @@ _ggit_repository_new (git_repository *repository)
 
 /**
  * ggit_repository_open:
- * @path: the path to the repository
- * @error: #GError for error reporting, or %NULL
+ * @path: the path to the repository.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Open a git repository.
  *
- * The 'path' argument must point to an existing git repository
- * folder, e.g.
+ * The @path must point to an existing git repository folder, e.g.
  *
  *		/path/to/my_repo/.git/	(normal repository)
  *							objects/
@@ -241,40 +242,43 @@ _ggit_repository_new (git_repository *repository)
  *						index
  *						HEAD
  *
- *	The method will automatically detect if 'path' is a normal
- *	or bare repository or fail is 'path' is neither.
+ *	The method will automatically detect if @path is a normal
+ *	or bare repository or fail if it is neither.
  *
- * Returns: (transfer full): a newly created #GgitRepository
+ * Returns: (transfer full): a newly created #GgitRepository.
  */
 GgitRepository *
-ggit_repository_open (const gchar *path,
-                      GError     **error)
+ggit_repository_open (const gchar  *path,
+                      GError      **error)
 {
+	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
 	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
-	                       "path", path, NULL);
+	                       "path", path,
+	                       NULL);
 }
 
 /**
  * ggit_repository_init_repository:
- * @path: the path to the repository
- * @is_bare: if %TRUE, a Git repository without a working directory is created
+ * @path: the path to the repository.
+ * @is_bare: if %TRUE, a git repository without a working directory is created
  *           at the pointed path. If %FALSE, provided path will be considered as the working
  *           directory into which the .git directory will be created.
- * @error: #GError for error reporting, or %NULL
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a new Git repository in the given folder.
+ * Creates a new git repository in the given folder.
  *
- * TODO:
- *	- Reinit the repository
- *	- Create config files
- *
- * Returns: (transfer full): a newly created #GgitRepository
+ * Returns: (transfer full): a newly created #GgitRepository.
  */
 GgitRepository *
-ggit_repository_init_repository (const gchar *path,
-                                 gboolean     is_bare,
-                                 GError     **error)
+ggit_repository_init_repository (const gchar  *path,
+                                 gboolean      is_bare,
+                                 GError      **error)
 {
+	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
 	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
 	                       "path", path,
 	                       "is-bare", is_bare,
@@ -284,27 +288,27 @@ ggit_repository_init_repository (const gchar *path,
 
 /**
  * ggit_repository_lookup:
- * @repository: a #GgitRepository
- * @oid: a #GgitOId
- * @gtype: a GType
- * @error: #GError for error reporting, or %NULL
+ * @repository: a #GgitRepository.
+ * @oid: a #GgitOId.
+ * @gtype: a #GType.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Lookup a reference to one of the objects in a repostory.
+ * Lookups a reference to one of the objects in the @repository.
  *
  * The generated reference must be freed with g_object_unref().
  *
- * The 'gtype' parameter must match the type of the object
+ * The @gtype must match the type of the object
  * in the odb; the method will fail otherwise.
- * The special value 'G_TYPE_NONE' may be passed to let
+ * The special value %G_TYPE_NONE may be passed to let
  * the method guess the object's type.
  *
- * Returns: (transfer full): the specific #GgitObject.
+ * Returns: (transfer full): the found #GgitObject, or %NULL on error.
  */
 GgitObject *
-ggit_repository_lookup (GgitRepository *repository,
-                        GgitOId        *oid,
-                        GType           gtype,
-                        GError        **error)
+ggit_repository_lookup (GgitRepository  *repository,
+                        GgitOId         *oid,
+                        GType            gtype,
+                        GError         **error)
 {
 	GgitObject *object = NULL;
 	git_object *obj;
@@ -334,26 +338,29 @@ ggit_repository_lookup (GgitRepository *repository,
 
 /**
  * ggit_repository_discover:
- * @path: the base path where the lookup starts
- * @error: #GError for error reporting, or %NULL
+ * @path: the base path where the lookup starts.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Look for a git repository and copy its path in the given buffer. The lookup start
- * from base_path and walk across parent directories if nothing has been found. The
- * lookup ends when the first repository is found.
+ * Looks for a git repository.
  *
- * Returns: (transfer full): the repository path
+ * The lookup starts from @path and walks up the parent directories
+ * and stops when a repository is found.
+ *
+ * Returns: (transfer full): the repository path.
  */
 gchar *
-ggit_repository_discover (const gchar    *path,
-                          GError        **error)
+ggit_repository_discover (const gchar  *path,
+                          GError      **error)
 {
 	gchar found_path[GIT_PATH_MAX];
 	gchar *rep_path = NULL;
 	gint ret;
 
 	g_return_val_if_fail (path != NULL || *path == '\0', NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_repository_discover(found_path, sizeof(found_path), path, 0, "");
+	ret = git_repository_discover (found_path, sizeof (found_path),
+	                               path, 0, "");
 
 	if (ret == 0)
 	{
@@ -368,11 +375,11 @@ ggit_repository_discover (const gchar    *path,
 }
 
 /**
- * ggit_repository_head_detached:
- * @repository: a #GgitRepository
- * @error: #GError for error reporting, or %NULL
+ * ggit_repository_is_head_detached:
+ * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Check if a repository's HEAD is detached
+ * Checks if @repository's HEAD is detached.
  *
  * A repository's HEAD is detached when it points directly to a commit
  * instead of a branch.
@@ -380,12 +387,13 @@ ggit_repository_discover (const gchar    *path,
  * Returns: %TRUE if HEAD is detached.
  */
 gboolean
-ggit_repository_head_detached (GgitRepository *repository,
-                               GError        **error)
+ggit_repository_is_head_detached (GgitRepository  *repository,
+                                  GError         **error)
 {
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_repository_head_detached (repository->priv->repository);
 
@@ -398,24 +406,25 @@ ggit_repository_head_detached (GgitRepository *repository,
 }
 
 /**
- * ggit_repository_head_orphan:
- * @repository: a #GgitRepository
- * @error: #GError for error reporting, or %NULL
+ * ggit_repository_is_head_orphan:
+ * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Check if the current branch is an orphan
+ * Checks if @repository's HEAD is an orphan.
  *
- * An orphan branch is one named from HEAD but which doesn't exist in
+ * An orphan branch is one named from HEAD but doesn't exist in
  * the refs namespace, because it doesn't have any commit to point to.
  *
  * Returns: %TRUE if the current branch is an orphan.
  */
 gboolean
-ggit_repository_head_orphan (GgitRepository *repository,
-                             GError        **error)
+ggit_repository_is_head_orphan (GgitRepository  *repository,
+                                GError         **error)
 {
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_repository_head_orphan (repository->priv->repository);
 
@@ -429,10 +438,10 @@ ggit_repository_head_orphan (GgitRepository *repository,
 
 /**
  * ggit_repository_is_empty:
- * @repository: a #GgitRepository
- * @error: #GError for error reporting, or %NULL
+ * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Check if a repository is empty
+ * Checks if @repository is empty.
  *
  * An empty repository has just been initialized and contains
  * no commits.
@@ -440,12 +449,13 @@ ggit_repository_head_orphan (GgitRepository *repository,
  * Returns: %TRUE if the repository is empty.
  */
 gboolean
-ggit_repository_is_empty (GgitRepository *repository,
-                          GError        **error)
+ggit_repository_is_empty (GgitRepository  *repository,
+                          GError         **error)
 {
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_repository_is_empty (repository->priv->repository);
 
@@ -458,25 +468,17 @@ ggit_repository_is_empty (GgitRepository *repository,
 }
 
 /**
- * ggit_repository_path:
- * @repository: a #GgitRepository
- * @id: The ID of the path to return
+ * ggit_repository_get_path:
+ * @repository: a #GgitRepository.
+ * @id: the #GgitRepositoryPathid of the path to return.
  *
- * Get one of the paths to the repository
+ * Gets one of the paths to the repository.
  *
- * Possible values for `id`:
- *
- *	GIT_REPO_PATH: return the path to the repository
- *	GIT_REPO_PATH_INDEX: return the path to the index
- *	GIT_REPO_PATH_ODB: return the path to the ODB
- *	GIT_REPO_PATH_WORKDIR: return the path to the working
- *		directory
- *
- * Returns: absolute path of the requested id
+ * Returns: the absolute path of the requested #GgitRepositoryPathid.
  */
 const gchar *
-ggit_repository_path (GgitRepository      *repository,
-                      GgitRepositoryPathid id)
+ggit_repository_get_path (GgitRepository       *repository,
+                          GgitRepositoryPathid  id)
 {
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
@@ -485,9 +487,9 @@ ggit_repository_path (GgitRepository      *repository,
 
 /**
  * ggit_repository_is_bare:
- * @repository: a #GgitRepository
+ * @repository: a #GgitRepository.
  *
- * Check if a repository is bare
+ * Checks if @repository is bare.
  *
  * Returns: %TRUE if the repository is empty.
  */

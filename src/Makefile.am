@@ -23,6 +23,7 @@ INST_H_FILES =			\
 	ggit-repository.h	\
 	ggit-signature.h	\
 	ggit-tag.h		\
+	ggit-types.h		\
 	ggit.h
 
 NOINST_H_FILES =		\

@@ -25,10 +25,10 @@
 #define __GGIT_TAG_H__
 
 #include <glib-object.h>
-#include "ggit-object.h"
-#include "ggit-oid.h"
-#include "ggit-signature.h"
 #include <git2/tag.h>
+
+#include "ggit-object.h"
+#include "ggit-types.h"
 
 G_BEGIN_DECLS
 
@@ -40,7 +40,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_TAG_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_TAG))
 #define GGIT_TAG_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_TAG, GgitTagClass))
 
-typedef struct _GgitTag		GgitTag;
 typedef struct _GgitTagClass	GgitTagClass;
 
 struct _GgitTag
@@ -55,18 +54,18 @@ struct _GgitTagClass
 
 GType             ggit_tag_get_type             (void) G_GNUC_CONST;
 
-GgitTag         *_ggit_tag_new                  (git_tag *tag);
+GgitTag         *_ggit_tag_new                  (git_tag  *tag);
 
-GgitObject       *ggit_tag_target               (GgitTag *tag,
-                                                 GError **error);
+GgitObject       *ggit_tag_get_target           (GgitTag  *tag,
+                                                 GError  **error);
 
-GgitOId          *ggit_tag_target_oid           (GgitTag *tag);
+GgitOId          *ggit_tag_get_target_oid       (GgitTag  *tag);
 
-const gchar      *ggit_tag_name                 (GgitTag *tag);
+const gchar      *ggit_tag_get_name             (GgitTag  *tag);
 
-GgitSignature    *ggit_tag_tagger               (GgitTag *tag);
+GgitSignature    *ggit_tag_get_tagger           (GgitTag *tag);
 
-const gchar      *ggit_tag_message              (GgitTag *tag);
+const gchar      *ggit_tag_get_message          (GgitTag  *tag);
 
 G_END_DECLS
 

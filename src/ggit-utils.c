@@ -21,10 +21,10 @@
  */
 
 
-#include "ggit-utils.h"
-#include "ggit-tag.h"
-#include "ggit-commit.h"
 #include "ggit-blob.h"
+#include "ggit-commit.h"
+#include "ggit-tag.h"
+#include "ggit-utils.h"
 
 git_otype
 ggit_utils_get_otype_from_gtype (GType gtype)

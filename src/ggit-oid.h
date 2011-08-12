@@ -27,31 +27,31 @@
 #include <glib-object.h>
 #include <git2/oid.h>
 
+#include "ggit-types.h"
+
 G_BEGIN_DECLS
 
 #define GGIT_TYPE_OID       (ggit_oid_get_type ())
 #define GGIT_OID(obj)       ((GgitOId *)obj)
 #define GGIT_OID_CONST(obj) ((GgitOId const *)obj)
 
-typedef struct _GgitOId GgitOId;
-
 GType               ggit_oid_get_type            (void) G_GNUC_CONST;
 
-GgitOId           *_ggit_oid_new                 (git_oid *oid);
+GgitOId           *_ggit_oid_new                 (git_oid      *oid);
 
-git_oid           *_ggit_oid_get_oid             (GgitOId *oid);
+git_oid           *_ggit_oid_get_oid             (GgitOId      *oid);
 
-GgitOId            *ggit_oid_copy                (GgitOId *oid);
-void                ggit_oid_free                (GgitOId *oid);
+GgitOId            *ggit_oid_copy                (GgitOId      *oid);
+void                ggit_oid_free                (GgitOId      *oid);
 
-GgitOId            *ggit_oid_fromstr             (const gchar *str);
+GgitOId            *ggit_oid_new_from_string     (const gchar  *str);
 
-GgitOId            *ggit_oid_fromraw             (const guchar *raw);
+GgitOId            *ggit_oid_new_from_raw        (const guchar *raw);
 
-gint                ggit_oid_cmp                 (GgitOId *a,
-                                                  GgitOId *b);
+gint                ggit_oid_compare             (GgitOId      *a,
+                                                  GgitOId      *b);
 
-gchar              *ggit_oid_to_string           (GgitOId *oid);
+gchar              *ggit_oid_to_string           (GgitOId      *oid);
 
 G_END_DECLS
 

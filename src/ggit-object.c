@@ -24,6 +24,7 @@
 #include "ggit-object.h"
 #include "ggit-object-private.h"
 #include "ggit-oid.h"
+#include "ggit-repository.h"
 
 
 #define GGIT_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_OBJECT, GgitObjectPrivate))
@@ -56,8 +57,16 @@ ggit_object_init (GgitObject *object)
 	object->priv = GGIT_OBJECT_GET_PRIVATE (object);
 }
 
+/**
+ * ggit_object_get_id:
+ * @object: a #GgitObject.
+ *
+ * Gets the #GgitOId of @object.
+ *
+ * Returns: (transfer full): the #GgitOId of the object.
+ */
 GgitOId *
-ggit_object_id (GgitObject *object)
+ggit_object_get_id (GgitObject *object)
 {
 	const git_oid *oid;
 
@@ -69,16 +78,16 @@ ggit_object_id (GgitObject *object)
 }
 
 /**
- * ggit_object_owner:
- * @object: a #GgitObject
+ * ggit_object_get_owner:
+ * @object: a #GgitObject.
  *
- * Get the repository that owns this object
+ * Gets the #GgitRepository that owns @object.
  *
- * Returns: (transfer full): the repository that own this object. The returned
- * value must be freed calling g_object_unref().
+ * Returns: (transfer full): the #GgitRepository that owns this object.
+ * The returned value must be free'd calling g_object_unref().
  */
 GgitRepository *
-ggit_object_owner (GgitObject *object)
+ggit_object_get_owner (GgitObject *object)
 {
 	git_repository *repository;
 

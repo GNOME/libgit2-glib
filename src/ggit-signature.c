@@ -21,8 +21,11 @@
  */
 
 
-#include "ggit-signature.h"
+#include <git2/errors.h>
+#include <git2/signature.h>
+
 #include "ggit-error.h"
+#include "ggit-signature.h"
 
 
 struct _GgitSignature
@@ -45,23 +48,22 @@ _ggit_signature_wrap (git_signature *signature)
 
 /**
  * ggit_signature_new:
- * @name: name of the person
- * @email: email of the person
- * @signature_time: time when the action happened
- * @signature_offset: timezone offset in minutes for the time
- * @error: #GError for error reporting, or %NULL
+ * @name: the name of the person.
+ * @email: the email of the person.
+ * @signature_time: the time when the action happened.
+ * @signature_offset: the timezone offset in minutes for the time.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Create a new action signature. The signature must be freed
- * manually using ggit_signature_free()
+ * Creates a new #GgitSignature.
  *
- * Returns: (transfer full): a newly created #GgitSignature
+ * Returns: (transfer full): a newly allocated #GgitSignature.
  */
 GgitSignature *
-ggit_signature_new (const gchar *name,
-                    const gchar *email,
-                    gint64       signature_time,
-                    gint         signature_offset,
-                    GError     **error)
+ggit_signature_new (const gchar  *name,
+                    const gchar  *email,
+                    gint64        signature_time,
+                    gint          signature_offset,
+                    GError      **error)
 {
 	GgitSignature *signature = NULL;
 	git_signature *sig;
@@ -69,10 +71,11 @@ ggit_signature_new (const gchar *name,
 
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (email != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_signature_new (&sig, name, email, signature_time, signature_offset);
 
-	if (ret == 0)
+	if (ret == GIT_SUCCESS)
 	{
 		signature = _ggit_signature_wrap (sig);
 	}
@@ -85,20 +88,19 @@ ggit_signature_new (const gchar *name,
 }
 
 /**
- * ggit_signature_now:
- * @name: name of the person
- * @email: email of the person
- * @error: #GError for error reporting, or %NULL
+ * ggit_signature_new_now:
+ * @name: the name of the person.
+ * @email: the email of the person.
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Create a new action signature with a timestamp of 'now'. The
- * signature must be freed manually using ggit_signature_free()
+ * Creates a new #GgitSignature with a timestamp of 'now'.
  *
- * Returns: (transfer full): a newly created #GgitSignature
+ * Returns: (transfer full): a newly allocated #GgitSignature.
  */
 GgitSignature *
-ggit_signature_now (const gchar *name,
-                    const gchar *email,
-                    GError     **error)
+ggit_signature_new_now (const gchar  *name,
+                        const gchar  *email,
+                        GError      **error)
 {
 	GgitSignature *signature = NULL;
 	git_signature *sig;
@@ -106,10 +108,11 @@ ggit_signature_now (const gchar *name,
 
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (email != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_signature_now (&sig, name, email);
 
-	if (ret == 0)
+	if (ret == GIT_SUCCESS)
 	{
 		signature = _ggit_signature_wrap (sig);
 	}
@@ -123,11 +126,11 @@ ggit_signature_now (const gchar *name,
 
 /**
  * ggit_signature_copy:
- * @signature: a #GgitSignature
+ * @signature: a #GgitSignature.
  *
  * Creates a copy of @signature.
  *
- * Returns: (transfer full): a newly created #GgitSignature
+ * Returns: (transfer full): a newly allocated #GgitSignature.
  */
 GgitSignature *
 ggit_signature_copy (GgitSignature *signature)
@@ -144,7 +147,7 @@ ggit_signature_copy (GgitSignature *signature)
 
 /**
  * ggit_signature_free:
- * @signature: a #GgitSignature
+ * @signature: a #GgitSignature.
  *
  * Frees @signature.
  */
@@ -159,11 +162,11 @@ ggit_signature_free (GgitSignature *signature)
 
 /**
  * ggit_signature_get_name:
- * @signature. a #GgitSignature
+ * @signature: a #GgitSignature.
  *
- * Gets the name of the person
+ * Gets the name of the person.
  *
- * Returns: the name of the person
+ * Returns: the name of the person.
  */
 const gchar *
 ggit_signature_get_name (GgitSignature *signature)
@@ -175,11 +178,11 @@ ggit_signature_get_name (GgitSignature *signature)
 
 /**
  * ggit_signature_get_email:
- * @signature. a #GgitSignature
+ * @signature: a #GgitSignature.
  *
- * Gets the email of the person
+ * Gets the email of the person.
  *
- * Returns: the email of the person
+ * Returns: the email of the person.
  */
 const gchar *
 ggit_signature_get_email (GgitSignature *signature)
@@ -191,11 +194,11 @@ ggit_signature_get_email (GgitSignature *signature)
 
 /**
  * ggit_signature_get_time:
- * @signature. a #GgitSignature
+ * @signature: a #GgitSignature.
  *
- * Gets the time when the action happened
+ * Gets the time when the action happened.
  *
- * Returns: the time when the action happened
+ * Returns: the time when the action happened.
  */
 gint64
 ggit_signature_get_time (GgitSignature *signature)
@@ -206,15 +209,15 @@ ggit_signature_get_time (GgitSignature *signature)
 }
 
 /**
- * ggit_signature_get_offset:
- * @signature. a #GgitSignature
+ * ggit_signature_get_time_offset:
+ * @signature: a #GgitSignature.
  *
- * Gets the timezone offset in minutes for the time
+ * Gets the timezone offset in minutes for the time.
  *
- * Returns: the timezone offset in minutes for the time
+ * Returns: the timezone offset in minutes for the time.
  */
 gint
-ggit_signature_get_offset (GgitSignature *signature)
+ggit_signature_get_time_offset (GgitSignature *signature)
 {
 	g_return_val_if_fail (signature != NULL, 0);
 

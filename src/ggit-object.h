@@ -26,8 +26,8 @@
 
 #include <glib-object.h>
 #include <git2/object.h>
-#include "ggit-oid.h"
-#include "ggit-repository.h"
+
+#include "ggit-types.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +39,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_OBJECT))
 #define GGIT_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_OBJECT, GgitObjectClass))
 
-typedef struct _GgitObject		GgitObject;
 typedef struct _GgitObjectClass		GgitObjectClass;
 typedef struct _GgitObjectPrivate	GgitObjectPrivate;
 
@@ -55,11 +54,11 @@ struct _GgitObjectClass
 	GObjectClass parent_class;
 };
 
-GType                    ggit_object_get_type          (void) G_GNUC_CONST;
+GType            ggit_object_get_type          (void) G_GNUC_CONST;
 
-GgitOId                 *ggit_object_id                (GgitObject *object);
+GgitOId         *ggit_object_get_id            (GgitObject *object);
 
-struct _GgitRepository  *ggit_object_owner             (GgitObject *object);
+GgitRepository  *ggit_object_get_owner         (GgitObject *object);
 
 G_END_DECLS
 

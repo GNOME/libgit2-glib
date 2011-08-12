@@ -58,20 +58,20 @@ _ggit_blob_new (git_blob *blob)
 }
 
 /**
- * ggit_blob_rawcontent:
- * @blob: a #GgitBlob
+ * ggit_blob_get_raw_content:
+ * @blob: a #GgitBlob.
  *
- * Get a read-only buffer with the raw content of @blob.
+ * Gets a read-only buffer with the raw contents of @blob.
  *
- * A pointer to the raw content of a blob is returned;
- * this pointer is owned internally by the object and shall
+ * A pointer to the raw contents of @blob is returned.
+ * This pointer is owned internally by @object and must
  * not be free'd. The pointer may be invalidated at a later
  * time.
  *
- * Returns: (transfer none): the content or %NULL if @blob has no contents
+ * Returns: (transfer none): the contents or %NULL if @blob has no contents.
  */
 gconstpointer
-ggit_blob_rawcontent (GgitBlob *blob)
+ggit_blob_get_raw_content (GgitBlob *blob)
 {
 	git_blob *b;
 
@@ -83,15 +83,15 @@ ggit_blob_rawcontent (GgitBlob *blob)
 }
 
 /**
- * ggit_blob_rawsize:
- * @blob: a #GgitBlob
+ * ggit_blob_get_raw_size:
+ * @blob: a #GgitBlob.
  *
- * Get the size in bytes of the contents of a blob
+ * Gets the size in bytes of the contents of @blob.
  *
- * Returns: the size on bytes
+ * Returns: the size in bytes.
  */
 gint
-ggit_blob_rawsize (GgitBlob *blob)
+ggit_blob_get_raw_size (GgitBlob *blob)
 {
 	git_blob *b;
 

@@ -25,9 +25,10 @@
 #define __GGIT_COMMIT_H__
 
 #include <glib-object.h>
-#include "ggit-object.h"
-#include "ggit-signature.h"
 #include <git2/commit.h>
+
+#include "ggit-object.h"
+#include "ggit-types.h"
 
 G_BEGIN_DECLS
 
@@ -39,7 +40,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_COMMIT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_COMMIT))
 #define GGIT_COMMIT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_COMMIT, GgitCommitClass))
 
-typedef struct _GgitCommit		GgitCommit;
 typedef struct _GgitCommitClass		GgitCommitClass;
 
 struct _GgitCommit
@@ -54,21 +54,21 @@ struct _GgitCommitClass
 
 GType                ggit_commit_get_type          (void) G_GNUC_CONST;
 
-GgitCommit         *_ggit_commit_new               (git_commit *commit);
+GgitCommit          *_ggit_commit_new              (git_commit *commit);
 
-const gchar         *ggit_commit_message_short     (GgitCommit *commit);
+const gchar         *ggit_commit_get_short_message (GgitCommit *commit);
 
-const gchar         *ggit_commit_message           (GgitCommit *commit);
+const gchar         *ggit_commit_get_message       (GgitCommit *commit);
 
-gint64               ggit_commit_time              (GgitCommit *commit);
+gint64               ggit_commit_get_time          (GgitCommit *commit);
 
-gint                 ggit_commit_time_offset       (GgitCommit *commit);
+gint                 ggit_commit_get_time_offset   (GgitCommit *commit);
 
-GgitSignature       *ggit_commit_committer         (GgitCommit *commit);
+GgitSignature       *ggit_commit_get_committer     (GgitCommit *commit);
 
-GgitSignature       *ggit_commit_author            (GgitCommit *commit);
+GgitSignature       *ggit_commit_get_author        (GgitCommit *commit);
 
-GList               *ggit_commit_parents           (GgitCommit *commit);
+GList               *ggit_commit_get_parents       (GgitCommit *commit);
 
 G_END_DECLS
 

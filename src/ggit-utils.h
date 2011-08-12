@@ -1,5 +1,5 @@
 /*
- * ggit.h
+ * ggit-utils.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2011 - Ignacio Casal Quinteiro
@@ -25,8 +25,9 @@
 
 #include <glib-object.h>
 #include <git2/common.h>
-#include <git2/types.h>
 #include <git2/object.h>
+#include <git2/types.h>
+
 #include "ggit-object.h"
 
 G_BEGIN_DECLS

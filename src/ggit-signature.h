@@ -27,39 +27,39 @@
 #include <glib-object.h>
 #include <git2/signature.h>
 
+#include "ggit-types.h"
+
 G_BEGIN_DECLS
 
 #define GGIT_TYPE_SIGNATURE		(ggit_signature_get_type ())
 #define GGIT_SIGNATURE(obj)		((GgitSignature *)obj)
 #define GGIT_SIGNATURE_CONST(obj)	((GgitSignature const *)obj)
 
-typedef struct _GgitSignature	GgitSignature;
+GType                 ggit_signature_get_type          (void) G_GNUC_CONST;
 
-GType                 ggit_signature_get_type     (void) G_GNUC_CONST;
+GgitSignature        *_ggit_signature_wrap             (git_signature *signature);
 
-GgitSignature       *_ggit_signature_wrap         (git_signature *signature);
+GgitSignature        *ggit_signature_new               (const gchar    *name,
+                                                        const gchar    *email,
+                                                        gint64          signature_time,
+                                                        gint            signature_offset,
+                                                        GError        **error);
 
-GgitSignature        *ggit_signature_new          (const gchar *name,
-                                                   const gchar *email,
-                                                   gint64       signature_time,
-                                                   gint         signature_offset,
-                                                   GError     **error);
+GgitSignature        *ggit_signature_new_now           (const gchar    *name,
+                                                        const gchar    *email,
+                                                        GError        **error);
 
-GgitSignature        *ggit_signature_now          (const gchar *name,
-                                                   const gchar *email,
-                                                   GError     **error);
+GgitSignature        *ggit_signature_copy              (GgitSignature  *signature);
 
-GgitSignature        *ggit_signature_copy         (GgitSignature *signature);
+void                  ggit_signature_free              (GgitSignature  *signature);
 
-void                  ggit_signature_free         (GgitSignature *signature);
+const gchar          *ggit_signature_get_name          (GgitSignature  *signature);
 
-const gchar          *ggit_signature_get_name     (GgitSignature *signature);
+const gchar          *ggit_signature_get_email         (GgitSignature  *signature);
 
-const gchar          *ggit_signature_get_email    (GgitSignature *signature);
+gint64                ggit_signature_get_time          (GgitSignature  *signature);
 
-gint64                ggit_signature_get_time     (GgitSignature *signature);
-
-gint                  ggit_signature_get_offset   (GgitSignature *signature);
+gint                  ggit_signature_get_time_offset   (GgitSignature  *signature);
 
 G_END_DECLS
 
