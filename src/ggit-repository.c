@@ -324,7 +324,7 @@ ggit_repository_lookup (GgitRepository  *repository,
 	ret = git_object_lookup (&obj, repository->priv->repository,
 	                         id, otype);
 
-	if (ret == 0)
+	if (ret == GIT_SUCCESS)
 	{
 		object = ggit_utils_create_real_object (obj);
 	}
@@ -362,7 +362,7 @@ ggit_repository_discover (const gchar  *path,
 	ret = git_repository_discover (found_path, sizeof (found_path),
 	                               path, 0, "");
 
-	if (ret == 0)
+	if (ret == GIT_SUCCESS)
 	{
 		rep_path = g_strdup (found_path);
 	}

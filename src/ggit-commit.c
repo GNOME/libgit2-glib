@@ -211,11 +211,8 @@ ggit_commit_get_parents (GgitCommit *commit)
 	for (i = num_parents - 1; i >= 0; --i)
 	{
 		git_commit *p;
-		gint ret;
 
-		ret = git_commit_parent (&p, c, i);
-
-		if (ret == 0)
+		if (git_commit_parent (&p, c, i) == GIT_SUCCESS)
 		{
 			parents = g_list_prepend (parents, _ggit_commit_new (p));
 		}
