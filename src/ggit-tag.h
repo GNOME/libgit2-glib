@@ -27,6 +27,7 @@
 #include <glib-object.h>
 #include "ggit-object.h"
 #include "ggit-oid.h"
+#include "ggit-signature.h"
 #include <git2/tag.h>
 
 G_BEGIN_DECLS
@@ -62,6 +63,8 @@ GgitObject       *ggit_tag_target               (GgitTag *tag,
 GgitOId          *ggit_tag_target_oid           (GgitTag *tag);
 
 const gchar      *ggit_tag_name                 (GgitTag *tag);
+
+GgitSignature    *ggit_tag_tagger               (GgitTag *tag);
 
 const gchar      *ggit_tag_message              (GgitTag *tag);
 

@@ -142,6 +142,29 @@ ggit_tag_name (GgitTag *tag)
 }
 
 /**
+ * ggit_tag_tagger:
+ * @tag: a #GgitTag
+ *
+ * Get the tagger (author) of a tag. The returned value must be free with
+ * ggit_signature_free().
+ *
+ * Returns: (transfer full): the tagger (author) of a tag
+ */
+GgitSignature *
+ggit_tag_tagger (GgitTag *tag)
+{
+	const git_signature *signature;
+	git_tag *t;
+
+	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
+
+	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
+	signature = git_tag_tagger (t);
+
+	return _ggit_signature_wrap ((git_signature *)signature);
+}
+
+/**
  * ggit_tag_message:
  * @tag: a #GgitTag
  *
