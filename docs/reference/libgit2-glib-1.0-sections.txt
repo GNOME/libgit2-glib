@@ -1,7 +1,7 @@
 <SECTION>
 <FILE>blob</FILE>
 <TITLE>GgitBlob</TITLE>
-<INCLUDE>src/ggit-blob.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-blob.h</INCLUDE>
 GgitBlob
 ggit_blob_get_raw_content
 ggit_blob_get_raw_size
@@ -20,7 +20,7 @@ ggit_blob_get_type
 <SECTION>
 <FILE>commit</FILE>
 <TITLE>GgitCommit</TITLE>
-<INCLUDE>src/ggit-commit.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-commit.h</INCLUDE>
 GgitCommit
 ggit_commit_get_message_encoding
 ggit_commit_get_message
@@ -44,7 +44,7 @@ ggit_commit_get_type
 <SECTION>
 <FILE>error</FILE>
 <TITLE>GgitError</TITLE>
-<INCLUDE>src/ggit-error.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-error.h</INCLUDE>
 GgitError
 GGIT_ERROR
 </SECTION>
@@ -52,7 +52,7 @@ GGIT_ERROR
 <SECTION>
 <FILE>object</FILE>
 <TITLE>GgitObject</TITLE>
-<INCLUDE>src/ggit-object.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-object.h</INCLUDE>
 GgitObject
 ggit_object_get_id
 ggit_object_get_owner
@@ -70,7 +70,7 @@ ggit_object_get_type
 <SECTION>
 <FILE>oid</FILE>
 <TITLE>GgitOId</TITLE>
-<INCLUDE>src/ggit-oid.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-oid.h</INCLUDE>
 GgitOId
 ggit_oid_copy
 ggit_oid_free
@@ -88,7 +88,7 @@ ggit_oid_get_type
 <SECTION>
 <FILE>repository</FILE>
 <TITLE>GgitRepository</TITLE>
-<INCLUDE>src/ggit-repository.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-repository.h</INCLUDE>
 GgitRepository
 GgitRepositoryPathid
 ggit_repository_open
@@ -115,7 +115,7 @@ ggit_repository_get_type
 <SECTION>
 <FILE>signature</FILE>
 <TITLE>GgitSignature</TITLE>
-<INCLUDE>src/ggit-signature.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-signature.h</INCLUDE>
 GgitSignature
 ggit_signature_new
 ggit_signature_new_now
@@ -135,7 +135,7 @@ ggit_signature_get_type
 <SECTION>
 <FILE>tag</FILE>
 <TITLE>GgitTag</TITLE>
-<INCLUDE>src/ggit-tag.h</INCLUDE>
+<INCLUDE>libgit2-glib/ggit-tag.h</INCLUDE>
 GgitTag
 ggit_tag_get_target
 ggit_tag_get_target_oid

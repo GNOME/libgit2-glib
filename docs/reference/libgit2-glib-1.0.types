@@ -1,10 +1,10 @@
-#include <src/ggit-blob.h>
-#include <src/ggit-commit.h>
-#include <src/ggit-object.h>
-#include <src/ggit-oid.h>
-#include <src/ggit-repository.h>
-#include <src/ggit-signature.h>
-#include <src/ggit-tag.h>
+#include <libgit2-glib/ggit-blob.h>
+#include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-object.h>
+#include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-repository.h>
+#include <libgit2-glib/ggit-signature.h>
+#include <libgit2-glib/ggit-tag.h>
 
 ggit_blob_get_type
 ggit_commit_get_type

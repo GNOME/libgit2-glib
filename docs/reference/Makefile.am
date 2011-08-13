@@ -1,5 +1,5 @@
 GTKDOC_CFLAGS = -I$(top_srcdir) $(LIBGIT2_CFLAGS)
-GTKDOC_LIBS = $(top_builddir)/src/libgit2-glib-1.0.la $(LIBGIT2_LIBS)
+GTKDOC_LIBS = $(top_builddir)/libgit2-glib/libgit2-glib-1.0.la $(LIBGIT2_LIBS)
 
 ## Process this file with automake to produce Makefile.in
 AUTOMAKE_OPTIONS = 1.7
@@ -17,8 +17,8 @@ SCAN_OPTIONS =
 DOC_SOURCE_DIR = ../..
 
 # Used for dependencies
-HFILE_GLOB = $(top_srcdir)/src/*.h
-CFILE_GLOB = $(top_srcdir)/src/*.c
+HFILE_GLOB = $(top_srcdir)/libgit2-glib/*.h
+CFILE_GLOB = $(top_srcdir)/libgit2-glib/*.c
 
 # Headers to ignore
 IGNORE_HFILES =					\

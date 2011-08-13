@@ -55,6 +55,6 @@ AC_OUTPUT([
 	docs/reference/Makefile
 	docs/reference/version.xml
 	examples/Makefile
-	src/Makefile
+	libgit2-glib/Makefile
 ])
 

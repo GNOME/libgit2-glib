@@ -7,7 +7,7 @@ test -z "$srcdir" && srcdir=.
 PKG_NAME="libgit2-glib"
 
 (test -f $srcdir/configure.ac \
-  && test -f $srcdir/src/ggit-repository.c) || {
+  && test -f $srcdir/libgit2-glib/ggit-repository.c) || {
     echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
     echo " top-level $PKG_NAME directory"
     exit 1
