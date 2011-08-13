@@ -60,26 +60,6 @@ _ggit_commit_new (git_commit *commit)
 }
 
 /**
- * ggit_commit_get_short_message:
- * @commit: a #GgitCommit.
- *
- * Gets the short (one line) message of @commit.
- *
- * Returns: the short (one line) message of the commit.
- */
-const gchar *
-ggit_commit_get_short_message (GgitCommit *commit)
-{
-	git_commit *c;
-
-	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
-
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
-
-	return git_commit_message_short (c);
-}
-
-/**
  * ggit_commit_get_message:
  * @commit: a #GgitCommit.
  *

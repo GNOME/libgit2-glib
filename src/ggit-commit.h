@@ -56,8 +56,6 @@ GType                ggit_commit_get_type          (void) G_GNUC_CONST;
 
 GgitCommit          *_ggit_commit_new              (git_commit *commit);
 
-const gchar         *ggit_commit_get_short_message (GgitCommit *commit);
-
 const gchar         *ggit_commit_get_message       (GgitCommit *commit);
 
 gint64               ggit_commit_get_time          (GgitCommit *commit);
