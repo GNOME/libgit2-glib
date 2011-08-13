@@ -25,6 +25,9 @@ AM_INIT_AUTOMAKE
 AC_PROG_LIBTOOL
 AC_PROG_CC
 
+# Documentation
+GTK_DOC_CHECK([1.11], [--flavour=no-tmpl])
+
 INTROSPECTION_REQUIRED=0.10.1
 GLIB_REQUIRED=2.26.0
 GIT2_REQUIRED=0.14.0
@@ -48,6 +51,9 @@ GNOME_COMPILE_WARNINGS([maximum])
 AC_OUTPUT([
 	libgit2-glib-1.0.pc
 	Makefile
+	docs/Makefile
+	docs/reference/Makefile
+	docs/reference/version.xml
 	examples/Makefile
 	src/Makefile
 ])

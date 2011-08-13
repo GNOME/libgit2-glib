@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY version SYSTEM "version.xml">
+]>
+<book id="index" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <bookinfo>
+    <title>libgit2-glib Reference Manual</title>
+    <releaseinfo>for libgit2-glib &version;</releaseinfo>
+  </bookinfo>
+
+  <reference>
+    <title>API reference</title>
+    <xi:include href="xml/blob.xml"/>
+    <xi:include href="xml/commit.xml"/>
+    <xi:include href="xml/error.xml"/>
+    <xi:include href="xml/object.xml"/>
+    <xi:include href="xml/oid.xml"/>
+    <xi:include href="xml/repository.xml"/>
+    <xi:include href="xml/signature.xml"/>
+    <xi:include href="xml/tag.xml"/>
+  </reference>
+
+  <index id="api-index-full">
+    <title>Index of all symbols</title>
+    <xi:include href="xml/api-index-full.xml"><xi:fallback /></xi:include>
+  </index>
+  <index id="api-index-deprecated" role="deprecated">
+    <title>Index of deprecated symbols</title>
+    <xi:include href="xml/api-index-deprecated.xml"><xi:fallback /></xi:include>
+  </index>
+
+  <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
+
+</book>

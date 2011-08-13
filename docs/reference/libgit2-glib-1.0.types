@@ -1,0 +1,16 @@
+#include <src/ggit-blob.h>
+#include <src/ggit-commit.h>
+#include <src/ggit-object.h>
+#include <src/ggit-oid.h>
+#include <src/ggit-repository.h>
+#include <src/ggit-signature.h>
+#include <src/ggit-tag.h>
+
+ggit_blob_get_type
+ggit_commit_get_type
+ggit_object_get_type
+ggit_oid_get_type
+ggit_repository_get_type
+ggit_signature_get_type
+ggit_tag_get_type
+

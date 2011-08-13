@@ -97,7 +97,7 @@ typedef enum
 /* NOTE: keep in sync with git2/errors.h */
 /**
  * GgitError:
- * @GGIT_ERROR_FAILED: A generic error for when an operation fails.
+ * @GGIT_ERROR_GIT_ERROR: A generic error for when an operation fails.
  * @GGIT_ERROR_NOTOID: Input was not a properly formatted Git object id.
  * @GGIT_ERROR_NOTFOUND: Input does not exist in the scope searched.
  * @GGIT_ERROR_NOMEM: Not enough space available.
