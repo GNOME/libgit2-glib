@@ -79,10 +79,10 @@ typedef struct _GgitTag GgitTag;
 /* NOTE: keep in sync with git2/repository.h */
 /**
  * GgitRepositoryPathid:
- * @GIT_REPO_PATH: The path to the repository.
- * @GIT_REPO_PATH_INDEX: The path to the index.
- * @GIT_REPO_PATH_ODB: The path to the ODB.
- * @GIT_REPO_PATH_WORKDIR: The path to the working directory.
+ * @GGIT_REPO_PATH: The path to the repository.
+ * @GGIT_REPO_PATH_INDEX: The path to the index.
+ * @GGIT_REPO_PATH_ODB: The path to the ODB.
+ * @GGIT_REPO_PATH_WORKDIR: The path to the working directory.
  *
  * These identify the various path ids.
  */
@@ -122,7 +122,7 @@ typedef enum
  * @GGIT_ERROR_INVALIDPATH: The path is invalid.
  * @GGIT_ERROR_REVWALKOVER: The revision walker is empty; there
  *                          are no more commits left to iterate.
- * GGIT_ERROR_INVALIDREFSTATE: The state of the reference is not valid.
+ * @GGIT_ERROR_INVALIDREFSTATE: The state of the reference is not valid.
  * @GGIT_ERROR_NOTIMPLEMENTED: This feature has not been implemented yet.
  * @GGIT_ERROR_EXISTS: A reference with this name already exists.
  * @GGIT_ERROR_OVERFLOW: The given integer literal is too large to be parsed.
