@@ -41,12 +41,9 @@ G_BEGIN_DECLS
 #define GGIT_BLOB_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_BLOB, GgitBlobClass))
 
 typedef struct _GgitBlobClass	GgitBlobClass;
-typedef struct _GgitBlobPrivate	GgitBlobPrivate;
 
 struct _GgitBlob {
 	GgitObject parent;
-
-	GgitBlobPrivate *priv;
 };
 
 struct _GgitBlobClass {

@@ -47,6 +47,7 @@ ggit_commit_get_type
 <INCLUDE>libgit2-glib/ggit-error.h</INCLUDE>
 GgitError
 GGIT_ERROR
+ggit_error_quark
 </SECTION>
 
 <SECTION>
@@ -64,6 +65,7 @@ GGIT_OBJECT_CLASS
 GGIT_IS_OBJECT
 GGIT_IS_OBJECT_CLASS
 GGIT_OBJECT_GET_CLASS
+GgitObjectPrivate
 ggit_object_get_type
 </SECTION>
 
@@ -109,6 +111,7 @@ GGIT_REPOSITORY_CLASS
 GGIT_IS_REPOSITORY
 GGIT_IS_REPOSITORY_CLASS
 GGIT_REPOSITORY_GET_CLASS
+GgitRepositoryPrivate
 ggit_repository_get_type
 </SECTION>
 
