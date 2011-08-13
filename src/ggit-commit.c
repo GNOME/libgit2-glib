@@ -60,6 +60,30 @@ _ggit_commit_new (git_commit *commit)
 }
 
 /**
+ * ggit_commit_get_message_encoding:
+ * @commit: a #GgitCommit.
+ *
+ * Get the encoding for the message of a commit,
+ * as a string representing a standard encoding name.
+ *
+ * The encoding may be %NULL if the 'encoding' header
+ * in the commit is missing; in that case UTF-8 is assumed.
+ *
+ * Returns: the encoding of the commit message or %NULL.
+ */
+const gchar *
+ggit_commit_get_message_encoding (GgitCommit *commit)
+{
+	git_commit *c;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+
+	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+
+	return git_commit_message_encoding (c);
+}
+
+/**
  * ggit_commit_get_message:
  * @commit: a #GgitCommit.
  *

@@ -52,21 +52,23 @@ struct _GgitCommitClass
 	GgitObjectClass parent_class;
 };
 
-GType                ggit_commit_get_type          (void) G_GNUC_CONST;
+GType                ggit_commit_get_type               (void) G_GNUC_CONST;
 
-GgitCommit          *_ggit_commit_new              (git_commit *commit);
+GgitCommit          *_ggit_commit_new                   (git_commit *commit);
 
-const gchar         *ggit_commit_get_message       (GgitCommit *commit);
+const gchar         *ggit_commit_get_message_encoding   (GgitCommit *commit);
 
-gint64               ggit_commit_get_time          (GgitCommit *commit);
+const gchar         *ggit_commit_get_message            (GgitCommit *commit);
 
-gint                 ggit_commit_get_time_offset   (GgitCommit *commit);
+gint64               ggit_commit_get_time               (GgitCommit *commit);
 
-GgitSignature       *ggit_commit_get_committer     (GgitCommit *commit);
+gint                 ggit_commit_get_time_offset        (GgitCommit *commit);
 
-GgitSignature       *ggit_commit_get_author        (GgitCommit *commit);
+GgitSignature       *ggit_commit_get_committer          (GgitCommit *commit);
 
-GList               *ggit_commit_get_parents       (GgitCommit *commit);
+GgitSignature       *ggit_commit_get_author             (GgitCommit *commit);
+
+GList               *ggit_commit_get_parents            (GgitCommit *commit);
 
 G_END_DECLS
 
