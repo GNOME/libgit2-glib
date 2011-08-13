@@ -56,5 +56,6 @@ AC_OUTPUT([
 	docs/reference/version.xml
 	examples/Makefile
 	libgit2-glib/Makefile
+	tests/Makefile
 ])
 

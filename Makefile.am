@@ -1,4 +1,4 @@
-SUBDIRS = libgit2-glib docs examples
+SUBDIRS = libgit2-glib docs examples tests
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libgit2-glib-1.0.pc
