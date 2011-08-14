@@ -42,10 +42,10 @@ _ggit_oid_new (git_oid *oid)
 	return glib_oid;
 }
 
-git_oid *
+const git_oid *
 _ggit_oid_get_oid (GgitOId *oid)
 {
-	return &oid->oid;
+	return (const git_oid *)&oid->oid;
 }
 
 /**

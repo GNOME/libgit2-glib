@@ -20,6 +20,7 @@ INST_H_FILES =			\
 	ggit-error.h		\
 	ggit-object.h		\
 	ggit-oid.h		\
+	ggit-ref.h		\
 	ggit-repository.h	\
 	ggit-signature.h	\
 	ggit-tag.h		\
@@ -36,6 +37,7 @@ C_FILES =			\
 	ggit-error.c		\
 	ggit-object.c		\
 	ggit-oid.c		\
+	ggit-ref.c		\
 	ggit-repository.c	\
 	ggit-signature.c	\
 	ggit-tag.c		\

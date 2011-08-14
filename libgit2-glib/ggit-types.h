@@ -55,6 +55,32 @@ typedef struct _GgitObject GgitObject;
 typedef struct _GgitOId GgitOId;
 
 /**
+ * GgitRef:
+ *
+ * Reprensents a git reference.
+ */
+typedef struct _GgitRef	GgitRef;
+
+/**
+ * GgitRefType:
+ * @GGIT_REF_INVALID: An invalid reference.
+ * @GGIT_REF_OID: A reference which points at an object id.
+ * @GGIT_REF_SYMBOLIC: A reference which points at another reference.
+ * @GGIT_REF_PACKED:
+ * @GGIT_REF_HAS_PEEL:
+ * @GGIT_REF_LISTALL: All references types.
+ */
+typedef enum
+{
+	GGIT_REF_INVALID = 0,
+	GGIT_REF_OID = 1,
+	GGIT_REF_SYMBOLIC = 2,
+	GGIT_REF_PACKED = 4,
+	GGIT_REF_HAS_PEEL = 8,
+	GGIT_REF_LISTALL = GGIT_REF_OID | GGIT_REF_SYMBOLIC | GGIT_REF_PACKED
+} GgitRefType;
+
+/**
  * GgitRepository:
  *
  * Represents an existing git repository including all of it's
