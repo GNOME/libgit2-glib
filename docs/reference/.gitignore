@@ -1,0 +1,15 @@
+/html
+/tmpl
+/xml
+/libgit2-glib-decl-list.txt
+/libgit2-glib-decl.txt
+/libgit2-glib-undeclared.txt
+/libgit2-glib-undocumented.txt
+/libgit2-glib-unused.txt
+/libgit2-glib.args
+/libgit2-glib.hierarchy
+/libgit2-glib.interfaces
+/libgit2-glib.prerequisites
+/libgit2-glib.signals
+/version.xml
+/*.stamp

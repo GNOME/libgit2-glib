@@ -63,4 +63,5 @@ Makefile.in
 /py-compile
 /so_locations
 /stamp-h1
+/tests/repository
 /xmldocs.make
