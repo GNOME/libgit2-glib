@@ -88,6 +88,31 @@ ggit_oid_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ref</FILE>
+<TITLE>GgitRef</TITLE>
+<INCLUDE>libgit2-glib/ggit-ref.h</INCLUDE>
+GgitRef
+GgitRefType
+ggit_ref_copy
+ggit_ref_free
+ggit_ref_get_oid
+ggit_ref_get_target
+ggit_ref_get_reference_type
+ggit_ref_get_name
+ggit_ref_resolve
+ggit_ref_get_owner
+ggit_ref_set_target
+ggit_ref_set_oid
+ggit_ref_rename
+ggit_ref_delete
+<SUBSECTION Standard>
+GGIT_TYPE_REF
+GGIT_REF
+GGIT_REF_CONST
+ggit_ref_get_type
+</SECTION>
+
+<SECTION>
 <FILE>repository</FILE>
 <TITLE>GgitRepository</TITLE>
 <INCLUDE>libgit2-glib/ggit-repository.h</INCLUDE>

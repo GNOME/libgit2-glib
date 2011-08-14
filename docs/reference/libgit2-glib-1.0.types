@@ -2,6 +2,7 @@
 #include <libgit2-glib/ggit-commit.h>
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-repository.h>
 #include <libgit2-glib/ggit-signature.h>
 #include <libgit2-glib/ggit-tag.h>
@@ -10,6 +11,7 @@ ggit_blob_get_type
 ggit_commit_get_type
 ggit_object_get_type
 ggit_oid_get_type
+ggit_ref_get_type
 ggit_repository_get_type
 ggit_signature_get_type
 ggit_tag_get_type

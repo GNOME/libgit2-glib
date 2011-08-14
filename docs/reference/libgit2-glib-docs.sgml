@@ -16,6 +16,7 @@
     <xi:include href="xml/error.xml"/>
     <xi:include href="xml/object.xml"/>
     <xi:include href="xml/oid.xml"/>
+    <xi:include href="xml/ref.xml"/>
     <xi:include href="xml/repository.xml"/>
     <xi:include href="xml/signature.xml"/>
     <xi:include href="xml/tag.xml"/>
