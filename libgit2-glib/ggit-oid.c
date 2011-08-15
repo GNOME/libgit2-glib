@@ -162,3 +162,5 @@ ggit_oid_to_string (GgitOId *oid)
 
 	return git_oid_to_string (hex, GIT_OID_HEXSZ + 1, &oid->oid);
 }
+
+/* ex:set ts=8 noet: */

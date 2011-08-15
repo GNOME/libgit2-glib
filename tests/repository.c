@@ -217,3 +217,5 @@ main (int    argc,
 
 	return g_test_run();
 }
+
+/* ex:set ts=8 noet: */

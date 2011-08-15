@@ -39,3 +39,5 @@ void    _ggit_error_set   (GError **error,
 G_END_DECLS
 
 #endif /* __GGIT_ERROR_H__ */
+
+/* ex:set ts=8 noet: */

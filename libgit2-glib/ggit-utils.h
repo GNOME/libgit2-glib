@@ -39,3 +39,5 @@ GgitObject     *ggit_utils_create_real_object         (git_object *obj);
 G_END_DECLS
 
 #endif
+
+/* ex:set ts=8 noet: */

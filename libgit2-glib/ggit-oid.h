@@ -56,3 +56,5 @@ gchar              *ggit_oid_to_string           (GgitOId      *oid);
 G_END_DECLS
 
 #endif /* __GGIT_OID_H__ */
+
+/* ex:set ts=8 noet: */

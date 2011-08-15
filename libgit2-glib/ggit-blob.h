@@ -61,3 +61,5 @@ gint              ggit_blob_get_raw_size     (GgitBlob *blob);
 G_END_DECLS
 
 #endif /* __GGIT_BLOB_H__ */
+
+/* ex:set ts=8 noet: */

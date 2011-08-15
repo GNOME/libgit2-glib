@@ -78,3 +78,5 @@ ggit_utils_create_real_object (git_object *obj)
 
 	return object;
 }
+
+/* ex:set ts=8 noet: */

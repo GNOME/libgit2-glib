@@ -75,3 +75,5 @@ main (int argc, char *argv[])
 
 	return 0;
 }
+
+/* ex:set ts=8 noet: */

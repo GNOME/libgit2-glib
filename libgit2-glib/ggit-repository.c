@@ -500,3 +500,5 @@ ggit_repository_is_bare (GgitRepository *repository)
 
 	return git_repository_is_bare (repository->priv->repository);
 }
+
+/* ex:set ts=8 noet: */

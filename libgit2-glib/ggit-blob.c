@@ -101,3 +101,5 @@ ggit_blob_get_raw_size (GgitBlob *blob)
 
 	return git_blob_rawsize (b);
 }
+
+/* ex:set ts=8 noet: */

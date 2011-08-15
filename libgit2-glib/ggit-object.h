@@ -63,3 +63,5 @@ GgitRepository  *ggit_object_get_owner         (GgitObject *object);
 G_END_DECLS
 
 #endif /* __GGIT_OBJECT_H__ */
+
+/* ex:set ts=8 noet: */

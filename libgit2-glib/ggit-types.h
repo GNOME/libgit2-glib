@@ -201,3 +201,5 @@ typedef enum {
 G_END_DECLS
 
 #endif /* __GGIT_TYPES_H__ */
+
+/* ex:set ts=8 noet: */

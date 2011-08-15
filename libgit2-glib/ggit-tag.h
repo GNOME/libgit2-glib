@@ -70,3 +70,5 @@ const gchar      *ggit_tag_get_message          (GgitTag  *tag);
 G_END_DECLS
 
 #endif /* __GGIT_TAG_H__ */
+
+/* ex:set ts=8 noet: */

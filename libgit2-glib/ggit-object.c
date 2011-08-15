@@ -97,3 +97,5 @@ ggit_object_get_owner (GgitObject *object)
 
 	return _ggit_repository_new (repository);
 }
+
+/* ex:set ts=8 noet: */

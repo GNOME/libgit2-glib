@@ -223,3 +223,5 @@ ggit_signature_get_time_offset (GgitSignature *signature)
 
 	return signature->signature->when.offset;
 }
+
+/* ex:set ts=8 noet: */

@@ -225,3 +225,5 @@ ggit_commit_get_parents (GgitCommit *commit)
 
 	return parents;
 }
+
+/* ex:set ts=8 noet: */

@@ -90,3 +90,5 @@ gboolean            ggit_repository_is_bare           (GgitRepository        *re
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */
+
+/* ex:set ts=8 noet: */

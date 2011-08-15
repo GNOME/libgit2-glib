@@ -75,3 +75,5 @@ void             ggit_ref_delete             (GgitRef  *ref,
 G_END_DECLS
 
 #endif /* __GGIT_REF_H__ */
+
+/* ex:set ts=8 noet: */

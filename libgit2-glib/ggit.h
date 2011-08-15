@@ -33,3 +33,5 @@
 #include "ggit-types.h"
 
 #endif
+
+/* ex:set ts=8 noet: */

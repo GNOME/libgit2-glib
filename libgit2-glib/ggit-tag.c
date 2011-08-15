@@ -185,3 +185,5 @@ ggit_tag_get_message (GgitTag *tag)
 
 	return git_tag_message (t);
 }
+
+/* ex:set ts=8 noet: */

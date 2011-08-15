@@ -67,3 +67,5 @@ _ggit_error_set (GError **error,
 		                     git_lasterror ());
 	}
 }
+
+/* ex:set ts=8 noet: */

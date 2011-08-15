@@ -73,3 +73,5 @@ GList               *ggit_commit_get_parents            (GgitCommit *commit);
 G_END_DECLS
 
 #endif /* __GGIT_COMMIT_H__ */
+
+/* ex:set ts=8 noet: */

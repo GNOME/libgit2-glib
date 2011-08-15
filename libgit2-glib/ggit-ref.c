@@ -330,3 +330,5 @@ ggit_ref_delete (GgitRef  *ref,
 		_ggit_error_set (error, ret);
 	}
 }
+
+/* ex:set ts=8 noet: */

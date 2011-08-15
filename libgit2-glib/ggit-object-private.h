@@ -27,3 +27,5 @@ struct _GgitObjectPrivate
 {
 	git_object *obj;
 };
+
+/* ex:set ts=8 noet: */
