@@ -23,9 +23,11 @@
 #include <gio/gio.h>
 #include <git2/errors.h>
 #include <git2/repository.h>
+#include <git2/refs.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
+#include "ggit-ref.h"
 #include "ggit-repository.h"
 #include "ggit-utils.h"
 
@@ -334,6 +336,43 @@ ggit_repository_lookup (GgitRepository  *repository,
 	}
 
 	return object;
+}
+
+/**
+ * ggit_repository_lookup_reference:
+ * @repository: a #GgitRepository
+ * @name: the long name for the reference (e.g. HEAD, ref/heads/master, refs/tags/v0.1.0, ...)
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a reference by its name in @repository. The returned #GgitRef must
+ * be freed with ggit_ref_free().
+ *
+ * Returns: (transfer full): the searched reference.
+ */
+GgitRef *
+ggit_repository_lookup_reference (GgitRepository  *repository,
+                                  const gchar     *name,
+                                  GError         **error)
+{
+	GgitRef *ref = NULL;
+	git_reference *reference;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+
+	ret = git_reference_lookup (&reference, repository->priv->repository,
+	                            name);
+	if (ret == GIT_SUCCESS)
+	{
+		ref = _ggit_ref_wrap (reference);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return ref;
 }
 
 /**

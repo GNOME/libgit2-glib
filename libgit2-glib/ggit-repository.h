@@ -56,7 +56,7 @@ struct _GgitRepositoryClass
 
 GType               ggit_repository_get_type          (void) G_GNUC_CONST;
 
-GgitRepository     *_ggit_repository_new              (git_repository *repository);
+GgitRepository     *_ggit_repository_new              (git_repository        *repository);
 
 GgitRepository     *ggit_repository_open              (const gchar           *path,
                                                        GError               **error);
@@ -68,6 +68,10 @@ GgitRepository     *ggit_repository_init_repository   (const gchar           *pa
 GgitObject         *ggit_repository_lookup            (GgitRepository        *repository,
                                                        GgitOId               *oid,
                                                        GType                  gtype,
+                                                       GError               **error);
+
+GgitRef            *ggit_repository_lookup_reference  (GgitRepository        *repository,
+                                                       const gchar           *name,
                                                        GError               **error);
 
 gchar              *ggit_repository_discover          (const gchar           *path,
