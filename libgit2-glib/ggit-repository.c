@@ -340,8 +340,8 @@ ggit_repository_lookup (GgitRepository  *repository,
 
 /**
  * ggit_repository_lookup_reference:
- * @repository: a #GgitRepository
- * @name: the long name for the reference (e.g. HEAD, ref/heads/master, refs/tags/v0.1.0, ...)
+ * @repository: a #GgitRepository.
+ * @name: the long name for the reference (e.g. HEAD, ref/heads/master, refs/tags/v0.1.0, ...).
  * @error: a #GError for error reporting, or %NULL.
  *
  * Lookups a reference by its name in @repository. The returned #GgitRef must
@@ -363,6 +363,48 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 
 	ret = git_reference_lookup (&reference, repository->priv->repository,
 	                            name);
+	if (ret == GIT_SUCCESS)
+	{
+		ref = _ggit_ref_wrap (reference);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return ref;
+}
+
+/**
+ * ggit_repository_create_reference:
+ * @repository: a #GgitRepository.
+ * @name: the name for the new #GgitRef.
+ * @oid: the #GgitOId pointed to by the reference.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a new object id reference.
+ *
+ * The reference will be created in the repository and written
+ * to the disk. The returned value must be freed with ggit_ref_free().
+ *
+ * Returns: (transfer full): the newly created reference.
+ */
+GgitRef *
+ggit_repository_create_reference (GgitRepository  *repository,
+                                  const gchar     *name,
+                                  GgitOId         *oid,
+                                  GError         **error)
+{
+	GgitRef *ref = NULL;
+	git_reference *reference;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (oid != NULL, NULL);
+
+	ret = git_reference_create_oid (&reference, repository->priv->repository,
+	                                name, _ggit_oid_get_oid (oid), FALSE);
 	if (ret == GIT_SUCCESS)
 	{
 		ref = _ggit_ref_wrap (reference);

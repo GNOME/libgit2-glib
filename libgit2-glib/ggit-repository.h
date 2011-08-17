@@ -74,6 +74,11 @@ GgitRef            *ggit_repository_lookup_reference  (GgitRepository        *re
                                                        const gchar           *name,
                                                        GError               **error);
 
+GgitRef            *ggit_repository_create_reference  (GgitRepository        *repository,
+                                                       const gchar           *name,
+                                                       GgitOId               *oid,
+                                                       GError               **error);
+
 gchar              *ggit_repository_discover          (const gchar           *path,
                                                        GError               **error);
 
