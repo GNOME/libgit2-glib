@@ -418,6 +418,48 @@ ggit_repository_create_reference (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_create_symbolic_reference:
+ * @repository: a #GgitRepository.
+ * @name: the name for the new #GgitRef.
+ * @target: the full name to the reference.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a new symbolic reference.
+ *
+ * The reference will be created in the repository and written
+ * to the disk. The returned value must be freed with ggit_ref_free().
+ *
+ * Returns: (transfer full): the newly created reference.
+ */
+GgitRef *
+ggit_repository_create_symbolic_reference (GgitRepository  *repository,
+                                           const gchar     *name,
+                                           const gchar     *target,
+                                           GError         **error)
+{
+	GgitRef *ref = NULL;
+	git_reference *reference;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (target != NULL, NULL);
+
+	ret = git_reference_create_symbolic (&reference, repository->priv->repository,
+	                                     name, target, FALSE);
+	if (ret == GIT_SUCCESS)
+	{
+		ref = _ggit_ref_wrap (reference);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return ref;
+}
+
+/**
  * ggit_repository_discover:
  * @path: the base path where the lookup starts.
  * @error: a #GError for error reporting, or %NULL.

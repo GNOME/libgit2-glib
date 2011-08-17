@@ -79,6 +79,12 @@ GgitRef            *ggit_repository_create_reference  (GgitRepository        *re
                                                        GgitOId               *oid,
                                                        GError               **error);
 
+GgitRef            *ggit_repository_create_symbolic_reference
+                                                      (GgitRepository        *repository,
+                                                       const gchar           *name,
+                                                       const gchar           *target,
+                                                       GError               **error);
+
 gchar              *ggit_repository_discover          (const gchar           *path,
                                                        GError               **error);
 
