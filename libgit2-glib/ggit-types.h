@@ -40,86 +40,6 @@ typedef struct _GgitBlob GgitBlob;
  */
 typedef struct _GgitCommit GgitCommit;
 
-/**
- * GgitObject:
- *
- * Represents a generic object in a repository.
- */
-typedef struct _GgitObject GgitObject;
-
-/**
- * GgitOId:
- *
- * Represents a unique ID of any object.
- */
-typedef struct _GgitOId GgitOId;
-
-/**
- * GgitRef:
- *
- * Reprensents a git reference.
- */
-typedef struct _GgitRef	GgitRef;
-
-/**
- * GgitRefType:
- * @GGIT_REF_INVALID: An invalid reference.
- * @GGIT_REF_OID: A reference which points at an object id.
- * @GGIT_REF_SYMBOLIC: A reference which points at another reference.
- * @GGIT_REF_PACKED:
- * @GGIT_REF_HAS_PEEL:
- * @GGIT_REF_LISTALL: All references types.
- */
-typedef enum
-{
-	GGIT_REF_INVALID = 0,
-	GGIT_REF_OID = 1,
-	GGIT_REF_SYMBOLIC = 2,
-	GGIT_REF_PACKED = 4,
-	GGIT_REF_HAS_PEEL = 8,
-	GGIT_REF_LISTALL = GGIT_REF_OID | GGIT_REF_SYMBOLIC | GGIT_REF_PACKED
-} GgitRefType;
-
-/**
- * GgitRepository:
- *
- * Represents an existing git repository including all of it's
- * object contents.
- */
-typedef struct _GgitRepository GgitRepository;
-
-/**
- * GgitSignature:
- *
- * Represents an action signature.
- */
-typedef struct _GgitSignature GgitSignature;
-
-/**
- * GgitTag:
- *
- * Represents a tag object.
- */
-typedef struct _GgitTag GgitTag;
-
-/* NOTE: keep in sync with git2/repository.h */
-/**
- * GgitRepositoryPathid:
- * @GGIT_REPO_PATH: The path to the repository.
- * @GGIT_REPO_PATH_INDEX: The path to the index.
- * @GGIT_REPO_PATH_ODB: The path to the ODB.
- * @GGIT_REPO_PATH_WORKDIR: The path to the working directory.
- *
- * These identify the various path ids.
- */
-typedef enum
-{
-	GGIT_REPO_PATH,
-	GGIT_REPO_PATH_INDEX,
-	GGIT_REPO_PATH_ODB,
-	GGIT_REPO_PATH_WORKDIR
-} GgitRepositoryPathid;
-
 /* NOTE: keep in sync with git2/errors.h */
 /**
  * GgitError:
@@ -197,6 +117,127 @@ typedef enum {
 	GGIT_ERROR_NOMATCH = -31,
 	GGIT_ERROR_SHORTBUFFER = -32
 } GgitError;
+
+/**
+ * GgitObject:
+ *
+ * Represents a generic object in a repository.
+ */
+typedef struct _GgitObject GgitObject;
+
+/**
+ * GgitOId:
+ *
+ * Represents a unique ID of any object.
+ */
+typedef struct _GgitOId GgitOId;
+
+/**
+ * GgitRef:
+ *
+ * Reprensents a git reference.
+ */
+typedef struct _GgitRef	GgitRef;
+
+/* NOTE: keep in sync with git2/refs.h */
+/**
+ * GgitRefType:
+ * @GGIT_REF_INVALID: An invalid reference.
+ * @GGIT_REF_OID: A reference which points at an object id.
+ * @GGIT_REF_SYMBOLIC: A reference which points at another reference.
+ * @GGIT_REF_PACKED:
+ * @GGIT_REF_HAS_PEEL:
+ * @GGIT_REF_LISTALL: All references types.
+ */
+typedef enum
+{
+	GGIT_REF_INVALID = 0,
+	GGIT_REF_OID = 1,
+	GGIT_REF_SYMBOLIC = 2,
+	GGIT_REF_PACKED = 4,
+	GGIT_REF_HAS_PEEL = 8,
+	GGIT_REF_LISTALL = GGIT_REF_OID | GGIT_REF_SYMBOLIC | GGIT_REF_PACKED
+} GgitRefType;
+
+/**
+ * GgitRepository:
+ *
+ * Represents an existing git repository including all of it's
+ * object contents.
+ */
+typedef struct _GgitRepository GgitRepository;
+
+/* NOTE: keep in sync with git2/repository.h */
+/**
+ * GgitRepositoryPathid:
+ * @GGIT_REPO_PATH: The path to the repository.
+ * @GGIT_REPO_PATH_INDEX: The path to the index.
+ * @GGIT_REPO_PATH_ODB: The path to the ODB.
+ * @GGIT_REPO_PATH_WORKDIR: The path to the working directory.
+ *
+ * These identify the various path ids.
+ */
+typedef enum
+{
+	GGIT_REPO_PATH,
+	GGIT_REPO_PATH_INDEX,
+	GGIT_REPO_PATH_ODB,
+	GGIT_REPO_PATH_WORKDIR
+} GgitRepositoryPathid;
+
+/**
+ * GgitSignature:
+ *
+ * Represents an action signature.
+ */
+typedef struct _GgitSignature GgitSignature;
+
+/* FIXME */
+/* NOTE: keep in sync with git2/status.h */
+/**
+ * GgitStatusFlags:
+ * @GGIT_STATUS_CURRENT:
+ * @GGIT_STATUS_INDEX_NEW:
+ * @GGIT_STATUS_INDEX_MODIFIED:
+ * @GGIT_STATUS_INDEX_DELETED:
+ * @GGIT_STATUS_WORKING_TREE_NEW:
+ * @GGIT_STATUS_WORKING_TREE_MODIFIED:
+ * @GGIT_STATUS_WORKING_TREE_DELETED:
+ * @GGIT_STATUS_IGNORED:
+ */
+typedef enum
+{
+	GGIT_STATUS_CURRENT = 0,
+	GGIT_STATUS_INDEX_NEW = 1 << 0,
+	GGIT_STATUS_INDEX_MODIFIED = 1 << 1,
+	GGIT_STATUS_INDEX_DELETED = 1 << 2,
+	GGIT_STATUS_WORKING_TREE_NEW = 1 << 3,
+	GGIT_STATUS_WORKING_TREE_MODIFIED = 1 << 4,
+	GGIT_STATUS_WORKING_TREE_DELETED = 1 << 5,
+	GGIT_STATUS_IGNORED = 1 << 6
+} GgitStatusFlags;
+
+/**
+ * GgitStatusCallback:
+ * @path: the file to retrieve status for, rooted at the repository working dir.
+ * @status_flags: the status value.
+ * @data: user-supplied data.
+ *
+ * The type of the callback functions for retrieving the status of the files
+ * in a #GgitRepository. See ggit_repository_file_status_foreach().
+ *
+ * Returns: 0 to go for the next file or a #GgitError in case there was an error.
+ */
+typedef int (* GgitStatusCallback) (const gchar     *path,
+                                    GgitStatusFlags  status_flags,
+                                    gpointer         data);
+
+/**
+ * GgitTag:
+ *
+ * Represents a tag object.
+ */
+typedef struct _GgitTag GgitTag;
 
 G_END_DECLS
 

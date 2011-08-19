@@ -102,6 +102,16 @@ const gchar        *ggit_repository_get_path          (GgitRepository        *re
 
 gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 
+GgitStatusFlags     ggit_repository_file_status       (GgitRepository        *repository,
+                                                       const gchar           *path,
+                                                       GError               **error);
+
+void                ggit_repository_file_status_foreach
+                                                     (GgitRepository         *repository,
+                                                      GgitStatusCallback      callback,
+                                                      gpointer                user_data,
+                                                      GError                **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

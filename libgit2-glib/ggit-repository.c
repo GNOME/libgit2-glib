@@ -24,6 +24,7 @@
 #include <git2/errors.h>
 #include <git2/repository.h>
 #include <git2/refs.h>
+#include <git2/status.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -622,6 +623,71 @@ ggit_repository_is_bare (GgitRepository *repository)
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 
 	return git_repository_is_bare (repository->priv->repository);
+}
+
+/**
+ * ggit_repository_file_status:
+ * @repository: a #GgitRepository.
+ * @path: the file to retrieve status for, rooted at the repository working dir.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the file status for a single file.
+ *
+ * Returns: the status for a single file.
+ */
+GgitStatusFlags
+ggit_repository_file_status (GgitRepository  *repository,
+                             const gchar     *path,
+                             GError         **error)
+{
+	GgitStatusFlags status_flags;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), GGIT_STATUS_IGNORED);
+	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
+	g_return_val_if_fail (error == NULL || *error == NULL, GGIT_STATUS_IGNORED);
+
+	ret = git_status_file (&status_flags, repository->priv->repository,
+	                       path);
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return status_flags;
+}
+
+/**
+ * ggit_repository_file_status_foreach:
+ * @repository: a #GgitRepository.
+ * @callback: (scope call): a #GgitStatusCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gathers file statuses and run a callback for each one.
+ *
+ * To the callback is passed the path of the file, the status and the data pointer
+ * passed to this function. If the callback returns something other than
+ * 0, the iteration will stop and @error will be set.
+ */
+void
+ggit_repository_file_status_foreach (GgitRepository     *repository,
+                                     GgitStatusCallback  callback,
+                                     gpointer            user_data,
+                                     GError            **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (callback != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_status_foreach (repository->priv->repository, callback,
+	                          user_data);
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+	}
 }
 
 /* ex:set ts=8 noet: */
