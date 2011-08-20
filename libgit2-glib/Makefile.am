@@ -22,6 +22,7 @@ INST_H_FILES =			\
 	ggit-oid.h		\
 	ggit-ref.h		\
 	ggit-repository.h	\
+	ggit-revision-walker.h	\
 	ggit-signature.h	\
 	ggit-tag.h		\
 	ggit-types.h		\
@@ -39,6 +40,7 @@ C_FILES =			\
 	ggit-oid.c		\
 	ggit-ref.c		\
 	ggit-repository.c	\
+	ggit-revision-walker.c	\
 	ggit-signature.c	\
 	ggit-tag.c		\
 	ggit-utils.c

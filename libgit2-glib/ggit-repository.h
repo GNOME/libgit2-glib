@@ -58,6 +58,8 @@ GType               ggit_repository_get_type          (void) G_GNUC_CONST;
 
 GgitRepository     *_ggit_repository_new              (git_repository        *repository);
 
+git_repository     *_ggit_repository_get_repository   (GgitRepository        *repository);
+
 GgitRepository     *ggit_repository_open              (const gchar           *path,
                                                        GError               **error);
 

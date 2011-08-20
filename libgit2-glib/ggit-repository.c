@@ -226,6 +226,14 @@ _ggit_repository_new (git_repository *repository)
 	return rep;
 }
 
+git_repository *
+_ggit_repository_get_repository (GgitRepository *repository)
+{
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+
+	return repository->priv->repository;
+}
+
 /**
  * ggit_repository_open:
  * @path: the path to the repository.

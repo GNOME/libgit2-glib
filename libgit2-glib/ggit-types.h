@@ -192,6 +192,31 @@ typedef enum
  */
 typedef struct _GgitSignature GgitSignature;
 
+/**
+ * GgitSortMode:
+ * @GGIT_SORT_NONE: Sorts the repository contents in no particular ordering;
+ *                  this sorting is arbitrary, implementation-specific
+ *                  and subject to change at any time.
+ * @GGIT_SORT_TOPOLOGICAL: Sorts the repository contents in topological order
+ *                         (parents before children); this sorting mode
+ *                         can be combined with time sorting.
+ * @GGIT_SORT_TIME: Sort the repository contents by commit time;
+ *                  this sorting mode can be combined with
+ *                  topological sorting.
+ * @GGIT_SORT_REVERSE: Iterate through the repository contents in reverse
+ *                     order; this sorting mode can be combined with
+ *                     any of the above.
+ *
+ * The type of sorting mode for the revision walker.
+ */
+typedef enum
+{
+	GGIT_SORT_NONE = 0,
+	GGIT_SORT_TOPOLOGICAL = 1 << 0,
+	GGIT_SORT_TIME = 1 << 1,
+	GGIT_SORT_REVERSE = 1 << 2
+} GgitSortMode;
+
 /* FIXME */
 /* NOTE: keep in sync with git2/status.h */
 /**
