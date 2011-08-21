@@ -23,8 +23,8 @@ Simple install procedure:
   % tar Jxf libgit2-glib-0.0.1.tar.xz		# unpack the sources
   % cd libgit2-glib-0.0.1			# change to the toplevel directory
   % ./configure					# run the `configure' script
-  % make					# build gedit
+  % make					# build libgit2-glib
   [ Become root if necessary ]
-  % make install				# install gedit
+  % make install				# install libgit2-glib
 
 See the file 'INSTALL' for more detailed information.
