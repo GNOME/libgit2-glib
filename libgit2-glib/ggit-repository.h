@@ -102,6 +102,9 @@ gboolean            ggit_repository_is_empty          (GgitRepository        *re
 const gchar        *ggit_repository_get_path          (GgitRepository        *repository);
 const gchar        *ggit_repository_get_workdir       (GgitRepository        *repository);
 
+void                ggit_repository_set_workdir       (GgitRepository        *repository,
+                                                       const gchar           *workdir);
+
 gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 
 GgitStatusFlags     ggit_repository_file_status       (GgitRepository        *repository,

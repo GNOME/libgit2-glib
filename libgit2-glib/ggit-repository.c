@@ -40,6 +40,7 @@ struct _GgitRepositoryPrivate
 	gchar *path;
 	gboolean is_bare;
 	gboolean init;
+	gchar *workdir;
 };
 
 enum
@@ -47,7 +48,8 @@ enum
 	PROP_0,
 	PROP_PATH,
 	PROP_IS_BARE,
-	PROP_INIT
+	PROP_INIT,
+	PROP_WORKDIR
 };
 
 static void         ggit_repository_initable_iface_init (GInitableIface  *iface);
@@ -64,6 +66,8 @@ ggit_repository_finalize (GObject *object)
 
 	g_free (priv->path);
 	git_repository_free (priv->repository);
+
+	g_free (priv->workdir);
 
 	G_OBJECT_CLASS (ggit_repository_parent_class)->finalize (object);
 }
@@ -88,6 +92,10 @@ ggit_repository_get_property (GObject    *object,
 		case PROP_INIT:
 			g_value_set_boolean (value, priv->init);
 			break;
+		case PROP_WORKDIR:
+			g_value_set_string (value,
+			                    ggit_repository_get_workdir (repository));
+			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
@@ -100,7 +108,11 @@ ggit_repository_set_property (GObject      *object,
                               const GValue *value,
                               GParamSpec   *pspec)
 {
-	GgitRepositoryPrivate *priv = GGIT_REPOSITORY (object)->priv;
+	GgitRepository *repository;
+	GgitRepositoryPrivate *priv;
+
+	repository = GGIT_REPOSITORY (object);
+	priv = repository->priv;
 
 	switch (prop_id)
 	{
@@ -113,6 +125,17 @@ ggit_repository_set_property (GObject      *object,
 			break;
 		case PROP_INIT:
 			priv->init = g_value_get_boolean (value);
+			break;
+		case PROP_WORKDIR:
+			g_free (priv->workdir);
+			priv->workdir = g_value_dup_string (value);
+
+			if (repository->priv->repository)
+			{
+				ggit_repository_set_workdir (repository,
+				                             priv->workdir);
+			}
+
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -159,6 +182,16 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                       G_PARAM_CONSTRUCT_ONLY |
 	                                                       G_PARAM_STATIC_STRINGS));
 
+	g_object_class_install_property (object_class,
+	                                 PROP_PATH,
+	                                 g_param_spec_string ("workdir",
+	                                                      "Path to repository working directory",
+	                                                      "The path to the repository working directory",
+	                                                      NULL,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT |
+	                                                      G_PARAM_STATIC_STRINGS));
+
 	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
 }
 
@@ -204,6 +237,10 @@ ggit_repository_initable_init (GInitable    *initable,
 		                     git_lasterror ());
 		success = FALSE;
 	}
+	else if (priv->workdir)
+	{
+		git_repository_set_workdir (priv->repository, priv->workdir);
+	}
 
 	return success;
 }
@@ -236,7 +273,7 @@ _ggit_repository_get_repository (GgitRepository *repository)
 /**
  * ggit_repository_open:
  * @path: the path to the repository.
- * @error: a #GError for error reporting, or %NULL.
+ * @error: (error-domains GIOError): a #GError for error reporting, or %NULL.
  *
  * Open a git repository.
  *
@@ -628,6 +665,23 @@ ggit_repository_get_workdir (GgitRepository *repository)
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
 	return git_repository_workdir (repository->priv->repository);
+}
+
+/**
+ * ggit_repository_set_workdir:
+ * @repository: a #GgitRepository.
+ * @workdir: the working directory
+ *
+ * Sets the working directory of the repository.
+ *
+ */
+void
+ggit_repository_set_workdir (GgitRepository *repository,
+                             const gchar    *workdir)
+{
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+
+	git_repository_set_workdir (repository->priv->repository, workdir);
 }
 
 /**
