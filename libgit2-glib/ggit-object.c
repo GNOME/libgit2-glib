@@ -36,7 +36,7 @@ ggit_object_finalize (GObject *object)
 {
 	GgitObject *obj = GGIT_OBJECT (object);
 
-	git_object_close (obj->priv->obj);
+	git_object_free (obj->priv->obj);
 
 	G_OBJECT_CLASS (ggit_object_parent_class)->finalize (object);
 }
