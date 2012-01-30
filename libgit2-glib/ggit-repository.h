@@ -99,8 +99,8 @@ gboolean            ggit_repository_is_head_orphan    (GgitRepository        *re
 gboolean            ggit_repository_is_empty          (GgitRepository        *repository,
                                                        GError               **error);
 
-const gchar        *ggit_repository_get_path          (GgitRepository        *repository,
-                                                       GgitRepositoryPathid   id);
+const gchar        *ggit_repository_get_path          (GgitRepository        *repository);
+const gchar        *ggit_repository_get_workdir       (GgitRepository        *repository);
 
 gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 

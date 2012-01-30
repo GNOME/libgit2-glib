@@ -61,8 +61,7 @@ main (int argc, char *argv[])
 		return 1;
 	}
 
-	g_message ("Working dir: %s", ggit_repository_get_path (repository,
-	                                                        GGIT_REPO_PATH_WORKDIR));
+	g_message ("Working dir: %s", ggit_repository_get_workdir (repository));
 
 	oid = ggit_oid_new_from_string (hex);
 	oid_str = ggit_oid_to_string (oid);

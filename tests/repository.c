@@ -177,7 +177,7 @@ do_test_init (const gchar *git_dir,
 	/* libgit api includes the terminating separator */
 	dotgit_full = g_strdup_printf ("%s%s", dotgit, G_DIR_SEPARATOR_S);
 
-	repo_path = ggit_repository_get_path (repo, GGIT_REPO_PATH);
+	repo_path = ggit_repository_get_path (repo);
 	g_assert_cmpstr (dotgit_full, ==, repo_path);
 	g_assert (g_file_test (repo_path, G_FILE_TEST_IS_DIR));
 	g_free (dotgit);

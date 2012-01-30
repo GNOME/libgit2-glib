@@ -80,8 +80,7 @@ ggit_repository_get_property (GObject    *object,
 	switch (prop_id)
 	{
 		case PROP_PATH:
-			g_value_set_string (value, ggit_repository_get_path (repository,
-			                                                     GGIT_REPO_PATH));
+			g_value_set_string (value, ggit_repository_get_path (repository));
 			break;
 		case PROP_IS_BARE:
 			g_value_set_boolean (value, ggit_repository_is_bare (repository));
@@ -602,19 +601,33 @@ ggit_repository_is_empty (GgitRepository  *repository,
 /**
  * ggit_repository_get_path:
  * @repository: a #GgitRepository.
- * @id: the #GgitRepositoryPathid of the path to return.
  *
- * Gets one of the paths to the repository.
+ * Get the gitdir path of the repository.
  *
- * Returns: the absolute path of the requested #GgitRepositoryPathid.
+ * Returns: the absolute path of the gitdir of the repository.
  */
 const gchar *
-ggit_repository_get_path (GgitRepository       *repository,
-                          GgitRepositoryPathid  id)
+ggit_repository_get_path (GgitRepository *repository)
 {
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	return git_repository_path (repository->priv->repository, id);
+	return git_repository_path (repository->priv->repository);
+}
+
+/**
+ * ggit_repository_get_workdir:
+ * @repository: a #GgitRepository.
+ *
+ * Gets the working directory of the repository.
+ *
+ * Returns: the absolute path of working directory of the repository.
+ */
+const gchar *
+ggit_repository_get_workdir (GgitRepository *repository)
+{
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+
+	return git_repository_workdir (repository->priv->repository);
 }
 
 /**

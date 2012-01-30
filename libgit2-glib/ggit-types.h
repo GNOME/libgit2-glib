@@ -167,24 +167,6 @@ typedef enum
  */
 typedef struct _GgitRepository GgitRepository;
 
-/* NOTE: keep in sync with git2/repository.h */
-/**
- * GgitRepositoryPathid:
- * @GGIT_REPO_PATH: The path to the repository.
- * @GGIT_REPO_PATH_INDEX: The path to the index.
- * @GGIT_REPO_PATH_ODB: The path to the ODB.
- * @GGIT_REPO_PATH_WORKDIR: The path to the working directory.
- *
- * These identify the various path ids.
- */
-typedef enum
-{
-	GGIT_REPO_PATH,
-	GGIT_REPO_PATH_INDEX,
-	GGIT_REPO_PATH_ODB,
-	GGIT_REPO_PATH_WORKDIR
-} GgitRepositoryPathid;
-
 /**
  * GgitSignature:
  *
