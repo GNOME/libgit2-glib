@@ -25,6 +25,7 @@
 #include <gio/gio.h>
 
 #include <libgit2-glib/ggit-types.h>
+#include <git2/config.h>
 
 G_BEGIN_DECLS
 
@@ -94,6 +95,8 @@ gboolean     ggit_config_match_foreach (GgitConfig               *config,
                                         GgitConfigMatchCallback   callback,
                                         gpointer                  user_data,
                                         GError                  **error);
+
+GgitConfig  *_ggit_config_wrap         (git_config               *config);
 
 G_END_DECLS
 

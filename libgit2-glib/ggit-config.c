@@ -564,3 +564,16 @@ ggit_config_match_foreach (GgitConfig               *config,
 	return TRUE;
 }
 
+GgitConfig *
+_ggit_config_wrap (git_config *config)
+{
+	GgitConfig *ret;
+
+	g_return_val_if_fail (config != NULL, NULL);
+
+	ret = g_object_new (GGIT_TYPE_CONFIG, NULL);
+	git_config_free (ret->priv->config);
+	ret->priv->config = config;
+
+	return ret;
+}
