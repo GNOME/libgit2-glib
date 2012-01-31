@@ -87,6 +87,9 @@ GgitRef            *ggit_repository_create_symbolic_reference
                                                        const gchar           *target,
                                                        GError               **error);
 
+GgitRef            *ggit_repository_get_head          (GgitRepository        *repository,
+                                                       GError               **error);
+
 gchar              *ggit_repository_discover          (const gchar           *path,
                                                        GError               **error);
 

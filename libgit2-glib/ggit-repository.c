@@ -492,6 +492,41 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
 
 	ret = git_reference_create_symbolic (&reference, repository->priv->repository,
 	                                     name, target, FALSE);
+
+	if (ret == GIT_SUCCESS)
+	{
+		ref = _ggit_ref_wrap (reference);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return ref;
+}
+
+/**
+ * ggit_repository_get_head:
+ * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Get the current HEAD reference of the repository.
+ *
+ * Returns: (transfer full): a #GgitRef
+ *
+ **/
+GgitRef *
+ggit_repository_get_head (GgitRepository  *repository,
+                          GError         **error)
+{
+	GgitRef *ref = NULL;
+	git_reference *reference;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+
+	ret = git_repository_head (&reference, repository->priv->repository);
+
 	if (ret == GIT_SUCCESS)
 	{
 		ref = _ggit_ref_wrap (reference);
