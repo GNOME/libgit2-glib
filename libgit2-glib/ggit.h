@@ -23,14 +23,15 @@
 #ifndef __GGIT_H__
 #define __GGIT_H__
 
-#include "ggit-blob.h"
-#include "ggit-commit.h"
-#include "ggit-error.h"
-#include "ggit-object.h"
-#include "ggit-oid.h"
-#include "ggit-repository.h"
-#include "ggit-tag.h"
-#include "ggit-types.h"
+#include <libgit2-glib/ggit-blob.h>
+#include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-error.h>
+#include <libgit2-glib/ggit-object.h>
+#include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-repository.h>
+#include <libgit2-glib/ggit-tag.h>
+#include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-ref.h>
 
 #endif
 
