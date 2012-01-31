@@ -32,6 +32,7 @@
 #include <libgit2-glib/ggit-tag.h>
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-ref.h>
+#include <libgit2-glib/ggit-config.h>
 
 #endif
 

@@ -17,6 +17,7 @@ libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 INST_H_FILES =			\
 	ggit-blob.h		\
 	ggit-commit.h		\
+	ggit-config.h		\
 	ggit-error.h		\
 	ggit-object.h		\
 	ggit-oid.h		\
@@ -35,6 +36,7 @@ NOINST_H_FILES =		\
 C_FILES =			\
 	ggit-blob.c		\
 	ggit-commit.c		\
+	ggit-config.c		\
 	ggit-error.c		\
 	ggit-object.c		\
 	ggit-oid.c		\
@@ -69,11 +71,11 @@ if HAVE_INTROSPECTION
 
   Ggit-1.0.gir: libgit2-glib-1.0.la
   Ggit_1_0_gir_NAMESPACE = Ggit
-  Ggit_1_0_gir_INCLUDES = GObject-2.0 GLib-2.0
+  Ggit_1_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gio-2.0
   Ggit_1_0_gir_CFLAGS = $(LIBGIT2_GLIB_CFLAGS)
   Ggit_1_0_gir_LIBS = libgit2-glib-1.0.la
   Ggit_1_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources))
-  Ggit_1_0_gir_PACKAGES = gobject-2.0 glib-2.0 libgit2
+  Ggit_1_0_gir_PACKAGES = gobject-2.0 glib-2.0 libgit2 gio-2.0
   Ggit_1_0_gir_EXPORT_PACKAGES = libgit2-glib-1.0
 
   girdir = $(datadir)/gir-1.0
