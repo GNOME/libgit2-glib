@@ -49,7 +49,8 @@ enum
 	PROP_PATH,
 	PROP_IS_BARE,
 	PROP_INIT,
-	PROP_WORKDIR
+	PROP_WORKDIR,
+	PROP_HEAD
 };
 
 static void         ggit_repository_initable_iface_init (GInitableIface  *iface);
@@ -95,6 +96,10 @@ ggit_repository_get_property (GObject    *object,
 		case PROP_WORKDIR:
 			g_value_set_string (value,
 			                    ggit_repository_get_workdir (repository));
+			break;
+		case PROP_HEAD:
+			g_value_set_boxed (value,
+			                   ggit_repository_get_head (repository, NULL));
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -193,6 +198,14 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                      G_PARAM_STATIC_STRINGS));
 
 	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_HEAD,
+	                                 g_param_spec_boxed ("head",
+	                                                     "Head",
+	                                                     "Head",
+	                                                     GGIT_TYPE_REF,
+	                                                     G_PARAM_READABLE));
 }
 
 static void
