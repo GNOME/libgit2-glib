@@ -163,4 +163,61 @@ ggit_oid_to_string (GgitOId *oid)
 	return git_oid_to_string (hex, GIT_OID_HEXSZ + 1, &oid->oid);
 }
 
+/**
+ * ggit_oid_hash:
+ * @oid: a #GgitOId
+ *
+ * Computes a hash value for a git object identifier.
+ *
+ * Returns: the hash value
+ *
+ **/
+guint
+ggit_oid_hash (GgitOId const *oid)
+{
+	/* This is copied from glib
+	 * This function implements the widely used "djb" hash apparently posted
+	 * by Daniel Bernstein to comp.lang.c some time ago.  The 32 bit
+	 * unsigned hash value starts at 5381 and for each byte 'c' in the
+	 * string, is updated: <literal>hash = hash * 33 + c</literal>.  This
+	 * function uses the signed value of each byte.
+	 */
+
+	guint32 h = 5381;
+	guint i;
+
+	for (i = 0; i < GIT_OID_RAWSZ; ++i)
+	{
+		h = (h << 5) + h + oid->oid.id[i];
+	}
+
+	return h;
+}
+
+/**
+ * ggit_oid_equal:
+ * @a: a #GgitOId
+ * @b: a #GgitOId
+ *
+ * Compares two #GgitOId for equality.
+ *
+ * Returns: %TRUE if @a and @b are equal, %FALSE otherwise
+ *
+ **/
+gboolean
+ggit_oid_equal (GgitOId const *a,
+                GgitOId const *b)
+{
+	if ((a != NULL) != (b != NULL))
+	{
+		return FALSE;
+	}
+	else if (a == b)
+	{
+		return TRUE;
+	}
+
+	return git_oid_cmp (&a->oid, &b->oid) == 0;
+}
+
 /* ex:set ts=8 noet: */

@@ -53,6 +53,10 @@ gint                ggit_oid_compare             (GgitOId      *a,
 
 gchar              *ggit_oid_to_string           (GgitOId      *oid);
 
+guint               ggit_oid_hash                (GgitOId const *oid);
+gboolean            ggit_oid_equal               (GgitOId const *a,
+                                                  GgitOId const *b);
+
 G_END_DECLS
 
 #endif /* __GGIT_OID_H__ */
