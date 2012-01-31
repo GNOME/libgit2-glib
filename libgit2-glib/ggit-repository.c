@@ -869,4 +869,38 @@ ggit_repository_references_foreach (GgitRepository          *repository,
 	}
 }
 
+/**
+ * ggit_repository_get_config:
+ * @repository: a #GgitRepository
+ * @error: a #GError
+ *
+ * Get the config for a specific repository.
+ *
+ * Returns: (transfer full): a #GgitConfig.
+ *
+ **/
+GgitConfig *
+ggit_repository_get_config (GgitRepository  *repository,
+                            GError         **error)
+{
+	git_config *config;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_repository_config (&config,
+	                             repository->priv->repository);
+
+	if (ret == GIT_SUCCESS)
+	{
+		return _ggit_config_wrap (config);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+}
+
 /* ex:set ts=8 noet: */

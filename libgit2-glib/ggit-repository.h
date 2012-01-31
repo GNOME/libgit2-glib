@@ -26,8 +26,8 @@
 
 #include <glib-object.h>
 #include <git2/repository.h>
-
-#include "ggit-types.h"
+#include <libgit2-glib/ggit-config.h>
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
@@ -124,6 +124,9 @@ gboolean            ggit_repository_references_foreach (GgitRepository          
                                                         GgitRefType              reftype,
                                                         GgitReferencesCallback   callback,
                                                         gpointer                 user_data,
+                                                        GError                 **error);
+
+GgitConfig         *ggit_repository_get_config         (GgitRepository          *repository,
                                                         GError                 **error);
 
 G_END_DECLS
