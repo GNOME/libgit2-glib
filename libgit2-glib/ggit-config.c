@@ -392,3 +392,175 @@ ggit_config_delete (GgitConfig   *config,
 		return TRUE;
 	}
 }
+
+/**
+ * ggit_config_foreach:
+ * @config: a #GgitConfig.
+ * @callback: (scope call): a #GgitConfigCallback.
+ * @user_data: the user data for @callback
+ * @error: a #GError.
+ *
+ * Call @callback for each configuration value.
+ *
+ * Returns: %TRUE if successfull, %FALSE otherwise
+ *
+ **/
+gboolean
+ggit_config_foreach (GgitConfig          *config,
+                     GgitConfigCallback   callback,
+                     gpointer             user_data,
+                     GError             **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+
+	ret = git_config_foreach (config->priv->config, callback, user_data);
+
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
+}
+
+typedef struct
+{
+	GRegex *regex;
+	GMatchInfo *ret;
+
+	const gchar *value;
+
+	GgitConfigMatchCallback callback;
+	gpointer user_data;
+} MatchInfo;
+
+static gint
+match_foreach (const gchar *name,
+               const gchar *value,
+               MatchInfo   *info)
+{
+	if (g_regex_match (info->regex, name, (GRegexMatchFlags)0, &info->ret))
+	{
+		if (info->callback)
+		{
+			gint ret;
+
+			ret = info->callback (info->ret, value, info->user_data);
+			g_match_info_free (info->ret);
+
+			return ret;
+		}
+		else
+		{
+			info->value = value;
+
+			/* Semi arbitrary error */
+			return GGIT_ERROR_EXISTS;
+		}
+	}
+
+	return GIT_SUCCESS;
+}
+
+/**
+ * ggit_config_match:
+ * @config: a #GgitConfig.
+ * @regex: a #GRegex.
+ * @match_info: (out) (allow-none): a #GMatchInfo.
+ * @error: a #GError.
+ *
+ * Matches a configuration against a regular expression. @match_info will
+ * contain the match information if the return value is not %NULL, otherwise
+ * @error will be set.
+ *
+ * Returns: (allow-none): the value of that matched configuration
+ *
+ **/
+gchar const *
+ggit_config_match (GgitConfig  *config,
+                   GRegex      *regex,
+                   GMatchInfo **match_info,
+                   GError     **error)
+{
+	MatchInfo info = {0,};
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
+	g_return_val_if_fail (regex != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+
+	info.regex = regex;
+
+	ggit_config_foreach (config, (GgitConfigCallback)match_foreach, &info, NULL);
+
+	if (info.ret)
+	{
+		if (match_info)
+		{
+			*match_info = info.ret;
+		}
+		else
+		{
+			g_match_info_free (info.ret);
+		}
+	}
+
+	if (!info.value)
+	{
+		_ggit_error_set (error, GGIT_ERROR_NOMATCH);
+	}
+
+	return info.value;
+}
+
+/**
+ * ggit_config_match_foreach:
+ * @config: a #GgitConfig.
+ * @regex: a #GRegex.
+ * @callback: (scope call): a #GgitConfigMatchCallback.
+ * @user_data: the user data for @callback
+ * @error: a #GError
+ *
+ * Call @callback for all configurations matching @regex.
+ *
+ * Returns: %TRUE if matches were successfull, %FALSE otherwise
+ *
+ **/
+gboolean
+ggit_config_match_foreach (GgitConfig               *config,
+                           GRegex                   *regex,
+                           GgitConfigMatchCallback   callback,
+                           gpointer                  user_data,
+                           GError                  **error)
+{
+	MatchInfo info = {0,};
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
+	g_return_val_if_fail (regex != NULL, FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+
+	info.regex = regex;
+	info.callback = callback;
+	info.user_data = user_data;
+
+	ret = ggit_config_foreach (config,
+	                           (GgitConfigCallback)match_foreach,
+	                           &info,
+	                           error);
+
+	if (ret != GIT_SUCCESS)
+	{
+		return FALSE;
+	}
+
+	return TRUE;
+}
+

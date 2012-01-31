@@ -253,6 +253,38 @@ typedef int (* GgitReferencesCallback) (const gchar     *name,
                                         gpointer         data);
 
 /**
+ * GgitConfigCallback:
+ * @name: the name of the configuration value
+ * @value: the value
+ * @data: user-supplied data.
+ *
+ * The type of the callback functions for retrieving values from a #GgitConfig.
+ * See ggit_config_foreach().
+ *
+ * Returns: 0 to go for the next config value or a #GgitError in case there was
+ *          an error.
+ */
+typedef int (* GgitConfigCallback) (const gchar     *name,
+                                    const gchar     *value,
+                                    gpointer         data);
+
+/**
+ * GgitConfigMatchCallback:
+ * @match_info: the match
+ * @value: the value
+ * @data: user-supplied data.
+ *
+ * The type of the callback functions for retrieving values from a #GgitConfig
+ * using a regular expression. See ggit_config_match_foreach().
+ *
+ * Returns: 0 to go for the next config value or a #GgitError in case there was
+ *          an error.
+ */
+typedef int (* GgitConfigMatchCallback) (GMatchInfo  *match_info,
+                                         const gchar *value,
+                                         gpointer     data);
+
+/**
  * GgitTag:
  *
  * Represents a tag object.
