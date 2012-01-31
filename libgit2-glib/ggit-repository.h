@@ -114,11 +114,17 @@ GgitStatusFlags     ggit_repository_file_status       (GgitRepository        *re
                                                        const gchar           *path,
                                                        GError               **error);
 
-void                ggit_repository_file_status_foreach
+gboolean            ggit_repository_file_status_foreach
                                                      (GgitRepository         *repository,
                                                       GgitStatusCallback      callback,
                                                       gpointer                user_data,
                                                       GError                **error);
+
+gboolean            ggit_repository_references_foreach (GgitRepository          *repository,
+                                                        GgitRefType              reftype,
+                                                        GgitReferencesCallback   callback,
+                                                        gpointer                 user_data,
+                                                        GError                 **error);
 
 G_END_DECLS
 

@@ -240,6 +240,19 @@ typedef int (* GgitStatusCallback) (const gchar     *path,
                                     gpointer         data);
 
 /**
+ * GgitReferencesCallback:
+ * @name: the name of the reference
+ * @data: user-supplied data.
+ *
+ * The type of the callback functions for retrieving the references
+ * in a #GgitRepository. See ggit_repository_references_foreach().
+ *
+ * Returns: 0 to go for the next references or a #GgitError in case there was an error.
+ */
+typedef int (* GgitReferencesCallback) (const gchar     *name,
+                                        gpointer         data);
+
+/**
  * GgitTag:
  *
  * Represents a tag object.

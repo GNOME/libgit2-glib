@@ -273,7 +273,7 @@ _ggit_repository_get_repository (GgitRepository *repository)
 /**
  * ggit_repository_open:
  * @path: the path to the repository.
- * @error: (error-domains GIOError): a #GError for error reporting, or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Open a git repository.
  *
@@ -779,8 +779,11 @@ ggit_repository_file_status (GgitRepository  *repository,
  * To the callback is passed the path of the file, the status and the data pointer
  * passed to this function. If the callback returns something other than
  * 0, the iteration will stop and @error will be set.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ *
  */
-void
+gboolean
 ggit_repository_file_status_foreach (GgitRepository     *repository,
                                      GgitStatusCallback  callback,
                                      gpointer            user_data,
@@ -788,15 +791,68 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 {
 	gint ret;
 
-	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
-	g_return_if_fail (callback != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_status_foreach (repository->priv->repository, callback,
 	                          user_data);
+
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
+}
+
+/**
+ * ggit_repository_references_foreach:
+ * @repository: a #GgitRepository.
+ * @reftype: a #GgitRefType
+ * @callback: (scope call): a #GgitReferencesCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gathers references and run a callback for each one.
+ *
+ * To the callback is passed the name of the reference and the data pointer
+ * passed to this function. If the callback returns something other than
+ * 0, the iteration will stop and @error will be set. The references are
+ * filtered by @reftype.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ *
+ */
+gboolean
+ggit_repository_references_foreach (GgitRepository          *repository,
+                                    GgitRefType              reftype,
+                                    GgitReferencesCallback   callback,
+                                    gpointer                 user_data,
+                                    GError                 **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_reference_foreach (repository->priv->repository,
+	                             reftype,
+	                             callback,
+	                             user_data);
+
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
 	}
 }
 
