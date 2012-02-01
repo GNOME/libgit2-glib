@@ -27,6 +27,7 @@
 #include <glib-object.h>
 #include <git2/repository.h>
 #include <libgit2-glib/ggit-config.h>
+#include <libgit2-glib/ggit-index.h>
 #include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
@@ -127,6 +128,9 @@ gboolean            ggit_repository_references_foreach (GgitRepository          
                                                         GError                 **error);
 
 GgitConfig         *ggit_repository_get_config         (GgitRepository          *repository,
+                                                        GError                 **error);
+
+GgitIndex          *ggit_repository_get_index          (GgitRepository          *repository,
                                                         GError                 **error);
 
 G_END_DECLS

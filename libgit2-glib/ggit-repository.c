@@ -903,4 +903,38 @@ ggit_repository_get_config (GgitRepository  *repository,
 	}
 }
 
+/**
+ * ggit_repository_get_index:
+ * @repository: a #GgitRepository.
+ * @error: a #GError.
+ *
+ * Get the index for a specific repository.
+ *
+ * Returns: (transfer full): a #GgitIndex.
+ *
+ **/
+GgitIndex *
+ggit_repository_get_index (GgitRepository  *repository,
+                           GError         **error)
+{
+	git_index *idx;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_repository_index (&idx,
+	                            repository->priv->repository);
+
+	if (ret == GIT_SUCCESS)
+	{
+		return _ggit_index_wrap (idx);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+}
+
 /* ex:set ts=8 noet: */

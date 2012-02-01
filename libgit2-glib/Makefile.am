@@ -14,37 +14,43 @@ libgit2_glib_1_0_la_LDFLAGS = \
 
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
-INST_H_FILES =			\
-	ggit-blob.h		\
-	ggit-commit.h		\
-	ggit-config.h		\
-	ggit-error.h		\
-	ggit-object.h		\
-	ggit-oid.h		\
-	ggit-ref.h		\
-	ggit-repository.h	\
-	ggit-revision-walker.h	\
-	ggit-signature.h	\
-	ggit-tag.h		\
-	ggit-types.h		\
+INST_H_FILES =				\
+	ggit-blob.h			\
+	ggit-commit.h			\
+	ggit-config.h			\
+	ggit-error.h			\
+	ggit-index.h			\
+	ggit-index-entry.h		\
+	ggit-index-entry-unmerged.h	\
+	ggit-object.h			\
+	ggit-oid.h			\
+	ggit-ref.h			\
+	ggit-repository.h		\
+	ggit-revision-walker.h		\
+	ggit-signature.h		\
+	ggit-tag.h			\
+	ggit-types.h			\
 	ggit.h
 
 NOINST_H_FILES =		\
 	ggit-object-private.h	\
 	ggit-utils.h
 
-C_FILES =			\
-	ggit-blob.c		\
-	ggit-commit.c		\
-	ggit-config.c		\
-	ggit-error.c		\
-	ggit-object.c		\
-	ggit-oid.c		\
-	ggit-ref.c		\
-	ggit-repository.c	\
-	ggit-revision-walker.c	\
-	ggit-signature.c	\
-	ggit-tag.c		\
+C_FILES =				\
+	ggit-blob.c			\
+	ggit-commit.c			\
+	ggit-config.c			\
+	ggit-error.c			\
+	ggit-index.c			\
+	ggit-index-entry.c		\
+	ggit-index-entry-unmerged.c	\
+	ggit-object.c			\
+	ggit-oid.c			\
+	ggit-ref.c			\
+	ggit-repository.c		\
+	ggit-revision-walker.c		\
+	ggit-signature.c		\
+	ggit-tag.c			\
 	ggit-utils.c
 
 libgit2_glib_1_0_la_SOURCES = 	\
