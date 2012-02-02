@@ -550,7 +550,6 @@ ggit_config_match_foreach (GgitConfig               *config,
                            GError                  **error)
 {
 	MatchInfo info = {0,};
-	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (regex != NULL, FALSE);
@@ -561,17 +560,10 @@ ggit_config_match_foreach (GgitConfig               *config,
 	info.callback = callback;
 	info.user_data = user_data;
 
-	ret = ggit_config_foreach (config,
-	                           (GgitConfigCallback)match_foreach,
-	                           &info,
-	                           error);
-
-	if (ret != GIT_SUCCESS)
-	{
-		return FALSE;
-	}
-
-	return TRUE;
+	return ggit_config_foreach (config,
+	                            (GgitConfigCallback)match_foreach,
+	                             &info,
+	                             error);
 }
 
 GgitConfig *
