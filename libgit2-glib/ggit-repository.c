@@ -98,8 +98,8 @@ ggit_repository_get_property (GObject    *object,
 			                    ggit_repository_get_workdir (repository));
 			break;
 		case PROP_HEAD:
-			g_value_set_boxed (value,
-			                   ggit_repository_get_head (repository, NULL));
+			g_value_set_object (value,
+			                    ggit_repository_get_head (repository, NULL));
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -201,11 +201,11 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 
 	g_object_class_install_property (object_class,
 	                                 PROP_HEAD,
-	                                 g_param_spec_boxed ("head",
-	                                                     "Head",
-	                                                     "Head",
-	                                                     GGIT_TYPE_REF,
-	                                                     G_PARAM_READABLE));
+	                                 g_param_spec_object ("head",
+	                                                      "Head",
+	                                                      "Head",
+	                                                      GGIT_TYPE_REF,
+	                                                      G_PARAM_READABLE));
 }
 
 static void

@@ -20,7 +20,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-
 #include "ggit-ref.h"
 #include "ggit-oid.h"
 #include "ggit-error.h"
@@ -28,52 +27,65 @@
 
 #include <git2/errors.h>
 
-struct _GgitRef
+#define GGIT_REF_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REF, GgitRefPrivate))
+
+struct _GgitRefPrivate
 {
 	git_reference *ref;
 };
 
-G_DEFINE_BOXED_TYPE (GgitRef, ggit_ref, ggit_ref_copy, ggit_ref_free)
+G_DEFINE_TYPE (GgitRef, ggit_ref, G_TYPE_OBJECT)
+
+static void
+ggit_ref_finalize (GObject *object)
+{
+	G_OBJECT_CLASS (ggit_ref_parent_class)->finalize (object);
+}
+
+static void
+ggit_ref_class_init (GgitRefClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = ggit_ref_finalize;
+
+	g_type_class_add_private (object_class, sizeof (GgitRefPrivate));
+}
+
+static void
+ggit_ref_init (GgitRef *self)
+{
+	self->priv = GGIT_REF_GET_PRIVATE (self);
+}
+
+
+/**
+ * ggit_ref_assign:
+ * @ref: a #GgitRef.
+ * @copyfrom: a #GgitRef.
+ *
+ * Assign the native ref from one object to another
+ *
+ **/
+void
+ggit_ref_assign (GgitRef *ref,
+                 GgitRef *copyfrom)
+{
+	g_return_if_fail (GGIT_IS_REF (ref));
+	g_return_if_fail (GGIT_IS_REF (copyfrom));
+
+	ref->priv->ref = copyfrom->priv->ref;
+}
 
 GgitRef *
 _ggit_ref_wrap (git_reference *ref)
 {
 	GgitRef *reference;
 
-	reference = g_slice_new (GgitRef);
-	reference->ref = ref;
+	reference = g_object_new (GGIT_TYPE_REF, NULL);
+	reference->priv->ref = ref;
 
 	return reference;
-}
-
-/**
- * ggit_ref_copy:
- * @ref: a #GgitRef.
- *
- * Creates a copy of @ref.
- *
- * Returns: (transfer full): a new copy of @ref.
- */
-GgitRef *
-ggit_ref_copy (GgitRef *ref)
-{
-	g_return_val_if_fail (ref != NULL, NULL);
-
-	return _ggit_ref_wrap (ref->ref);
-}
-
-/**
- * ggit_ref_free:
- * @ref: a #GgitRef.
- *
- * Fress @ref.
- */
-void
-ggit_ref_free (GgitRef *ref)
-{
-	g_return_if_fail (ref != NULL);
-
-	g_slice_free (GgitRef, ref);
 }
 
 /**
@@ -93,7 +105,8 @@ ggit_ref_get_oid (GgitRef *ref)
 
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	oid = git_reference_oid (ref->ref);
+	oid = git_reference_oid (ref->priv->ref);
+
 	if (oid != NULL)
 	{
 		goid = _ggit_oid_new ((git_oid *)oid);
@@ -116,7 +129,7 @@ ggit_ref_get_target (GgitRef *ref)
 {
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	return git_reference_target (ref->ref);
+	return git_reference_target (ref->priv->ref);
 }
 
 /**
@@ -133,7 +146,7 @@ ggit_ref_get_reference_type (GgitRef *ref)
 {
 	g_return_val_if_fail (ref != NULL, GGIT_REF_INVALID);
 
-	return git_reference_type (ref->ref);
+	return git_reference_type (ref->priv->ref);
 }
 
 /**
@@ -149,7 +162,7 @@ ggit_ref_get_name (GgitRef *ref)
 {
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	return git_reference_name (ref->ref);
+	return git_reference_name (ref->priv->ref);
 }
 
 /**
@@ -177,7 +190,8 @@ ggit_ref_resolve (GgitRef  *ref,
 
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	ret = git_reference_resolve (&reference, ref->ref);
+	ret = git_reference_resolve (&reference, ref->priv->ref);
+
 	if (ret == GIT_SUCCESS)
 	{
 		rev_ref = _ggit_ref_wrap (reference);
@@ -203,7 +217,7 @@ ggit_ref_get_owner (GgitRef *ref)
 {
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	return _ggit_repository_new (git_reference_owner (ref->ref));
+	return _ggit_repository_new (git_reference_owner (ref->priv->ref));
 }
 
 /**
@@ -230,7 +244,8 @@ ggit_ref_set_target (GgitRef      *ref,
 	g_return_if_fail (ref != NULL);
 	g_return_if_fail (target != NULL);
 
-	ret = git_reference_set_target (ref->ref, target);
+	ret = git_reference_set_target (ref->priv->ref, target);
+
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);
@@ -261,7 +276,8 @@ ggit_ref_set_oid (GgitRef  *ref,
 	g_return_if_fail (ref != NULL);
 	g_return_if_fail (oid != NULL);
 
-	ret = git_reference_set_oid (ref->ref, _ggit_oid_get_oid (oid));
+	ret = git_reference_set_oid (ref->priv->ref, _ggit_oid_get_oid (oid));
+
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);
@@ -297,7 +313,8 @@ ggit_ref_rename (GgitRef     *ref,
 
 	force = (force != FALSE);
 
-	ret = git_reference_rename (ref->ref, new_name, force);
+	ret = git_reference_rename (ref->priv->ref, new_name, force);
+
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);
@@ -324,7 +341,8 @@ ggit_ref_delete (GgitRef  *ref,
 
 	g_return_if_fail (ref != NULL);
 
-	ret = git_reference_delete (ref->ref);
+	ret = git_reference_delete (ref->priv->ref);
+
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);

@@ -20,28 +20,45 @@
  * Boston, MA  02110-1301  USA
  */
 
-
 #ifndef __GGIT_REF_H__
 #define __GGIT_REF_H__
 
 #include <glib-object.h>
 #include <git2/refs.h>
-
-#include "ggit-types.h"
+#include <libgit2-glib/ggit-oid.h>
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REF		(ggit_ref_get_type ())
-#define GGIT_REF(obj)		((GgitRef *)obj)
-#define GGIT_REF_CONST(obj)	((GgitRef const *)obj)
+#define GGIT_TYPE_REF			(ggit_ref_get_type ())
+#define GGIT_REF(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REF, GgitRef))
+#define GGIT_REF_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REF, GgitRef const))
+#define GGIT_REF_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REF, GgitRefClass))
+#define GGIT_IS_REF(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REF))
+#define GGIT_IS_REF_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REF))
+#define GGIT_REF_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REF, GgitRefClass))
+
+typedef struct _GgitRef		GgitRef;
+typedef struct _GgitRefClass	GgitRefClass;
+typedef struct _GgitRefPrivate	GgitRefPrivate;
+
+struct _GgitRef
+{
+	GObject parent;
+
+	GgitRefPrivate *priv;
+};
+
+struct _GgitRefClass
+{
+	GObjectClass parent_class;
+};
 
 GType            ggit_ref_get_type           (void) G_GNUC_CONST;
 
 GgitRef        *_ggit_ref_wrap               (git_reference *ref);
 
-GgitRef         *ggit_ref_copy               (GgitRef *ref);
-
-void             ggit_ref_free               (GgitRef *ref);
+void             ggit_ref_assign             (GgitRef *ref,
+                                              GgitRef *copyfrom);
 
 GgitOId         *ggit_ref_get_oid            (GgitRef *ref);
 
