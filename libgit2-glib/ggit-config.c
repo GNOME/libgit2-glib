@@ -48,9 +48,9 @@ ggit_config_finalize (GObject *object)
 
 	git_config_free (config->priv->config);
 
-	if (config->priv->config)
+	if (config->priv->file)
 	{
-		g_object_unref (config->priv->config);
+		g_object_unref (config->priv->file);
 	}
 
 	G_OBJECT_CLASS (ggit_config_parent_class)->finalize (object);
