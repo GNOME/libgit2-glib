@@ -37,16 +37,17 @@
 struct _GgitRepositoryPrivate
 {
 	git_repository *repository;
-	gchar *path;
-	gboolean is_bare;
-	gboolean init;
-	gchar *workdir;
+	GFile *location;
+	GFile *workdir;
+
+	guint is_bare : 1;
+	guint init : 1;
 };
 
 enum
 {
 	PROP_0,
-	PROP_PATH,
+	PROP_LOCATION,
 	PROP_IS_BARE,
 	PROP_INIT,
 	PROP_WORKDIR,
@@ -65,10 +66,10 @@ ggit_repository_finalize (GObject *object)
 {
 	GgitRepositoryPrivate *priv = GGIT_REPOSITORY (object)->priv;
 
-	g_free (priv->path);
-	git_repository_free (priv->repository);
+	g_clear_object (&priv->location);
+	g_clear_object (&priv->workdir);
 
-	g_free (priv->workdir);
+	git_repository_free (priv->repository);
 
 	G_OBJECT_CLASS (ggit_repository_parent_class)->finalize (object);
 }
@@ -84,17 +85,20 @@ ggit_repository_get_property (GObject    *object,
 
 	switch (prop_id)
 	{
-		case PROP_PATH:
-			g_value_set_string (value, ggit_repository_get_path (repository));
+		case PROP_LOCATION:
+			g_value_take_object (value,
+			                     ggit_repository_get_location (repository));
 			break;
 		case PROP_IS_BARE:
-			g_value_set_boolean (value, ggit_repository_is_bare (repository));
+			g_value_set_boolean (value,
+			                     ggit_repository_is_bare (repository));
 			break;
 		case PROP_INIT:
-			g_value_set_boolean (value, priv->init);
+			g_value_set_boolean (value,
+			                     priv->init);
 			break;
 		case PROP_WORKDIR:
-			g_value_set_string (value,
+			g_value_take_object (value,
 			                    ggit_repository_get_workdir (repository));
 			break;
 		case PROP_HEAD:
@@ -104,6 +108,36 @@ ggit_repository_get_property (GObject    *object,
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
+	}
+}
+
+static void
+set_workdir (GgitRepository *repository,
+             GFile          *workdir)
+{
+	GgitRepositoryPrivate *priv;
+
+	priv = repository->priv;
+
+	g_clear_object (&priv->workdir);
+
+	if (workdir)
+	{
+		priv->workdir = g_file_dup (workdir);
+
+		if (priv->repository)
+		{
+			gchar *path;
+
+			path = g_file_get_path (priv->workdir);
+
+			git_repository_set_workdir (priv->repository, path);
+			g_free (path);
+		}
+	}
+	else if (priv->repository)
+	{
+		git_repository_set_workdir (priv->repository, NULL);
 	}
 }
 
@@ -121,26 +155,29 @@ ggit_repository_set_property (GObject      *object,
 
 	switch (prop_id)
 	{
-		case PROP_PATH:
-			g_free (priv->path);
-			priv->path = g_value_dup_string (value);
+		case PROP_LOCATION:
+		{
+			GFile *f;
+
+			f = g_value_get_object (value);
+
+			g_clear_object (&priv->location);
+
+			if (f)
+			{
+				priv->location = g_file_dup (f);
+			}
+
+			break;
+		}
+		case PROP_WORKDIR:
+			set_workdir (repository, g_value_get_object (value));
 			break;
 		case PROP_IS_BARE:
 			priv->is_bare = g_value_get_boolean (value);
 			break;
 		case PROP_INIT:
 			priv->init = g_value_get_boolean (value);
-			break;
-		case PROP_WORKDIR:
-			g_free (priv->workdir);
-			priv->workdir = g_value_dup_string (value);
-
-			if (repository->priv->repository)
-			{
-				ggit_repository_set_workdir (repository,
-				                             priv->workdir);
-			}
-
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -158,11 +195,11 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	object_class->set_property = ggit_repository_set_property;
 
 	g_object_class_install_property (object_class,
-	                                 PROP_PATH,
-	                                 g_param_spec_string ("path",
-	                                                      "Path to repository",
-	                                                      "The path to the repository",
-	                                                      NULL,
+	                                 PROP_LOCATION,
+	                                 g_param_spec_object ("location",
+	                                                      "Location of repository",
+	                                                      "The location of the repository",
+	                                                      G_TYPE_FILE,
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
@@ -189,10 +226,10 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 
 	g_object_class_install_property (object_class,
 	                                 PROP_WORKDIR,
-	                                 g_param_spec_string ("workdir",
+	                                 g_param_spec_object ("workdir",
 	                                                      "Path to repository working directory",
 	                                                      "The path to the repository working directory",
-	                                                      NULL,
+	                                                      G_TYPE_FILE,
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT |
 	                                                      G_PARAM_STATIC_STRINGS));
@@ -222,6 +259,7 @@ ggit_repository_initable_init (GInitable    *initable,
 	GgitRepositoryPrivate *priv;
 	gboolean success = TRUE;
 	gint err;
+	gchar *path = NULL;
 
 	if (cancellable != NULL)
 	{
@@ -232,21 +270,28 @@ ggit_repository_initable_init (GInitable    *initable,
 
 	priv = GGIT_REPOSITORY (initable)->priv;
 
-	if (priv->path == NULL)
+	if (priv->location != NULL)
+	{
+		path = g_file_get_path (priv->location);
+	}
+
+	if (path == NULL)
 	{
 		err = GGIT_ERROR_INVALIDPATH;
 	}
 	else if (priv->init == TRUE)
 	{
 		err = git_repository_init (&priv->repository,
-		                           priv->path,
+		                           path,
 		                           priv->is_bare);
 	}
-	else if (priv->path != NULL)
+	else
 	{
 		err = git_repository_open (&priv->repository,
-		                           priv->path);
+		                           path);
 	}
+
+	g_free (path);
 
 	if (err != GIT_SUCCESS)
 	{
@@ -261,7 +306,14 @@ ggit_repository_initable_init (GInitable    *initable,
 	}
 	else if (priv->workdir)
 	{
-		git_repository_set_workdir (priv->repository, priv->workdir);
+		path = g_file_get_path (priv->workdir);
+
+		if (path)
+		{
+			git_repository_set_workdir (priv->repository, path);
+		}
+
+		g_free (path);
 	}
 
 	return success;
@@ -294,7 +346,7 @@ _ggit_repository_get_repository (GgitRepository *repository)
 
 /**
  * ggit_repository_open:
- * @path: the path to the repository.
+ * @location: the location of the repository.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Open a git repository.
@@ -317,20 +369,20 @@ _ggit_repository_get_repository (GgitRepository *repository)
  * Returns: (transfer full): a newly created #GgitRepository.
  */
 GgitRepository *
-ggit_repository_open (const gchar  *path,
-                      GError      **error)
+ggit_repository_open (GFile   *location,
+                      GError **error)
 {
-	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (G_IS_FILE (location), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
-	                       "path", path,
+	                       "location", location,
 	                       NULL);
 }
 
 /**
  * ggit_repository_init_repository:
- * @path: the path to the repository.
+ * @location: the location of the repository.
  * @is_bare: if %TRUE, a git repository without a working directory is created
  *           at the pointed path. If %FALSE, provided path will be considered as the working
  *           directory into which the .git directory will be created.
@@ -341,15 +393,15 @@ ggit_repository_open (const gchar  *path,
  * Returns: (transfer full): a newly created #GgitRepository.
  */
 GgitRepository *
-ggit_repository_init_repository (const gchar  *path,
-                                 gboolean      is_bare,
-                                 GError      **error)
+ggit_repository_init_repository (GFile     *location,
+                                 gboolean   is_bare,
+                                 GError   **error)
 {
-	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (G_IS_FILE (location), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
-	                       "path", path,
+	                       "location", location,
 	                       "is-bare", is_bare,
 	                       "init", TRUE,
 	                       NULL);
@@ -430,6 +482,7 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 
 	ret = git_reference_lookup (&reference, repository->priv->repository,
 	                            name);
+
 	if (ret == GIT_SUCCESS)
 	{
 		ref = _ggit_ref_wrap (reference);
@@ -472,6 +525,7 @@ ggit_repository_create_reference (GgitRepository  *repository,
 
 	ret = git_reference_create_oid (&reference, repository->priv->repository,
 	                                name, _ggit_oid_get_oid (oid), FALSE);
+
 	if (ret == GIT_SUCCESS)
 	{
 		ref = _ggit_ref_wrap (reference);
@@ -563,7 +617,7 @@ ggit_repository_get_head (GgitRepository  *repository,
 
 /**
  * ggit_repository_discover:
- * @path: the base path where the lookup starts.
+ * @location: the base location where the lookup starts.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Looks for a git repository.
@@ -571,32 +625,42 @@ ggit_repository_get_head (GgitRepository  *repository,
  * The lookup starts from @path and walks up the parent directories
  * and stops when a repository is found.
  *
- * Returns: (transfer full): the repository path.
+ * Returns: (transfer full): the repository location.
  */
-gchar *
-ggit_repository_discover (const gchar  *path,
-                          GError      **error)
+GFile *
+ggit_repository_discover (GFile   *location,
+                          GError **error)
 {
 	gchar found_path[GIT_PATH_MAX];
-	gchar *rep_path = NULL;
+	GFile *rep = NULL;
+	gchar *path;
 	gint ret;
 
-	g_return_val_if_fail (path != NULL || *path == '\0', NULL);
+	g_return_val_if_fail (G_IS_FILE (location), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_repository_discover (found_path, sizeof (found_path),
-	                               path, 0, "");
+	path = g_file_get_path (location);
+
+	g_return_val_if_fail (path != NULL, NULL);
+
+	ret = git_repository_discover (found_path,
+	                               sizeof (found_path),
+	                               path,
+	                               0,
+	                               "");
+
+	g_free (path);
 
 	if (ret == GIT_SUCCESS)
 	{
-		rep_path = g_strdup (found_path);
+		rep = g_file_new_for_path (found_path);
 	}
 	else
 	{
 		_ggit_error_set (error, ret);
 	}
 
-	return rep_path;
+	return rep;
 }
 
 /**
@@ -693,19 +757,30 @@ ggit_repository_is_empty (GgitRepository  *repository,
 }
 
 /**
- * ggit_repository_get_path:
+ * ggit_repository_get_location:
  * @repository: a #GgitRepository.
  *
- * Get the gitdir path of the repository.
+ * Get the gitdir location of the repository.
  *
- * Returns: the absolute path of the gitdir of the repository.
+ * Returns: (transfer full): the location of the gitdir of the repository.
  */
-const gchar *
-ggit_repository_get_path (GgitRepository *repository)
+GFile *
+ggit_repository_get_location (GgitRepository *repository)
 {
+	const gchar *path;
+
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	return git_repository_path (repository->priv->repository);
+	path = git_repository_path (repository->priv->repository);
+
+	if (path)
+	{
+		return g_file_new_for_path (path);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 /**
@@ -714,14 +789,25 @@ ggit_repository_get_path (GgitRepository *repository)
  *
  * Gets the working directory of the repository.
  *
- * Returns: the absolute path of working directory of the repository.
+ * Returns: (transfer full): the location of the working directory of the repository.
  */
-const gchar *
+GFile *
 ggit_repository_get_workdir (GgitRepository *repository)
 {
+	const gchar *path;
+
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	return git_repository_workdir (repository->priv->repository);
+	path = git_repository_workdir (repository->priv->repository);
+
+	if (path)
+	{
+		return g_file_new_for_path (path);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 /**
@@ -734,11 +820,12 @@ ggit_repository_get_workdir (GgitRepository *repository)
  */
 void
 ggit_repository_set_workdir (GgitRepository *repository,
-                             const gchar    *workdir)
+                             GFile          *workdir)
 {
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (G_IS_FILE (workdir));
 
-	git_repository_set_workdir (repository->priv->repository, workdir);
+	set_workdir (repository, workdir);
 }
 
 /**
@@ -760,7 +847,7 @@ ggit_repository_is_bare (GgitRepository *repository)
 /**
  * ggit_repository_file_status:
  * @repository: a #GgitRepository.
- * @path: the file to retrieve status for, rooted at the repository working dir.
+ * @location: the file to retrieve status for, rooted at the repository working dir.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Gets the file status for a single file.
@@ -769,18 +856,26 @@ ggit_repository_is_bare (GgitRepository *repository)
  */
 GgitStatusFlags
 ggit_repository_file_status (GgitRepository  *repository,
-                             const gchar     *path,
+                             GFile           *location,
                              GError         **error)
 {
 	GgitStatusFlags status_flags;
 	gint ret;
+	gchar *path;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), GGIT_STATUS_IGNORED);
-	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
+	g_return_val_if_fail (G_IS_FILE (location), GGIT_STATUS_IGNORED);
 	g_return_val_if_fail (error == NULL || *error == NULL, GGIT_STATUS_IGNORED);
+
+	path = g_file_get_path (location);
+
+	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
 
 	ret = git_status_file (&status_flags, repository->priv->repository,
 	                       path);
+
+	g_free (path);
+
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);

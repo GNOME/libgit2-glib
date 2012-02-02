@@ -164,24 +164,26 @@ static void
 do_test_init (const gchar *git_dir,
               gboolean     bare)
 {
-	const gchar *repo_path;
-	gchar *dotgit, *dotgit_full;
 	GError *err = NULL;
 	GgitRepository *repo;
+	GFile *f;
+	GFile *dotgit;
 
-	repo = ggit_repository_init_repository (git_dir, bare, &err);
+	f = g_file_new_for_path (git_dir);
+	repo = ggit_repository_init_repository (f, bare, &err);
+
 	g_assert_no_error (err);
 
-	dotgit = bare ? g_strdup (git_dir) : g_build_filename (git_dir, ".git", NULL);
+	dotgit = bare ? g_file_dup (f) : g_file_get_child (f, ".git");
+	g_object_unref (f);
 
-	/* libgit api includes the terminating separator */
-	dotgit_full = g_strdup_printf ("%s%s", dotgit, G_DIR_SEPARATOR_S);
+	f = ggit_repository_get_location (repo);
 
-	repo_path = ggit_repository_get_path (repo);
-	g_assert_cmpstr (dotgit_full, ==, repo_path);
-	g_assert (g_file_test (repo_path, G_FILE_TEST_IS_DIR));
-	g_free (dotgit);
-	g_free (dotgit_full);
+	g_assert (g_file_equal (dotgit, f));
+	g_assert (g_file_query_exists (dotgit, NULL));
+
+	g_object_unref (dotgit);
+	g_object_unref (f);
 
 	g_assert (ggit_repository_is_bare (repo) == bare);
 

@@ -26,6 +26,7 @@
 
 #include <glib-object.h>
 #include <git2/repository.h>
+#include <gio/gio.h>
 #include <libgit2-glib/ggit-config.h>
 #include <libgit2-glib/ggit-index.h>
 #include <libgit2-glib/ggit-types.h>
@@ -61,10 +62,10 @@ GgitRepository     *_ggit_repository_new              (git_repository        *re
 
 git_repository     *_ggit_repository_get_repository   (GgitRepository        *repository);
 
-GgitRepository     *ggit_repository_open              (const gchar           *path,
+GgitRepository     *ggit_repository_open              (GFile                 *location,
                                                        GError               **error);
 
-GgitRepository     *ggit_repository_init_repository   (const gchar           *path,
+GgitRepository     *ggit_repository_init_repository   (GFile                 *location,
                                                        gboolean               is_bare,
                                                        GError               **error);
 
@@ -91,7 +92,7 @@ GgitRef            *ggit_repository_create_symbolic_reference
 GgitRef            *ggit_repository_get_head          (GgitRepository        *repository,
                                                        GError               **error);
 
-gchar              *ggit_repository_discover          (const gchar           *path,
+GFile              *ggit_repository_discover          (GFile                 *location,
                                                        GError               **error);
 
 gboolean            ggit_repository_is_head_detached  (GgitRepository        *repository,
@@ -103,16 +104,16 @@ gboolean            ggit_repository_is_head_orphan    (GgitRepository        *re
 gboolean            ggit_repository_is_empty          (GgitRepository        *repository,
                                                        GError               **error);
 
-const gchar        *ggit_repository_get_path          (GgitRepository        *repository);
-const gchar        *ggit_repository_get_workdir       (GgitRepository        *repository);
+GFile              *ggit_repository_get_location      (GgitRepository        *repository);
+GFile              *ggit_repository_get_workdir       (GgitRepository        *repository);
 
 void                ggit_repository_set_workdir       (GgitRepository        *repository,
-                                                       const gchar           *workdir);
+                                                       GFile                 *workdir);
 
 gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 
 GgitStatusFlags     ggit_repository_file_status       (GgitRepository        *repository,
-                                                       const gchar           *path,
+                                                       GFile                 *location,
                                                        GError               **error);
 
 gboolean            ggit_repository_file_status_foreach
