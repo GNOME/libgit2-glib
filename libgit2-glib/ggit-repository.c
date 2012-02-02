@@ -188,7 +188,7 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                       G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
-	                                 PROP_PATH,
+	                                 PROP_WORKDIR,
 	                                 g_param_spec_string ("workdir",
 	                                                      "Path to repository working directory",
 	                                                      "The path to the repository working directory",
