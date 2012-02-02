@@ -119,7 +119,7 @@ ggit_index_initable_init (GInitable    *initable,
 	GgitIndexPrivate *priv;
 	gboolean success = TRUE;
 	gint err;
-	gchar const *lasterr;
+	const gchar *lasterr;
 
 	if (cancellable != NULL)
 	{

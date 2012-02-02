@@ -493,7 +493,7 @@ match_foreach (const gchar *name,
  * Returns: (allow-none): the value of that matched configuration
  *
  **/
-gchar const *
+const gchar *
 ggit_config_match (GgitConfig  *config,
                    GRegex      *regex,
                    GMatchInfo **match_info,
