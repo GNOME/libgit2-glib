@@ -235,7 +235,7 @@ ggit_config_get_bool (GgitConfig   *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_config_get_bool (config->priv->config, name, &retval);
 
@@ -272,7 +272,7 @@ ggit_config_set_bool (GgitConfig   *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_config_set_bool (config->priv->config, name, value ? 1 : 0);
 
@@ -309,7 +309,7 @@ ggit_config_get_string (GgitConfig   *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_config_get_string (config->priv->config, name, &retval);
 
@@ -346,7 +346,7 @@ ggit_config_set_string (GgitConfig   *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	if (value == NULL)
 	{
@@ -388,7 +388,7 @@ ggit_config_delete (GgitConfig   *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_config_delete (config->priv->config, name);
 
@@ -425,7 +425,7 @@ ggit_config_foreach (GgitConfig          *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (callback != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_config_foreach (config->priv->config, callback, user_data);
 
@@ -503,7 +503,7 @@ ggit_config_match (GgitConfig  *config,
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (regex != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	info.regex = regex;
 
@@ -555,7 +555,7 @@ ggit_config_match_foreach (GgitConfig               *config,
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (regex != NULL, FALSE);
 	g_return_val_if_fail (callback != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	info.regex = regex;
 	info.callback = callback;
