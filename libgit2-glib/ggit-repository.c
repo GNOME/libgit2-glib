@@ -232,7 +232,11 @@ ggit_repository_initable_init (GInitable    *initable,
 
 	priv = GGIT_REPOSITORY (initable)->priv;
 
-	if (priv->init == TRUE)
+	if (priv->path == NULL)
+	{
+		err = GGIT_ERROR_INVALIDPATH;
+	}
+	else if (priv->init == TRUE)
 	{
 		err = git_repository_init (&priv->repository,
 		                           priv->path,
