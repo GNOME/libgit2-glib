@@ -250,8 +250,13 @@ ggit_repository_initable_init (GInitable    *initable,
 
 	if (err != GIT_SUCCESS)
 	{
-		g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_NOT_INITIALIZED,
-		                     git_lasterror ());
+		const gchar *errstr = git_lasterror ();
+
+		g_set_error_literal (error,
+		                     G_IO_ERROR,
+		                     G_IO_ERROR_NOT_INITIALIZED,
+		                     errstr ? errstr : git_strerror (err));
+
 		success = FALSE;
 	}
 	else if (priv->workdir)
