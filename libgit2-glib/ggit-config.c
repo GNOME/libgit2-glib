@@ -407,7 +407,7 @@ ggit_config_delete (GgitConfig   *config,
  * ggit_config_foreach:
  * @config: a #GgitConfig.
  * @callback: (scope call): a #GgitConfigCallback.
- * @user_data: the user data for @callback
+ * @user_data: (allow-none): the user data for @callback
  * @error: a #GError.
  *
  * Call @callback for each configuration value.
@@ -533,8 +533,8 @@ ggit_config_match (GgitConfig  *config,
  * ggit_config_match_foreach:
  * @config: a #GgitConfig.
  * @regex: a #GRegex.
- * @callback: (scope call): a #GgitConfigMatchCallback.
- * @user_data: the user data for @callback
+ * @callback: (scope call) (closure user_data): a #GgitConfigMatchCallback.
+ * @user_data: (closure): the user data for @callback
  * @error: a #GError
  *
  * Call @callback for all configurations matching @regex.

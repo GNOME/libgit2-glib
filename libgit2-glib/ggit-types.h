@@ -228,7 +228,7 @@ typedef enum
  * GgitStatusCallback:
  * @path: the file to retrieve status for, rooted at the repository working dir.
  * @status_flags: the status value.
- * @data: user-supplied data.
+ * @data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving the status of the files
  * in a #GgitRepository. See ggit_repository_file_status_foreach().
@@ -242,7 +242,7 @@ typedef int (* GgitStatusCallback) (const gchar     *path,
 /**
  * GgitReferencesCallback:
  * @name: the name of the reference
- * @data: user-supplied data.
+ * @data: (closure) (allow-none): user-supplied data.
  *
  * The type of the callback functions for retrieving the references
  * in a #GgitRepository. See ggit_repository_references_foreach().
@@ -256,7 +256,7 @@ typedef int (* GgitReferencesCallback) (const gchar     *name,
  * GgitConfigCallback:
  * @name: the name of the configuration value
  * @value: the value
- * @data: user-supplied data.
+ * @data: (closure) (allow-none): user-supplied data.
  *
  * The type of the callback functions for retrieving values from a #GgitConfig.
  * See ggit_config_foreach().
@@ -272,7 +272,7 @@ typedef int (* GgitConfigCallback) (const gchar     *name,
  * GgitConfigMatchCallback:
  * @match_info: the match
  * @value: the value
- * @data: user-supplied data.
+ * @data: (closure) (allow-none): user-supplied data.
  *
  * The type of the callback functions for retrieving values from a #GgitConfig
  * using a regular expression. See ggit_config_match_foreach().
