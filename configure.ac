@@ -16,6 +16,7 @@ AM_INIT_AUTOMAKE([1.11 tar-ustar dist-xz no-dist-gzip])
 AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
+AM_PATH_PYTHON
 
 # Initialize libtool
 LT_PREREQ([2.2])
@@ -45,6 +46,30 @@ GOBJECT_INTROSPECTION_REQUIRE($INTROSPECTION_REQUIRED)
 AC_SUBST(INTROSPECTION_REQUIRED)
 AC_SUBST(GLIB_REQUIRED)
 AC_SUBST(GIT2_REQUIRED)
+
+dnl ===========================================================================
+dnl Check for python
+dnl ===========================================================================
+PYGOBJECT_REQUIRED=3.0.0
+
+AC_ARG_ENABLE([python],
+              AS_HELP_STRING([--enable-python[=@<:@no/auto/yes@:>@]],[Build with python support]),
+              [enable_python=$enableval],
+              [enable_python="auto"])
+
+if test "x$enable_python" = "xauto"; then
+        PKG_CHECK_EXISTS([pygobject-3.0 >= $PYGOBJECT_REQUIRED],
+                         [enable_python=yes],[enable_python=no])
+fi
+
+if test "x$enable_python" = "xyes"; then
+        PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
+
+        pyoverridesdir=`$PYTHON -c "import gi; print(gi._overridesdir)"`
+        AC_SUBST(pyoverridesdir)
+fi
+
+AM_CONDITIONAL(ENABLE_PYTHON, test x"$enable_python" = "xyes")
 
 GNOME_COMPILE_WARNINGS([maximum])
 

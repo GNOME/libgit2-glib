@@ -61,6 +61,12 @@ libgit2_glib_1_0_la_SOURCES = 	\
 headerdir = $(prefix)/include/libgit2-glib-1.0/libgit2-glib
 header_DATA = $(INST_H_FILES)
 
+if ENABLE_PYTHON
+overridesdir = $(pyoverridesdir)
+overrides_PYTHON =                      \
+        Ggit.py
+endif
+
 EXTRA_DIST =
 CLEANFILES =
 
