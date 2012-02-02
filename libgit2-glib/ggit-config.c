@@ -91,8 +91,18 @@ ggit_config_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_FILE:
-			self->priv->file = g_file_dup (g_value_get_object (value));
+		{
+			GFile *f;
+
+			f = g_value_get_object (value);
+
+			if (f)
+			{
+				self->priv->file = g_file_dup (f);
+			}
+
 			break;
+		}
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
