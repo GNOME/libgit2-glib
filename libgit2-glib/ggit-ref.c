@@ -166,6 +166,21 @@ ggit_ref_get_name (GgitRef *ref)
 }
 
 /**
+ * ggit_ref_to_string:
+ * @ref: a #GgitRef.
+ *
+ * Get a string representation of the ref.
+ *
+ * Returns: a string representation of the ref.
+ *
+ **/
+const gchar *
+ggit_ref_to_string (GgitRef *ref)
+{
+	return ggit_ref_get_name (ref);
+}
+
+/**
  * ggit_ref_resolve:
  * @ref: a #GgitRef.
  * @error: a #GError for error reporting, or %NULL.
