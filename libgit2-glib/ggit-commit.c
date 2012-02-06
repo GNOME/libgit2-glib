@@ -204,48 +204,6 @@ ggit_commit_get_message (GgitCommit *commit)
 	return commit->priv->message_utf8;
 }
 
-/* TODO: use gdatetime */
-/**
- * ggit_commit_get_time:
- * @commit: a #GgitCommit.
- *
- * Gets the commit time (i.e. committer time) of @commit.
- *
- * Returns: the time of the commit.
- */
-gint64
-ggit_commit_get_time (GgitCommit *commit)
-{
-	git_commit *c;
-
-	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
-
-	c = _ggit_native_get (commit);
-
-	return git_commit_time (c);
-}
-
-/**
- * ggit_commit_get_time_offset:
- * @commit: a #GgitCommit.
- *
- * Gets the commit timezone offset (i.e. committer's preferred timezone)
- * of @commit.
- *
- * Returns: positive or negative timezone offset, in minutes from UTC.
- */
-gint
-ggit_commit_get_time_offset (GgitCommit *commit)
-{
-	git_commit *c;
-
-	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
-
-	c = _ggit_native_get (commit);
-
-	return git_commit_time_offset (c);
-}
-
 /**
  * ggit_commit_get_committer:
  * @commit: a #GgitCommit.

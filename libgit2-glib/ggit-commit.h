@@ -68,10 +68,6 @@ const gchar         *ggit_commit_get_message_encoding (GgitCommit        *commit
 
 const gchar         *ggit_commit_get_message          (GgitCommit        *commit);
 
-gint64               ggit_commit_get_time             (GgitCommit        *commit);
-
-gint                 ggit_commit_get_time_offset      (GgitCommit        *commit);
-
 GgitSignature       *ggit_commit_get_committer        (GgitCommit        *commit);
 
 GgitSignature       *ggit_commit_get_author           (GgitCommit        *commit);
