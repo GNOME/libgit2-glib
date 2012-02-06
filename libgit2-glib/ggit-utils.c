@@ -24,6 +24,7 @@
 #include "ggit-blob.h"
 #include "ggit-commit.h"
 #include "ggit-tag.h"
+#include "ggit-tree.h"
 #include "ggit-utils.h"
 
 git_otype
@@ -42,6 +43,10 @@ ggit_utils_get_otype_from_gtype (GType gtype)
 	else if (g_type_is_a (gtype, GGIT_TYPE_COMMIT))
 	{
 		otype = GIT_OBJ_COMMIT;
+	}
+	else if (g_type_is_a (gtype, GGIT_TYPE_TREE))
+	{
+		otype = GIT_OBJ_TREE;
 	}
 	else if (g_type_is_a (gtype, G_TYPE_NONE))
 	{
@@ -64,6 +69,8 @@ ggit_utils_get_gtype_from_otype (git_otype type)
 			return GGIT_TYPE_TAG;
 		case GIT_OBJ_BLOB:
 			return GGIT_TYPE_BLOB;
+		case GIT_OBJ_TREE:
+			return GGIT_TYPE_TREE;
 		case GIT_OBJ_COMMIT:
 			return GGIT_TYPE_COMMIT;
 		default:
@@ -91,6 +98,10 @@ ggit_utils_create_real_object (git_object *obj,
 	else if (otype == GIT_OBJ_COMMIT)
 	{
 		object = GGIT_OBJECT (_ggit_commit_wrap ((git_commit *)obj, owned));
+	}
+	else if (otype == GIT_OBJ_TREE)
+	{
+		object = GGIT_OBJECT (_ggit_tree_wrap ((git_tree *)obj, owned));
 	}
 
 	return object;

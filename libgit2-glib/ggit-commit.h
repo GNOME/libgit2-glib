@@ -84,6 +84,9 @@ GgitCommit *         ggit_commit_parents_get          (GgitCommitParents *parent
 GgitOId *            ggit_commit_parents_get_id       (GgitCommitParents *parents,
                                                        guint              idx);
 
+GgitTree *           ggit_commit_get_tree             (GgitCommit        *commit);
+
+GgitOId *            ggit_commit_get_tree_id          (GgitCommit        *commit);
 
 G_END_DECLS
 

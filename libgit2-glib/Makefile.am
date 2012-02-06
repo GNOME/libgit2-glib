@@ -30,6 +30,8 @@ INST_H_FILES =				\
 	ggit-revision-walker.h		\
 	ggit-signature.h		\
 	ggit-tag.h			\
+	ggit-tree.h			\
+	ggit-tree-entry.h		\
 	ggit-types.h			\
 	ggit-type-factory.h		\
 	ggit-type-factory-object.h	\
@@ -57,6 +59,8 @@ C_FILES =				\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
 	ggit-tag.c			\
+	ggit-tree.c			\
+	ggit-tree-entry.c		\
 	ggit-type-factory.c		\
 	ggit-type-factory-object.c	\
 	ggit-utils.c

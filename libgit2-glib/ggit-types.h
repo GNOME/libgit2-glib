@@ -40,6 +40,13 @@ typedef struct _GgitBlob GgitBlob;
  */
 typedef struct _GgitCommit GgitCommit;
 
+/**
+ * GgitTree:
+ *
+ * Represents a tree object.
+ */
+typedef struct _GgitTree GgitTree;
+
 /* NOTE: keep in sync with git2/errors.h */
 /**
  * GgitError:

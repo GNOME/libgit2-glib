@@ -26,6 +26,7 @@
 #include "ggit-signature.h"
 #include "ggit-oid.h"
 #include "ggit-convert.h"
+#include "ggit-tree.h"
 
 #define GGIT_COMMIT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT, GgitCommitPrivate))
 
@@ -366,6 +367,61 @@ ggit_commit_parents_get_id (GgitCommitParents *parents,
 	c = _ggit_native_get (parents->commit);
 
 	oid = git_commit_parent_oid (c, idx);
+	return _ggit_oid_new (oid);
+}
+
+/**
+ * ggit_commit_get_tree:
+ * @commit: a #GgitCommit.
+ *
+ * Get the tree object for @commit.
+ *
+ * Returns: (transfer full): a #GgitTree.
+ *
+ **/
+GgitTree *
+ggit_commit_get_tree (GgitCommit *commit)
+{
+	git_commit *c;
+	git_tree *t;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+
+	c = _ggit_native_get (commit);
+
+	if (git_commit_tree (&t, c) == GIT_SUCCESS)
+	{
+		return _ggit_tree_wrap (t, TRUE);
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+/**
+ * ggit_commit_get_tree_id:
+ * @commit: a #GgitCommit.
+ *
+ * Get the #GgitOId of the tree of @commit. Note that this is more efficient
+ * than getting the tree object with #ggit_commit_get_tree because no additional
+ * files need to be read from disk.
+ *
+ * Returns: (transfer full) a #GgitOId.
+ *
+ **/
+GgitOId *
+ggit_commit_get_tree_id (GgitCommit *commit)
+{
+	git_commit *c;
+	const git_oid *oid;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+
+	c = _ggit_native_get (commit);
+
+	oid = git_commit_tree_oid (c);
+
 	return _ggit_oid_new (oid);
 }
 
