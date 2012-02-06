@@ -53,39 +53,42 @@ struct _GgitRefClass
 	GgitNativeClass parent_class;
 };
 
-GType            ggit_ref_get_type           (void) G_GNUC_CONST;
+GType           ggit_ref_get_type           (void) G_GNUC_CONST;
 
-GgitRef        *_ggit_ref_wrap               (git_reference *ref);
+GgitRef        *_ggit_ref_wrap              (git_reference  *ref);
 
-GgitOId         *ggit_ref_get_id             (GgitRef *ref);
+GgitOId        *ggit_ref_get_id             (GgitRef        *ref);
 
-const gchar     *ggit_ref_get_target         (GgitRef *ref);
+const gchar    *ggit_ref_get_target         (GgitRef        *ref);
 
-GgitRefType      ggit_ref_get_reference_type (GgitRef *ref);
+GgitRefType     ggit_ref_get_reference_type (GgitRef        *ref);
 
-const gchar     *ggit_ref_get_name           (GgitRef *ref);
-const gchar     *ggit_ref_to_string          (GgitRef *ref);
+const gchar    *ggit_ref_get_name           (GgitRef        *ref);
+const gchar    *ggit_ref_to_string          (GgitRef        *ref);
 
-GgitRef         *ggit_ref_resolve            (GgitRef  *ref,
-                                              GError  **error);
+GgitRef        *ggit_ref_resolve            (GgitRef        *ref,
+                                             GError        **error);
 
-GgitRepository  *ggit_ref_get_owner          (GgitRef *ref);
+GgitRepository *ggit_ref_get_owner          (GgitRef        *ref);
 
-void             ggit_ref_set_target         (GgitRef      *ref,
-                                              const gchar  *target,
-                                              GError      **error);
+void            ggit_ref_set_target         (GgitRef        *ref,
+                                             const gchar    *target,
+                                             GError        **error);
 
-void             ggit_ref_set_oid            (GgitRef  *ref,
-                                              GgitOId  *oid,
-                                              GError  **error);
+void            ggit_ref_set_oid            (GgitRef        *ref,
+                                             GgitOId        *oid,
+                                             GError        **error);
 
-void             ggit_ref_rename             (GgitRef     *ref,
-                                              const gchar *new_name,
-                                              gboolean     force,
-                                              GError     **error);
+void            ggit_ref_rename             (GgitRef        *ref,
+                                             const gchar    *new_name,
+                                             gboolean        force,
+                                             GError        **error);
 
-void             ggit_ref_delete             (GgitRef  *ref,
-                                              GError  **error);
+void            ggit_ref_delete             (GgitRef        *ref,
+                                             GError        **error);
+
+GgitObject     *ggit_ref_lookup             (GgitRef        *ref,
+                                             GError        **error);
 
 G_END_DECLS
 

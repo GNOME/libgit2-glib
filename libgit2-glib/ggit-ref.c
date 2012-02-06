@@ -24,6 +24,7 @@
 #include "ggit-oid.h"
 #include "ggit-error.h"
 #include "ggit-repository.h"
+#include "ggit-utils.h"
 
 #include <git2/errors.h>
 
@@ -326,6 +327,45 @@ ggit_ref_delete (GgitRef  *ref,
 	if (ret != GIT_SUCCESS)
 	{
 		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_ref_lookup:
+ * @ref: a #GgitRef.
+ * @error: a #GError.
+ *
+ * Convenient method to resolve a reference to an object.
+ *
+ * Returns: (transfer full): a #GgitObject.
+ *
+ **/
+GgitObject *
+ggit_ref_lookup (GgitRef  *ref,
+                 GError  **error)
+{
+	git_object *obj;
+	git_reference *r;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	r = _ggit_native_get (ref);
+
+	ret = git_object_lookup (&obj,
+	                         git_reference_owner (r),
+	                         git_reference_oid (r),
+	                         GIT_OBJ_ANY);
+
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	else
+	{
+		return ggit_utils_create_real_object (obj, TRUE);
 	}
 }
 
