@@ -33,4 +33,12 @@ for c in dir(Ggit):
         globals()[nm] = override(cls)
         __all__.append(nm)
 
+class RevisionWalker(Ggit.RevisionWalker):
+    def __init__(self, repository):
+        Ggit.RevisionWalker.__init__(self, repository=repository)
+        self.init(None)
+
+RevisionWalker = override(RevisionWalker)
+__all__.append('RevisionWalker')
+
 # vi:ex:ts=4:et
