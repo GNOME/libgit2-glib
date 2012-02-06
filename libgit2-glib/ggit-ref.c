@@ -48,7 +48,7 @@ _ggit_ref_wrap (git_reference *ref)
 }
 
 /**
- * ggit_ref_get_oid:
+ * ggit_ref_get_id:
  * @ref: a #GgitRef.
  *
  * Get the OID pointed to by a reference.
@@ -57,7 +57,7 @@ _ggit_ref_wrap (git_reference *ref)
  * Returns: (transfer full): a new oid if available, %NULL otherwise.
  */
 GgitOId *
-ggit_ref_get_oid (GgitRef *ref)
+ggit_ref_get_id (GgitRef *ref)
 {
 	GgitOId *goid = NULL;
 	const git_oid *oid;

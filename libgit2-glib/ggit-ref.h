@@ -57,7 +57,7 @@ GType            ggit_ref_get_type           (void) G_GNUC_CONST;
 
 GgitRef        *_ggit_ref_wrap               (git_reference *ref);
 
-GgitOId         *ggit_ref_get_oid            (GgitRef *ref);
+GgitOId         *ggit_ref_get_id             (GgitRef *ref);
 
 const gchar     *ggit_ref_get_target         (GgitRef *ref);
 
