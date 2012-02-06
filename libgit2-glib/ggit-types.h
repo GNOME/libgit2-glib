@@ -90,7 +90,8 @@ typedef struct _GgitTree GgitTree;
  *
  * Error codes for the %GGIT_ERROR error domain.
  */
-typedef enum {
+typedef enum
+{
 	GGIT_ERROR_GIT_ERROR = -1,
 	GGIT_ERROR_NOTOID = -2,
 	GGIT_ERROR_NOTFOUND = -3,
