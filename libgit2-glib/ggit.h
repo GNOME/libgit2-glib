@@ -33,6 +33,8 @@
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-config.h>
+#include <libgit2-glib/ggit-type-factory.h>
+#include <libgit2-glib/ggit-type-factory-object.h>
 
 #endif
 

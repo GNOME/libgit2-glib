@@ -30,6 +30,8 @@ INST_H_FILES =				\
 	ggit-signature.h		\
 	ggit-tag.h			\
 	ggit-types.h			\
+	ggit-type-factory.h		\
+	ggit-type-factory-object.h	\
 	ggit.h
 
 NOINST_H_FILES =		\
@@ -51,6 +53,8 @@ C_FILES =				\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
 	ggit-tag.c			\
+	ggit-type-factory.c		\
+	ggit-type-factory-object.c	\
 	ggit-utils.c
 
 libgit2_glib_1_0_la_SOURCES = 	\
