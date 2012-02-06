@@ -27,6 +27,14 @@
 
 G_BEGIN_DECLS
 
+#define GGIT_TYPE_INDEX_ENTRY_UNMERGED       (ggit_index_entry_unmerged_get_type ())
+#define GGIT_INDEX_ENTRY_UNMERGED(obj)       ((GgitIndexEntryUnmerged *)obj)
+#define GGIT_INDEX_ENTRY_UNMERGED_CONST(obj) ((GgitIndexEntryUnmerged const *)obj)
+
+#define GGIT_TYPE_INDEX_ENTRIES_UNMERGED       (ggit_index_entries_unmerged_get_type ())
+#define GGIT_INDEX_ENTRIES_UNMERGED(obj)       ((GgitIndexEntriesUnmerged *)obj)
+#define GGIT_INDEX_ENTRIES_UNMERGED_CONST(obj) ((GgitIndexEntriesUnmerged const *)obj)
+
 typedef struct _GgitIndexEntriesUnmerged GgitIndexEntriesUnmerged;
 typedef struct _GgitIndexEntryUnmerged   GgitIndexEntryUnmerged;
 
