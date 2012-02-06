@@ -27,6 +27,16 @@
 #include "ggit-oid.h"
 #include "ggit-convert.h"
 
+#define GGIT_COMMIT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT, GgitCommitPrivate))
+
+static GgitCommitParents *ggit_commit_parents_copy (GgitCommitParents *parents);
+static void               ggit_commit_parents_free (GgitCommitParents *parents);
+
+struct _GgitCommitParents
+{
+	GgitCommit *commit;
+};
+
 struct _GgitCommitPrivate
 {
 	gchar *message_utf8;
@@ -34,6 +44,45 @@ struct _GgitCommitPrivate
 };
 
 G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
+
+G_DEFINE_BOXED_TYPE (GgitCommitParents,
+                     ggit_commit_parents,
+                     ggit_commit_parents_copy,
+                     ggit_commit_parents_free)
+
+static GgitCommitParents *
+ggit_commit_parents_new (GgitCommit *commit)
+{
+	GgitCommitParents *ret;
+
+	ret = g_slice_new (GgitCommitParents);
+
+	ret->commit = g_object_ref (commit);
+	return ret;
+}
+
+static GgitCommitParents *
+ggit_commit_parents_copy (GgitCommitParents *parents)
+{
+	if (parents == NULL)
+	{
+		return NULL;
+	}
+
+	return ggit_commit_parents_new (parents->commit);
+}
+
+static void
+ggit_commit_parents_free (GgitCommitParents *parents)
+{
+	if (parents == NULL)
+	{
+		return;
+	}
+
+	g_clear_object (&parents->commit);
+	g_slice_free (GgitCommitParents, parents);
+}
 
 static void
 ggit_commit_class_init (GgitCommitClass *klass)
@@ -86,6 +135,7 @@ const gchar *
 ggit_commit_get_message_encoding (GgitCommit *commit)
 {
 	git_commit *c;
+	const gchar *encoding;
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
@@ -167,7 +217,6 @@ gint64
 ggit_commit_get_time (GgitCommit *commit)
 {
 	git_commit *c;
-	const gchar *encoding;
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
 
@@ -249,35 +298,90 @@ ggit_commit_get_author (GgitCommit *commit)
  * ggit_commit_get_parents:
  * @commit: a #GgitCommit.
  *
- * Gets the parents for @commit.
+ * Gets the parents collection for @commit.
  *
- * Returns: (transfer full) (element-type Ggit.Commit):
- * the parents of the commit.
+ * Returns: (transfer full): the parents collection of the commit.
  */
-GList *
+GgitCommitParents *
 ggit_commit_get_parents (GgitCommit *commit)
 {
-	GList *parents = NULL;
-	git_commit *c;
-	gint num_parents, i;
-
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
+	return ggit_commit_parents_new (commit);
+}
 
-	num_parents = git_commit_parentcount (c);
-	c = _ggit_native_get (commit);
+/**
+ * ggit_commit_parents_size:
+ * @parents: a #GgitCommitParents.
+ *
+ * Get the number of parents in the parents collection.
+ *
+ * Returns: the number of parents.
+ *
+ **/
+guint
+ggit_commit_parents_size (GgitCommitParents *parents)
+{
+	git_commit *c;
 
-	for (i = num_parents - 1; i >= 0; --i)
+	g_return_val_if_fail (parents != NULL, 0);
+
+	c = _ggit_native_get (parents->commit);
+	return (guint)git_commit_parentcount (c);
+}
+
+/**
+ * ggit_commit_parents_get:
+ * @parents: a #GgitCommitParents.
+ * @idx: the parent index.
+ *
+ * Get the #GgitCommit of a parent.
+ *
+ * Returns: (transfer full): a #GgitCommit.
+ *
+ **/
+GgitCommit *
+ggit_commit_parents_get (GgitCommitParents *parents,
+                         guint              idx)
+{
+	git_commit *c;
+	git_commit *p;
+
+	g_return_val_if_fail (parents != NULL, NULL);
+
+	c = _ggit_native_get (parents->commit);
+
+	if (git_commit_parent (&p, c, idx) == GIT_SUCCESS)
 	{
-		git_commit *p;
-
-		if (git_commit_parent (&p, c, i) == GIT_SUCCESS)
-		{
-			parents = g_list_prepend (parents, _ggit_commit_new (p));
-		}
+		return _ggit_commit_wrap (p, TRUE);
 	}
 
-	return parents;
+	return NULL;
+}
+
+/**
+ * ggit_commit_parents_get_id:
+ * @parents: a #GgitCommitParents.
+ * @idx: the parent index.
+ *
+ * Get the #GgitOId of a parent.
+ *
+ * Returns: (transfer full): a #GgitOid.
+ *
+ **/
+GgitOId *
+ggit_commit_parents_get_id (GgitCommitParents *parents,
+                            guint              idx)
+{
+	git_commit *c;
+	const git_oid *oid;
+
+	g_return_val_if_fail (parents != NULL, NULL);
+
+	c = _ggit_native_get (parents->commit);
+
+	oid = git_commit_parent_oid (c, idx);
+	return _ggit_oid_new (oid);
 }
 
 /* ex:set ts=8 noet: */
