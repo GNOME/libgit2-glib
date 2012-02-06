@@ -55,6 +55,22 @@ ggit_utils_get_otype_from_gtype (GType gtype)
 	return otype;
 }
 
+GType
+ggit_utils_get_gtype_from_otype (git_otype type)
+{
+	switch (type)
+	{
+		case GIT_OBJ_TAG:
+			return GGIT_TYPE_TAG;
+		case GIT_OBJ_BLOB:
+			return GGIT_TYPE_BLOB;
+		case GIT_OBJ_COMMIT:
+			return GGIT_TYPE_COMMIT;
+		default:
+			return G_TYPE_NONE;
+	}
+}
+
 GgitObject *
 ggit_utils_create_real_object (git_object *obj,
                                gboolean    owned)

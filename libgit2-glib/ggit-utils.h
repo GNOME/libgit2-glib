@@ -33,6 +33,7 @@
 G_BEGIN_DECLS
 
 git_otype       ggit_utils_get_otype_from_gtype       (GType gtype);
+GType           ggit_utils_get_gtype_from_otype       (git_otype type);
 
 GgitObject     *ggit_utils_create_real_object         (git_object *obj,
                                                        gboolean    owned);
