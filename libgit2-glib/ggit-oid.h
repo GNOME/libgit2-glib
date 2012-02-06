@@ -35,27 +35,27 @@ G_BEGIN_DECLS
 #define GGIT_OID(obj)       ((GgitOId *)obj)
 #define GGIT_OID_CONST(obj) ((GgitOId const *)obj)
 
-GType               ggit_oid_get_type            (void) G_GNUC_CONST;
+GType          ggit_oid_get_type        (void) G_GNUC_CONST;
 
-GgitOId           *_ggit_oid_new                 (git_oid      *oid);
+GgitOId       *_ggit_oid_new            (const git_oid *oid);
 
-const git_oid     *_ggit_oid_get_oid             (GgitOId      *oid);
+const git_oid *_ggit_oid_get_oid        (GgitOId       *oid);
 
-GgitOId            *ggit_oid_copy                (GgitOId      *oid);
-void                ggit_oid_free                (GgitOId      *oid);
+GgitOId       *ggit_oid_copy            (GgitOId       *oid);
+void           ggit_oid_free            (GgitOId       *oid);
 
-GgitOId            *ggit_oid_new_from_string     (const gchar  *str);
+GgitOId       *ggit_oid_new_from_string (const gchar   *str);
 
-GgitOId            *ggit_oid_new_from_raw        (const guchar *raw);
+GgitOId       *ggit_oid_new_from_raw    (const guchar  *raw);
 
-gint                ggit_oid_compare             (GgitOId      *a,
-                                                  GgitOId      *b);
+gint           ggit_oid_compare         (GgitOId       *a,
+                                         GgitOId       *b);
 
-gchar              *ggit_oid_to_string           (GgitOId      *oid);
+gchar         *ggit_oid_to_string       (GgitOId       *oid);
 
-guint               ggit_oid_hash                (GgitOId const *oid);
-gboolean            ggit_oid_equal               (GgitOId const *a,
-                                                  GgitOId const *b);
+guint          ggit_oid_hash            (GgitOId const *oid);
+gboolean       ggit_oid_equal           (GgitOId const *a,
+                                         GgitOId const *b);
 
 G_END_DECLS
 

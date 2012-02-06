@@ -32,7 +32,7 @@ struct _GgitOId
 G_DEFINE_BOXED_TYPE (GgitOId, ggit_oid, ggit_oid_copy, ggit_oid_free)
 
 GgitOId *
-_ggit_oid_new (git_oid *oid)
+_ggit_oid_new (const git_oid *oid)
 {
 	GgitOId *glib_oid;
 
