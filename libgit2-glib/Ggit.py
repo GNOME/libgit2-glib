@@ -17,23 +17,6 @@ def _wrap_to_string(self):
 
     return "<%s.%s at %s: %s>" % (mod, b.__name__, hex(id(self)), self.to_string())
 
-class IteratorWrapper:
-    def __init__(self, obj):
-        self._idx = 0
-        self._obj = obj
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._idx >= self._obj.size():
-            return None
-
-        ret = self._obj.get(self._idx)
-        self._idx += 1
-
-        return ret
-
 def _wrap_iter(self):
     for i in xrange(0, self.size()):
         yield self.get(i)
