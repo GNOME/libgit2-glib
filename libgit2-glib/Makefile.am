@@ -36,12 +36,15 @@ INST_H_FILES =				\
 	ggit.h
 
 NOINST_H_FILES =			\
+	ggit-object-private.h		\
+	ggit-convert.h			\
 	ggit-utils.h
 
 C_FILES =				\
 	ggit-blob.c			\
 	ggit-commit.c			\
 	ggit-config.c			\
+	ggit-convert.c			\
 	ggit-error.c			\
 	ggit-index.c			\
 	ggit-index-entry.c		\
