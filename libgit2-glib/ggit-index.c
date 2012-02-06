@@ -331,6 +331,17 @@ ggit_index_uniq (GgitIndex *idx)
 	git_index_uniq (idx->priv->idx);
 }
 
+/**
+ * ggit_index_remove:
+ * @idx: a #GgitIndex.
+ * @position: the position of the file in the index.
+ * @error: a #GError.
+ *
+ * Remove a file from the index (specified by position).
+ *
+ * Returns: %TRUE if the file was successfully removed, %FALSE otherwise.
+ *
+ **/
 gboolean
 ggit_index_remove (GgitIndex  *idx,
                    gint        position,
@@ -352,6 +363,18 @@ ggit_index_remove (GgitIndex  *idx,
 	return TRUE;
 }
 
+/**
+ * ggit_index_append:
+ * @idx: a #GgitIndex.
+ * @file: a #GFile.
+ * @stage: the stage.
+ * @error: a #GError.
+ *
+ * Append a file to the index.
+ *
+ * Returns: %TRUE if the file was appended successfully, %FALSE otherwise.
+ *
+ **/
 gboolean
 ggit_index_append (GgitIndex  *idx,
                    GFile      *file,
@@ -381,6 +404,18 @@ ggit_index_append (GgitIndex  *idx,
 	return TRUE;
 }
 
+/**
+ * ggit_index_add:
+ * @idx: a #GgitIndex.
+ * @file: a #GFile.
+ * @stage: the stage.
+ * @error: a #GError.
+ *
+ * Add a file to the index.
+ *
+ * Returns: %TRUE if the file was successfully added, %FALSE otherwise.
+ *
+ **/
 gboolean
 ggit_index_add (GgitIndex  *idx,
                 GFile      *file,
@@ -427,6 +462,15 @@ ggit_index_get_entries (GgitIndex *idx)
 	return _ggit_index_entries_new (idx);
 }
 
+/**
+ * ggit_index_get_entries_unmerged:
+ * @idx: a #GgitIndex.
+ *
+ * Get the unmerged entries enumerator.
+ *
+ * Returns: (transfer full): a #GgitIndexEntriesUnmerged.
+ *
+ **/
 GgitIndexEntriesUnmerged *
 ggit_index_get_entries_unmerged (GgitIndex *idx)
 {
