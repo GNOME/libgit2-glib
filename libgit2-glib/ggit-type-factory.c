@@ -57,6 +57,12 @@ type_wrap_free (TypeWrap *wrap)
 static void
 ggit_type_factory_finalize (GObject *object)
 {
+	GgitTypeFactory *factory;
+
+	factory = GGIT_TYPE_FACTORY (object);
+
+	g_hash_table_destroy (factory->priv->typemap);
+
 	G_OBJECT_CLASS (ggit_type_factory_parent_class)->finalize (object);
 }
 
