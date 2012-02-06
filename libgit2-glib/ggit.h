@@ -35,6 +35,7 @@
 #include <libgit2-glib/ggit-config.h>
 #include <libgit2-glib/ggit-type-factory.h>
 #include <libgit2-glib/ggit-type-factory-object.h>
+#include <libgit2-glib/ggit-native.h>
 
 #endif
 

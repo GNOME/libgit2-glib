@@ -22,6 +22,7 @@ INST_H_FILES =				\
 	ggit-index.h			\
 	ggit-index-entry.h		\
 	ggit-index-entry-unmerged.h	\
+	ggit-native.h			\
 	ggit-object.h			\
 	ggit-oid.h			\
 	ggit-ref.h			\
@@ -46,6 +47,7 @@ C_FILES =				\
 	ggit-index.c			\
 	ggit-index-entry.c		\
 	ggit-index-entry-unmerged.c	\
+	ggit-native.c			\
 	ggit-object.c			\
 	ggit-oid.c			\
 	ggit-ref.c			\
