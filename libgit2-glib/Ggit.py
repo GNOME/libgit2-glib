@@ -73,4 +73,10 @@ for c in dir(Ggit):
     if o.__gtype__.is_a(Gio.Initable):
         _override_dyn(o, __init__=_wrap_initable_init)
 
+def _revision_walker_init(self, repository):
+    Ggit.RevisionWalker.__init__(self, repository=repository)
+    Gio.Initable.init(self, None)
+
+_override_dyn(Ggit.RevisionWalker, __init__=_revision_walker_init)
+
 # vi:ex:ts=4:et
