@@ -1,4 +1,4 @@
-from gi.repository import GObject
+from gi.repository import GObject, Gio
 from ..overrides import override
 from ..importer import modules
 from gi import types
@@ -17,6 +17,42 @@ def _wrap_to_string(self):
 
     return "<%s.%s at %s: %s>" % (mod, b.__name__, hex(id(self)), self.to_string())
 
+class IteratorWrapper:
+    def __init__(self, obj):
+        self._idx = 0
+        self._obj = obj
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self._idx >= self._obj.size():
+            return None
+
+        ret = self._obj.get(self._idx)
+        self._idx += 1
+
+        return ret
+
+def _wrap_iter(self):
+    for i in xrange(0, self.size()):
+        yield self.get(i)
+
+def _wrap_initable_init(self, *args, **kwargs):
+    super(GObject.Object, self).__init__(*args, **kwargs)
+    Gio.Initable.init(self, None)
+
+def _override_dyn(base, **kwargs):
+    nm = base.__name__
+
+    if nm in globals():
+        for k in kwargs:
+            setattr(globals()[nm], k, kwargs[k])
+    else:
+        cls = type(nm, (base,), kwargs)
+        globals()[nm] = cls
+        __all__.append(nm)
+
 for c in dir(Ggit):
     try:
         o = getattr(Ggit, c)
@@ -26,19 +62,15 @@ for c in dir(Ggit):
     if not isinstance(o, types.GObjectMeta) and not isinstance(o, types.StructMeta):
         continue
 
+    # add __str__ mapping to to_string
     if hasattr(o, 'to_string'):
-        nm = o.__name__
+        _override_dyn(o, __str__=_wrap_to_string)
 
-        cls = type(nm, (o,), {'__str__': _wrap_to_string})
-        globals()[nm] = override(cls)
-        __all__.append(nm)
+    # add iterator pattern for objects having _get and _size
+    if hasattr(o, 'get') and hasattr(o, 'size'):
+        _override_dyn(o, __iter__=_wrap_iter)
 
-class RevisionWalker(Ggit.RevisionWalker):
-    def __init__(self, repository):
-        Ggit.RevisionWalker.__init__(self, repository=repository)
-        self.init(None)
-
-RevisionWalker = override(RevisionWalker)
-__all__.append('RevisionWalker')
+    if o.__gtype__.is_a(Gio.Initable):
+        _override_dyn(o, __init__=_wrap_initable_init)
 
 # vi:ex:ts=4:et
