@@ -36,7 +36,6 @@
 
 struct _GgitRepositoryPrivate
 {
-	git_repository *repository;
 	GFile *location;
 	GFile *workdir;
 
@@ -56,7 +55,7 @@ enum
 
 static void         ggit_repository_initable_iface_init (GInitableIface  *iface);
 
-G_DEFINE_TYPE_EXTENDED (GgitRepository, ggit_repository, G_TYPE_OBJECT,
+G_DEFINE_TYPE_EXTENDED (GgitRepository, ggit_repository, GGIT_TYPE_NATIVE,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_repository_initable_iface_init))
@@ -68,8 +67,6 @@ ggit_repository_finalize (GObject *object)
 
 	g_clear_object (&priv->location);
 	g_clear_object (&priv->workdir);
-
-	git_repository_free (priv->repository);
 
 	G_OBJECT_CLASS (ggit_repository_parent_class)->finalize (object);
 }
@@ -125,19 +122,19 @@ set_workdir (GgitRepository *repository,
 	{
 		priv->workdir = g_file_dup (workdir);
 
-		if (priv->repository)
+		if (_ggit_native_get (repository))
 		{
 			gchar *path;
 
 			path = g_file_get_path (priv->workdir);
 
-			git_repository_set_workdir (priv->repository, path);
+			git_repository_set_workdir (_ggit_native_get (repository), path);
 			g_free (path);
 		}
 	}
-	else if (priv->repository)
+	else if (_ggit_native_get (repository))
 	{
-		git_repository_set_workdir (priv->repository, NULL);
+		git_repository_set_workdir (_ggit_native_get (repository), NULL);
 	}
 }
 
@@ -260,6 +257,7 @@ ggit_repository_initable_init (GInitable    *initable,
 	gboolean success = TRUE;
 	gint err;
 	gchar *path = NULL;
+	git_repository *repo = NULL;
 
 	if (cancellable != NULL)
 	{
@@ -281,13 +279,13 @@ ggit_repository_initable_init (GInitable    *initable,
 	}
 	else if (priv->init == TRUE)
 	{
-		err = git_repository_init (&priv->repository,
+		err = git_repository_init (&repo,
 		                           path,
 		                           priv->is_bare);
 	}
 	else
 	{
-		err = git_repository_open (&priv->repository,
+		err = git_repository_open (&repo,
 		                           path);
 	}
 
@@ -310,11 +308,16 @@ ggit_repository_initable_init (GInitable    *initable,
 
 		if (path)
 		{
-			git_repository_set_workdir (priv->repository, path);
+			git_repository_set_workdir (_ggit_native_get (GGIT_REPOSITORY (initable)),
+			                            path);
 		}
 
 		g_free (path);
 	}
+
+	_ggit_native_set (GGIT_REPOSITORY (initable),
+	                  repo,
+	                  (GDestroyNotify)git_repository_free);
 
 	return success;
 }
@@ -326,14 +329,22 @@ ggit_repository_initable_iface_init (GInitableIface *iface)
 }
 
 GgitRepository *
-_ggit_repository_new (git_repository *repository)
+_ggit_repository_wrap (git_repository *repository,
+                       gboolean        owned)
 {
-	GgitRepository *rep;
+	GgitRepository *ret;
 
-	rep = g_object_new (GGIT_TYPE_REPOSITORY, NULL);
-	rep->priv->repository = repository;
+	ret = g_object_new (GGIT_TYPE_REPOSITORY,
+	                    "native", repository,
+	                    NULL);
 
-	return rep;
+	if (owned)
+	{
+		_ggit_native_set_destroy_func (ret,
+		                               (GDestroyNotify)git_repository_free);
+	}
+
+	return ret;
 }
 
 git_repository *
@@ -341,7 +352,7 @@ _ggit_repository_get_repository (GgitRepository *repository)
 {
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	return repository->priv->repository;
+	return _ggit_native_get (repository);
 }
 
 /**
@@ -442,12 +453,14 @@ ggit_repository_lookup (GgitRepository  *repository,
 	id = (const git_oid *)_ggit_oid_get_oid (oid);
 	otype = ggit_utils_get_otype_from_gtype (gtype);
 
-	ret = git_object_lookup (&obj, repository->priv->repository,
-	                         id, otype);
+	ret = git_object_lookup (&obj,
+	                         _ggit_native_get (repository),
+	                         id,
+	                         otype);
 
 	if (ret == GIT_SUCCESS)
 	{
-		object = ggit_utils_create_real_object (obj);
+		object = ggit_utils_create_real_object (obj, TRUE);
 	}
 	else
 	{
@@ -480,7 +493,7 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (name != NULL, NULL);
 
-	ret = git_reference_lookup (&reference, repository->priv->repository,
+	ret = git_reference_lookup (&reference, _ggit_native_get (repository),
 	                            name);
 
 	if (ret == GIT_SUCCESS)
@@ -523,7 +536,7 @@ ggit_repository_create_reference (GgitRepository  *repository,
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (oid != NULL, NULL);
 
-	ret = git_reference_create_oid (&reference, repository->priv->repository,
+	ret = git_reference_create_oid (&reference, _ggit_native_get (repository),
 	                                name, _ggit_oid_get_oid (oid), FALSE);
 
 	if (ret == GIT_SUCCESS)
@@ -566,7 +579,7 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (target != NULL, NULL);
 
-	ret = git_reference_create_symbolic (&reference, repository->priv->repository,
+	ret = git_reference_create_symbolic (&reference, _ggit_native_get (repository),
 	                                     name, target, FALSE);
 
 	if (ret == GIT_SUCCESS)
@@ -601,7 +614,7 @@ ggit_repository_get_head (GgitRepository  *repository,
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	ret = git_repository_head (&reference, repository->priv->repository);
+	ret = git_repository_head (&reference, _ggit_native_get (repository));
 
 	if (ret == GIT_SUCCESS)
 	{
@@ -684,7 +697,7 @@ ggit_repository_is_head_detached (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_repository_head_detached (repository->priv->repository);
+	ret = git_repository_head_detached (_ggit_native_get (repository));
 
 	if (ret < 0)
 	{
@@ -715,7 +728,7 @@ ggit_repository_is_head_orphan (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_repository_head_orphan (repository->priv->repository);
+	ret = git_repository_head_orphan (_ggit_native_get (repository));
 
 	if (ret < 0)
 	{
@@ -746,7 +759,7 @@ ggit_repository_is_empty (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_repository_is_empty (repository->priv->repository);
+	ret = git_repository_is_empty (_ggit_native_get (repository));
 
 	if (ret < 0)
 	{
@@ -771,7 +784,7 @@ ggit_repository_get_location (GgitRepository *repository)
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	path = git_repository_path (repository->priv->repository);
+	path = git_repository_path (_ggit_native_get (repository));
 
 	if (path)
 	{
@@ -798,7 +811,7 @@ ggit_repository_get_workdir (GgitRepository *repository)
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	path = git_repository_workdir (repository->priv->repository);
+	path = git_repository_workdir (_ggit_native_get (repository));
 
 	if (path)
 	{
@@ -841,7 +854,7 @@ ggit_repository_is_bare (GgitRepository *repository)
 {
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 
-	return git_repository_is_bare (repository->priv->repository);
+	return git_repository_is_bare (_ggit_native_get (repository));
 }
 
 /**
@@ -871,7 +884,7 @@ ggit_repository_file_status (GgitRepository  *repository,
 
 	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
 
-	ret = git_status_file (&status_flags, repository->priv->repository,
+	ret = git_status_file (&status_flags, _ggit_native_get (repository),
 	                       path);
 
 	g_free (path);
@@ -912,7 +925,7 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_status_foreach (repository->priv->repository, callback,
+	ret = git_status_foreach (_ggit_native_get (repository), callback,
 	                          user_data);
 
 	if (ret != GIT_SUCCESS)
@@ -957,7 +970,7 @@ ggit_repository_references_foreach (GgitRepository          *repository,
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_reference_foreach (repository->priv->repository,
+	ret = git_reference_foreach (_ggit_native_get (repository),
 	                             reftype,
 	                             callback,
 	                             user_data);
@@ -994,7 +1007,7 @@ ggit_repository_get_config (GgitRepository  *repository,
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_repository_config (&config,
-	                             repository->priv->repository);
+	                             _ggit_native_get (repository));
 
 	if (ret == GIT_SUCCESS)
 	{
@@ -1028,7 +1041,7 @@ ggit_repository_get_index (GgitRepository  *repository,
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_repository_index (&idx,
-	                            repository->priv->repository);
+	                            _ggit_native_get (repository));
 
 	if (ret == GIT_SUCCESS)
 	{

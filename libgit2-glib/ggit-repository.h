@@ -30,6 +30,9 @@
 #include <libgit2-glib/ggit-config.h>
 #include <libgit2-glib/ggit-index.h>
 #include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-native.h>
+#include <libgit2-glib/ggit-object.h>
+#include <libgit2-glib/ggit-tree.h>
 
 G_BEGIN_DECLS
 
@@ -46,19 +49,20 @@ typedef struct _GgitRepositoryPrivate	GgitRepositoryPrivate;
 
 struct _GgitRepository
 {
-	GObject parent;
+	GgitNative parent;
 
 	GgitRepositoryPrivate *priv;
 };
 
 struct _GgitRepositoryClass
 {
-	GObjectClass parent_class;
+	GgitNativeClass parent_class;
 };
 
 GType               ggit_repository_get_type          (void) G_GNUC_CONST;
 
-GgitRepository     *_ggit_repository_new              (git_repository        *repository);
+GgitRepository     *_ggit_repository_wrap             (git_repository        *repository,
+                                                       gboolean               owned);
 
 git_repository     *_ggit_repository_get_repository   (GgitRepository        *repository);
 
