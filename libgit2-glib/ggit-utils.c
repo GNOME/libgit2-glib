@@ -56,7 +56,8 @@ ggit_utils_get_otype_from_gtype (GType gtype)
 }
 
 GgitObject *
-ggit_utils_create_real_object (git_object *obj)
+ggit_utils_create_real_object (git_object *obj,
+                               gboolean    owned)
 {
 	GgitObject *object = NULL;
 	git_otype otype;
@@ -65,15 +66,15 @@ ggit_utils_create_real_object (git_object *obj)
 
 	if (otype == GIT_OBJ_TAG)
 	{
-		object = GGIT_OBJECT (_ggit_tag_new ((git_tag *)obj));
+		object = GGIT_OBJECT (_ggit_tag_wrap ((git_tag *)obj, owned));
 	}
 	else if (otype == GGIT_TYPE_BLOB)
 	{
-		object = GGIT_OBJECT (_ggit_blob_new ((git_blob *)obj));
+		object = GGIT_OBJECT (_ggit_blob_wrap ((git_blob *)obj, owned));
 	}
 	else if (otype == GIT_OBJ_COMMIT)
 	{
-		object = GGIT_OBJECT (_ggit_commit_new ((git_commit *)obj));
+		object = GGIT_OBJECT (_ggit_commit_wrap ((git_commit *)obj, owned));
 	}
 
 	return object;

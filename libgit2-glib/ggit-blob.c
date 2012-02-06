@@ -22,23 +22,12 @@
 
 
 #include "ggit-blob.h"
-#include "ggit-object-private.h"
-
 
 G_DEFINE_TYPE (GgitBlob, ggit_blob, GGIT_TYPE_OBJECT)
 
 static void
-ggit_blob_finalize (GObject *object)
-{
-	G_OBJECT_CLASS (ggit_blob_parent_class)->finalize (object);
-}
-
-static void
 ggit_blob_class_init (GgitBlobClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = ggit_blob_finalize;
 }
 
 static void
@@ -47,12 +36,20 @@ ggit_blob_init (GgitBlob *self)
 }
 
 GgitBlob *
-_ggit_blob_new (git_blob *blob)
+_ggit_blob_wrap (git_blob *blob,
+                 gboolean  owned)
 {
 	GgitBlob *gblob;
 
-	gblob = g_object_new (GGIT_TYPE_BLOB, NULL);
-	GGIT_OBJECT (gblob)->priv->obj = (git_object *)blob;
+	gblob = g_object_new (GGIT_TYPE_BLOB,
+	                      "native", blob,
+	                      NULL);
+
+	if (owned)
+	{
+		_ggit_native_set_destroy_func (gblob,
+		                               (GDestroyNotify)git_object_free);
+	}
 
 	return gblob;
 }
@@ -77,7 +74,7 @@ ggit_blob_get_raw_content (GgitBlob *blob)
 
 	g_return_val_if_fail (GGIT_IS_BLOB (blob), NULL);
 
-	b = (git_blob *)GGIT_OBJECT (blob)->priv->obj;
+	b = _ggit_native_get (blob);
 
 	return git_blob_rawcontent (b);
 }
@@ -97,7 +94,7 @@ ggit_blob_get_raw_size (GgitBlob *blob)
 
 	g_return_val_if_fail (GGIT_IS_BLOB (blob), 0);
 
-	b = (git_blob *)GGIT_OBJECT (blob)->priv->obj;
+	b = _ggit_native_get (blob);
 
 	return git_blob_rawsize (b);
 }

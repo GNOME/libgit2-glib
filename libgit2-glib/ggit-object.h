@@ -26,6 +26,7 @@
 
 #include <glib-object.h>
 #include <git2/object.h>
+#include <libgit2-glib/ggit-native.h>
 
 #include "ggit-types.h"
 
@@ -40,18 +41,18 @@ G_BEGIN_DECLS
 #define GGIT_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_OBJECT, GgitObjectClass))
 
 typedef struct _GgitObjectClass		GgitObjectClass;
-typedef struct _GgitObjectPrivate	GgitObjectPrivate;
 
 struct _GgitObject
 {
-	GObject parent;
+	GgitNative parent;
 
-	GgitObjectPrivate *priv;
+	/* priv padding */
+	gpointer _priv;
 };
 
 struct _GgitObjectClass
 {
-	GObjectClass parent_class;
+	GgitNativeClass parent_class;
 };
 
 GType            ggit_object_get_type          (void) G_GNUC_CONST;

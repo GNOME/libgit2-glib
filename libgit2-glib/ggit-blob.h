@@ -42,17 +42,23 @@ G_BEGIN_DECLS
 
 typedef struct _GgitBlobClass	GgitBlobClass;
 
-struct _GgitBlob {
+struct _GgitBlob
+{
 	GgitObject parent;
+
+	/* priv padding */
+	gpointer _priv;
 };
 
-struct _GgitBlobClass {
+struct _GgitBlobClass
+{
 	GgitObjectClass parent_class;
 };
 
 GType             ggit_blob_get_type         (void) G_GNUC_CONST;
 
-GgitBlob        *_ggit_blob_new              (git_blob *blob);
+GgitBlob        *_ggit_blob_wrap             (git_blob *blob,
+                                              gboolean  owned);
 
 gconstpointer     ggit_blob_get_raw_content  (GgitBlob *blob);
 

@@ -45,6 +45,9 @@ typedef struct _GgitTagClass	GgitTagClass;
 struct _GgitTag
 {
 	GgitObject parent;
+
+	/* priv padding */
+	gpointer _priv;
 };
 
 struct _GgitTagClass
@@ -54,7 +57,8 @@ struct _GgitTagClass
 
 GType             ggit_tag_get_type             (void) G_GNUC_CONST;
 
-GgitTag         *_ggit_tag_new                  (git_tag  *tag);
+GgitTag         *_ggit_tag_wrap                 (git_tag  *tag,
+                                                 gboolean owned);
 
 GgitObject       *ggit_tag_get_target           (GgitTag  *tag,
                                                  GError  **error);

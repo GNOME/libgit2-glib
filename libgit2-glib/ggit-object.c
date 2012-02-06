@@ -22,39 +22,19 @@
 
 
 #include "ggit-object.h"
-#include "ggit-object-private.h"
 #include "ggit-oid.h"
 #include "ggit-repository.h"
 
-
-#define GGIT_OBJECT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_OBJECT, GgitObjectPrivate))
-
-G_DEFINE_ABSTRACT_TYPE (GgitObject, ggit_object, G_TYPE_OBJECT)
-
-static void
-ggit_object_finalize (GObject *object)
-{
-	GgitObject *obj = GGIT_OBJECT (object);
-
-	git_object_free (obj->priv->obj);
-
-	G_OBJECT_CLASS (ggit_object_parent_class)->finalize (object);
-}
+G_DEFINE_ABSTRACT_TYPE (GgitObject, ggit_object, GGIT_TYPE_NATIVE)
 
 static void
 ggit_object_class_init (GgitObjectClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = ggit_object_finalize;
-
-	g_type_class_add_private (object_class, sizeof (GgitObjectPrivate));
 }
 
 static void
 ggit_object_init (GgitObject *object)
 {
-	object->priv = GGIT_OBJECT_GET_PRIVATE (object);
 }
 
 /**
@@ -72,7 +52,7 @@ ggit_object_get_id (GgitObject *object)
 
 	g_return_val_if_fail (GGIT_IS_OBJECT (object), NULL);
 
-	oid = git_object_id (object->priv->obj);
+	oid = git_object_id (_ggit_native_get (object));
 
 	return _ggit_oid_new ((git_oid *)oid);
 }
@@ -93,9 +73,9 @@ ggit_object_get_owner (GgitObject *object)
 
 	g_return_val_if_fail (GGIT_IS_OBJECT (object), NULL);
 
-	repository = git_object_owner (object->priv->obj);
+	repository = git_object_owner (_ggit_native_get (object));
 
-	return _ggit_repository_new (repository);
+	return _ggit_repository_wrap (repository, FALSE);
 }
 
 /* ex:set ts=8 noet: */

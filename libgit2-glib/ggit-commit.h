@@ -27,8 +27,8 @@
 #include <glib-object.h>
 #include <git2/commit.h>
 
-#include "ggit-object.h"
-#include "ggit-types.h"
+#include <libgit2-glib/ggit-object.h>
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
@@ -54,7 +54,8 @@ struct _GgitCommitClass
 
 GType                ggit_commit_get_type               (void) G_GNUC_CONST;
 
-GgitCommit          *_ggit_commit_new                   (git_commit *commit);
+GgitCommit          *_ggit_commit_wrap                  (git_commit *commit,
+                                                         gboolean    owned);
 
 const gchar         *ggit_commit_get_message_encoding   (GgitCommit *commit);
 

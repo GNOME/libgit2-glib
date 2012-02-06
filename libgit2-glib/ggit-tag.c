@@ -23,27 +23,16 @@
 #include <git2/errors.h>
 
 #include "ggit-error.h"
-#include "ggit-object-private.h"
 #include "ggit-oid.h"
 #include "ggit-signature.h"
 #include "ggit-tag.h"
 #include "ggit-utils.h"
 
-
 G_DEFINE_TYPE (GgitTag, ggit_tag, GGIT_TYPE_OBJECT)
-
-static void
-ggit_tag_finalize (GObject *object)
-{
-	G_OBJECT_CLASS (ggit_tag_parent_class)->finalize (object);
-}
 
 static void
 ggit_tag_class_init (GgitTagClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = ggit_tag_finalize;
 }
 
 static void
@@ -52,12 +41,20 @@ ggit_tag_init (GgitTag *self)
 }
 
 GgitTag *
-_ggit_tag_new (git_tag *tag)
+_ggit_tag_wrap (git_tag  *tag,
+                gboolean  owned)
 {
 	GgitTag *gtag;
 
-	gtag = g_object_new (GGIT_TYPE_TAG, NULL);
-	GGIT_OBJECT (gtag)->priv->obj = (git_object *)tag;
+	gtag = g_object_new (GGIT_TYPE_TAG,
+	                     "native", tag,
+	                     NULL);
+
+	if (owned)
+	{
+		_ggit_native_set_destroy_func (gtag,
+		                               (GDestroyNotify)git_object_free);
+	}
 
 	return gtag;
 }
@@ -86,7 +83,7 @@ ggit_tag_get_target (GgitTag  *tag,
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
+	t = _ggit_native_get (tag);
 	ret = git_tag_target (&obj, t);
 
 	if (ret != GIT_SUCCESS)
@@ -95,7 +92,7 @@ ggit_tag_get_target (GgitTag  *tag,
 	}
 	else
 	{
-		object = ggit_utils_create_real_object (obj);
+		object = ggit_utils_create_real_object (obj, TRUE);
 	}
 
 	return object;
@@ -117,7 +114,7 @@ ggit_tag_get_target_oid (GgitTag *tag)
 
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
 
-	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
+	t = _ggit_native_get (tag);
 	oid = git_tag_target_oid (t);
 
 	return _ggit_oid_new ((git_oid *)oid);
@@ -138,7 +135,7 @@ ggit_tag_get_name (GgitTag *tag)
 
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
 
-	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
+	t = _ggit_native_get (tag);
 
 	return git_tag_name (t);
 }
@@ -160,10 +157,10 @@ ggit_tag_get_tagger (GgitTag *tag)
 
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
 
-	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
+	t = _ggit_native_get (tag);
 	signature = git_tag_tagger (t);
 
-	return _ggit_signature_wrap ((git_signature *)signature);
+	return _ggit_signature_wrap ((git_signature *)signature, NULL);
 }
 
 /**
@@ -181,7 +178,7 @@ ggit_tag_get_message (GgitTag *tag)
 
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
 
-	t = (git_tag *)GGIT_OBJECT (tag)->priv->obj;
+	t = _ggit_native_get (tag);
 
 	return git_tag_message (t);
 }

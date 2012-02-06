@@ -23,38 +23,38 @@
 #include <git2/errors.h>
 
 #include "ggit-commit.h"
-#include "ggit-object-private.h"
 #include "ggit-signature.h"
-
+#include "ggit-oid.h"
+#include "ggit-convert.h"
 
 G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
 
 static void
-ggit_commit_finalize (GObject *object)
-{
-	G_OBJECT_CLASS (ggit_commit_parent_class)->finalize (object);
-}
-
-static void
 ggit_commit_class_init (GgitCommitClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = ggit_commit_finalize;
 }
 
 static void
 ggit_commit_init (GgitCommit *self)
 {
+	self->priv = GGIT_COMMIT_GET_PRIVATE (self);
 }
 
 GgitCommit *
-_ggit_commit_new (git_commit *commit)
+_ggit_commit_wrap (git_commit *commit,
+                   gboolean    owned)
 {
 	GgitCommit *gcommit;
 
-	gcommit = g_object_new (GGIT_TYPE_COMMIT, NULL);
-	GGIT_OBJECT (gcommit)->priv->obj = (git_object *)commit;
+	gcommit = g_object_new (GGIT_TYPE_COMMIT,
+	                        "native", commit,
+	                        NULL);
+
+	if (owned)
+	{
+		_ggit_native_set_destroy_func (gcommit,
+		                               (GDestroyNotify)git_object_free);
+	}
 
 	return gcommit;
 }
@@ -78,7 +78,7 @@ ggit_commit_get_message_encoding (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	c = _ggit_native_get (commit);
 
 	return git_commit_message_encoding (c);
 }
@@ -98,7 +98,7 @@ ggit_commit_get_message (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	c = _ggit_native_get (commit);
 
 	return git_commit_message (c);
 }
@@ -119,7 +119,7 @@ ggit_commit_get_time (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	c = _ggit_native_get (commit);
 
 	return git_commit_time (c);
 }
@@ -140,7 +140,7 @@ ggit_commit_get_time_offset (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	c = _ggit_native_get (commit);
 
 	return git_commit_time_offset (c);
 }
@@ -162,7 +162,7 @@ ggit_commit_get_committer (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	c = _ggit_native_get (commit);
 	signature = git_commit_committer (c);
 
 	return _ggit_signature_wrap ((git_signature *)signature);
@@ -185,7 +185,7 @@ ggit_commit_get_author (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
+	c = _ggit_native_get (commit);
 	signature = git_commit_author (c);
 
 	return _ggit_signature_wrap ((git_signature *)signature);
@@ -209,9 +209,9 @@ ggit_commit_get_parents (GgitCommit *commit)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	c = (git_commit *)GGIT_OBJECT (commit)->priv->obj;
 
 	num_parents = git_commit_parentcount (c);
+	c = _ggit_native_get (commit);
 
 	for (i = num_parents - 1; i >= 0; --i)
 	{

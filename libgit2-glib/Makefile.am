@@ -35,8 +35,7 @@ INST_H_FILES =				\
 	ggit-type-factory-object.h	\
 	ggit.h
 
-NOINST_H_FILES =		\
-	ggit-object-private.h	\
+NOINST_H_FILES =			\
 	ggit-utils.h
 
 C_FILES =				\

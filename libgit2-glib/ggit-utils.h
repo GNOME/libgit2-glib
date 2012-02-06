@@ -34,7 +34,8 @@ G_BEGIN_DECLS
 
 git_otype       ggit_utils_get_otype_from_gtype       (GType gtype);
 
-GgitObject     *ggit_utils_create_real_object         (git_object *obj);
+GgitObject     *ggit_utils_create_real_object         (git_object *obj,
+                                                       gboolean    owned);
 
 G_END_DECLS
 
