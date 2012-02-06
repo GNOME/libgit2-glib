@@ -37,7 +37,8 @@ G_BEGIN_DECLS
 
 GType                 ggit_signature_get_type          (void) G_GNUC_CONST;
 
-GgitSignature        *_ggit_signature_wrap             (git_signature *signature);
+GgitSignature        *_ggit_signature_wrap             (git_signature *signature,
+                                                        const gchar   *encoding);
 
 GgitSignature        *ggit_signature_new               (const gchar    *name,
                                                         const gchar    *email,

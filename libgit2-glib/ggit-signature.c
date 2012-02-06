@@ -26,22 +26,28 @@
 
 #include "ggit-error.h"
 #include "ggit-signature.h"
-
+#include "ggit-convert.h"
 
 struct _GgitSignature
 {
 	git_signature *signature;
+	gchar *encoding;
+
+	gchar *name_utf8;
+	gchar *email_utf8;
 };
 
 G_DEFINE_BOXED_TYPE (GgitSignature, ggit_signature, ggit_signature_copy, ggit_signature_free)
 
 GgitSignature *
-_ggit_signature_wrap (git_signature *signature)
+_ggit_signature_wrap (git_signature *signature,
+                      const gchar   *encoding)
 {
 	GgitSignature *sig;
 
 	sig = g_slice_new (GgitSignature);
 	sig->signature = signature;
+	sig->encoding = g_strdup (encoding);
 
 	return sig;
 }
@@ -77,7 +83,7 @@ ggit_signature_new (const gchar  *name,
 
 	if (ret == GIT_SUCCESS)
 	{
-		signature = _ggit_signature_wrap (sig);
+		signature = _ggit_signature_wrap (sig, NULL);
 	}
 	else
 	{
@@ -114,7 +120,7 @@ ggit_signature_new_now (const gchar  *name,
 
 	if (ret == GIT_SUCCESS)
 	{
-		signature = _ggit_signature_wrap (sig);
+		signature = _ggit_signature_wrap (sig, NULL);
 	}
 	else
 	{
@@ -140,7 +146,9 @@ ggit_signature_copy (GgitSignature *signature)
 	g_return_val_if_fail (signature != NULL, NULL);
 
 	s = g_slice_new (GgitSignature);
+
 	s->signature = git_signature_dup (signature->signature);
+	s->encoding = g_strdup (signature->encoding);
 
 	return s;
 }
@@ -157,7 +165,22 @@ ggit_signature_free (GgitSignature *signature)
 	g_return_if_fail (signature != NULL);
 
 	git_signature_free (signature->signature);
+	g_free (signature->encoding);
+
 	g_slice_free (GgitSignature, signature);
+}
+
+static gchar *
+ensure_utf8 (gchar       *utf8,
+             const gchar *encoding,
+             const gchar *original)
+{
+	if (utf8)
+	{
+		return utf8;
+	}
+
+	return ggit_convert_utf8 (original, -1, encoding);
 }
 
 /**
@@ -173,7 +196,11 @@ ggit_signature_get_name (GgitSignature *signature)
 {
 	g_return_val_if_fail (signature != NULL, NULL);
 
-	return signature->signature->name;
+	signature->name_utf8 = ensure_utf8 (signature->name_utf8,
+	                                    signature->encoding,
+	                                    signature->signature->name);
+
+	return signature->name_utf8;
 }
 
 /**
@@ -189,7 +216,11 @@ ggit_signature_get_email (GgitSignature *signature)
 {
 	g_return_val_if_fail (signature != NULL, NULL);
 
-	return signature->signature->email;
+	signature->email_utf8 = ensure_utf8 (signature->email_utf8,
+	                                     signature->encoding,
+	                                     signature->signature->email);
+
+	return signature->email_utf8;
 }
 
 /**
