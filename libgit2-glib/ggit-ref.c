@@ -163,6 +163,7 @@ ggit_ref_resolve (GgitRef  *ref,
 	gint ret;
 
 	g_return_val_if_fail (ref != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_reference_resolve (&reference, _ggit_native_get (ref));
 
@@ -218,6 +219,7 @@ ggit_ref_set_target (GgitRef      *ref,
 
 	g_return_if_fail (ref != NULL);
 	g_return_if_fail (target != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_reference_set_target (_ggit_native_get (ref), target);
 
@@ -250,6 +252,7 @@ ggit_ref_set_oid (GgitRef  *ref,
 
 	g_return_if_fail (ref != NULL);
 	g_return_if_fail (oid != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_reference_set_oid (_ggit_native_get (ref), _ggit_oid_get_oid (oid));
 
@@ -285,6 +288,7 @@ ggit_ref_rename (GgitRef     *ref,
 
 	g_return_if_fail (ref != NULL);
 	g_return_if_fail (new_name != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
 
 	force = (force != FALSE);
 
@@ -315,6 +319,7 @@ ggit_ref_delete (GgitRef  *ref,
 	gint ret;
 
 	g_return_if_fail (ref != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_reference_delete (_ggit_native_get (ref));
 
