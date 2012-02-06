@@ -58,7 +58,7 @@ const gchar          *ggit_signature_get_name          (GgitSignature  *signatur
 
 const gchar          *ggit_signature_get_email         (GgitSignature  *signature);
 
-gint64                ggit_signature_get_time          (GgitSignature  *signature);
+GDateTime            *ggit_signature_get_time          (GgitSignature  *signature);
 
 gint                  ggit_signature_get_time_offset   (GgitSignature  *signature);
 

@@ -229,14 +229,14 @@ ggit_signature_get_email (GgitSignature *signature)
  *
  * Gets the time when the action happened.
  *
- * Returns: the time when the action happened.
+ * Returns: (transfer full): the time when the action happened.
  */
-gint64
+GDateTime *
 ggit_signature_get_time (GgitSignature *signature)
 {
 	g_return_val_if_fail (signature != NULL, 0);
 
-	return signature->signature->when.time;
+	return g_date_time_new_from_unix_utc (signature->signature->when.time);
 }
 
 /**
