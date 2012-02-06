@@ -205,6 +205,33 @@ ggit_commit_get_message (GgitCommit *commit)
 }
 
 /**
+ * ggit_commit_get_subject:
+ * @commit: a #GgitCommit.
+ *
+ * Gets the subject of @commit. The subject of a commit is the first line of
+ * the commit message (as per convention). The resulting subject is always
+ * encoded in UTF-8.
+ *
+ * Returns: the subject of the commit.
+ */
+const gchar *
+ggit_commit_get_subject (GgitCommit *commit)
+{
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+
+	ensure_message_utf8 (commit);
+
+	if (commit->priv->subject_utf8)
+	{
+		return commit->priv->subject_utf8;
+	}
+	else
+	{
+		return commit->priv->message_utf8;
+	}
+}
+
+/**
  * ggit_commit_get_committer:
  * @commit: a #GgitCommit.
  *

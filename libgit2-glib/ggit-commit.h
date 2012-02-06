@@ -68,6 +68,8 @@ const gchar         *ggit_commit_get_message_encoding (GgitCommit        *commit
 
 const gchar         *ggit_commit_get_message          (GgitCommit        *commit);
 
+const gchar         *ggit_commit_get_subject          (GgitCommit        *commit);
+
 GgitSignature       *ggit_commit_get_committer        (GgitCommit        *commit);
 
 GgitSignature       *ggit_commit_get_author           (GgitCommit        *commit);
