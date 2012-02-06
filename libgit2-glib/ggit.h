@@ -29,6 +29,7 @@
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-repository.h>
+#include <libgit2-glib/ggit-revision-walker.h>
 #include <libgit2-glib/ggit-tag.h>
 #include <libgit2-glib/ggit-tree.h>
 #include <libgit2-glib/ggit-types.h>
