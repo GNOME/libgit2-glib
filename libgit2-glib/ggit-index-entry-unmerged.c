@@ -279,3 +279,5 @@ ggit_index_entry_unmerged_get_file (GgitIndexEntryUnmerged *entry)
 
 	return g_file_new_for_path (entry->entry->path);
 }
+
+/* ex:set ts=8 noet: */

@@ -353,3 +353,4 @@ ggit_index_entry_get_file (GgitIndexEntry *entry)
 	return g_file_new_for_path (entry->entry->path);
 }
 
+/* ex:set ts=8 noet: */

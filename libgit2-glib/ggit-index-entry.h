@@ -64,3 +64,4 @@ G_END_DECLS
 
 #endif /* __GGIT_INDEX_ENTRY_H__ */
 
+/* ex:set ts=8 noet: */

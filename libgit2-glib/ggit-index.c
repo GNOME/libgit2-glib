@@ -434,3 +434,5 @@ ggit_index_get_entries_unmerged (GgitIndex *idx)
 
 	return _ggit_index_entries_unmerged_new (idx);
 }
+
+/* ex:set ts=8 noet: */
