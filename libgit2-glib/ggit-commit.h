@@ -41,10 +41,14 @@ G_BEGIN_DECLS
 #define GGIT_COMMIT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_COMMIT, GgitCommitClass))
 
 typedef struct _GgitCommitClass		GgitCommitClass;
+typedef struct _GgitCommitPrivate	GgitCommitPrivate;
 
 struct _GgitCommit
 {
 	GgitObject parent;
+
+	/* priv padding */
+	GgitCommitPrivate *priv;
 };
 
 struct _GgitCommitClass

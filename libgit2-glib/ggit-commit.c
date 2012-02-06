@@ -27,11 +27,22 @@
 #include "ggit-oid.h"
 #include "ggit-convert.h"
 
+struct _GgitCommitPrivate
+{
+	gchar *message_utf8;
+	gchar *subject_utf8;
+};
+
 G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
 
 static void
 ggit_commit_class_init (GgitCommitClass *klass)
 {
+	GObjectClass *object_class;
+
+	object_class = G_OBJECT_CLASS (klass);
+
+	g_type_class_add_private (object_class, sizeof (GgitCommitPrivate));
 }
 
 static void
@@ -80,27 +91,67 @@ ggit_commit_get_message_encoding (GgitCommit *commit)
 
 	c = _ggit_native_get (commit);
 
-	return git_commit_message_encoding (c);
+	encoding = git_commit_message_encoding (c);
+
+	if (encoding == NULL)
+	{
+		return "UTF-8";
+	}
+	else
+	{
+		return encoding;
+	}
+}
+
+static void
+ensure_message_utf8 (GgitCommit *commit)
+{
+	git_commit *c;
+	const gchar *msg;
+	const gchar *encoding;
+	const gchar *ptr;
+
+	if (commit->priv->message_utf8)
+	{
+		return;
+	}
+
+	c = _ggit_native_get (commit);
+	msg = git_commit_message (c);
+
+	encoding = ggit_commit_get_message_encoding (commit);
+
+	commit->priv->message_utf8 = ggit_convert_utf8 (msg,
+	                                                -1,
+	                                                encoding);
+
+	// Extract the subject
+	ptr = g_utf8_strchr (commit->priv->message_utf8, -1, '\n');
+
+	if (ptr != NULL)
+	{
+		commit->priv->subject_utf8 = g_strndup (commit->priv->message_utf8,
+		                                        ptr - commit->priv->message_utf8);
+	}
 }
 
 /**
  * ggit_commit_get_message:
  * @commit: a #GgitCommit.
  *
- * Gets the full message of @commit.
+ * Gets the full message of @commit. The resulting message is always encoded
+ * in UTF-8.
  *
  * Returns: the message of the commit.
  */
 const gchar *
 ggit_commit_get_message (GgitCommit *commit)
 {
-	git_commit *c;
-
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	c = _ggit_native_get (commit);
+	ensure_message_utf8 (commit);
 
-	return git_commit_message (c);
+	return commit->priv->message_utf8;
 }
 
 /* TODO: use gdatetime */
@@ -116,6 +167,7 @@ gint64
 ggit_commit_get_time (GgitCommit *commit)
 {
 	git_commit *c;
+	const gchar *encoding;
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), 0);
 
