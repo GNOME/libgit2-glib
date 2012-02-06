@@ -1,5 +1,5 @@
 /*
- * ggit-type-factory-object.c
+ * ggit-object-factory-base.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Jesse van den Kieboom
@@ -18,33 +18,33 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ggit-type-factory-object.h"
-#include "ggit-type-factory.h"
+#include "ggit-object-factory-base.h"
+#include "ggit-object-factory.h"
 
-G_DEFINE_ABSTRACT_TYPE (GgitTypeFactoryObject, ggit_type_factory_object, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GgitObjectFactoryBase, ggit_object_factory_base, G_TYPE_OBJECT)
 
 static GObject *
-ggit_type_factory_object_constructor (GType                  type,
+ggit_object_factory_base_constructor (GType                  type,
                                       guint                  n_construct_properties,
                                       GObjectConstructParam *construct_properties)
 {
-	return ggit_type_factory_construct (ggit_type_factory_get_default (),
-	                                    ggit_type_factory_object_parent_class,
-	                                    type,
-	                                    n_construct_properties,
-	                                    construct_properties);
+	return ggit_object_factory_construct (ggit_object_factory_get_default (),
+	                                      ggit_object_factory_base_parent_class,
+	                                      type,
+	                                      n_construct_properties,
+	                                      construct_properties);
 }
 
 static void
-ggit_type_factory_object_class_init (GgitTypeFactoryObjectClass *klass)
+ggit_object_factory_base_class_init (GgitObjectFactoryBaseClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->constructor = ggit_type_factory_object_constructor;
+	object_class->constructor = ggit_object_factory_base_constructor;
 }
 
 static void
-ggit_type_factory_object_init (GgitTypeFactoryObject *self)
+ggit_object_factory_base_init (GgitObjectFactoryBase *self)
 {
 }
 

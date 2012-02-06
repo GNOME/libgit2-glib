@@ -33,8 +33,8 @@ INST_H_FILES =				\
 	ggit-tree.h			\
 	ggit-tree-entry.h		\
 	ggit-types.h			\
-	ggit-type-factory.h		\
-	ggit-type-factory-object.h	\
+	ggit-object-factory.h		\
+	ggit-object-factory-base.h	\
 	ggit.h
 
 NOINST_H_FILES =			\
@@ -61,8 +61,8 @@ C_FILES =				\
 	ggit-tag.c			\
 	ggit-tree.c			\
 	ggit-tree-entry.c		\
-	ggit-type-factory.c		\
-	ggit-type-factory-object.c	\
+	ggit-object-factory.c		\
+	ggit-object-factory-base.c	\
 	ggit-utils.c
 
 libgit2_glib_1_0_la_SOURCES = 	\

@@ -28,7 +28,7 @@ struct _GgitNativePrivate
 	GDestroyNotify destroy_notify;
 };
 
-G_DEFINE_ABSTRACT_TYPE (GgitNative, ggit_native, GGIT_TYPE_TYPE_FACTORY_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GgitNative, ggit_native, GGIT_TYPE_OBJECT_FACTORY_BASE)
 
 enum
 {

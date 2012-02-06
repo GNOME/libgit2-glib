@@ -22,7 +22,7 @@
 #define __GGIT_NATIVE_H__
 
 #include <glib-object.h>
-#include <libgit2-glib/ggit-type-factory-object.h>
+#include <libgit2-glib/ggit-object-factory-base.h>
 
 G_BEGIN_DECLS
 
@@ -40,14 +40,14 @@ typedef struct _GgitNativePrivate	GgitNativePrivate;
 
 struct _GgitNative
 {
-	GgitTypeFactoryObject parent;
+	GgitObjectFactoryBase parent;
 
 	GgitNativePrivate *priv;
 };
 
 struct _GgitNativeClass
 {
-	GgitTypeFactoryObjectClass parent_class;
+	GgitObjectFactoryBaseClass parent_class;
 };
 
 GType    ggit_native_get_type          (void) G_GNUC_CONST;

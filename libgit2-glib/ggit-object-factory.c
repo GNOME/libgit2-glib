@@ -1,5 +1,5 @@
 /*
- * ggit-type-factory.c
+ * ggit-object-factory.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Jesse van den Kieboom
@@ -18,24 +18,24 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ggit-type-factory.h"
-#include "ggit-type-factory-object.h"
+#include "ggit-object-factory.h"
+#include "ggit-object-factory-base.h"
 
-#define GGIT_TYPE_FACTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_TYPE_FACTORY, GgitTypeFactoryPrivate))
+#define GGIT_OBJECT_FACTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_OBJECT_FACTORY, GgitObjectFactoryPrivate))
 
 typedef struct
 {
 	GType type;
 } TypeWrap;
 
-struct _GgitTypeFactoryPrivate
+struct _GgitObjectFactoryPrivate
 {
 	GHashTable *typemap;
 };
 
-G_DEFINE_TYPE (GgitTypeFactory, ggit_type_factory, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GgitObjectFactory, ggit_object_factory, G_TYPE_OBJECT)
 
-static GgitTypeFactory *the_instance = NULL;
+static GgitObjectFactory *the_instance = NULL;
 
 static TypeWrap *
 type_wrap_new (GType type)
@@ -55,21 +55,21 @@ type_wrap_free (TypeWrap *wrap)
 }
 
 static void
-ggit_type_factory_finalize (GObject *object)
+ggit_object_factory_finalize (GObject *object)
 {
-	GgitTypeFactory *factory;
+	GgitObjectFactory *factory;
 
-	factory = GGIT_TYPE_FACTORY (object);
+	factory = GGIT_OBJECT_FACTORY (object);
 
 	g_hash_table_destroy (factory->priv->typemap);
 
-	G_OBJECT_CLASS (ggit_type_factory_parent_class)->finalize (object);
+	G_OBJECT_CLASS (ggit_object_factory_parent_class)->finalize (object);
 }
 
 static GObject *
-ggit_type_factory_constructor (GType                  type,
-                               guint                  n_construct_properties,
-                               GObjectConstructParam *construct_properties)
+ggit_object_factory_constructor (GType                  type,
+                                 guint                  n_construct_properties,
+                                 GObjectConstructParam *construct_properties)
 {
 	GObject *ret;
 
@@ -78,29 +78,29 @@ ggit_type_factory_constructor (GType                  type,
 		return g_object_ref (the_instance);
 	}
 
-	ret = G_OBJECT_CLASS (ggit_type_factory_parent_class)->constructor (type,
+	ret = G_OBJECT_CLASS (ggit_object_factory_parent_class)->constructor (type,
 	                                                                    n_construct_properties,
 	                                                                    construct_properties);
 
-	the_instance = GGIT_TYPE_FACTORY (ret);
+	the_instance = GGIT_OBJECT_FACTORY (ret);
 	return ret;
 }
 
 static void
-ggit_type_factory_class_init (GgitTypeFactoryClass *klass)
+ggit_object_factory_class_init (GgitObjectFactoryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = ggit_type_factory_finalize;
-	object_class->constructor = ggit_type_factory_constructor;
+	object_class->finalize = ggit_object_factory_finalize;
+	object_class->constructor = ggit_object_factory_constructor;
 
-	g_type_class_add_private (object_class, sizeof (GgitTypeFactoryPrivate));
+	g_type_class_add_private (object_class, sizeof (GgitObjectFactoryPrivate));
 }
 
 static void
-ggit_type_factory_init (GgitTypeFactory *self)
+ggit_object_factory_init (GgitObjectFactory *self)
 {
-	self->priv = GGIT_TYPE_FACTORY_GET_PRIVATE (self);
+	self->priv = GGIT_OBJECT_FACTORY_GET_PRIVATE (self);
 
 	self->priv->typemap = g_hash_table_new_full ((GHashFunc)g_direct_hash,
 	                                             (GEqualFunc)g_direct_equal,
@@ -109,19 +109,19 @@ ggit_type_factory_init (GgitTypeFactory *self)
 }
 
 /**
- * ggit_type_factory_get_default:
+ * ggit_object_factory_get_default:
  *
  * Get the default type factory instance.
  *
- * Returns: (transfer none): a #GgitTypeFactory.
+ * Returns: (transfer none): a #GgitObjectFactory.
  *
  **/
-GgitTypeFactory *
-ggit_type_factory_get_default (void)
+GgitObjectFactory *
+ggit_object_factory_get_default (void)
 {
 	if (the_instance == NULL)
 	{
-		the_instance = g_object_new (GGIT_TYPE_TYPE_FACTORY, NULL);
+		the_instance = g_object_new (GGIT_TYPE_OBJECT_FACTORY, NULL);
 
 		g_object_add_weak_pointer (G_OBJECT (the_instance),
 		                           (gpointer *)&the_instance);
@@ -131,24 +131,24 @@ ggit_type_factory_get_default (void)
 }
 
 /**
- * ggit_type_factory_register:
- * @factory: a #GgitTypeFactory.
+ * ggit_object_factory_register:
+ * @factory: a #GgitObjectFactory.
  * @basetype: a #GType.
  * @subtype: a #GType.
  *
  * Register @subtype as the instantiation class for @basetype. Each time an
  * object of type @basetype is going to be created, an instance of @subtype
- * is created instead. @basetype must be subclassed from #GgitTypeFactoryObject.
+ * is created instead. @basetype must be subclassed from #GgitObjectFactoryObject.
  *
  **/
 void
-ggit_type_factory_register (GgitTypeFactory *factory,
-                            GType            basetype,
-                            GType            subtype)
+ggit_object_factory_register (GgitObjectFactory *factory,
+                              GType              basetype,
+                              GType              subtype)
 {
-	g_return_if_fail (GGIT_IS_TYPE_FACTORY (factory));
+	g_return_if_fail (GGIT_IS_OBJECT_FACTORY (factory));
 	g_return_if_fail (basetype == subtype || g_type_is_a (subtype, basetype));
-	g_return_if_fail (g_type_is_a (basetype, GGIT_TYPE_TYPE_FACTORY_OBJECT));
+	g_return_if_fail (g_type_is_a (basetype, GGIT_TYPE_OBJECT_FACTORY_BASE));
 
 	g_hash_table_insert (factory->priv->typemap,
 	                     GINT_TO_POINTER (g_type_qname (basetype)),
@@ -156,8 +156,8 @@ ggit_type_factory_register (GgitTypeFactory *factory,
 }
 
 /**
- * ggit_type_factory_unregister:
- * @factory: a #GgitTypeFactory.
+ * ggit_object_factory_unregister:
+ * @factory: a #GgitObjectFactory.
  * @basetype: a #GType.
  * @subtype: a #GType.
  *
@@ -165,13 +165,13 @@ ggit_type_factory_register (GgitTypeFactory *factory,
  *
  **/
 void
-ggit_type_factory_unregister (GgitTypeFactory *factory,
-                              GType            basetype,
-                              GType            subtype)
+ggit_object_factory_unregister (GgitObjectFactory *factory,
+                                GType              basetype,
+                                GType              subtype)
 {
 	TypeWrap *val;
 
-	g_return_if_fail (GGIT_IS_TYPE_FACTORY (factory));
+	g_return_if_fail (GGIT_IS_OBJECT_FACTORY (factory));
 
 	val = g_hash_table_lookup (factory->priv->typemap,
 	                           GINT_TO_POINTER (g_type_qname (basetype)));
@@ -184,8 +184,8 @@ ggit_type_factory_unregister (GgitTypeFactory *factory,
 }
 
 /**
- * ggit_type_factory_construct:
- * @factory: a #GgitTypeFactory.
+ * ggit_object_factory_construct:
+ * @factory: a #GgitObjectFactory.
  * @parent_class: a #GObjectClass.
  * @basetype: a #GType.
  * @n_construct_properties: number of construct properties.
@@ -197,15 +197,15 @@ ggit_type_factory_unregister (GgitTypeFactory *factory,
  *
  **/
 GObject *
-ggit_type_factory_construct (GgitTypeFactory       *factory,
-                             GObjectClass          *parent_class,
-                             GType                  basetype,
-                             guint                  n_construct_properties,
-                             GObjectConstructParam *construct_properties)
+ggit_object_factory_construct (GgitObjectFactory     *factory,
+                               GObjectClass          *parent_class,
+                               GType                  basetype,
+                               guint                  n_construct_properties,
+                               GObjectConstructParam *construct_properties)
 {
 	TypeWrap *val;
 
-	g_return_val_if_fail (GGIT_IS_TYPE_FACTORY (factory), NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT_FACTORY (factory), NULL);
 
 	val = g_hash_table_lookup (factory->priv->typemap,
 	                           GINT_TO_POINTER (g_type_qname (basetype)));
