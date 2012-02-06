@@ -26,6 +26,7 @@
 #include <glib-object.h>
 #include <git2/refs.h>
 #include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-native.h>
 
 G_BEGIN_DECLS
 
@@ -37,28 +38,24 @@ G_BEGIN_DECLS
 #define GGIT_IS_REF_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REF))
 #define GGIT_REF_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REF, GgitRefClass))
 
-typedef struct _GgitRef		GgitRef;
 typedef struct _GgitRefClass	GgitRefClass;
-typedef struct _GgitRefPrivate	GgitRefPrivate;
 
 struct _GgitRef
 {
-	GObject parent;
+	GgitNative parent;
 
-	GgitRefPrivate *priv;
+	/* priv padding */
+	gpointer *_priv;
 };
 
 struct _GgitRefClass
 {
-	GObjectClass parent_class;
+	GgitNativeClass parent_class;
 };
 
 GType            ggit_ref_get_type           (void) G_GNUC_CONST;
 
 GgitRef        *_ggit_ref_wrap               (git_reference *ref);
-
-void             ggit_ref_assign             (GgitRef *ref,
-                                              GgitRef *copyfrom);
 
 GgitOId         *ggit_ref_get_oid            (GgitRef *ref);
 
