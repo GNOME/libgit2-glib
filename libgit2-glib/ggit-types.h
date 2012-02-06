@@ -183,6 +183,13 @@ typedef struct _GgitRepository GgitRepository;
 typedef struct _GgitSignature GgitSignature;
 
 /**
+ * GgitRevisionWalker:
+ *
+ * Represents a revision walker.
+ */
+typedef struct _GgitRevisionWalker GgitRevisionWalker;
+
+/**
  * GgitSortMode:
  * @GGIT_SORT_NONE: Sorts the repository contents in no particular ordering;
  *                  this sorting is arbitrary, implementation-specific
