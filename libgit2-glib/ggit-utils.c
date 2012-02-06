@@ -39,7 +39,7 @@ ggit_utils_get_otype_from_gtype (GType gtype)
 	{
 		otype = GIT_OBJ_BLOB;
 	}
-	else if (g_type_is_a (gtype, GGIT_TYPE_BLOB))
+	else if (g_type_is_a (gtype, GGIT_TYPE_COMMIT))
 	{
 		otype = GIT_OBJ_COMMIT;
 	}
