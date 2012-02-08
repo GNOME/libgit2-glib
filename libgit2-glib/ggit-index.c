@@ -118,7 +118,7 @@ ggit_index_initable_init (GInitable    *initable,
 {
 	GgitIndexPrivate *priv;
 	gboolean success = TRUE;
-	gint err;
+	gint err = GIT_SUCCESS;
 	const gchar *lasterr;
 
 	if (cancellable != NULL)
