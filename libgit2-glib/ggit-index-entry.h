@@ -24,6 +24,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
@@ -38,10 +39,8 @@ G_BEGIN_DECLS
 typedef struct _GgitIndexEntries GgitIndexEntries;
 typedef struct _GgitIndexEntry   GgitIndexEntry;
 
-struct _GgitIndex;
-
 GType             ggit_index_entries_get_type         (void) G_GNUC_CONST;
-GgitIndexEntries *_ggit_index_entries_new             (struct _GgitIndex *owner);
+GgitIndexEntries *_ggit_index_entries_new             (GgitIndex         *owner);
 GgitIndexEntries *ggit_index_entries_copy             (GgitIndexEntries  *entries);
 void              ggit_index_entries_free             (GgitIndexEntries  *entries);
 

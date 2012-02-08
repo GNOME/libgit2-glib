@@ -24,6 +24,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <git2/index.h>
+#include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-index-entry.h>
 #include <libgit2-glib/ggit-index-entry-unmerged.h>
 
@@ -37,7 +38,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_INDEX_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_INDEX))
 #define GGIT_INDEX_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_INDEX, GgitIndexClass))
 
-typedef struct _GgitIndex		GgitIndex;
 typedef struct _GgitIndexClass		GgitIndexClass;
 typedef struct _GgitIndexPrivate	GgitIndexPrivate;
 

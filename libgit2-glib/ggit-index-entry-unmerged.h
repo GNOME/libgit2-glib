@@ -24,6 +24,7 @@
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
@@ -38,10 +39,8 @@ G_BEGIN_DECLS
 typedef struct _GgitIndexEntriesUnmerged GgitIndexEntriesUnmerged;
 typedef struct _GgitIndexEntryUnmerged   GgitIndexEntryUnmerged;
 
-struct _GgitIndex;
-
 GgitIndexEntriesUnmerged *
-	_ggit_index_entries_unmerged_new        (struct _GgitIndex        *owner);
+	_ggit_index_entries_unmerged_new        (GgitIndex                *owner);
 
 GgitIndexEntriesUnmerged *
 	ggit_index_entries_unmerged_copy        (GgitIndexEntriesUnmerged *entries);

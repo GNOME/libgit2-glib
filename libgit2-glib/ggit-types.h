@@ -47,6 +47,13 @@ typedef struct _GgitCommit GgitCommit;
  */
 typedef struct _GgitTree GgitTree;
 
+/**
+ * GitgIndex:
+ *
+ * Represents an index object.
+ */
+typedef struct _GgitIndex GgitIndex;
+
 /* NOTE: keep in sync with git2/errors.h */
 /**
  * GgitError:
