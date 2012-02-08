@@ -99,7 +99,7 @@ ggit_tag_get_target (GgitTag  *tag,
 }
 
 /**
- * ggit_tag_get_target_oid:
+ * ggit_tag_get_target_id:
  * @tag: a #GgitTag.
  *
  * Gets the target #GgitOId of @tag.
@@ -107,7 +107,7 @@ ggit_tag_get_target (GgitTag  *tag,
  * Returns: (transfer full): the target #GgitOId of the tag.
  */
 GgitOId *
-ggit_tag_get_target_oid (GgitTag *tag)
+ggit_tag_get_target_id (GgitTag *tag)
 {
 	const git_oid *oid;
 	git_tag *t;

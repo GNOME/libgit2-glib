@@ -240,7 +240,7 @@ ggit_index_entry_unmerged_get_mode (GgitIndexEntryUnmerged *entry,
 }
 
 /**
- * ggit_index_entry_unmerged_get_oid:
+ * ggit_index_entry_unmerged_get_id:
  * @entry: a #GgitIndexEntryUnmerged.
  *
  * Get the oid of the index entry.
@@ -249,8 +249,8 @@ ggit_index_entry_unmerged_get_mode (GgitIndexEntryUnmerged *entry,
  *
  **/
 GgitOId *
-ggit_index_entry_unmerged_get_oid (GgitIndexEntryUnmerged *entry,
-                                   gint                    stage)
+ggit_index_entry_unmerged_get_id (GgitIndexEntryUnmerged *entry,
+                                  gint                    stage)
 {
 	g_return_val_if_fail (entry != NULL, NULL);
 	g_return_val_if_fail (stage >= 0 && stage <= 3, NULL);

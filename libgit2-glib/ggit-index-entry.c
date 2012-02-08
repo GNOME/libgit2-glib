@@ -281,7 +281,7 @@ ggit_index_entry_get_file_size (GgitIndexEntry *entry)
 }
 
 /**
- * ggit_index_entry_get_oid:
+ * ggit_index_entry_get_id:
  * @entry: a #GgitIndexEntry.
  *
  * Get the oid of the index entry.
@@ -290,7 +290,7 @@ ggit_index_entry_get_file_size (GgitIndexEntry *entry)
  *
  **/
 GgitOId *
-ggit_index_entry_get_oid (GgitIndexEntry *entry)
+ggit_index_entry_get_id (GgitIndexEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, NULL);
 

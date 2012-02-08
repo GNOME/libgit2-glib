@@ -63,7 +63,7 @@ GgitTag         *_ggit_tag_wrap                 (git_tag  *tag,
 GgitObject       *ggit_tag_get_target           (GgitTag  *tag,
                                                  GError  **error);
 
-GgitOId          *ggit_tag_get_target_oid       (GgitTag  *tag);
+GgitOId          *ggit_tag_get_target_id        (GgitTag  *tag);
 
 const gchar      *ggit_tag_get_name             (GgitTag  *tag);
 

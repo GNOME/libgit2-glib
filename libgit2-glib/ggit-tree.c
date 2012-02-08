@@ -53,7 +53,7 @@ _ggit_tree_wrap (git_tree *tree,
 }
 
 /**
- * ggit_tree_id:
+ * ggit_tree_get_id:
  * @tree: a #GgitTree.
  *
  * Get the #GgitOId of the tree.
@@ -62,7 +62,7 @@ _ggit_tree_wrap (git_tree *tree,
  *
  **/
 GgitOId *
-ggit_tree_id (GgitTree *tree)
+ggit_tree_get_id (GgitTree *tree)
 {
 	git_tree *t;
 	const git_oid *oid;

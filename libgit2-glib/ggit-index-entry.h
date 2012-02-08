@@ -61,7 +61,7 @@ guint             ggit_index_entry_get_uid            (GgitIndexEntry    *entry)
 guint             ggit_index_entry_get_gid            (GgitIndexEntry    *entry);
 goffset           ggit_index_entry_get_file_size      (GgitIndexEntry    *entry);
 
-GgitOId          *ggit_index_entry_get_oid            (GgitIndexEntry    *entry);
+GgitOId          *ggit_index_entry_get_id             (GgitIndexEntry    *entry);
 
 guint             ggit_index_entry_get_flags          (GgitIndexEntry    *entry);
 guint             ggit_index_entry_get_flags_extended (GgitIndexEntry    *entry);

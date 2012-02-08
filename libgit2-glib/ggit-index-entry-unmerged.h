@@ -67,7 +67,7 @@ void     ggit_index_entry_unmerged_free       (GgitIndexEntryUnmerged   *entry);
 guint    ggit_index_entry_unmerged_get_mode   (GgitIndexEntryUnmerged   *entry,
                                                gint                      stage);
 
-GgitOId *ggit_index_entry_unmerged_get_oid    (GgitIndexEntryUnmerged   *entry,
+GgitOId *ggit_index_entry_unmerged_get_id     (GgitIndexEntryUnmerged   *entry,
                                                gint                      stage);
 
 GFile   *ggit_index_entry_unmerged_get_file   (GgitIndexEntryUnmerged   *entry);

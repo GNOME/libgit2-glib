@@ -57,7 +57,7 @@ GType          ggit_tree_get_type       (void) G_GNUC_CONST;
 GgitTree      *_ggit_tree_wrap          (git_tree *tree,
                                          gboolean  owned);
 
-GgitOId       *ggit_tree_id             (GgitTree *tree);
+GgitOId       *ggit_tree_get_id         (GgitTree *tree);
 
 GgitTreeEntry *ggit_tree_get            (GgitTree *tree,
                                          guint     i);
