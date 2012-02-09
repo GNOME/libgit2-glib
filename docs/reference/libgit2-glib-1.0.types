@@ -1,18 +1,40 @@
 #include <libgit2-glib/ggit-blob.h>
 #include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-config.h>
+#include <libgit2-glib/ggit-index.h>
+#include <libgit2-glib/ggit-index-entry.h>
+#include <libgit2-glib/ggit-index-entry-unmerged.h>
+#include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-object.h>
+#include <libgit2-glib/ggit-object-factory.h>
+#include <libgit2-glib/ggit-object-factory-base.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-repository.h>
+#include <libgit2-glib/ggit-revision-walker.h>
 #include <libgit2-glib/ggit-signature.h>
 #include <libgit2-glib/ggit-tag.h>
+#include <libgit2-glib/ggit-tree.h>
+#include <libgit2-glib/ggit-tree-entry.h>
 
 ggit_blob_get_type
 ggit_commit_get_type
+ggit_commit_parents_get_type
+ggit_config_get_type
+ggit_index_get_type
+ggit_index_entries_get_type
+ggit_index_entry_get_type
+ggit_index_entries_unmerged_get_type
+ggit_index_entry_unmerged_get_type
+ggit_native_get_type
 ggit_object_get_type
+ggit_object_factory_get_type
+ggit_object_factory_base_get_type
 ggit_oid_get_type
 ggit_ref_get_type
 ggit_repository_get_type
+ggit_revision_walker_get_type
 ggit_signature_get_type
 ggit_tag_get_type
-
+ggit_tree_get_type
+ggit_tree_entry_get_type
