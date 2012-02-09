@@ -13,13 +13,22 @@
     <title>API reference</title>
     <xi:include href="xml/blob.xml"/>
     <xi:include href="xml/commit.xml"/>
+    <xi:include href="xml/config.xml"/>
     <xi:include href="xml/error.xml"/>
+    <xi:include href="xml/index-entry-unmerged.xml"/>
+    <xi:include href="xml/index-entry.xml"/>
+    <xi:include href="xml/index.xml"/>
+    <xi:include href="xml/native.xml"/>
+    <xi:include href="xml/object-factory-base.xml"/>
+    <xi:include href="xml/object-factory.xml"/>
     <xi:include href="xml/object.xml"/>
     <xi:include href="xml/oid.xml"/>
     <xi:include href="xml/ref.xml"/>
     <xi:include href="xml/repository.xml"/>
     <xi:include href="xml/signature.xml"/>
     <xi:include href="xml/tag.xml"/>
+    <xi:include href="xml/tree-entry.xml"/>
+    <xi:include href="xml/tree.xml"/>
   </reference>
 
   <index id="api-index-full">
