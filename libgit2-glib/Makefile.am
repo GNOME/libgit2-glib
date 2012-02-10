@@ -79,7 +79,7 @@ overrides_PYTHON =                      \
         Ggit.py
 endif
 
-EXTRA_DIST =
+EXTRA_DIST = Ggit.py
 CLEANFILES =
 
 if HAVE_INTROSPECTION
