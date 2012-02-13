@@ -885,7 +885,8 @@ ggit_repository_file_status (GgitRepository  *repository,
 
 	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
 
-	ret = git_status_file (&status_flags, _ggit_native_get (repository),
+	ret = git_status_file (&status_flags,
+	                       _ggit_native_get (repository),
 	                       path);
 
 	g_free (path);
@@ -926,7 +927,8 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_status_foreach (_ggit_native_get (repository), callback,
+	ret = git_status_foreach (_ggit_native_get (repository),
+	                          callback,
 	                          user_data);
 
 	if (ret != GIT_SUCCESS)
