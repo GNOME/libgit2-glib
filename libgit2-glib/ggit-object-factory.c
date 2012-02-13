@@ -183,6 +183,26 @@ ggit_object_factory_unregister (GgitObjectFactory *factory,
 	}
 }
 
+static GParameter *
+convert_to_gparameter (GObjectConstructParam *params,
+                       guint                  num)
+{
+	GParameter *ret;
+	guint i;
+
+	ret = g_new0 (GParameter, num);
+
+	for (i = 0; i < num; ++i)
+	{
+		ret[i].name = params[i].pspec->name;
+
+		g_value_init (&ret[i].value, G_VALUE_TYPE (params[i].value));
+		g_value_copy (params[i].value, &ret[i].value);
+	}
+
+	return ret;
+}
+
 /**
  * ggit_object_factory_construct:
  * @factory: a #GgitObjectFactory.
@@ -204,6 +224,7 @@ ggit_object_factory_construct (GgitObjectFactory     *factory,
                                GObjectConstructParam *construct_properties)
 {
 	TypeWrap *val;
+	GObject *ret;
 
 	g_return_val_if_fail (GGIT_IS_OBJECT_FACTORY (factory), NULL);
 
@@ -212,12 +233,30 @@ ggit_object_factory_construct (GgitObjectFactory     *factory,
 
 	if (val)
 	{
-		basetype = val->type;
+		/* convert construct properties to gparameter and call newv */
+		GParameter *params;
+		guint i;
+
+		params = convert_to_gparameter (construct_properties,
+		                                n_construct_properties);
+
+		ret = g_object_newv (val->type, n_construct_properties, params);
+
+		for (i = 0; i < n_construct_properties; ++i)
+		{
+			g_value_unset (&params[i].value);
+		}
+
+		g_free (params);
+	}
+	else
+	{
+		ret = parent_class->constructor (basetype,
+		                                 n_construct_properties,
+		                                 construct_properties);
 	}
 
-	return parent_class->constructor (basetype,
-	                                  n_construct_properties,
-	                                  construct_properties);
+	return ret;
 }
 
 /* ex:set ts=8 noet: */
