@@ -25,6 +25,7 @@
 #include <git2/repository.h>
 #include <git2/refs.h>
 #include <git2/status.h>
+#include <git2/tag.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -1051,6 +1052,158 @@ ggit_repository_get_index (GgitRepository  *repository,
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
+	}
+}
+
+/**
+ * ggit_repository_create_tag:
+ * @repository: a #GgitRepository.
+ * @tag_name: the tag name.
+ * @target: a #GgitObject.
+ * @tagger: a #GgitSignature.
+ * @message: the tag message.
+ * @flags: a #GgitCreateTagFlags.
+ * @error: a #GError.
+ *
+ * Create a new tag object.
+ *
+ * Returns: (transfer full) (allow-none): the id to which the tag points, or
+ *                                        %NULL in case of an error.
+ *
+ **/
+GgitOId *
+ggit_repository_create_tag (GgitRepository      *repository,
+                            gchar const         *tag_name,
+                            GgitObject          *target,
+                            GgitSignature       *tagger,
+                            gchar const         *message,
+                            GgitCreateTagFlags   flags,
+                            GError             **error)
+{
+	git_oid oid;
+	gboolean force;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (tag_name != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), NULL);
+	g_return_val_if_fail (tagger != NULL, NULL);
+	g_return_val_if_fail (message != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	force = flags & GGIT_CREATE_TAG_FORCE;
+
+	ret = git_tag_create (&oid,
+	                     _ggit_native_get (repository),
+	                     tag_name,
+	                     _ggit_native_get (target),
+	                     _ggit_native_get (tagger),
+	                     message,
+	                     force ? 1 : 0);
+
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	else
+	{
+		return _ggit_oid_new (&oid);
+	}
+}
+
+/**
+ * ggit_repository_create_tag_from_buffer:
+ * @repository: a #GgitRepository.
+ * @tag: the tag buffer.
+ * @flags: a #GgitCreateTagFlags.
+ * @error: a #GError.
+ *
+ * Create a new tag from a buffer describing the tag object. The buffer must
+ * be correctly formatted.
+ *
+ * Returns: (transfer full) (allow-none): the id to which the tag points, or
+ *                                        %NULL in case of an error.
+ *
+ **/
+GgitOId *
+ggit_repository_create_tag_from_buffer (GgitRepository      *repository,
+                                        const gchar         *tag,
+                                        GgitCreateTagFlags   flags,
+                                        GError             **error)
+{
+	git_oid oid;
+	gboolean force;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (tag != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	force = flags & GGIT_CREATE_TAG_FORCE;
+
+	ret = git_tag_create_frombuffer (&oid,
+	                                 _ggit_native_get (repository),
+	                                 tag,
+	                                 force ? 1 : 0);
+
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	else
+	{
+		return _ggit_oid_new (&oid);
+	}
+}
+
+/**
+ * ggit_repository_create_tag_lightweight:
+ * @repository: a #GgitRepository.
+ * @tag_name: the name of the tag.
+ * @target: a #GgitObject.
+ * @flags: a #GgitCreateTagFlags.
+ * @error: a #GError.
+ *
+ * Create a new lightweight tag.
+ *
+ * Returns: (transfer full) (allow-none): the id to which the tag points, or
+ *                                        %NULL in case of an error.
+ *
+ **/
+GgitOId *
+ggit_repository_create_tag_lightweight (GgitRepository      *repository,
+                                        const gchar         *tag_name,
+                                        GgitObject          *target,
+                                        GgitCreateTagFlags   flags,
+                                        GError             **error)
+{
+	gboolean force;
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (tag_name != NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	force = flags & GGIT_CREATE_TAG_FORCE;
+
+	ret = git_tag_create_lightweight (&oid,
+	                                  _ggit_native_get (repository),
+	                                  tag_name,
+	                                  _ggit_native_get (target),
+	                                  force ? 1 : 0);
+
+	if (ret != GIT_SUCCESS)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	else
+	{
+		return _ggit_oid_new (&oid);
 	}
 }
 

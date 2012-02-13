@@ -246,6 +246,12 @@ typedef enum
 	GGIT_STATUS_IGNORED = 1 << 6
 } GgitStatusFlags;
 
+typedef enum
+{
+	GGIT_CREATE_TAG_NONE = 0,
+	GGIT_CREATE_TAG_FORCE = 1 << 0
+} GgitCreateTagFlags;
+
 /**
  * GgitStatusCallback:
  * @path: the file to retrieve status for, rooted at the repository working dir.

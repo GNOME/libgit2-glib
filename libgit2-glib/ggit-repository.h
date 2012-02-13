@@ -93,6 +93,27 @@ GgitRef            *ggit_repository_create_symbolic_reference
                                                        const gchar           *target,
                                                        GError               **error);
 
+GgitOId            *ggit_repository_create_tag        (GgitRepository        *repository,
+                                                       const gchar           *tag_name,
+                                                       GgitObject            *target,
+                                                       GgitSignature         *tagger,
+                                                       const gchar           *message,
+                                                       GgitCreateTagFlags     flags,
+                                                       GError               **error);
+
+GgitOId            *ggit_repository_create_tag_from_buffer (
+                                                       GgitRepository        *repository,
+                                                       const gchar           *tag,
+                                                       GgitCreateTagFlags     flags,
+                                                       GError               **error);
+
+GgitOId           *ggit_repository_create_tag_lightweight (
+                                                       GgitRepository        *repository,
+                                                       const gchar           *tag_name,
+                                                       GgitObject            *target,
+                                                       GgitCreateTagFlags     flags,
+                                                       GError               **error);
+
 GgitRef            *ggit_repository_get_head          (GgitRepository        *repository,
                                                        GError               **error);
 
