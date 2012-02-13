@@ -20,25 +20,45 @@
  * Boston, MA  02110-1301  USA
  */
 
-
 #ifndef __GGIT_SIGNATURE_H__
 #define __GGIT_SIGNATURE_H__
 
-#include <glib-object.h>
+#include <libgit2-glib/ggit-native.h>
 #include <git2/signature.h>
-
-#include "ggit-types.h"
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
 #define GGIT_TYPE_SIGNATURE		(ggit_signature_get_type ())
-#define GGIT_SIGNATURE(obj)		((GgitSignature *)obj)
-#define GGIT_SIGNATURE_CONST(obj)	((GgitSignature const *)obj)
+#define GGIT_SIGNATURE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_SIGNATURE, GgitSignature))
+#define GGIT_SIGNATURE_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_SIGNATURE, GgitSignature const))
+#define GGIT_SIGNATURE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_SIGNATURE, GgitSignatureClass))
+#define GGIT_IS_SIGNATURE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_SIGNATURE))
+#define GGIT_IS_SIGNATURE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_SIGNATURE))
+#define GGIT_SIGNATURE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_SIGNATURE, GgitSignatureClass))
+
+typedef struct _GgitSignature		GgitSignature;
+typedef struct _GgitSignatureClass	GgitSignatureClass;
+typedef struct _GgitSignaturePrivate	GgitSignaturePrivate;
+
+struct _GgitSignature
+{
+	GgitNative parent;
+
+	/* priv padding */
+	GgitSignaturePrivate *priv;
+};
+
+struct _GgitSignatureClass
+{
+	GgitNativeClass parent_class;
+};
 
 GType                 ggit_signature_get_type          (void) G_GNUC_CONST;
 
 GgitSignature        *_ggit_signature_wrap             (git_signature *signature,
-                                                        const gchar   *encoding);
+                                                        const gchar   *encoding,
+                                                        gboolean       owned);
 
 GgitSignature        *ggit_signature_new               (const gchar    *name,
                                                         const gchar    *email,
@@ -49,10 +69,6 @@ GgitSignature        *ggit_signature_new               (const gchar    *name,
 GgitSignature        *ggit_signature_new_now           (const gchar    *name,
                                                         const gchar    *email,
                                                         GError        **error);
-
-GgitSignature        *ggit_signature_copy              (GgitSignature  *signature);
-
-void                  ggit_signature_free              (GgitSignature  *signature);
 
 const gchar          *ggit_signature_get_name          (GgitSignature  *signature);
 

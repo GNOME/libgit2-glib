@@ -253,7 +253,8 @@ ggit_commit_get_committer (GgitCommit *commit)
 	signature = git_commit_committer (c);
 
 	return _ggit_signature_wrap ((git_signature *)signature,
-	                             ggit_commit_get_message_encoding (commit));
+	                             ggit_commit_get_message_encoding (commit),
+	                             FALSE);
 }
 
 /**
@@ -277,7 +278,8 @@ ggit_commit_get_author (GgitCommit *commit)
 	signature = git_commit_author (c);
 
 	return _ggit_signature_wrap ((git_signature *)signature,
-	                             ggit_commit_get_message_encoding (commit));
+	                             ggit_commit_get_message_encoding (commit),
+	                             FALSE);
 }
 
 /**

@@ -20,7 +20,6 @@
  * Boston, MA  02110-1301  USA
  */
 
-
 #include <git2/errors.h>
 #include <git2/signature.h>
 
@@ -28,28 +27,126 @@
 #include "ggit-signature.h"
 #include "ggit-convert.h"
 
-struct _GgitSignature
+#define GGIT_SIGNATURE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_SIGNATURE, GgitSignaturePrivate))
+
+struct _GgitSignaturePrivate
 {
-	git_signature *signature;
 	gchar *encoding;
 
 	gchar *name_utf8;
 	gchar *email_utf8;
 };
 
-G_DEFINE_BOXED_TYPE (GgitSignature, ggit_signature, ggit_signature_copy, ggit_signature_free)
+G_DEFINE_TYPE (GgitSignature, ggit_signature, GGIT_TYPE_NATIVE)
+
+enum
+{
+	PROP_0,
+	PROP_ENCODING
+};
+
+static void
+ggit_signature_finalize (GObject *object)
+{
+	GgitSignature *signature;
+
+	signature = GGIT_SIGNATURE (object);
+
+	g_free (signature->priv->name_utf8);
+	g_free (signature->priv->email_utf8);
+	g_free (signature->priv->encoding);
+
+	G_OBJECT_CLASS (ggit_signature_parent_class)->finalize (object);
+}
+
+static void
+ggit_signature_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+	GgitSignature *self = GGIT_SIGNATURE (object);
+
+	switch (prop_id)
+	{
+		case PROP_ENCODING:
+			g_free (self->priv->encoding);
+			self->priv->encoding = g_value_dup_string (value);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+ggit_signature_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+	GgitSignature *self = GGIT_SIGNATURE (object);
+
+	switch (prop_id)
+	{
+		case PROP_ENCODING:
+			g_value_set_string (value, self->priv->encoding);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+ggit_signature_class_init (GgitSignatureClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = ggit_signature_finalize;
+
+	object_class->get_property = ggit_signature_get_property;
+	object_class->set_property = ggit_signature_set_property;
+
+	g_type_class_add_private (object_class, sizeof (GgitSignaturePrivate));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_ENCODING,
+	                                 g_param_spec_string ("encoding",
+	                                                      "Encoding",
+	                                                      "Encoding",
+	                                                      NULL,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY));
+}
+
+static void
+ggit_signature_init (GgitSignature *self)
+{
+	self->priv = GGIT_SIGNATURE_GET_PRIVATE (self);
+}
 
 GgitSignature *
 _ggit_signature_wrap (git_signature *signature,
-                      const gchar   *encoding)
+                      const gchar   *encoding,
+                      gboolean       owned)
 {
-	GgitSignature *sig;
+	GgitSignature *ret;
 
-	sig = g_slice_new (GgitSignature);
-	sig->signature = signature;
-	sig->encoding = g_strdup (encoding);
+	ret = g_object_new (GGIT_TYPE_SIGNATURE, "encoding", encoding, NULL);
 
-	return sig;
+	if (owned)
+	{
+		_ggit_native_set (ret,
+		                  signature,
+		                  (GDestroyNotify)git_signature_free);
+	}
+	else
+	{
+		_ggit_native_set (ret, signature, NULL);
+	}
+
+	return ret;
 }
 
 /**
@@ -60,7 +157,7 @@ _ggit_signature_wrap (git_signature *signature,
  * @signature_offset: the timezone offset in minutes for the time.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a new #GgitSignature.
+ * Creates a new #GgitSignature. Name and e-mail are assumed to be in UTF-8.
  *
  * Returns: (transfer full): a newly allocated #GgitSignature.
  */
@@ -83,7 +180,7 @@ ggit_signature_new (const gchar  *name,
 
 	if (ret == GIT_SUCCESS)
 	{
-		signature = _ggit_signature_wrap (sig, NULL);
+		signature = _ggit_signature_wrap (sig, "UTF-8", TRUE);
 	}
 	else
 	{
@@ -99,7 +196,8 @@ ggit_signature_new (const gchar  *name,
  * @email: the email of the person.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a new #GgitSignature with a timestamp of 'now'.
+ * Creates a new #GgitSignature with a timestamp of 'now'. Name and e-mail are
+ * assumed to be in UTF-8.
  *
  * Returns: (transfer full): a newly allocated #GgitSignature.
  */
@@ -120,7 +218,7 @@ ggit_signature_new_now (const gchar  *name,
 
 	if (ret == GIT_SUCCESS)
 	{
-		signature = _ggit_signature_wrap (sig, NULL);
+		signature = _ggit_signature_wrap (sig, "UTF-8", TRUE);
 	}
 	else
 	{
@@ -128,46 +226,6 @@ ggit_signature_new_now (const gchar  *name,
 	}
 
 	return signature;
-}
-
-/**
- * ggit_signature_copy:
- * @signature: a #GgitSignature.
- *
- * Creates a copy of @signature.
- *
- * Returns: (transfer full): a newly allocated #GgitSignature.
- */
-GgitSignature *
-ggit_signature_copy (GgitSignature *signature)
-{
-	GgitSignature *s;
-
-	g_return_val_if_fail (signature != NULL, NULL);
-
-	s = g_slice_new (GgitSignature);
-
-	s->signature = git_signature_dup (signature->signature);
-	s->encoding = g_strdup (signature->encoding);
-
-	return s;
-}
-
-/**
- * ggit_signature_free:
- * @signature: a #GgitSignature.
- *
- * Frees @signature.
- */
-void
-ggit_signature_free (GgitSignature *signature)
-{
-	g_return_if_fail (signature != NULL);
-
-	git_signature_free (signature->signature);
-	g_free (signature->encoding);
-
-	g_slice_free (GgitSignature, signature);
 }
 
 static gchar *
@@ -194,13 +252,17 @@ ensure_utf8 (gchar       *utf8,
 const gchar *
 ggit_signature_get_name (GgitSignature *signature)
 {
-	g_return_val_if_fail (signature != NULL, NULL);
+	git_signature *s;
 
-	signature->name_utf8 = ensure_utf8 (signature->name_utf8,
-	                                    signature->encoding,
-	                                    signature->signature->name);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 
-	return signature->name_utf8;
+	s = _ggit_native_get (signature);
+
+	signature->priv->name_utf8 = ensure_utf8 (signature->priv->name_utf8,
+	                                          signature->priv->encoding,
+	                                          s->name);
+
+	return signature->priv->name_utf8;
 }
 
 /**
@@ -214,13 +276,17 @@ ggit_signature_get_name (GgitSignature *signature)
 const gchar *
 ggit_signature_get_email (GgitSignature *signature)
 {
-	g_return_val_if_fail (signature != NULL, NULL);
+	git_signature *s;
 
-	signature->email_utf8 = ensure_utf8 (signature->email_utf8,
-	                                     signature->encoding,
-	                                     signature->signature->email);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 
-	return signature->email_utf8;
+	s = _ggit_native_get (signature);
+
+	signature->priv->email_utf8 = ensure_utf8 (signature->priv->email_utf8,
+	                                           signature->priv->encoding,
+	                                           s->email);
+
+	return signature->priv->email_utf8;
 }
 
 /**
@@ -234,9 +300,13 @@ ggit_signature_get_email (GgitSignature *signature)
 GDateTime *
 ggit_signature_get_time (GgitSignature *signature)
 {
-	g_return_val_if_fail (signature != NULL, 0);
+	git_signature *s;
 
-	return g_date_time_new_from_unix_utc (signature->signature->when.time);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
+
+	s = _ggit_native_get (signature);
+
+	return g_date_time_new_from_unix_utc (s->when.time);
 }
 
 /**
@@ -250,9 +320,13 @@ ggit_signature_get_time (GgitSignature *signature)
 gint
 ggit_signature_get_time_offset (GgitSignature *signature)
 {
-	g_return_val_if_fail (signature != NULL, 0);
+	git_signature *s;
 
-	return signature->signature->when.offset;
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
+
+	s = _ggit_native_get (signature);
+
+	return s->when.offset;
 }
 
 /* ex:set ts=8 noet: */
