@@ -9,8 +9,8 @@ to work with Git at this level, check out [Chapter 9][pg] of the Pro Git book.
 
 http://progit.org/book/ch9-0.html
 
-libgit2-glib is released under the GNU General Public License (GPL) version 2, see
-the file 'COPYING' for more information.
+libgit2-glib is released under the GNU Lesser General Public License (LGPL) version 2.1,
+see the file 'COPYING' for more information.
 
 Installation
 ============
