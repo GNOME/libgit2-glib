@@ -249,7 +249,7 @@ ggit_revision_walker_push (GgitRevisionWalker  *walker,
 }
 
 /**
- * ggit_revision_walker_push:
+ * ggit_revision_walker_hide:
  * @walker: a #GgitRevisionWalker.
  * @oid: a #GgitOId.
  * @error: a #GError for error reporting, or %NULL.
