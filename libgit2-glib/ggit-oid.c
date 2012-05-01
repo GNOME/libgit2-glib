@@ -158,7 +158,7 @@ ggit_oid_to_string (GgitOId *oid)
 
 	hex = g_new (char, GIT_OID_HEXSZ + 1);
 
-	return git_oid_to_string (hex, GIT_OID_HEXSZ + 1, &oid->oid);
+	return git_oid_tostr (hex, GIT_OID_HEXSZ + 1, &oid->oid);
 }
 
 /**
