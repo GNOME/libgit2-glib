@@ -145,7 +145,7 @@ ggit_revision_walker_initable_init (GInitable    *initable,
 
 	err = git_revwalk_new (&priv->revwalk,
 	                       _ggit_repository_get_repository (priv->repository));
-	if (err != GIT_SUCCESS)
+	if (err != GIT_OK)
 	{
 		_ggit_error_set (error, err);
 		success = FALSE;
@@ -242,7 +242,7 @@ ggit_revision_walker_push (GgitRevisionWalker  *walker,
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_revwalk_push (walker->priv->revwalk, _ggit_oid_get_oid (oid));
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -274,7 +274,7 @@ ggit_revision_walker_hide (GgitRevisionWalker  *walker,
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_revwalk_hide (walker->priv->revwalk, _ggit_oid_get_oid (oid));
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -311,7 +311,7 @@ ggit_revision_walker_next (GgitRevisionWalker  *walker,
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_revwalk_next (&oid, walker->priv->revwalk);
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		goid = _ggit_oid_new (&oid);
 	}

@@ -166,7 +166,7 @@ ggit_ref_resolve (GgitRef  *ref,
 
 	ret = git_reference_resolve (&reference, _ggit_native_get (ref));
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		rev_ref = _ggit_ref_wrap (reference);
 	}
@@ -222,7 +222,7 @@ ggit_ref_set_target (GgitRef      *ref,
 
 	ret = git_reference_set_target (_ggit_native_get (ref), target);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -255,7 +255,7 @@ ggit_ref_set_oid (GgitRef  *ref,
 
 	ret = git_reference_set_oid (_ggit_native_get (ref), _ggit_oid_get_oid (oid));
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -293,7 +293,7 @@ ggit_ref_rename (GgitRef     *ref,
 
 	ret = git_reference_rename (_ggit_native_get (ref), new_name, force);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -322,7 +322,7 @@ ggit_ref_delete (GgitRef  *ref,
 
 	ret = git_reference_delete (_ggit_native_get (ref));
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -356,7 +356,7 @@ ggit_ref_lookup (GgitRef  *ref,
 	                         git_reference_oid (r),
 	                         GIT_OBJ_ANY);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;

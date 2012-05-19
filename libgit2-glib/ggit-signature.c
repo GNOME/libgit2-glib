@@ -176,7 +176,7 @@ ggit_signature_new (const gchar  *name,
 
 	ret = git_signature_new (&sig, name, email, signature_time, signature_offset);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		signature = _ggit_signature_wrap (sig, "UTF-8", TRUE);
 	}
@@ -214,7 +214,7 @@ ggit_signature_new_now (const gchar  *name,
 
 	ret = git_signature_now (&sig, name, email);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		signature = _ggit_signature_wrap (sig, "UTF-8", TRUE);
 	}

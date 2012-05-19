@@ -84,7 +84,7 @@ ggit_tag_get_target (GgitTag  *tag,
 	t = _ggit_native_get (tag);
 	ret = git_tag_target (&obj, t);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}

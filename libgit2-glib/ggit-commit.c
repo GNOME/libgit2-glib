@@ -337,7 +337,7 @@ ggit_commit_parents_get (GgitCommitParents *parents,
 
 	c = _ggit_native_get (parents->commit);
 
-	if (git_commit_parent (&p, c, idx) == GIT_SUCCESS)
+	if (git_commit_parent (&p, c, idx) == GIT_OK)
 	{
 		return _ggit_commit_wrap (p, TRUE);
 	}
@@ -389,7 +389,7 @@ ggit_commit_get_tree (GgitCommit *commit)
 
 	c = _ggit_native_get (commit);
 
-	if (git_commit_tree (&t, c) == GIT_SUCCESS)
+	if (git_commit_tree (&t, c) == GIT_OK)
 	{
 		return _ggit_tree_wrap (t, TRUE);
 	}

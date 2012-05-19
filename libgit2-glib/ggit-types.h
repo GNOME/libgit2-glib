@@ -56,79 +56,25 @@ typedef struct _GgitIndex GgitIndex;
 /**
  * GgitError:
  * @GGIT_ERROR_GIT_ERROR: A generic error for when an operation fails.
- * @GGIT_ERROR_NOTOID: Input was not a properly formatted Git object id.
  * @GGIT_ERROR_NOTFOUND: Input does not exist in the scope searched.
- * @GGIT_ERROR_NOMEM: Not enough space available.
- * @GGIT_ERROR_OSERR: Consult the OS error information.
- * @GGIT_ERROR_OBJTYPE: The specified object is of invalid type.
- * @GGIT_ERROR_NOTAREPO: The specified repository is invalid.
- * @GGIT_ERROR_INVALIDTYPE: The object type is invalid or doesn't match.
- * @GGIT_ERROR_MISSINGOBJDATA: The object cannot be written because it's
- *                             missing internal data.
- * @GGIT_ERROR_PACKCORRUPTED: The packfile for the ODB is corrupted.
- * @GGIT_ERROR_FLOCKFAIL: Failed to acquire or release a file lock.
- * @GGIT_ERROR_ZLIB: The Z library failed to inflate/deflate an object's data.
- * @GGIT_ERROR_BUSY: The queried object is currently busy.
- * @GGIT_ERROR_BAREINDEX: The index file is not backed up by an
- *                        existing repository.
- * @GGIT_ERROR_INVALIDREFNAME: The name of the reference is not valid.
- * @GGIT_ERROR_REFCORRUPTED: The specified reference has its data corrupted.
- * @GGIT_ERROR_TOONESTEDSYMREF: The specified symbolic reference is
- *                              too deeply nested.
- * @GGIT_ERROR_PACKEDREFSCORRUPTED: The pack-refs file is either corrupted or
- *                                  its format is not currently supported.
- * @GGIT_ERROR_INVALIDPATH: The path is invalid.
+ * @GGIT_ERROR_EXISTS: A reference with this name already exists.
+ * @GGIT_ERROR_AMBIGUOUS: The given error is ambiguous.
+ * @GGIT_ERROR_BUFS: FIXME
+ * @GGIT_ERROR_PASSTHROUGH: Skip and passthrough the given ODB backend
  * @GGIT_ERROR_REVWALKOVER: The revision walker is empty; there
  *                          are no more commits left to iterate.
- * @GGIT_ERROR_INVALIDREFSTATE: The state of the reference is not valid.
- * @GGIT_ERROR_NOTIMPLEMENTED: This feature has not been implemented yet.
- * @GGIT_ERROR_EXISTS: A reference with this name already exists.
- * @GGIT_ERROR_OVERFLOW: The given integer literal is too large to be parsed.
- * @GGIT_ERROR_NOTNUM: The given literal is not a valid number.
- * @GGIT_ERROR_STREAM: Streaming error.
- * @GGIT_ERROR_INVALIDARGS: invalid arguments to function.
- * @GGIT_ERROR_OBJCORRUPTED: The specified object has its data corrupted.
- * @GGIT_ERROR_AMBIGUOUSOIDPREFIX: The given short oid is ambiguous.
- * @GGIT_ERROR_PASSTHROUGH: Skip and passthrough the given ODB backend
- * @GGIT_ERROR_NOMATCH: The path pattern and string did not match.
- * @GGIT_ERROR_SHORTBUFFER: The buffer is too short to satisfy the request.
  *
  * Error codes for the %GGIT_ERROR error domain.
  */
 typedef enum
 {
 	GGIT_ERROR_GIT_ERROR = -1,
-	GGIT_ERROR_NOTOID = -2,
 	GGIT_ERROR_NOTFOUND = -3,
-	GGIT_ERROR_NOMEM = -4,
-	GGIT_ERROR_OSERR = -5,
-	GGIT_ERROR_OBJTYPE = -6,
-	GGIT_ERROR_NOTAREPO = -7,
-	GGIT_ERROR_INVALIDTYPE = -8,
-	GGIT_ERROR_MISSINGOBJDATA = -9,
-	GGIT_ERROR_PACKCORRUPTED = -10,
-	GGIT_ERROR_FLOCKFAIL = -11,
-	GGIT_ERROR_ZLIB = -12,
-	GGIT_ERROR_BUSY = -13,
-	GGIT_ERROR_BAREINDEX = -14,
-	GGIT_ERROR_INVALIDREFNAME = -15,
-	GGIT_ERROR_REFCORRUPTED  = -16,
-	GGIT_ERROR_TOONESTEDSYMREF = -17,
-	GGIT_ERROR_PACKEDREFSCORRUPTED = -18,
-	GGIT_ERROR_INVALIDPATH = -19,
-	GGIT_ERROR_REVWALKOVER = -20,
-	GGIT_ERROR_INVALIDREFSTATE = -21,
-	GGIT_ERROR_NOTIMPLEMENTED = -22,
-	GGIT_ERROR_EXISTS = -23,
-	GGIT_ERROR_OVERFLOW = -24,
-	GGIT_ERROR_NOTNUM = -25,
-	GGIT_ERROR_STREAM = -26,
-	GGIT_ERROR_INVALIDARGS = -27,
-	GGIT_ERROR_OBJCORRUPTED = -28,
-	GGIT_ERROR_AMBIGUOUSOIDPREFIX = -29,
+	GGIT_ERROR_EXISTS = -4,
+	GGIT_ERROR_AMBIGUOUS = -5,
+	GGIT_ERROR_BUFS = -6,
 	GGIT_ERROR_PASSTHROUGH = -30,
-	GGIT_ERROR_NOMATCH = -31,
-	GGIT_ERROR_SHORTBUFFER = -32
+	GGIT_ERROR_REVWALKOVER = -31
 } GgitError;
 
 /**

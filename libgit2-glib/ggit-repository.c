@@ -274,7 +274,7 @@ ggit_repository_initable_init (GInitable    *initable,
 
 	if (path == NULL)
 	{
-		err = GGIT_ERROR_INVALIDPATH;
+		err = GGIT_ERROR_NOTFOUND;
 	}
 	else if (priv->init == TRUE)
 	{
@@ -290,14 +290,9 @@ ggit_repository_initable_init (GInitable    *initable,
 
 	g_free (path);
 
-	if (err != GIT_SUCCESS)
+	if (err != GIT_OK)
 	{
-		const gchar *errstr = git_lasterror ();
-
-		g_set_error_literal (error,
-		                     G_IO_ERROR,
-		                     G_IO_ERROR_NOT_INITIALIZED,
-		                     errstr ? errstr : git_strerror (err));
+		_ggit_error_set (error, err);
 
 		success = FALSE;
 	}
@@ -457,7 +452,7 @@ ggit_repository_lookup (GgitRepository  *repository,
 	                         id,
 	                         otype);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		object = ggit_utils_create_real_object (obj, TRUE);
 	}
@@ -495,7 +490,7 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 	ret = git_reference_lookup (&reference, _ggit_native_get (repository),
 	                            name);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		ref = _ggit_ref_wrap (reference);
 	}
@@ -538,7 +533,7 @@ ggit_repository_create_reference (GgitRepository  *repository,
 	ret = git_reference_create_oid (&reference, _ggit_native_get (repository),
 	                                name, _ggit_oid_get_oid (oid), FALSE);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		ref = _ggit_ref_wrap (reference);
 	}
@@ -581,7 +576,7 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
 	ret = git_reference_create_symbolic (&reference, _ggit_native_get (repository),
 	                                     name, target, FALSE);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		ref = _ggit_ref_wrap (reference);
 	}
@@ -615,7 +610,7 @@ ggit_repository_get_head (GgitRepository  *repository,
 
 	ret = git_repository_head (&reference, _ggit_native_get (repository));
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		ref = _ggit_ref_wrap (reference);
 	}
@@ -663,7 +658,7 @@ ggit_repository_discover (GFile   *location,
 
 	g_free (path);
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		rep = g_file_new_for_path (found_path);
 	}
@@ -889,7 +884,7 @@ ggit_repository_file_status (GgitRepository  *repository,
 
 	g_free (path);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 	}
@@ -929,7 +924,7 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 	                          callback,
 	                          user_data);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
@@ -976,7 +971,7 @@ ggit_repository_references_foreach (GgitRepository          *repository,
 	                             callback,
 	                             user_data);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
@@ -1010,7 +1005,7 @@ ggit_repository_get_config (GgitRepository  *repository,
 	ret = git_repository_config (&config,
 	                             _ggit_native_get (repository));
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		return _ggit_config_wrap (config);
 	}
@@ -1044,7 +1039,7 @@ ggit_repository_get_index (GgitRepository  *repository,
 	ret = git_repository_index (&idx,
 	                            _ggit_native_get (repository));
 
-	if (ret == GIT_SUCCESS)
+	if (ret == GIT_OK)
 	{
 		return _ggit_index_wrap (idx);
 	}
@@ -1101,7 +1096,7 @@ ggit_repository_create_tag (GgitRepository      *repository,
 	                     message,
 	                     force ? 1 : 0);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
@@ -1147,7 +1142,7 @@ ggit_repository_create_tag_from_buffer (GgitRepository      *repository,
 	                                 tag,
 	                                 force ? 1 : 0);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
@@ -1196,7 +1191,7 @@ ggit_repository_create_tag_lightweight (GgitRepository      *repository,
 	                                  _ggit_native_get (target),
 	                                  force ? 1 : 0);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;

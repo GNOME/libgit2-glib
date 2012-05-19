@@ -118,8 +118,6 @@ ggit_index_initable_init (GInitable    *initable,
 {
 	GgitIndexPrivate *priv;
 	gboolean success = TRUE;
-	gint err = GIT_SUCCESS;
-	const gchar *lasterr;
 
 	if (cancellable != NULL)
 	{
@@ -134,6 +132,7 @@ ggit_index_initable_init (GInitable    *initable,
 	if (priv->file != NULL)
 	{
 		gchar *path;
+		gint err = GIT_OK;
 
 		path = g_file_get_path (priv->file);
 
@@ -144,24 +143,18 @@ ggit_index_initable_init (GInitable    *initable,
 
 		g_free (path);
 
-		if (err != GIT_SUCCESS)
+		if (err != GIT_OK)
 		{
-			lasterr = git_lasterror ();
+			_ggit_error_set (error, err);
+			success = FALSE;
 		}
 	}
 	else
 	{
-		err = GGIT_ERROR_INVALIDPATH;
-		lasterr = "No file specified";
-	}
-
-	if (err != GIT_SUCCESS)
-	{
 		g_set_error_literal (error,
 		                     G_IO_ERROR,
 		                     G_IO_ERROR_NOT_INITIALIZED,
-		                     lasterr);
-
+		                     "No file specified");
 		success = FALSE;
 	}
 
@@ -276,7 +269,7 @@ ggit_index_read (GgitIndex  *idx,
 
 	ret = git_index_read (idx->priv->idx);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
@@ -307,7 +300,7 @@ ggit_index_write (GgitIndex  *idx,
 
 	ret = git_index_write (idx->priv->idx);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
@@ -354,7 +347,7 @@ ggit_index_remove (GgitIndex  *idx,
 
 	ret = git_index_remove (idx->priv->idx, position);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
@@ -395,7 +388,7 @@ ggit_index_append (GgitIndex  *idx,
 	ret = git_index_append (idx->priv->idx, path, stage);
 	g_free (path);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
@@ -436,7 +429,7 @@ ggit_index_add (GgitIndex  *idx,
 	ret = git_index_add (idx->priv->idx, path, stage);
 	g_free (path);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;

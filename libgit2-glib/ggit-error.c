@@ -46,24 +46,20 @@ void
 _ggit_error_set (GError **error,
                  gint     err)
 {
+	const git_error *git2_err;
+
 	g_return_if_fail (err < 0);
 
 	if (err == GGIT_ERROR_NOTFOUND)
 	{
 		return;
 	}
-	else if (err == GGIT_ERROR_OSERR)
-	{
-		g_set_error_literal (error, GGIT_ERROR,
-		                     err,
-		                     g_strerror (errno));
-	}
-	else
-	{
-		g_set_error_literal (error, GGIT_ERROR,
-		                     err,
-		                     git_lasterror ());
-	}
+
+	/* TODO: add more kind of errors, see git_error_t */
+	git2_err = giterr_last ();
+	g_set_error_literal (error, GGIT_ERROR,
+	                     err,
+	                     git2_err->message);
 }
 
 /* ex:set ts=8 noet: */

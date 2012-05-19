@@ -105,7 +105,7 @@ ggit_config_set_property (GObject      *object,
 		}
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -194,7 +194,7 @@ ggit_config_get_global ()
 	{
 		gchar global_path[GIT_PATH_MAX];
 
-		if (git_config_find_global (global_path) == GIT_SUCCESS)
+		if (git_config_find_global (global_path, GIT_PATH_MAX) == GIT_OK)
 		{
 			GFile *f;
 
@@ -237,17 +237,15 @@ ggit_config_get_bool (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_get_bool (config->priv->config, name, &retval);
+	ret = git_config_get_bool (&retval, config->priv->config, name);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return retval ? TRUE : FALSE;
-	}
+
+	return (retval > 0);
 }
 
 /**
@@ -276,15 +274,13 @@ ggit_config_set_bool (GgitConfig   *config,
 
 	ret = git_config_set_bool (config->priv->config, name, value ? 1 : 0);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 /**
@@ -311,17 +307,15 @@ ggit_config_get_string (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_get_string (config->priv->config, name, &retval);
+	ret = git_config_get_string (&retval, config->priv->config, name);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
-	else
-	{
-		return retval;
-	}
+
+	return retval;
 }
 
 /**
@@ -357,15 +351,13 @@ ggit_config_set_string (GgitConfig   *config,
 		ret = git_config_set_string (config->priv->config, name, value);
 	}
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 /**
@@ -392,15 +384,13 @@ ggit_config_delete (GgitConfig   *config,
 
 	ret = git_config_delete (config->priv->config, name);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 /**
@@ -429,15 +419,13 @@ ggit_config_foreach (GgitConfig          *config,
 
 	ret = git_config_foreach (config->priv->config, callback, user_data);
 
-	if (ret != GIT_SUCCESS)
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 typedef struct
@@ -476,7 +464,7 @@ match_foreach (const gchar *name,
 		}
 	}
 
-	return GIT_SUCCESS;
+	return GIT_OK;
 }
 
 /**
@@ -523,7 +511,7 @@ ggit_config_match (GgitConfig  *config,
 
 	if (!info.value)
 	{
-		_ggit_error_set (error, GGIT_ERROR_NOMATCH);
+		_ggit_error_set (error, GGIT_ERROR_NOTFOUND);
 	}
 
 	return info.value;

@@ -94,7 +94,7 @@ ggit_oid_new_from_string (const gchar *str)
 
 	g_return_val_if_fail (str != NULL, NULL);
 
-	if (git_oid_fromstr (&oid, str) == GIT_SUCCESS)
+	if (git_oid_fromstr (&oid, str) == GIT_OK)
 	{
 		glib_oid = _ggit_oid_new (&oid);
 	}
