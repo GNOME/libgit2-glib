@@ -780,14 +780,7 @@ ggit_repository_get_location (GgitRepository *repository)
 
 	path = git_repository_path (_ggit_native_get (repository));
 
-	if (path)
-	{
-		return g_file_new_for_path (path);
-	}
-	else
-	{
-		return NULL;
-	}
+	return path ? g_file_new_for_path (path) : NULL;
 }
 
 /**
@@ -807,14 +800,7 @@ ggit_repository_get_workdir (GgitRepository *repository)
 
 	path = git_repository_workdir (_ggit_native_get (repository));
 
-	if (path)
-	{
-		return g_file_new_for_path (path);
-	}
-	else
-	{
-		return NULL;
-	}
+	return path ? g_file_new_for_path (path) : NULL;
 }
 
 /**
@@ -929,10 +915,8 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 /**
@@ -976,10 +960,8 @@ ggit_repository_references_foreach (GgitRepository          *repository,
 		_ggit_error_set (error, ret);
 		return FALSE;
 	}
-	else
-	{
-		return TRUE;
-	}
+
+	return TRUE;
 }
 
 /**
@@ -1005,15 +987,13 @@ ggit_repository_get_config (GgitRepository  *repository,
 	ret = git_repository_config (&config,
 	                             _ggit_native_get (repository));
 
-	if (ret == GIT_OK)
-	{
-		return _ggit_config_wrap (config);
-	}
-	else
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
+
+	return _ggit_config_wrap (config);
 }
 
 /**
@@ -1039,15 +1019,13 @@ ggit_repository_get_index (GgitRepository  *repository,
 	ret = git_repository_index (&idx,
 	                            _ggit_native_get (repository));
 
-	if (ret == GIT_OK)
-	{
-		return _ggit_index_wrap (idx);
-	}
-	else
+	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
+
+	return _ggit_index_wrap (idx);
 }
 
 /**
@@ -1101,10 +1079,8 @@ ggit_repository_create_tag (GgitRepository      *repository,
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
-	else
-	{
-		return _ggit_oid_new (&oid);
-	}
+
+	return _ggit_oid_new (&oid);
 }
 
 /**
@@ -1147,10 +1123,8 @@ ggit_repository_create_tag_from_buffer (GgitRepository      *repository,
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
-	else
-	{
-		return _ggit_oid_new (&oid);
-	}
+
+	return _ggit_oid_new (&oid);
 }
 
 /**
@@ -1196,10 +1170,8 @@ ggit_repository_create_tag_lightweight (GgitRepository      *repository,
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
-	else
-	{
-		return _ggit_oid_new (&oid);
-	}
+
+	return _ggit_oid_new (&oid);
 }
 
 /* ex:set ts=8 noet: */
