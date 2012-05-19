@@ -105,4 +105,21 @@ ggit_utils_create_real_object (git_object *obj,
 	return object;
 }
 
+gchar **
+ggit_utils_get_str_array_from_git_strarray (git_strarray *gitarray)
+{
+	gchar **array;
+	gint i;
+
+	array = g_new (gchar *, gitarray->count + 1);
+
+	for (i = 0; i < gitarray->count; i++)
+	{
+		array[i] = g_strdup (gitarray->strings[i]);
+	}
+	array[i] = NULL;
+
+	return array;
+}
+
 /* ex:set ts=8 noet: */

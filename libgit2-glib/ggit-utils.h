@@ -36,6 +36,9 @@ GType           ggit_utils_get_gtype_from_otype       (git_otype type);
 GgitObject     *ggit_utils_create_real_object         (git_object *obj,
                                                        gboolean    owned);
 
+gchar         **ggit_utils_get_str_array_from_git_strarray
+                                                      (git_strarray *gitarray);
+
 G_END_DECLS
 
 #endif
