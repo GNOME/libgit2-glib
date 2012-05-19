@@ -24,6 +24,7 @@
 #include <git2/refs.h>
 #include <git2/status.h>
 #include <git2/tag.h>
+#include <git2/branch.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -1035,7 +1036,7 @@ ggit_repository_get_index (GgitRepository  *repository,
  * @target: a #GgitObject.
  * @tagger: a #GgitSignature.
  * @message: the tag message.
- * @flags: a #GgitCreateTagFlags.
+ * @flags: a #GgitCreateFlags.
  * @error: a #GError.
  *
  * Create a new tag object.
@@ -1045,13 +1046,13 @@ ggit_repository_get_index (GgitRepository  *repository,
  *
  **/
 GgitOId *
-ggit_repository_create_tag (GgitRepository      *repository,
-                            gchar const         *tag_name,
-                            GgitObject          *target,
-                            GgitSignature       *tagger,
-                            gchar const         *message,
-                            GgitCreateTagFlags   flags,
-                            GError             **error)
+ggit_repository_create_tag (GgitRepository   *repository,
+                            gchar const      *tag_name,
+                            GgitObject       *target,
+                            GgitSignature    *tagger,
+                            gchar const      *message,
+                            GgitCreateFlags   flags,
+                            GError          **error)
 {
 	git_oid oid;
 	gboolean force;
@@ -1064,7 +1065,7 @@ ggit_repository_create_tag (GgitRepository      *repository,
 	g_return_val_if_fail (message != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	force = flags & GGIT_CREATE_TAG_FORCE;
+	force = flags & GGIT_CREATE_FORCE;
 
 	ret = git_tag_create (&oid,
 	                     _ggit_native_get (repository),
@@ -1087,7 +1088,7 @@ ggit_repository_create_tag (GgitRepository      *repository,
  * ggit_repository_create_tag_from_buffer:
  * @repository: a #GgitRepository.
  * @tag: the tag buffer.
- * @flags: a #GgitCreateTagFlags.
+ * @flags: a #GgitCreateFlags.
  * @error: a #GError.
  *
  * Create a new tag from a buffer describing the tag object. The buffer must
@@ -1098,10 +1099,10 @@ ggit_repository_create_tag (GgitRepository      *repository,
  *
  **/
 GgitOId *
-ggit_repository_create_tag_from_buffer (GgitRepository      *repository,
-                                        const gchar         *tag,
-                                        GgitCreateTagFlags   flags,
-                                        GError             **error)
+ggit_repository_create_tag_from_buffer (GgitRepository   *repository,
+                                        const gchar      *tag,
+                                        GgitCreateFlags   flags,
+                                        GError          **error)
 {
 	git_oid oid;
 	gboolean force;
@@ -1111,7 +1112,7 @@ ggit_repository_create_tag_from_buffer (GgitRepository      *repository,
 	g_return_val_if_fail (tag != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	force = flags & GGIT_CREATE_TAG_FORCE;
+	force = flags & GGIT_CREATE_FORCE;
 
 	ret = git_tag_create_frombuffer (&oid,
 	                                 _ggit_native_get (repository),
@@ -1132,21 +1133,21 @@ ggit_repository_create_tag_from_buffer (GgitRepository      *repository,
  * @repository: a #GgitRepository.
  * @tag_name: the name of the tag.
  * @target: a #GgitObject.
- * @flags: a #GgitCreateTagFlags.
+ * @flags: a #GgitCreateFlags.
  * @error: a #GError.
  *
- * Create a new lightweight tag.
+ * Creates a new lightweight tag.
  *
  * Returns: (transfer full) (allow-none): the id to which the tag points, or
  *                                        %NULL in case of an error.
  *
  **/
 GgitOId *
-ggit_repository_create_tag_lightweight (GgitRepository      *repository,
-                                        const gchar         *tag_name,
-                                        GgitObject          *target,
-                                        GgitCreateTagFlags   flags,
-                                        GError             **error)
+ggit_repository_create_tag_lightweight (GgitRepository   *repository,
+                                        const gchar      *tag_name,
+                                        GgitObject       *target,
+                                        GgitCreateFlags   flags,
+                                        GError          **error)
 {
 	gboolean force;
 	git_oid oid;
@@ -1157,7 +1158,7 @@ ggit_repository_create_tag_lightweight (GgitRepository      *repository,
 	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	force = flags & GGIT_CREATE_TAG_FORCE;
+	force = flags & GGIT_CREATE_FORCE;
 
 	ret = git_tag_create_lightweight (&oid,
 	                                  _ggit_native_get (repository),
@@ -1172,6 +1173,160 @@ ggit_repository_create_tag_lightweight (GgitRepository      *repository,
 	}
 
 	return _ggit_oid_new (&oid);
+}
+
+/**
+ * ggit_repository_create_branch:
+ * @repository: a #GgitRepository.
+ * @branch_name: the name of the branch.
+ * @target: a #GgitObject.
+ * @flags: a #GgitCreateFlags.
+ * @error: a #GError.
+ *
+ * Creates a new branch pointing at a target commit.
+ *
+ * Returns: (transfer full) (allow-none): the id to which the branch points, or
+ *                                        %NULL in case of an error.
+ **/
+GgitOId *
+ggit_repository_create_branch (GgitRepository   *repository,
+                               const gchar      *branch_name,
+                               GgitObject       *target,
+                               GgitCreateFlags   flags,
+                               GError          **error)
+{
+	gboolean force;
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (branch_name != NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	force = flags & GGIT_CREATE_FORCE;
+
+	ret = git_branch_create (&oid,
+	                         _ggit_native_get (repository),
+	                         branch_name,
+	                         _ggit_native_get (target),
+	                         force ? 1 : 0);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_new (&oid);
+}
+
+/**
+ * ggit_repository_delete_branch:
+ * @repository: a #GgitRepository.
+ * @branch_name: the name of the branch.
+ * @branch_type: a #GgitBranchType.
+ * @error: a #GError.
+ *
+ * Deletes an existing branch reference.
+ **/
+void
+ggit_repository_delete_branch (GgitRepository   *repository,
+                               const gchar      *branch_name,
+                               GgitBranchType    branch_type,
+                               GError          **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (branch_name != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_branch_delete (_ggit_native_get (repository),
+	                         branch_name,
+	                         branch_type);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_repository_move_branch:
+ * @repository: a #GgitRepository.
+ * @old_branch_name: the old name of the branch.
+ * @new_branch_name: the new name of the branch.
+ * @flags: a GgitCreateFlags.
+ * @error: a #GError.
+ *
+ * Moves/renames an existing branch reference.
+ **/
+void
+ggit_repository_move_branch (GgitRepository   *repository,
+                             const gchar      *old_branch_name,
+                             const gchar      *new_branch_name,
+                             GgitCreateFlags   flags,
+                             GError          **error)
+{
+	gboolean force;
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (old_branch_name != NULL);
+	g_return_if_fail (new_branch_name != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	force = flags & GGIT_CREATE_FORCE;
+
+	ret = git_branch_move (_ggit_native_get (repository),
+	                       old_branch_name,
+	                       new_branch_name,
+	                       force ? 1 : 0);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_repository_list_branches:
+ * @repository: a #GgitRepository.
+ * @branch_type: a GgitBranchType.
+ * @error: a #GError.
+ *
+ * Fill a list with all the branches in the Repository.
+ *
+ * Returns: (transfer full) (allow-none): a list with the branches specified by @branch_type.
+ **/
+gchar **
+ggit_repository_list_branches (GgitRepository  *repository,
+                               GgitBranchType   branch_type,
+                               GError         **error)
+{
+	gint ret;
+	git_strarray branch_names;
+	gchar **branches;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_branch_list (&branch_names,
+	                       _ggit_native_get (repository),
+	                       branch_type);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		branches = NULL;
+	}
+	else
+	{
+		branches = ggit_utils_get_str_array_from_git_strarray (&branch_names);
+	}
+
+	return branches;
 }
 
 /* ex:set ts=8 noet: */

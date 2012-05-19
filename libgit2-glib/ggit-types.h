@@ -192,9 +192,21 @@ typedef enum
 
 typedef enum
 {
-	GGIT_CREATE_TAG_NONE = 0,
-	GGIT_CREATE_TAG_FORCE = 1 << 0
-} GgitCreateTagFlags;
+	GGIT_CREATE_NONE = 0,
+	GGIT_CREATE_FORCE = 1 << 0
+} GgitCreateFlags;
+
+/**
+ * GgitBranchType:
+ * @GGIT_BRANCH_LOCAL: specifies a local branch
+ * @GGIT_BRANCH_REMOTE: specifies a remote branch
+ *
+ * The type of a branch.
+ */
+typedef enum {
+	GGIT_BRANCH_LOCAL = 1,
+	GGIT_BRANCH_REMOTE = 2,
+} GgitBranchType;
 
 /**
  * GgitStatusCallback:
