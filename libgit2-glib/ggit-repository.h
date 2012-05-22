@@ -105,31 +105,34 @@ GgitOId            *ggit_repository_create_tag_from_buffer (
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
-GgitOId           *ggit_repository_create_tag_lightweight (
+GgitOId            *ggit_repository_create_tag_lightweight (
                                                        GgitRepository        *repository,
                                                        const gchar           *tag_name,
                                                        GgitObject            *target,
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
-GgitOId           *ggit_repository_create_branch      (GgitRepository        *repository,
+gchar             **ggit_repository_list_tags         (GgitRepository        *repository,
+                                                       GError               **error);
+
+GgitOId            *ggit_repository_create_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,
                                                        GgitObject            *target,
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
-void               ggit_repository_delete_branch      (GgitRepository        *repository,
+void                ggit_repository_delete_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,
                                                        GgitBranchType         branch_type,
                                                        GError               **error);
 
-void               ggit_repository_move_branch        (GgitRepository        *repository,
+void                ggit_repository_move_branch       (GgitRepository        *repository,
                                                        const gchar           *old_branch_name,
                                                        const gchar           *new_branch_name,
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
-gchar            **ggit_repository_list_branches      (GgitRepository        *repository,
+gchar             **ggit_repository_list_branches     (GgitRepository        *repository,
                                                        GgitBranchType         branch_type,
                                                        GError               **error);
 

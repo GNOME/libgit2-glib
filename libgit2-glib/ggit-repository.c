@@ -1176,6 +1176,42 @@ ggit_repository_create_tag_lightweight (GgitRepository   *repository,
 }
 
 /**
+ * ggit_repository_list_tags:
+ * @repository: a #GgitRepository.
+ * @error: a #GError.
+ *
+ * Fill a list with all the tags in the @repository.
+ *
+ * Returns: (transfer full) (allow-none): a list with the tags in @repository.
+ **/
+gchar **
+ggit_repository_list_tags (GgitRepository  *repository,
+                           GError         **error)
+{
+	gint ret;
+	git_strarray tag_names;
+	gchar **tags;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_tag_list (&tag_names,
+	                    _ggit_native_get (repository));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		tags = NULL;
+	}
+	else
+	{
+		tags = ggit_utils_get_str_array_from_git_strarray (&tag_names);
+	}
+
+	return tags;
+}
+
+/**
  * ggit_repository_create_branch:
  * @repository: a #GgitRepository.
  * @branch_name: the name of the branch.
