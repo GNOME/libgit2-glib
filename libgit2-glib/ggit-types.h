@@ -96,7 +96,7 @@ typedef struct _GgitOId GgitOId;
  *
  * Reprensents a git reference.
  */
-typedef struct _GgitRef	GgitRef;
+typedef struct _GgitRef GgitRef;
 
 /* NOTE: keep in sync with git2/refs.h */
 /**
@@ -132,6 +132,13 @@ typedef struct _GgitRepository GgitRepository;
  * Represents an action signature.
  */
 typedef struct _GgitSignature GgitSignature;
+
+/**
+ * GitgRemote:
+ *
+ * Represents a git remote.
+ */
+typedef struct _GgitRemote GgitRemote;
 
 /**
  * GgitRevisionWalker:

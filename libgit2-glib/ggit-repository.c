@@ -25,12 +25,14 @@
 #include <git2/status.h>
 #include <git2/tag.h>
 #include <git2/branch.h>
+#include <git2/remote.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
 #include "ggit-ref.h"
 #include "ggit-repository.h"
 #include "ggit-utils.h"
+#include "ggit-remote.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -1363,6 +1365,80 @@ ggit_repository_list_branches (GgitRepository  *repository,
 	}
 
 	return branches;
+}
+
+/**
+ * ggit_repository_add_remote:
+ * @repository: a #GgitRepository.
+ * @name: the name of the new remote.
+ * @url: the url of the remote.
+ * @error: a #GError.
+ *
+ * Adds a remote with the default fetch refspec to the repository's configuration.
+ *
+ * Returns: (transfer full) (allow-none): a new #GgitRemote or %NULL if there is an error.
+ */
+GgitRemote *
+ggit_repository_add_remote (GgitRepository  *repository,
+                            const gchar     *name,
+                            const gchar     *url,
+                            GError         **error)
+{
+	gint ret;
+	git_remote *remote;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_remote_add (&remote,
+	                      _ggit_native_get (repository),
+	                      name,
+	                      url);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_remote_new (remote);
+}
+
+/**
+ * ggit_repository_list_remotes:
+ * @repository: a #GgitRepository.
+ * @error: a #GError.
+ *
+ * Fill a list with all the remotes in @repository.
+ *
+ * Returns: (transfer full) (allow-none): a list with the remotes.
+ **/
+gchar **
+ggit_repository_list_remotes (GgitRepository  *repository,
+                              GError         **error)
+{
+	gint ret;
+	git_strarray remote_names;
+	gchar **remotes;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_remote_list (&remote_names,
+	                       _ggit_native_get (repository));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		remotes = NULL;
+	}
+	else
+	{
+		remotes = ggit_utils_get_str_array_from_git_strarray (&remote_names);
+	}
+
+	return remotes;
 }
 
 /* ex:set ts=8 noet: */

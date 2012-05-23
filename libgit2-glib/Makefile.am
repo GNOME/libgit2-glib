@@ -26,6 +26,7 @@ INST_H_FILES =				\
 	ggit-object.h			\
 	ggit-oid.h			\
 	ggit-ref.h			\
+	ggit-remote.h			\
 	ggit-repository.h		\
 	ggit-revision-walker.h		\
 	ggit-signature.h		\
@@ -55,6 +56,7 @@ C_FILES =				\
 	ggit-object.c			\
 	ggit-oid.c			\
 	ggit-ref.c			\
+	ggit-remote.c			\
 	ggit-repository.c		\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
