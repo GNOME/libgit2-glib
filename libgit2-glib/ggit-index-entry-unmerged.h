@@ -40,36 +40,36 @@ typedef struct _GgitIndexEntriesUnmerged GgitIndexEntriesUnmerged;
 typedef struct _GgitIndexEntryUnmerged   GgitIndexEntryUnmerged;
 
 GgitIndexEntriesUnmerged *
-	_ggit_index_entries_unmerged_new        (GgitIndex                *owner);
-
-GgitIndexEntriesUnmerged *
-	ggit_index_entries_unmerged_copy        (GgitIndexEntriesUnmerged *entries);
+        _ggit_index_entries_unmerged_new        (GgitIndex                *owner);
 
 GgitIndexEntryUnmerged *
-	ggit_index_entries_unmerged_get         (GgitIndexEntriesUnmerged *entries,
+         ggit_index_entries_unmerged_get        (GgitIndexEntriesUnmerged *entries,
                                                  guint                     idx);
 
 GgitIndexEntryUnmerged *
-	ggit_index_entries_unmerged_get_by_file (GgitIndexEntriesUnmerged *entries,
+         ggit_index_entries_unmerged_get_by_file(GgitIndexEntriesUnmerged *entries,
                                                  GFile                    *file);
 
+GType    ggit_index_entries_unmerged_get_type   (void) G_GNUC_CONST;
+
+GgitIndexEntriesUnmerged *
+         ggit_index_entries_unmerged_ref        (GgitIndexEntriesUnmerged *entries);
+void     ggit_index_entries_unmerged_unref      (GgitIndexEntriesUnmerged *entries);
+guint    ggit_index_entries_unmerged_size       (GgitIndexEntriesUnmerged *entries);
+
+GType    ggit_index_entry_unmerged_get_type     (void) G_GNUC_CONST;
+
 GgitIndexEntryUnmerged *
-	ggit_index_entry_unmerged_copy       (GgitIndexEntryUnmerged   *entry);
+         ggit_index_entry_unmerged_ref          (GgitIndexEntryUnmerged   *entry);
+void     ggit_index_entry_unmerged_unref        (GgitIndexEntryUnmerged   *entry);
 
-GType    ggit_index_entries_unmerged_get_type (void) G_GNUC_CONST;
-void     ggit_index_entries_unmerged_free     (GgitIndexEntriesUnmerged *entries);
-guint    ggit_index_entries_unmerged_size     (GgitIndexEntriesUnmerged *entries);
+guint    ggit_index_entry_unmerged_get_mode     (GgitIndexEntryUnmerged   *entry,
+                                                 gint                      stage);
 
-GType    ggit_index_entry_unmerged_get_type   (void) G_GNUC_CONST;
-void     ggit_index_entry_unmerged_free       (GgitIndexEntryUnmerged   *entry);
+GgitOId *ggit_index_entry_unmerged_get_id       (GgitIndexEntryUnmerged   *entry,
+                                                 gint                      stage);
 
-guint    ggit_index_entry_unmerged_get_mode   (GgitIndexEntryUnmerged   *entry,
-                                               gint                      stage);
-
-GgitOId *ggit_index_entry_unmerged_get_id     (GgitIndexEntryUnmerged   *entry,
-                                               gint                      stage);
-
-GFile   *ggit_index_entry_unmerged_get_file   (GgitIndexEntryUnmerged   *entry);
+GFile   *ggit_index_entry_unmerged_get_file     (GgitIndexEntryUnmerged   *entry);
 
 
 G_END_DECLS

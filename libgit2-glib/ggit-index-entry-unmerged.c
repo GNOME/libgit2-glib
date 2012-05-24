@@ -24,22 +24,24 @@
 struct _GgitIndexEntriesUnmerged
 {
 	GgitIndex *owner;
+	gint ref_count;
 };
 
 struct _GgitIndexEntryUnmerged
 {
 	git_index_entry_unmerged *entry;
+	gint ref_count;
 };
 
 G_DEFINE_BOXED_TYPE (GgitIndexEntriesUnmerged,
                      ggit_index_entries_unmerged,
-                     ggit_index_entries_unmerged_copy,
-                     ggit_index_entries_unmerged_free)
+                     ggit_index_entries_unmerged_ref,
+                     ggit_index_entries_unmerged_unref)
 
 G_DEFINE_BOXED_TYPE (GgitIndexEntryUnmerged,
                      ggit_index_entry_unmerged,
-                     ggit_index_entry_unmerged_copy,
-                     ggit_index_entry_unmerged_free)
+                     ggit_index_entry_unmerged_ref,
+                     ggit_index_entry_unmerged_unref)
 
 static GgitIndexEntryUnmerged *
 ggit_index_entry_unmerged_new (git_index_entry_unmerged *entry)
@@ -47,8 +49,8 @@ ggit_index_entry_unmerged_new (git_index_entry_unmerged *entry)
 	GgitIndexEntryUnmerged *ret;
 
 	ret = g_slice_new (GgitIndexEntryUnmerged);
-
 	ret->entry = entry;
+	ret->ref_count = 1;
 
 	return ret;
 }
@@ -60,70 +62,85 @@ _ggit_index_entries_unmerged_new (GgitIndex *owner)
 
 	ret = g_slice_new (GgitIndexEntriesUnmerged);
 	ret->owner = g_object_ref (owner);
+	ret->ref_count = 1;
 
 	return ret;
 }
 
 /**
- * ggit_index_entry_unmerged_copy:
+ * ggit_index_entry_unmerged_ref:
  * @entry: a #GgitIndexEntryUnmerged.
  *
- * Copy a #GgitIndexEntryUnmerged.
+ * Atomically increments the reference count of @entry by one.
+ * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer full): a #GgitIndexEntryUnmerged.
- *
+ * Returns: (transfer none): a #GgitIndexEntryUnmerged.
  **/
 GgitIndexEntryUnmerged *
-ggit_index_entry_unmerged_copy (GgitIndexEntryUnmerged *entry)
+ggit_index_entry_unmerged_ref (GgitIndexEntryUnmerged *entry)
 {
-	return ggit_index_entry_unmerged_new (entry->entry);
+	g_return_val_if_fail (entry != NULL, NULL);
+
+	g_atomic_int_inc (&entry->ref_count);
+
+	return entry;
 }
 
 /**
- * ggit_index_entry_unmerged_free:
+ * ggit_index_entry_unmerged_unref:
  * @entry: a #GgitIndexEntryUnmerged.
  *
- * Free a #GgitIndexEntryUnmerged.
- *
+ * Atomically decrements the reference count of @entry by one.
+ * If the reference count drops to 0, @entry is freed.
  **/
 void
-ggit_index_entry_unmerged_free (GgitIndexEntryUnmerged *entry)
+ggit_index_entry_unmerged_unref (GgitIndexEntryUnmerged *entry)
 {
-	g_slice_free (GgitIndexEntryUnmerged, entry);
+	g_return_if_fail (entry != NULL);
+
+	if (g_atomic_int_dec_and_test (&entry->ref_count))
+	{
+		g_slice_free (GgitIndexEntryUnmerged, entry);
+	}
 }
 
 /**
- * ggit_index_entries_unmerged_copy:
+ * ggit_index_entries_unmerged_ref:
  * @entries: a #GgitIndexEntriesUnmerged.
  *
- * Copy a #GgitIndexEntriesUnmerged.
+ * Atomically increments the reference count of @entries by one.
+ * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer full): a #GgitIndexEntriesUnmerged.
+ * Returns: (transfer none): a #GgitIndexEntriesUnmerged.
  *
  **/
 GgitIndexEntriesUnmerged *
-ggit_index_entries_unmerged_copy (GgitIndexEntriesUnmerged *entries)
+ggit_index_entries_unmerged_ref (GgitIndexEntriesUnmerged *entries)
 {
-	return _ggit_index_entries_unmerged_new (entries->owner);
+	g_return_val_if_fail (entries != NULL, NULL);
+
+	g_atomic_int_inc (&entries->ref_count);
+
+	return entries;
 }
 
 /**
- * ggit_index_entries_unmerged_free:
+ * ggit_index_entries_unmerged_unref:
  * @entries: a #GgitIndexEntriesUnmerged.
  *
- * Free a #GgitIndexEntriesUnmerged.
- *
+ * Atomically decrements the reference count of @entries by one.
+ * If the reference count drops to 0, @entries is freed.
  **/
 void
-ggit_index_entries_unmerged_free (GgitIndexEntriesUnmerged *entries)
+ggit_index_entries_unmerged_unref (GgitIndexEntriesUnmerged *entries)
 {
-	if (entries == NULL)
-	{
-		return;
-	}
+	g_return_if_fail (entries != NULL);
 
-	g_clear_object (&entries->owner);
-	g_slice_free (GgitIndexEntriesUnmerged, entries);
+	if (g_atomic_int_dec_and_test (&entries->ref_count))
+	{
+		g_clear_object (&entries->owner);
+		g_slice_free (GgitIndexEntriesUnmerged, entries);
+	}
 }
 
 /**
