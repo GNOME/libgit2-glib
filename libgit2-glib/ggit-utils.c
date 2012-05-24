@@ -115,7 +115,7 @@ ggit_utils_get_str_array_from_git_strarray (git_strarray *gitarray)
 
 	for (i = 0; i < gitarray->count; i++)
 	{
-		array[i] = g_strdup (gitarray->strings[i]);
+		array[i] = gitarray->strings[i];
 	}
 	array[i] = NULL;
 
