@@ -26,6 +26,7 @@
 #include <git2/tag.h>
 #include <git2/branch.h>
 #include <git2/remote.h>
+#include <git2/submodule.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -33,6 +34,7 @@
 #include "ggit-repository.h"
 #include "ggit-utils.h"
 #include "ggit-remote.h"
+#include "ggit-submodule.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -1439,6 +1441,86 @@ ggit_repository_list_remotes (GgitRepository  *repository,
 	}
 
 	return remotes;
+}
+
+/**
+ * ggit_repository_lookup_submodule:
+ * @repository: a #GgitRepository.
+ * @name: the name of the submodule.
+ * @error: a #GError.
+ *
+ * Lookups a submodule information by name or path. If the submodule
+ * does not exist, %NULL is returned and a GGIT_ERROR_NOTFOUND error set.
+ *
+ * Returns: (transfer full) (allow-none): a newly-allocated #GgitSubmodule.
+ */
+GgitSubmodule *
+ggit_repository_lookup_submodule (GgitRepository  *repository,
+                                  const gchar     *name,
+                                  GError         **error)
+{
+	GgitSubmodule *gsubmodule = NULL;
+	gint ret;
+	git_submodule *submodule;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_submodule_lookup (&submodule,
+	                            _ggit_native_get (repository),
+	                            name);
+
+	if (ret == GIT_OK)
+	{
+		gsubmodule = _ggit_submodule_new (submodule);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return gsubmodule;
+}
+
+/**
+ * ggit_repository_submodule_foreach:
+ * @repository: a #GgitRepository.
+ * @callback: (scope call): a #GgitStatusCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gathers file statuses and run a callback for each one.
+ *
+ * To the callback is passed the path of the file, the status and the data pointer
+ * passed to this function. If the callback returns something other than
+ * 0, the iteration will stop and @error will be set.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ */
+gboolean
+ggit_repository_submodule_foreach (GgitRepository        *repository,
+                                   GgitSubmoduleCallback  callback,
+                                   gpointer               user_data,
+                                   GError               **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_submodule_foreach (_ggit_native_get (repository),
+	                             callback,
+	                             user_data);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* ex:set ts=8 noet: */

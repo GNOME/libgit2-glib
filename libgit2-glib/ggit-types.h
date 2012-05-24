@@ -133,6 +133,33 @@ typedef struct _GgitRepository GgitRepository;
  */
 typedef struct _GgitSignature GgitSignature;
 
+typedef enum {
+	GGIT_SUBMODULE_UPDATE_CHECKOUT = 0,
+	GGIT_SUBMODULE_UPDATE_REBASE = 1,
+	GGIT_SUBMODULE_UPDATE_MERGE = 2
+} GgitSubmoduleUpdate;
+
+/**
+ * GgitSubmoduleIgnore:
+ * @GGIT_SUBMODULE_IGNORE_ALL: never dirty.
+ * @GGIT_SUBMODULE_IGNORE_DIRTY: only dirty if HEAD moved.
+ * @GGIT_SUBMODULE_IGNORE_UNTRACKED: dirty if tracked files change.
+ * @GGIT_SUBMODULE_IGNORE_NONE: any change or untracked == dirty.
+ */
+typedef enum {
+	GGIT_SUBMODULE_IGNORE_ALL = 0,
+	GGIT_SUBMODULE_IGNORE_DIRTY = 1,
+	GGIT_SUBMODULE_IGNORE_UNTRACKED = 2,
+	GGIT_SUBMODULE_IGNORE_NONE = 3
+} GgitSubmoduleIgnore;
+
+/**
+ * GgitSubmodule:
+ *
+ * Represents a git submodule.
+ */
+typedef struct _GgitSubmodule GgitSubmodule;
+
 /**
  * GitgRemote:
  *
@@ -214,6 +241,19 @@ typedef enum {
 	GGIT_BRANCH_LOCAL = 1,
 	GGIT_BRANCH_REMOTE = 2,
 } GgitBranchType;
+
+/**
+ * GgitSubmoduleCallback:
+ * @name: the name of the submodule.
+ * @data: (closure) (allow-none): user-supplied data.
+ *
+ * The type of the callback functions for retrieving the submodules
+ * in a #GgitRepository. See ggit_repository_submodule_foreach().
+ *
+ * Returns: 0 to go for the next submodule or a #GgitError in case there was an error.
+ */
+typedef int (* GgitSubmoduleCallback) (const gchar     *name,
+                                       gpointer         data);
 
 /**
  * GgitStatusCallback:

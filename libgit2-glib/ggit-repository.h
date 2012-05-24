@@ -189,6 +189,15 @@ GgitConfig         *ggit_repository_get_config         (GgitRepository          
 GgitIndex          *ggit_repository_get_index          (GgitRepository          *repository,
                                                         GError                 **error);
 
+GgitSubmodule      *ggit_repository_lookup_submodule   (GgitRepository          *repository,
+                                                        const gchar             *name,
+                                                        GError                 **error);
+
+gboolean            ggit_repository_submodule_foreach  (GgitRepository          *repository,
+                                                        GgitSubmoduleCallback    callback,
+                                                        gpointer                 user_data,
+                                                        GError                 **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

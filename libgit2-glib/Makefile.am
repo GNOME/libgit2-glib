@@ -30,6 +30,7 @@ INST_H_FILES =				\
 	ggit-repository.h		\
 	ggit-revision-walker.h		\
 	ggit-signature.h		\
+	ggit-submodule.h		\
 	ggit-tag.h			\
 	ggit-tree.h			\
 	ggit-tree-entry.h		\
@@ -60,6 +61,7 @@ C_FILES =				\
 	ggit-repository.c		\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
+	ggit-submodule.c		\
 	ggit-tag.c			\
 	ggit-tree.c			\
 	ggit-tree-entry.c		\
