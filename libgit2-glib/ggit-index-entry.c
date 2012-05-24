@@ -24,22 +24,24 @@
 struct _GgitIndexEntries
 {
 	GgitIndex *owner;
+	gint ref_count;
 };
 
 struct _GgitIndexEntry
 {
 	git_index_entry *entry;
+	gint ref_count;
 };
 
 G_DEFINE_BOXED_TYPE (GgitIndexEntries,
                      ggit_index_entries,
-                     ggit_index_entries_copy,
-                     ggit_index_entries_free)
+                     ggit_index_entries_ref,
+                     ggit_index_entries_unref)
 
 G_DEFINE_BOXED_TYPE (GgitIndexEntry,
                      ggit_index_entry,
-                     ggit_index_entry_copy,
-                     ggit_index_entry_free)
+                     ggit_index_entry_ref,
+                     ggit_index_entry_unref)
 
 static GgitIndexEntry *
 ggit_index_entry_new (git_index_entry *entry)
@@ -49,6 +51,7 @@ ggit_index_entry_new (git_index_entry *entry)
 	ret = g_slice_new (GgitIndexEntry);
 
 	ret->entry = entry;
+	ret->ref_count = 1;
 
 	return ret;
 }
@@ -60,70 +63,84 @@ _ggit_index_entries_new (GgitIndex *owner)
 
 	ret = g_slice_new (GgitIndexEntries);
 	ret->owner = g_object_ref (owner);
+	ret->ref_count = 1;
 
 	return ret;
 }
 
 /**
- * ggit_index_entry_copy:
+ * ggit_index_entry_ref:
  * @entry: a #GgitIndexEntry.
  *
- * Copy a #GgitIndexEntry.
+ * Atomically increments the reference count of @entry by one.
+ * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer full): a #GgitIndexEntry.
- *
+ * Returns: (transfer none): a #GgitIndexEntry.
  **/
 GgitIndexEntry *
-ggit_index_entry_copy (GgitIndexEntry *entry)
+ggit_index_entry_ref (GgitIndexEntry *entry)
 {
-	return ggit_index_entry_new (entry->entry);
+	g_return_val_if_fail (entry != NULL, NULL);
+
+	g_atomic_int_inc (&entry->ref_count);
+
+	return entry;
 }
 
 /**
- * ggit_index_entry_free:
+ * ggit_index_entry_unref:
  * @entry: a #GgitIndexEntry.
  *
- * Free a #GgitIndexEntry.
- *
+ * Atomically decrements the reference count of @entry by one.
+ * If the reference count drops to 0, @entry is freed.
  **/
 void
-ggit_index_entry_free (GgitIndexEntry *entry)
+ggit_index_entry_unref (GgitIndexEntry *entry)
 {
-	g_slice_free (GgitIndexEntry, entry);
+	g_return_if_fail (entry != NULL);
+
+	if (g_atomic_int_dec_and_test (&entry->ref_count))
+	{
+		g_slice_free (GgitIndexEntry, entry);
+	}
 }
 
 /**
- * ggit_index_entries_copy:
+ * ggit_index_entries_ref:
  * @entries: a #GgitIndexEntries.
  *
- * Copy a #GgitIndexEntries.
+ * Atomically increments the reference count of @entries by one.
+ * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer full): a #GgitIndexEntries.
- *
+ * Returns: (transfer none): a #GgitIndexEntries.
  **/
 GgitIndexEntries *
-ggit_index_entries_copy (GgitIndexEntries *entries)
+ggit_index_entries_ref (GgitIndexEntries *entries)
 {
-	return _ggit_index_entries_new (entries->owner);
+	g_return_val_if_fail (entries != NULL, NULL);
+
+	g_atomic_int_inc (&entries->ref_count);
+
+	return entries;
 }
 
 /**
- * ggit_index_entries_free:
+ * ggit_index_entries_unref:
  * @entries: a #GgitIndexEntries.
  *
- * Free a #GgitIndexEntries.
- *
+ * Atomically decrements the reference count of @entries by one.
+ * If the reference count drops to 0, @entries is freed.
  **/
 void
-ggit_index_entries_free (GgitIndexEntries *entries)
+ggit_index_entries_unref (GgitIndexEntries *entries)
 {
-	if (entries == NULL)
-	{
-		return;
-	}
+	g_return_if_fail (entries != NULL);
 
-	g_clear_object (&entries->owner);
-	g_slice_free (GgitIndexEntries, entries);
+	if (g_atomic_int_dec_and_test (&entries->ref_count))
+	{
+		g_clear_object (&entries->owner);
+		g_slice_free (GgitIndexEntries, entries);
+	}
 }
 
 /**

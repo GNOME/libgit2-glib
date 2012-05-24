@@ -41,8 +41,8 @@ typedef struct _GgitIndexEntry   GgitIndexEntry;
 
 GType             ggit_index_entries_get_type         (void) G_GNUC_CONST;
 GgitIndexEntries *_ggit_index_entries_new             (GgitIndex         *owner);
-GgitIndexEntries *ggit_index_entries_copy             (GgitIndexEntries  *entries);
-void              ggit_index_entries_free             (GgitIndexEntries  *entries);
+GgitIndexEntries *ggit_index_entries_ref              (GgitIndexEntries  *entries);
+void              ggit_index_entries_unref            (GgitIndexEntries  *entries);
 
 GgitIndexEntry   *ggit_index_entries_get              (GgitIndexEntries  *entries,
                                                        guint              idx);
@@ -50,8 +50,8 @@ GgitIndexEntry   *ggit_index_entries_get              (GgitIndexEntries  *entrie
 guint             ggit_index_entries_size             (GgitIndexEntries  *entries);
 
 GType             ggit_index_entry_get_type           (void) G_GNUC_CONST;
-GgitIndexEntry *  ggit_index_entry_copy               (GgitIndexEntry    *entry);
-void              ggit_index_entry_free               (GgitIndexEntry    *entry);
+GgitIndexEntry   *ggit_index_entry_ref                (GgitIndexEntry    *entry);
+void              ggit_index_entry_unref              (GgitIndexEntry    *entry);
 
 guint             ggit_index_entry_get_dev            (GgitIndexEntry    *entry);
 guint             ggit_index_entry_get_ino            (GgitIndexEntry    *entry);
