@@ -25,70 +25,61 @@
 struct _GgitTreeEntry
 {
 	const git_tree_entry *entry;
+	gint ref_count;
 };
 
 G_DEFINE_BOXED_TYPE (GgitTreeEntry,
                      ggit_tree_entry,
-                     ggit_tree_entry_copy,
-                     ggit_tree_entry_free)
+                     ggit_tree_entry_ref,
+                     ggit_tree_entry_unref)
 
-static GgitTreeEntry *
-ggit_tree_entry_new (const git_tree_entry *entry)
+GgitTreeEntry *
+_ggit_tree_entry_new (const git_tree_entry *entry)
 {
 	GgitTreeEntry *ret;
 
 	ret = g_slice_new (GgitTreeEntry);
-
 	ret->entry = entry;
+	ret->ref_count = 1;
 
 	return ret;
 }
 
 /**
- * ggit_tree_entry_copy:
+ * ggit_tree_entry_ref:
  * @entry: a #GgitTreeEntry.
  *
- * Copy a #GgitTreeEntry.
+ * Atomically increments the reference count of @entry by one.
+ * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer full): a #GgitTreeEntry.
- *
+ * Returns: (transfer none): a #GgitTreeEntry.
  **/
 GgitTreeEntry *
-ggit_tree_entry_copy (GgitTreeEntry *entry)
+ggit_tree_entry_ref (GgitTreeEntry *entry)
 {
-	if (entry != NULL)
-	{
-		return ggit_tree_entry_new (entry->entry);
-	}
+	g_return_val_if_fail (entry != NULL, NULL);
 
-	return NULL;
+	g_atomic_int_inc (&entry->ref_count);
+
+	return entry;
 }
 
 /**
- * ggit_tree_entry_free:
+ * ggit_tree_entry_unref:
  * @entry: a #GgitTreeEntry.
  *
- * Free a #GgitTreeEntry.
- *
+ * Atomically decrements the reference count of @entry by one.
+ * If the reference count drops to 0, @entry is freed.
  **/
 void
-ggit_tree_entry_free (GgitTreeEntry *entry)
+ggit_tree_entry_unref (GgitTreeEntry *entry)
 {
-	if (entry != NULL)
+	g_return_if_fail (entry != NULL);
+
+	if (g_atomic_int_dec_and_test (&entry->ref_count))
 	{
 		g_slice_free (GgitTreeEntry, entry);
 	}
-}
-
-GgitTreeEntry *
-_ggit_tree_entry_wrap (const git_tree_entry *entry)
-{
-	if (!entry)
-	{
-		return NULL;
-	}
-
-	return ggit_tree_entry_new (entry);
 }
 
 /**

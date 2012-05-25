@@ -99,7 +99,7 @@ ggit_tree_get (GgitTree *tree,
 
 	entry = git_tree_entry_byindex (t, i);
 
-	return _ggit_tree_entry_wrap (entry);
+	return _ggit_tree_entry_new (entry);
 }
 
 /**
@@ -146,7 +146,7 @@ ggit_tree_get_by_file (GgitTree *tree,
 	t = _ggit_native_get (tree);
 
 	path = g_file_get_path (file);
-	entry = _ggit_tree_entry_wrap (git_tree_entry_byname (t, path));
+	entry = _ggit_tree_entry_new (git_tree_entry_byname (t, path));
 	g_free (path);
 
 	return entry;
