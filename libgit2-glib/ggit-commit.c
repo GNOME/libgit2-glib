@@ -28,12 +28,13 @@
 
 #define GGIT_COMMIT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT, GgitCommitPrivate))
 
-static GgitCommitParents *ggit_commit_parents_copy (GgitCommitParents *parents);
-static void               ggit_commit_parents_free (GgitCommitParents *parents);
+static GgitCommitParents *ggit_commit_parents_ref (GgitCommitParents *parents);
+static void               ggit_commit_parents_unref (GgitCommitParents *parents);
 
 struct _GgitCommitParents
 {
 	GgitCommit *commit;
+	gint ref_count;
 };
 
 struct _GgitCommitPrivate
@@ -46,8 +47,8 @@ G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
 
 G_DEFINE_BOXED_TYPE (GgitCommitParents,
                      ggit_commit_parents,
-                     ggit_commit_parents_copy,
-                     ggit_commit_parents_free)
+                     ggit_commit_parents_ref,
+                     ggit_commit_parents_unref)
 
 static GgitCommitParents *
 ggit_commit_parents_new (GgitCommit *commit)
@@ -55,32 +56,32 @@ ggit_commit_parents_new (GgitCommit *commit)
 	GgitCommitParents *ret;
 
 	ret = g_slice_new (GgitCommitParents);
-
 	ret->commit = g_object_ref (commit);
+	ret->ref_count = 1;
+
 	return ret;
 }
 
 static GgitCommitParents *
-ggit_commit_parents_copy (GgitCommitParents *parents)
+ggit_commit_parents_ref (GgitCommitParents *parents)
 {
-	if (parents == NULL)
-	{
-		return NULL;
-	}
+	g_return_val_if_fail (parents != NULL, NULL);
 
-	return ggit_commit_parents_new (parents->commit);
+	g_atomic_int_inc (&parents->ref_count);
+
+	return parents;
 }
 
 static void
-ggit_commit_parents_free (GgitCommitParents *parents)
+ggit_commit_parents_unref (GgitCommitParents *parents)
 {
-	if (parents == NULL)
-	{
-		return;
-	}
+	g_return_if_fail (parents != NULL);
 
-	g_clear_object (&parents->commit);
-	g_slice_free (GgitCommitParents, parents);
+	if (g_atomic_int_dec_and_test (&parents->ref_count))
+	{
+		g_clear_object (&parents->commit);
+		g_slice_free (GgitCommitParents, parents);
+	}
 }
 
 static void
