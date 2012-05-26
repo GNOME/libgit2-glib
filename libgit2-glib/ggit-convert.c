@@ -42,13 +42,13 @@ convert_fallback (gchar const *text,
 	gsize read, written;
 	GString *str = g_string_new ("");
 
-	while ((res = g_convert(text,
-	                        size,
-	                        "UTF-8",
-	                        "ASCII",
-	                        &read,
-	                        &written,
-	                        NULL)) == NULL)
+	while ((res = g_convert (text,
+	                         size,
+	                         "UTF-8",
+	                         "ASCII",
+	                         &read,
+	                         &written,
+	                         NULL)) == NULL)
 	{
 		res = g_convert (text, read, "UTF-8", "ASCII", NULL, NULL, NULL);
 		str = g_string_append (str, res);
@@ -145,3 +145,5 @@ ggit_convert_utf8 (const gchar *str,
 
 	return convert_fallback (str, size, "?");
 }
+
+/* ex:set ts=8 noet: */

@@ -142,9 +142,9 @@ test_teardown (TestFixture   *fixture,
 	gint ret;
 
 	/* remove all files in the directory, it sucks that
-	* there isn't a glib util for this, for now lets just cheat */
+	 * there isn't a glib util for this, for now lets just cheat */
 	cmd = g_strdup_printf ("rm -rf '%s'", fixture->git_dir);
-	ret = system(cmd);
+	ret = system (cmd);
 	g_assert (ret == 0);
 
 	g_free (cmd);
@@ -215,7 +215,7 @@ main (int    argc,
 	TEST ("init", init);
 	TEST ("init-bare", init_bare);
 
-	return g_test_run();
+	return g_test_run ();
 }
 
 /* ex:set ts=8 noet: */

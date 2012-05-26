@@ -59,7 +59,7 @@ _ggit_error_set (GError **error,
 	git2_err = giterr_last ();
 	g_set_error_literal (error, GGIT_ERROR,
 	                     err,
-	                     git2_err->message);
+	                     git2_err == NULL ? "" : git2_err->message);
 }
 
 /* ex:set ts=8 noet: */

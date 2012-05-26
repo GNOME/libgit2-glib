@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_SIGNATURE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_SIGNATURE))
 #define GGIT_SIGNATURE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_SIGNATURE, GgitSignatureClass))
 
-typedef struct _GgitSignature		GgitSignature;
 typedef struct _GgitSignatureClass	GgitSignatureClass;
 typedef struct _GgitSignaturePrivate	GgitSignaturePrivate;
 

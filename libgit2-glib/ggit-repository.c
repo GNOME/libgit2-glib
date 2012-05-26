@@ -57,7 +57,7 @@ enum
 	PROP_HEAD
 };
 
-static void         ggit_repository_initable_iface_init (GInitableIface  *iface);
+static void ggit_repository_initable_iface_init (GInitableIface  *iface);
 
 G_DEFINE_TYPE_EXTENDED (GgitRepository, ggit_repository, GGIT_TYPE_NATIVE,
                         0,
@@ -307,7 +307,7 @@ ggit_repository_initable_init (GInitable    *initable,
 
 		if (path)
 		{
-			git_repository_set_workdir (_ggit_native_get (GGIT_REPOSITORY (initable)),
+			git_repository_set_workdir (_ggit_native_get (initable),
 			                            path);
 		}
 

@@ -31,8 +31,6 @@ G_BEGIN_DECLS
 #define GGIT_TREE_ENTRY(obj)       ((GgitTreeEntry *)obj)
 #define GGIT_TREE_ENTRY_CONST(obj) ((GgitTreeEntry const *)obj)
 
-typedef struct _GgitTreeEntry		GgitTreeEntry;
-
 GType          ggit_tree_entry_get_type        (void) G_GNUC_CONST;
 
 GgitTreeEntry *_ggit_tree_entry_new            (const git_tree_entry *entry);

@@ -73,7 +73,7 @@ ggit_signature_set_property (GObject      *object,
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -92,7 +92,7 @@ ggit_signature_get_property (GObject    *object,
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -291,9 +291,9 @@ ggit_signature_get_email (GgitSignature *signature)
  * ggit_signature_get_time:
  * @signature: a #GgitSignature.
  *
- * Gets the time when the action happened.
+ * Gets the time in UTC when the action happened.
  *
- * Returns: (transfer full): the time when the action happened.
+ * Returns: (transfer full): the time in UTC when the action happened.
  */
 GDateTime *
 ggit_signature_get_time (GgitSignature *signature)

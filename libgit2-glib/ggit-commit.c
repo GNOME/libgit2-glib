@@ -183,7 +183,7 @@ ensure_message_utf8 (GgitCommit *commit)
 	                                                -1,
 	                                                encoding);
 
-	// Extract the subject
+	/* Extract the subject */
 	ptr = g_utf8_strchr (commit->priv->message_utf8, -1, '\n');
 
 	if (ptr != NULL)

@@ -82,7 +82,7 @@ ggit_index_set_property (GObject      *object,
 		}
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -101,7 +101,7 @@ ggit_index_get_property (GObject    *object,
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -236,11 +236,8 @@ ggit_index_open (GFile   *file,
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	return g_initable_new (GGIT_TYPE_INDEX,
-	                       NULL,
-	                       error,
-	                       "file",
-	                       file,
+	return g_initable_new (GGIT_TYPE_INDEX, NULL, error,
+	                       "file", file,
 	                       NULL);
 }
 

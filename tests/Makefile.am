@@ -9,4 +9,4 @@ TEST_PROGS = repository
 repository_SOURCES = repository.c
 repository_LDADD = $(progs_ldadd)
 
-
+# ex:set ts=8 noet:

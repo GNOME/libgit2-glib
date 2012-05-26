@@ -119,7 +119,7 @@ ggit_config_get_property (GObject    *object,
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -143,7 +143,9 @@ ggit_config_class_init (GgitConfigClass *klass)
 	                                                      "File",
 	                                                      "File",
 	                                                      G_TYPE_FILE,
-	                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY |
+	                                                      G_PARAM_STATIC_STRINGS));
 }
 
 static void
@@ -185,7 +187,7 @@ ggit_config_new (GFile *file)
  *
  **/
 GgitConfig *
-ggit_config_get_global ()
+ggit_config_get_global (void)
 {
 	static GgitConfig *config = NULL;
 
@@ -566,3 +568,5 @@ _ggit_config_wrap (git_config *config)
 
 	return ret;
 }
+
+/* ex:set ts=8 noet: */

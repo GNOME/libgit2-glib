@@ -46,7 +46,14 @@ typedef struct _GgitCommit GgitCommit;
 typedef struct _GgitTree GgitTree;
 
 /**
- * GitgIndex:
+ * GgitTreeEntry:
+ *
+ * Represents an entry in a tree.
+ */
+typedef struct _GgitTreeEntry GgitTreeEntry;
+
+/**
+ * GgitIndex:
  *
  * Represents an index object.
  */
@@ -97,6 +104,13 @@ typedef struct _GgitOId GgitOId;
  * Reprensents a git reference.
  */
 typedef struct _GgitRef GgitRef;
+
+/**
+ * GgitConfig:
+ *
+ * Represents a git configuration.
+ */
+typedef struct _GgitConfig GgitConfig;
 
 /* NOTE: keep in sync with git2/refs.h */
 /**
@@ -161,7 +175,7 @@ typedef enum {
 typedef struct _GgitSubmodule GgitSubmodule;
 
 /**
- * GitgRemote:
+ * GgitRemote:
  *
  * Represents a git remote.
  */

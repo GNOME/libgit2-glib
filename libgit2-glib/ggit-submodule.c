@@ -136,7 +136,7 @@ ggit_submodule_get_url (GgitSubmodule *submodule)
  *
  * Gets the HEAD SHA1 for the submodule or zero if not committed.
  *
- * Returns: (transfer full) (allow-none): the HEAD SHA1 for the submodule.
+ * Returns: (transfer full): the HEAD SHA1 for the submodule.
  */
 GgitOId *
 ggit_submodule_get_oid (GgitSubmodule *submodule)

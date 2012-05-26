@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_CONFIG_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CONFIG))
 #define GGIT_CONFIG_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CONFIG, GgitConfigClass))
 
-typedef struct _GgitConfig		GgitConfig;
 typedef struct _GgitConfigClass		GgitConfigClass;
 typedef struct _GgitConfigPrivate	GgitConfigPrivate;
 
@@ -102,3 +101,5 @@ GgitConfig  *_ggit_config_wrap         (git_config               *config);
 G_END_DECLS
 
 #endif /* __GGIT_CONFIG_H__ */
+
+/* ex:set ts=8 noet: */
