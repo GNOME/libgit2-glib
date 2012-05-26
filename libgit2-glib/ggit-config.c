@@ -29,11 +29,10 @@
 
 struct _GgitConfigPrivate
 {
-	git_config *config;
 	GFile *file;
 };
 
-G_DEFINE_TYPE (GgitConfig, ggit_config, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GgitConfig, ggit_config, GGIT_TYPE_NATIVE)
 
 enum
 {
@@ -46,8 +45,6 @@ ggit_config_finalize (GObject *object)
 {
 	GgitConfig *config = GGIT_CONFIG (object);
 
-	git_config_free (config->priv->config);
-
 	if (config->priv->file)
 	{
 		g_object_unref (config->priv->file);
@@ -59,9 +56,7 @@ ggit_config_finalize (GObject *object)
 static void
 ggit_config_constructed (GObject *object)
 {
-	GgitConfig *config;
-
-	config = GGIT_CONFIG (object);
+	GgitConfig *config = GGIT_CONFIG (object);
 
 	if (config->priv->file)
 	{
@@ -71,7 +66,7 @@ ggit_config_constructed (GObject *object)
 
 		if (path != NULL)
 		{
-			git_config_add_file_ondisk (config->priv->config,
+			git_config_add_file_ondisk (_ggit_native_get (config),
 			                            path,
 			                            0);
 		}
@@ -154,8 +149,12 @@ ggit_config_class_init (GgitConfigClass *klass)
 static void
 ggit_config_init (GgitConfig *self)
 {
+	git_config *config;
+
 	self->priv = GGIT_CONFIG_GET_PRIVATE (self);
-	git_config_new (&self->priv->config);
+
+	git_config_new (&config);
+	_ggit_native_set (self, config, (GDestroyNotify) git_config_free);
 }
 
 /**
@@ -237,7 +236,7 @@ ggit_config_get_bool (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_get_bool (&retval, config->priv->config, name);
+	ret = git_config_get_bool (&retval, _ggit_native_get (config), name);
 
 	if (ret != GIT_OK)
 	{
@@ -272,7 +271,7 @@ ggit_config_set_bool (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_set_bool (config->priv->config, name, value ? 1 : 0);
+	ret = git_config_set_bool (_ggit_native_get (config), name, value ? 1 : 0);
 
 	if (ret != GIT_OK)
 	{
@@ -307,7 +306,7 @@ ggit_config_get_string (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_get_string (&retval, config->priv->config, name);
+	ret = git_config_get_string (&retval, _ggit_native_get (config), name);
 
 	if (ret != GIT_OK)
 	{
@@ -344,11 +343,12 @@ ggit_config_set_string (GgitConfig   *config,
 
 	if (value == NULL)
 	{
-		ret = git_config_delete (config->priv->config, name);
+		ret = git_config_delete (_ggit_native_get (config), name);
 	}
 	else
 	{
-		ret = git_config_set_string (config->priv->config, name, value);
+		ret = git_config_set_string (_ggit_native_get (config),
+		                             name, value);
 	}
 
 	if (ret != GIT_OK)
@@ -382,7 +382,7 @@ ggit_config_delete (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_delete (config->priv->config, name);
+	ret = git_config_delete (_ggit_native_get (config), name);
 
 	if (ret != GIT_OK)
 	{
@@ -417,7 +417,7 @@ ggit_config_foreach (GgitConfig          *config,
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_foreach (config->priv->config, callback, user_data);
+	ret = git_config_foreach (_ggit_native_get (config), callback, user_data);
 
 	if (ret != GIT_OK)
 	{
@@ -562,8 +562,7 @@ _ggit_config_wrap (git_config *config)
 	g_return_val_if_fail (config != NULL, NULL);
 
 	ret = g_object_new (GGIT_TYPE_CONFIG, NULL);
-	git_config_free (ret->priv->config);
-	ret->priv->config = config;
+	_ggit_native_set (ret, config, (GDestroyNotify) git_config_free);
 
 	return ret;
 }

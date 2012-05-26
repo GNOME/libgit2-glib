@@ -23,9 +23,10 @@
 
 #include <glib-object.h>
 #include <gio/gio.h>
+#include <git2/config.h>
 
 #include <libgit2-glib/ggit-types.h>
-#include <git2/config.h>
+#include "ggit-native.h"
 
 G_BEGIN_DECLS
 
@@ -43,14 +44,14 @@ typedef struct _GgitConfigPrivate	GgitConfigPrivate;
 
 struct _GgitConfig
 {
-	GObject parent;
+	GgitNative parent;
 
 	GgitConfigPrivate *priv;
 };
 
 struct _GgitConfigClass
 {
-	GObjectClass parent_class;
+	GgitNativeClass parent_class;
 };
 
 GType        ggit_config_get_type      (void) G_GNUC_CONST;
