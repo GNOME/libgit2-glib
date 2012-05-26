@@ -39,6 +39,11 @@ GgitObject     *ggit_utils_create_real_object         (git_object *obj,
 gchar         **ggit_utils_get_str_array_from_git_strarray
                                                       (git_strarray *gitarray);
 
+
+void            ggit_utils_get_git_strarray_from_str_array
+                                                      (const gchar  **array,
+                                                       git_strarray  *gitarray);
+
 G_END_DECLS
 
 #endif

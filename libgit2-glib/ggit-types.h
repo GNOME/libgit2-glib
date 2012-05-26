@@ -322,6 +322,196 @@ typedef int (* GgitConfigMatchCallback) (GMatchInfo  *match_info,
  */
 typedef struct _GgitTag GgitTag;
 
+/**
+ * GgitDiff:
+ *
+ * Represents a diff.
+ */
+typedef struct _GgitDiff GgitDiff;
+
+/**
+ * GgitDiffOptions:
+ *
+ * Represents the options used when creating a #GgitDiff.
+ */
+typedef struct _GgitDiffOptions GgitDiffOptions;
+
+/**
+ * GgitDiffFile:
+ *
+ * Represents a file in a #GgitDiff.
+ */
+typedef struct _GgitDiffFile GgitDiffFile;
+
+/**
+ * GgitDiffDelta:
+ *
+ * Represents the changes done to one file.
+ */
+typedef struct _GgitDiffDelta GgitDiffDelta;
+
+/**
+ * GgitDiffRange:
+ *
+ * Represents the hunk of a diff.
+ */
+typedef struct _GgitDiffRange GgitDiffRange;
+
+/**
+ * GgitDiffFlags:
+ * @GGIT_DIFF_NORMAL: normal.
+ * @GGIT_DIFF_REVERSE: reverse.
+ * @GGIT_DIFF_FORCE_TEXT: force text.
+ * @GGIT_DIFF_IGNORE_WHITESPACE: ignore whitespace.
+ * @GGIT_DIFF_IGNORE_WHITESPACE_CHANGE: ignore whitespace change.
+ * @GGIT_DIFF_IGNORE_WHITESPACE_EOL: ignore whitespace at end-of-line.
+ * @GGIT_DIFF_IGNORE_SUBMODULES: ignore submodules.
+ * @GGIT_DIFF_PATIENCE: generate using the "patience diff" algorithm.
+ * @GGIT_DIFF_INCLUDE_IGNORED: include ignored files.
+ * @GGIT_DIFF_INCLUDE_UNTRACKED: include untracked files.
+ * @GGIT_DIFF_INCLUDE_UNMODIFIED: include unmodified files.
+ * @GGIT_DIFF_RECURSE_UNTRACKED_DIRS:
+ *
+ * How the diff should be generated.
+ */
+typedef enum {
+	GGIT_DIFF_NORMAL                   = 0,
+	GGIT_DIFF_REVERSE                  = 1 << 0,
+	GGIT_DIFF_FORCE_TEXT               = 1 << 1,
+	GGIT_DIFF_IGNORE_WHITESPACE        = 1 << 2,
+	GGIT_DIFF_IGNORE_WHITESPACE_CHANGE = 1 << 3,
+	GGIT_DIFF_IGNORE_WHITESPACE_EOL    = 1 << 4,
+	GGIT_DIFF_IGNORE_SUBMODULES        = 1 << 5,
+	GGIT_DIFF_PATIENCE                 = 1 << 6,
+	GGIT_DIFF_INCLUDE_IGNORED          = 1 << 7,
+	GGIT_DIFF_INCLUDE_UNTRACKED        = 1 << 8,
+	GGIT_DIFF_INCLUDE_UNMODIFIED       = 1 << 9,
+	GGIT_DIFF_RECURSE_UNTRACKED_DIRS   = 1 << 10
+} GgitDiffFlags;
+
+/**
+ * GgitDiffFileFlags:
+ * @GGIT_DIFF_FILE_VALID_OID: if the OID is valid.
+ * @GGIT_DIFF_FILE_FREE_PATH: if the path must be freed (libgit2 internal).
+ * @GGIT_DIFF_FILE_BINARY: if the file is binary.
+ * @GGIT_DIFF_FILE_NOT_BINARY: if the file is not binary.
+ * @GGIT_DIFF_FILE_FREE_DATA: if the data must be freed (libgit2 internal).
+ * @GGIT_DIFF_FILE_UNMAP_DATA: if the data must be unmapped (libgit2 internal).
+ */
+typedef enum {
+	GGIT_DIFF_FILE_VALID_OID  = 1 << 0,
+	GGIT_DIFF_FILE_FREE_PATH  = 1 << 1,
+	GGIT_DIFF_FILE_BINARY     = 1 << 2,
+	GGIT_DIFF_FILE_NOT_BINARY = 1 << 3,
+	GGIT_DIFF_FILE_FREE_DATA  = 1 << 4,
+	GGIT_DIFF_FILE_UNMAP_DATA = 1 << 5
+} GgitDiffFileFlags;
+
+
+/**
+ * GgitDeltaType:
+ * @GGIT_DELTA_UNMODIFIED: unmodified.
+ * @GGIT_DELTA_ADDED: added.
+ * @GGIT_DELTA_DELETED: deleted.
+ * @GGIT_DELTA_MODIFIED: modified.
+ * @GGIT_DELTA_RENAMED: renamed.
+ * @GGIT_DELTA_COPIED: copied.
+ * @GGIT_DELTA_IGNORED: ignored.
+ * @GGIT_DELTA_UNTRACKED: untracked.
+ *
+ * Describes the type of change the delta is.
+ */
+typedef enum {
+	GGIT_DELTA_UNMODIFIED = 0,
+	GGIT_DELTA_ADDED      = 1,
+	GGIT_DELTA_DELETED    = 2,
+	GGIT_DELTA_MODIFIED   = 3,
+	GGIT_DELTA_RENAMED    = 4,
+	GGIT_DELTA_COPIED     = 5,
+	GGIT_DELTA_IGNORED    = 6,
+	GGIT_DELTA_UNTRACKED  = 7
+} GgitDeltaType;
+
+/**
+ * GgitDiffLineType:
+ * @GGIT_DIFF_LINE_CONTEXT: line is part of the context.
+ * @GGIT_DIFF_LINE_ADDITION: line that was added.
+ * @GGIT_DIFF_LINE_DELETION: line that was removed.
+ * @GGIT_DIFF_LINE_ADD_EOFNL: LF was added at end of file.
+ * @GGIT_DIFF_LINE_DEL_EOFNL: LF was removed at end of file.
+ * @GGIT_DIFF_LINE_FILE_HDR: the file header.
+ * @GGIT_DIFF_LINE_HUNK_HDR: the hunk header.
+ * @GGIT_DIFF_LINE_BINARY: is binary.
+ *
+ * These values describe where a line came from and will be passed to
+ * the #GgitDiffLineCallback when iterating over a diff.
+ *
+ * The #GGIT_DIFF_LINE_FILE_HDR, #GGIT_DIFF_LINE_HUNK_HDR and
+ * #GGIT_DIFF_LINE_BINARY values are only sent when the diff is being printed.
+ */
+typedef enum {
+	GGIT_DIFF_LINE_CONTEXT   = ' ',
+	GGIT_DIFF_LINE_ADDITION  = '+',
+	GGIT_DIFF_LINE_DELETION  = '-',
+	GGIT_DIFF_LINE_ADD_EOFNL = '\n',
+	GGIT_DIFF_LINE_DEL_EOFNL = '\0',
+	GGIT_DIFF_LINE_FILE_HDR  = 'F',
+	GGIT_DIFF_LINE_HUNK_HDR  = 'H',
+	GGIT_DIFF_LINE_BINARY    = 'B'
+} GgitDiffLineType;
+
+/**
+ * GgitDiffFileCallback:
+ * @delta: a #GgitDiffDelta.
+ * @progress: the progress.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Called for each file.
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitDiffFileCallback) (GgitDiffDelta *delta,
+                                       gfloat         progress,
+                                       gpointer       user_data);
+
+/**
+ * GgitDiffHunkCallback:
+ * @delta: a #GgitDiffDelta.
+ * @range: a #GgitDiffRange.
+ * @header: the header.
+ * @header_len: the header length.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Called for each hunk.
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitDiffHunkCallback) (GgitDiffDelta *delta,
+                                       GgitDiffRange *range,
+                                       const gchar   *header,
+                                       gsize          header_len,
+                                       gpointer       user_data);
+
+/**
+ * GgitDiffLineCallback:
+ * @delta: a #GgitDiffDelta.
+ * @range: a #GgitDiffRange.
+ * @line_type: a #GgitDiffLineType.
+ * @content: the content.
+ * @content_len: the content length.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Called for each line.
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (*GgitDiffLineCallback) (GgitDiffDelta    *delta,
+                                      GgitDiffRange    *range,
+                                      GgitDiffLineType  line_type,
+                                      const gchar      *content,
+                                      gsize             content_len,
+                                      gpointer          user_data);
+
 G_END_DECLS
 
 #endif /* __GGIT_TYPES_H__ */

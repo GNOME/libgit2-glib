@@ -18,6 +18,11 @@ INST_H_FILES =				\
 	ggit-blob.h			\
 	ggit-commit.h			\
 	ggit-config.h			\
+	ggit-diff.h			\
+	ggit-diff-delta.h		\
+	ggit-diff-file.h		\
+	ggit-diff-options.h		\
+	ggit-diff-range.h		\
 	ggit-error.h			\
 	ggit-index.h			\
 	ggit-index-entry.h		\
@@ -49,6 +54,11 @@ C_FILES =				\
 	ggit-commit.c			\
 	ggit-config.c			\
 	ggit-convert.c			\
+	ggit-diff.c			\
+	ggit-diff-delta.c		\
+	ggit-diff-file.c		\
+	ggit-diff-options.c		\
+	ggit-diff-range.c		\
 	ggit-error.c			\
 	ggit-index.c			\
 	ggit-index-entry.c		\
@@ -116,3 +126,5 @@ if HAVE_INTROSPECTION
 	$(gir_DATA)		\
 	$(typelib_DATA)
 endif
+
+# ex:set ts=8 noet:

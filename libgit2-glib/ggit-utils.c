@@ -18,6 +18,7 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <git2/errors.h>
 
 #include "ggit-blob.h"
 #include "ggit-commit.h"
@@ -120,6 +121,28 @@ ggit_utils_get_str_array_from_git_strarray (git_strarray *gitarray)
 	array[i] = NULL;
 
 	return array;
+}
+
+void
+ggit_utils_get_git_strarray_from_str_array (const gchar  **array,
+                                            git_strarray  *gitarray)
+{
+	git_strarray fake_gitarray;
+
+	if (array == NULL)
+	{
+		gitarray->count = 0;
+		gitarray->strings = NULL;
+		return;
+	}
+
+	fake_gitarray.count = g_strv_length ((gchar **) array);
+	fake_gitarray.strings = (gchar **) array;
+
+	if (git_strarray_copy (gitarray, &fake_gitarray) != GIT_OK)
+	{
+		/* out of memory */
+	}
 }
 
 /* ex:set ts=8 noet: */

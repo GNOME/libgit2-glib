@@ -23,6 +23,11 @@
 
 #include <libgit2-glib/ggit-blob.h>
 #include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-diff.h>
+#include <libgit2-glib/ggit-diff-delta.h>
+#include <libgit2-glib/ggit-diff-file.h>
+#include <libgit2-glib/ggit-diff-options.h>
+#include <libgit2-glib/ggit-diff-range.h>
 #include <libgit2-glib/ggit-error.h>
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-oid.h>
