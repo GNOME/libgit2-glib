@@ -21,7 +21,9 @@
 #include "ggit-ref.h"
 #include "ggit-oid.h"
 #include "ggit-error.h"
+#include "ggit-reflog.h"
 #include "ggit-repository.h"
+#include "ggit-signature.h"
 #include "ggit-utils.h"
 
 #include <git2/errors.h>
@@ -331,7 +333,7 @@ ggit_ref_delete (GgitRef  *ref,
 /**
  * ggit_ref_lookup:
  * @ref: a #GgitRef.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Convenient method to resolve a reference to an object.
  *
@@ -364,6 +366,128 @@ ggit_ref_lookup (GgitRef  *ref,
 	else
 	{
 		return ggit_utils_create_real_object (obj, TRUE);
+	}
+}
+
+/**
+ * ggit_ref_get_reflog:
+ * @ref: a #GgitRef.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the #GgitReflog for @ref.
+ *
+ * Returns: the reflog.
+ */
+GgitReflog *
+ggit_ref_get_reflog (GgitRef  *ref,
+                     GError  **error)
+{
+	git_reflog *reflog;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_reflog_read (&reflog, _ggit_native_get (ref));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_reflog_new (reflog);
+}
+
+/**
+ * ggit_ref_create_reflog:
+ * @ref: a #GgitRef.
+ * @oid: a #GgitOId.
+ * @committer: a #GgitSignature.
+ * @message: the message.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a #GgitReflog with the given properties.
+ *
+ * Returns: the created reflog, or %NULL if error is set.
+ */
+GgitReflog *
+ggit_ref_create_reflog (GgitRef        *ref,
+                        GgitOId        *oid,
+                        GgitSignature  *committer,
+                        const gchar    *message,
+                        GError        **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
+	g_return_val_if_fail (oid != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), NULL);
+	g_return_val_if_fail (message != NULL && *message != '\0', NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_reflog_write (_ggit_native_get (ref),
+	                        _ggit_native_get (oid),
+	                        _ggit_native_get (committer),
+	                        message);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return ggit_ref_get_reflog (ref, error);
+}
+
+/**
+ * ggit_ref_rename_reflog:
+ * @ref: a #GgitRef.
+ * @new_name: the new name of the reference.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Renames the reflog for @ref to @new_name, on error @error is set.
+ */
+void
+ggit_ref_rename_reflog (GgitRef      *ref,
+                        const gchar  *new_name,
+                        GError      **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REF (ref));
+	g_return_if_fail (new_name != NULL && *new_name != '\0');
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_reflog_rename (_ggit_native_get (ref), new_name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_ref_delete_reflog:
+ * @ref: a #GgitRef.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Deletes the reflog for @ref, on error @error is set.
+ */
+void
+ggit_ref_delete_reflog (GgitRef  *ref,
+                        GError  **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REF (ref));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_reflog_delete (_ggit_native_get (ref));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
 	}
 }
 

@@ -512,6 +512,20 @@ typedef gint (*GgitDiffLineCallback) (GgitDiffDelta    *delta,
                                       gsize             content_len,
                                       gpointer          user_data);
 
+/**
+ * GgitReflog:
+ *
+ * Represents a reflog.
+ */
+typedef struct _GgitReflog GgitReflog;
+
+/**
+ * GgitReflogEntry:
+ *
+ * Represents a reflog entry.
+ */
+typedef struct _GgitReflogEntry GgitReflogEntry;
+
 G_END_DECLS
 
 #endif /* __GGIT_TYPES_H__ */

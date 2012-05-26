@@ -88,6 +88,19 @@ void            ggit_ref_delete             (GgitRef        *ref,
 GgitObject     *ggit_ref_lookup             (GgitRef        *ref,
                                              GError        **error);
 
+GgitReflog     *ggit_ref_get_reflog         (GgitRef        *ref,
+                                             GError        **error);
+GgitReflog     *ggit_ref_create_reflog      (GgitRef        *ref,
+                                             GgitOId        *oid,
+                                             GgitSignature  *committer,
+                                             const gchar    *message,
+                                             GError        **error);
+void            ggit_ref_rename_reflog      (GgitRef        *ref,
+                                             const gchar    *new_name,
+                                             GError        **error);
+void            ggit_ref_delete_reflog      (GgitRef        *ref,
+                                             GError        **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REF_H__ */
