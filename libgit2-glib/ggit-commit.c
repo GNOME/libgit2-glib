@@ -28,9 +28,6 @@
 
 #define GGIT_COMMIT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT, GgitCommitPrivate))
 
-static GgitCommitParents *ggit_commit_parents_ref (GgitCommitParents *parents);
-static void               ggit_commit_parents_unref (GgitCommitParents *parents);
-
 struct _GgitCommitParents
 {
 	GgitCommit *commit;
@@ -62,7 +59,7 @@ ggit_commit_parents_new (GgitCommit *commit)
 	return ret;
 }
 
-static GgitCommitParents *
+GgitCommitParents *
 ggit_commit_parents_ref (GgitCommitParents *parents)
 {
 	g_return_val_if_fail (parents != NULL, NULL);
@@ -72,7 +69,7 @@ ggit_commit_parents_ref (GgitCommitParents *parents)
 	return parents;
 }
 
-static void
+void
 ggit_commit_parents_unref (GgitCommitParents *parents)
 {
 	g_return_if_fail (parents != NULL);

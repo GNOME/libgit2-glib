@@ -74,6 +74,11 @@ GgitSignature       *ggit_commit_get_author           (GgitCommit        *commit
 
 GgitCommitParents *  ggit_commit_get_parents          (GgitCommit        *commit);
 
+
+
+GgitCommitParents   *ggit_commit_parents_ref          (GgitCommitParents *parents);
+void                 ggit_commit_parents_unref        (GgitCommitParents *parents);
+
 guint                ggit_commit_parents_size         (GgitCommitParents *parents);
 
 GgitCommit *         ggit_commit_parents_get          (GgitCommitParents *parents,
