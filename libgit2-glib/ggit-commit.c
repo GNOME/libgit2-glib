@@ -82,11 +82,22 @@ ggit_commit_parents_unref (GgitCommitParents *parents)
 }
 
 static void
+ggit_commit_finalize (GObject *object)
+{
+	GgitCommit *commit = GGIT_COMMIT (object);
+
+	g_free (commit->priv->message_utf8);
+	g_free (commit->priv->subject_utf8);
+
+	G_OBJECT_CLASS (ggit_commit_parent_class)->finalize (object);
+}
+
+static void
 ggit_commit_class_init (GgitCommitClass *klass)
 {
-	GObjectClass *object_class;
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class = G_OBJECT_CLASS (klass);
+	object_class->finalize = ggit_commit_finalize;
 
 	g_type_class_add_private (object_class, sizeof (GgitCommitPrivate));
 }
