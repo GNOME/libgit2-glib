@@ -27,6 +27,7 @@
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-index-entry.h>
 #include <libgit2-glib/ggit-index-entry-unmerged.h>
+#include "ggit-native.h"
 
 G_BEGIN_DECLS
 
@@ -43,14 +44,14 @@ typedef struct _GgitIndexPrivate	GgitIndexPrivate;
 
 struct _GgitIndex
 {
-	GObject parent;
+	GgitNative parent;
 
 	GgitIndexPrivate *priv;
 };
 
 struct _GgitIndexClass
 {
-	GObjectClass parent_class;
+	GgitNativeClass parent_class;
 };
 
 GType                     ggit_index_get_type             (void) G_GNUC_CONST;

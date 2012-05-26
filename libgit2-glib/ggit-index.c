@@ -26,7 +26,6 @@
 
 struct _GgitIndexPrivate
 {
-	git_index *idx;
 	GFile *file;
 };
 
@@ -38,7 +37,7 @@ enum
 
 static void ggit_index_initable_iface_init (GInitableIface *iface);
 
-G_DEFINE_TYPE_EXTENDED (GgitIndex, ggit_index, G_TYPE_OBJECT,
+G_DEFINE_TYPE_EXTENDED (GgitIndex, ggit_index, GGIT_TYPE_NATIVE,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_index_initable_iface_init))
@@ -53,11 +52,6 @@ ggit_index_finalize (GObject *object)
 	if (idx->priv->file)
 	{
 		g_object_unref (idx->priv->file);
-	}
-
-	if (idx->priv->idx)
-	{
-		git_index_free (idx->priv->idx);
 	}
 
 	G_OBJECT_CLASS (ggit_index_parent_class)->finalize (object);
@@ -117,6 +111,7 @@ ggit_index_initable_init (GInitable    *initable,
                           GError      **error)
 {
 	GgitIndexPrivate *priv;
+	git_index *idx;
 	gboolean success = TRUE;
 
 	if (cancellable != NULL)
@@ -138,7 +133,7 @@ ggit_index_initable_init (GInitable    *initable,
 
 		if (path != NULL)
 		{
-			err = git_index_open (&priv->idx, path);
+			err = git_index_open (&idx, path);
 		}
 
 		g_free (path);
@@ -148,6 +143,9 @@ ggit_index_initable_init (GInitable    *initable,
 			_ggit_error_set (error, err);
 			success = FALSE;
 		}
+
+		_ggit_native_set (initable, idx,
+		                  (GDestroyNotify) git_index_free);
 	}
 	else
 	{
@@ -207,7 +205,7 @@ _ggit_index_wrap (git_index *idx)
 	}
 
 	ret = g_object_new (GGIT_TYPE_INDEX, NULL);
-	ret->priv->idx = idx;
+	_ggit_native_set (ret, idx, (GDestroyNotify) git_index_free);
 
 	return ret;
 }
@@ -217,7 +215,7 @@ _ggit_index_get_index (GgitIndex *idx)
 {
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
 
-	return idx->priv->idx;
+	return _ggit_native_get (idx);
 }
 
 /**
@@ -267,7 +265,7 @@ ggit_index_read (GgitIndex  *idx,
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_index_read (idx->priv->idx);
+	ret = git_index_read (_ggit_native_get (idx));
 
 	if (ret != GIT_OK)
 	{
@@ -298,7 +296,7 @@ ggit_index_write (GgitIndex  *idx,
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_index_write (idx->priv->idx);
+	ret = git_index_write (_ggit_native_get (idx));
 
 	if (ret != GIT_OK)
 	{
@@ -321,7 +319,7 @@ ggit_index_uniq (GgitIndex *idx)
 {
 	g_return_if_fail (GGIT_IS_INDEX (idx));
 
-	git_index_uniq (idx->priv->idx);
+	git_index_uniq (_ggit_native_get (idx));
 }
 
 /**
@@ -345,7 +343,7 @@ ggit_index_remove (GgitIndex  *idx,
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_index_remove (idx->priv->idx, position);
+	ret = git_index_remove (_ggit_native_get (idx), position);
 
 	if (ret != GIT_OK)
 	{
@@ -385,7 +383,7 @@ ggit_index_append (GgitIndex  *idx,
 
 	g_return_val_if_fail (path != NULL, FALSE);
 
-	ret = git_index_append (idx->priv->idx, path, stage);
+	ret = git_index_append (_ggit_native_get (idx), path, stage);
 	g_free (path);
 
 	if (ret != GIT_OK)
@@ -426,7 +424,7 @@ ggit_index_add (GgitIndex  *idx,
 
 	g_return_val_if_fail (path != NULL, FALSE);
 
-	ret = git_index_add (idx->priv->idx, path, stage);
+	ret = git_index_add (_ggit_native_get (idx), path, stage);
 	g_free (path);
 
 	if (ret != GIT_OK)
