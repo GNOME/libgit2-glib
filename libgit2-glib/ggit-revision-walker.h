@@ -24,6 +24,7 @@
 
 #include <glib-object.h>
 #include "ggit-types.h"
+#include "ggit-native.h"
 
 G_BEGIN_DECLS
 
@@ -40,14 +41,14 @@ typedef struct _GgitRevisionWalkerPrivate	GgitRevisionWalkerPrivate;
 
 struct _GgitRevisionWalker
 {
-	GObject parent;
+	GgitNative parent;
 
 	GgitRevisionWalkerPrivate *priv;
 };
 
 struct _GgitRevisionWalkerClass
 {
-	GObjectClass parent_class;
+	GgitNativeClass parent_class;
 };
 
 GType                   ggit_revision_walker_get_type       (void) G_GNUC_CONST;

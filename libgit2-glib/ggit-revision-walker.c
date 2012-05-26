@@ -33,7 +33,6 @@
 struct _GgitRevisionWalkerPrivate
 {
 	GgitRepository *repository;
-	git_revwalk *revwalk;
 };
 
 enum
@@ -44,20 +43,10 @@ enum
 
 static void ggit_revision_walker_initable_iface_init (GInitableIface  *iface);
 
-G_DEFINE_TYPE_EXTENDED (GgitRevisionWalker, ggit_revision_walker, G_TYPE_OBJECT,
+G_DEFINE_TYPE_EXTENDED (GgitRevisionWalker, ggit_revision_walker, GGIT_TYPE_NATIVE,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_revision_walker_initable_iface_init))
-
-static void
-ggit_revision_walker_finalize (GObject *object)
-{
-	GgitRevisionWalkerPrivate *priv = GGIT_REVISION_WALKER (object)->priv;
-
-	git_revwalk_free (priv->revwalk);
-
-	G_OBJECT_CLASS (ggit_revision_walker_parent_class)->finalize (object);
-}
 
 static void
 ggit_revision_walker_get_property (GObject    *object,
@@ -102,7 +91,6 @@ ggit_revision_walker_class_init (GgitRevisionWalkerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = ggit_revision_walker_finalize;
 	object_class->get_property = ggit_revision_walker_get_property;
 	object_class->set_property = ggit_revision_walker_set_property;
 
@@ -131,6 +119,7 @@ ggit_revision_walker_initable_init (GInitable    *initable,
                                     GError      **error)
 {
 	GgitRevisionWalkerPrivate *priv;
+	git_revwalk *revwalk;
 	gboolean success = TRUE;
 	gint err;
 
@@ -143,13 +132,16 @@ ggit_revision_walker_initable_init (GInitable    *initable,
 
 	priv = GGIT_REVISION_WALKER (initable)->priv;
 
-	err = git_revwalk_new (&priv->revwalk,
+	err = git_revwalk_new (&revwalk,
 	                       _ggit_repository_get_repository (priv->repository));
 	if (err != GIT_OK)
 	{
 		_ggit_error_set (error, err);
 		success = FALSE;
 	}
+
+	_ggit_native_set (initable, revwalk,
+	                  (GDestroyNotify) git_revwalk_free);
 
 	return success;
 }
@@ -211,7 +203,7 @@ ggit_revision_walker_reset (GgitRevisionWalker *walker)
 {
 	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
 
-	git_revwalk_reset (walker->priv->revwalk);
+	git_revwalk_reset (_ggit_native_get (walker));
 }
 
 /**
@@ -241,7 +233,9 @@ ggit_revision_walker_push (GgitRevisionWalker  *walker,
 	g_return_if_fail (oid != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_revwalk_push (walker->priv->revwalk, _ggit_oid_get_oid (oid));
+	ret = git_revwalk_push (_ggit_native_get (walker),
+	                        _ggit_oid_get_oid (oid));
+
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
@@ -273,7 +267,9 @@ ggit_revision_walker_hide (GgitRevisionWalker  *walker,
 	g_return_if_fail (oid != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_revwalk_hide (walker->priv->revwalk, _ggit_oid_get_oid (oid));
+	ret = git_revwalk_hide (_ggit_native_get (walker),
+	                        _ggit_oid_get_oid (oid));
+
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
@@ -310,7 +306,8 @@ ggit_revision_walker_next (GgitRevisionWalker  *walker,
 	g_return_val_if_fail (GGIT_IS_REVISION_WALKER (walker), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_revwalk_next (&oid, walker->priv->revwalk);
+	ret = git_revwalk_next (&oid, _ggit_native_get (walker));
+
 	if (ret == GIT_OK)
 	{
 		goid = _ggit_oid_new (&oid);
@@ -339,7 +336,7 @@ ggit_revision_walker_set_sort_mode (GgitRevisionWalker *walker,
 {
 	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
 
-	git_revwalk_sorting (walker->priv->revwalk, sort_mode);
+	git_revwalk_sorting (_ggit_native_get (walker), sort_mode);
 }
 
 /**
