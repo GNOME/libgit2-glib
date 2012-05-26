@@ -6,3 +6,9 @@ progs_ldadd     = $(top_builddir)/libgit2-glib/libgit2-glib-1.0.la $(LIBGIT2_GLI
 EXAMPLE_PROGS		= general
 general_SOURCES		= general.c
 general_LDADD		= $(progs_ldadd)
+
+EXAMPLE_PROGS		= walk
+walk_SOURCES		= walk.c
+walk_LDADD		= $(progs_ldadd)
+
+# ex:set ts=8 noet:
