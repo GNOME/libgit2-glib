@@ -29,6 +29,8 @@ INST_H_FILES =				\
 	ggit-index-entry-unmerged.h	\
 	ggit-native.h			\
 	ggit-object.h			\
+	ggit-object-factory.h		\
+	ggit-object-factory-base.h	\
 	ggit-oid.h			\
 	ggit-ref.h			\
 	ggit-reflog.h			\
@@ -42,12 +44,9 @@ INST_H_FILES =				\
 	ggit-tree.h			\
 	ggit-tree-entry.h		\
 	ggit-types.h			\
-	ggit-object-factory.h		\
-	ggit-object-factory-base.h	\
 	ggit.h
 
 NOINST_H_FILES =			\
-	ggit-object-private.h		\
 	ggit-convert.h			\
 	ggit-utils.h
 
@@ -67,6 +66,8 @@ C_FILES =				\
 	ggit-index-entry-unmerged.c	\
 	ggit-native.c			\
 	ggit-object.c			\
+	ggit-object-factory.c		\
+	ggit-object-factory-base.c	\
 	ggit-oid.c			\
 	ggit-ref.c			\
 	ggit-reflog.c			\
@@ -79,8 +80,6 @@ C_FILES =				\
 	ggit-tag.c			\
 	ggit-tree.c			\
 	ggit-tree-entry.c		\
-	ggit-object-factory.c		\
-	ggit-object-factory-base.c	\
 	ggit-utils.c
 
 libgit2_glib_1_0_la_SOURCES = 	\

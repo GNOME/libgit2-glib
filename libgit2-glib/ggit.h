@@ -23,26 +23,33 @@
 
 #include <libgit2-glib/ggit-blob.h>
 #include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-config.h>
 #include <libgit2-glib/ggit-diff.h>
 #include <libgit2-glib/ggit-diff-delta.h>
 #include <libgit2-glib/ggit-diff-file.h>
 #include <libgit2-glib/ggit-diff-options.h>
 #include <libgit2-glib/ggit-diff-range.h>
 #include <libgit2-glib/ggit-error.h>
+#include <libgit2-glib/ggit-index.h>
+#include <libgit2-glib/ggit-index-entry.h>
+#include <libgit2-glib/ggit-index-entry-unmerged.h>
+#include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-object.h>
+#include <libgit2-glib/ggit-object-factory.h>
+#include <libgit2-glib/ggit-object-factory-base.h>
 #include <libgit2-glib/ggit-oid.h>
-#include <libgit2-glib/ggit-repository.h>
-#include <libgit2-glib/ggit-revision-walker.h>
-#include <libgit2-glib/ggit-tag.h>
-#include <libgit2-glib/ggit-tree.h>
-#include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-reflog.h>
 #include <libgit2-glib/ggit-reflog-entry.h>
-#include <libgit2-glib/ggit-config.h>
-#include <libgit2-glib/ggit-object-factory.h>
-#include <libgit2-glib/ggit-object-factory-base.h>
-#include <libgit2-glib/ggit-native.h>
+#include <libgit2-glib/ggit-remote.h>
+#include <libgit2-glib/ggit-repository.h>
+#include <libgit2-glib/ggit-revision-walker.h>
+#include <libgit2-glib/ggit-signature.h>
+#include <libgit2-glib/ggit-submodule.h>
+#include <libgit2-glib/ggit-tag.h>
+#include <libgit2-glib/ggit-tree.h>
+#include <libgit2-glib/ggit-tree-entry.h>
+#include <libgit2-glib/ggit-types.h>
 
 #endif
 
