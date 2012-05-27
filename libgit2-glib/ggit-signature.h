@@ -59,8 +59,8 @@ GgitSignature        *_ggit_signature_wrap             (git_signature *signature
 
 GgitSignature        *ggit_signature_new               (const gchar    *name,
                                                         const gchar    *email,
-                                                        gint64          signature_time,
-                                                        gint            signature_offset,
+                                                        GDateTime      *signature_time,
+                                                        GTimeZone      *signature_time_zone,
                                                         GError        **error);
 
 GgitSignature        *ggit_signature_new_now           (const gchar    *name,
@@ -72,8 +72,6 @@ const gchar          *ggit_signature_get_name          (GgitSignature  *signatur
 const gchar          *ggit_signature_get_email         (GgitSignature  *signature);
 
 GDateTime            *ggit_signature_get_time          (GgitSignature  *signature);
-
-gint                  ggit_signature_get_time_offset   (GgitSignature  *signature);
 
 GTimeZone            *ggit_signature_get_time_zone     (GgitSignature  *signature);
 

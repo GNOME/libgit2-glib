@@ -147,12 +147,13 @@ _ggit_signature_wrap (git_signature *signature,
 	return ret;
 }
 
+/* https://bugzilla.gnome.org/show_bug.cgi?id=676922 */
 /**
- * ggit_signature_new:
+ * ggit_signature_new: (skip)
  * @name: the name of the person.
  * @email: the email of the person.
  * @signature_time: the time when the action happened.
- * @signature_offset: the timezone offset in minutes for the time.
+ * @signature_time_zone: the timezone for the time.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a new #GgitSignature. Name and e-mail are assumed to be in UTF-8.
@@ -162,19 +163,32 @@ _ggit_signature_wrap (git_signature *signature,
 GgitSignature *
 ggit_signature_new (const gchar  *name,
                     const gchar  *email,
-                    gint64        signature_time,
-                    gint          signature_offset,
+                    GDateTime    *signature_time,
+                    GTimeZone    *signature_time_zone,
                     GError      **error)
 {
 	GgitSignature *signature = NULL;
+	gint64 sig_time;
+	gint time_zone_interval;
+	gint32 sig_offset;
 	git_signature *sig;
 	gint ret;
 
 	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (signature_time != NULL, NULL);
+	g_return_val_if_fail (signature_time_zone != NULL, NULL);
 	g_return_val_if_fail (email != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_signature_new (&sig, name, email, signature_time, signature_offset);
+	sig_time = g_date_time_to_unix (signature_time);
+
+	time_zone_interval = g_time_zone_find_interval (signature_time_zone,
+	                                                G_TIME_TYPE_UNIVERSAL,
+	                                                sig_time);
+	sig_offset = g_time_zone_get_offset (signature_time_zone,
+	                                     time_zone_interval);
+
+	ret = git_signature_new (&sig, name, email, sig_time, sig_offset);
 
 	if (ret == GIT_OK)
 	{
@@ -307,28 +321,9 @@ ggit_signature_get_time (GgitSignature *signature)
 	return g_date_time_new_from_unix_utc (s->when.time);
 }
 
+/* https://bugzilla.gnome.org/show_bug.cgi?id=676922 */
 /**
- * ggit_signature_get_time_offset:
- * @signature: a #GgitSignature.
- *
- * Gets the timezone offset in minutes for the time.
- *
- * Returns: the timezone offset in minutes for the time.
- */
-gint
-ggit_signature_get_time_offset (GgitSignature *signature)
-{
-	git_signature *s;
-
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
-
-	s = _ggit_native_get (signature);
-
-	return s->when.offset;
-}
-
-/**
- * ggit_signature_get_time_zone:
+ * ggit_signature_get_time_zone: (skip)
  * @signature: a #GgitSignature.
  *
  * Gets the timezone in which the action happened.
