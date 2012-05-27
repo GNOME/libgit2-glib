@@ -75,6 +75,8 @@ GDateTime            *ggit_signature_get_time          (GgitSignature  *signatur
 
 gint                  ggit_signature_get_time_offset   (GgitSignature  *signature);
 
+GTimeZone            *ggit_signature_get_time_zone     (GgitSignature  *signature);
+
 G_END_DECLS
 
 #endif /* __GGIT_SIGNATURE_H__ */

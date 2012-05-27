@@ -327,4 +327,40 @@ ggit_signature_get_time_offset (GgitSignature *signature)
 	return s->when.offset;
 }
 
+/**
+ * ggit_signature_get_time_zone:
+ * @signature: a #GgitSignature.
+ *
+ * Gets the timezone in which the action happened.
+ *
+ * Returns: (transfer full): the timezone in which the action happened.
+ */
+GTimeZone *
+ggit_signature_get_time_zone (GgitSignature *signature)
+{
+	git_signature *s;
+	guint offset;
+	guint minutes;
+	guint hours;
+	gchar *time_zone_id;
+	GTimeZone *time_zone;
+
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
+
+	s = _ggit_native_get (signature);
+
+	offset = ABS (s->when.offset);
+	minutes = offset % 60;
+	hours = (offset - minutes) / 60;
+
+	time_zone_id = g_strdup_printf ("%s%02i:%02i",
+	                                s->when.offset >= 0 ? "+" : "-",
+	                                hours, minutes);
+	time_zone = g_time_zone_new (time_zone_id);
+
+	g_free (time_zone_id);
+
+	return time_zone;
+}
+
 /* ex:set ts=8 noet: */
