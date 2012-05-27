@@ -69,6 +69,7 @@ main (int   argc,
 	gint64 n_revisions = 10;
 	GError *err = NULL;
 
+	ggit_init ();
 	g_type_init ();
 
 	if (argc < 2 || argc > 3)

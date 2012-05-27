@@ -31,7 +31,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-#include "ggit-repository.h"
+#include "ggit.h"
 
 #define TESTREPO_NAME "testrepo.git"
 
@@ -204,6 +204,7 @@ int
 main (int    argc,
       char **argv)
 {
+	ggit_init ();
 	g_type_init ();
 	g_test_init (&argc, &argv, NULL);
 

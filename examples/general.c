@@ -20,8 +20,7 @@
 
 
 #include <glib.h>
-#include "ggit-repository.h"
-#include "ggit-oid.h"
+#include "ggit.h"
 
 int
 main (int argc, char *argv[])
@@ -35,6 +34,7 @@ main (int argc, char *argv[])
 	GFile *f;
 	gchar *path;
 
+	ggit_init ();
 	g_type_init ();
 
 	if (argc < 2)

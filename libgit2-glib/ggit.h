@@ -33,6 +33,7 @@
 #include <libgit2-glib/ggit-index.h>
 #include <libgit2-glib/ggit-index-entry.h>
 #include <libgit2-glib/ggit-index-entry-unmerged.h>
+#include <libgit2-glib/ggit-main.h>
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-object-factory.h>
