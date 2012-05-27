@@ -1370,6 +1370,41 @@ ggit_repository_list_branches (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_get_remote:
+ * @repository: a #GgitRepository.
+ * @name: the remote's name.
+ * @error: a #GError.
+ *
+ * Gets the remote called @name.
+ *
+ * Returns: (transfer full) (allow-none): a new #GgitRemote or %NULL if there is an error.
+ */
+GgitRemote *
+ggit_repository_get_remote (GgitRepository  *repository,
+                            const gchar     *name,
+                            GError         **error)
+{
+	gint ret;
+	git_remote *remote;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_remote_load (&remote,
+	                       _ggit_native_get (repository),
+	                       name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_remote_new (remote);
+}
+
+/**
  * ggit_repository_add_remote:
  * @repository: a #GgitRepository.
  * @name: the name of the new remote.

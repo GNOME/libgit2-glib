@@ -136,6 +136,10 @@ gchar             **ggit_repository_list_branches     (GgitRepository        *re
                                                        GgitBranchType         branch_type,
                                                        GError               **error);
 
+GgitRemote         *ggit_repository_get_remote        (GgitRepository        *repository,
+                                                       const gchar           *name,
+                                                       GError               **error);
+
 GgitRemote         *ggit_repository_add_remote        (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        const gchar           *url,
