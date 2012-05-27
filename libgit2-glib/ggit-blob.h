@@ -60,7 +60,7 @@ GgitBlob        *_ggit_blob_wrap             (git_blob *blob,
 
 gconstpointer     ggit_blob_get_raw_content  (GgitBlob *blob);
 
-gint              ggit_blob_get_raw_size     (GgitBlob *blob);
+gsize             ggit_blob_get_raw_size     (GgitBlob *blob);
 
 G_END_DECLS
 

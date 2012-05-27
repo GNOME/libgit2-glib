@@ -85,7 +85,7 @@ ggit_blob_get_raw_content (GgitBlob *blob)
  *
  * Returns: the size in bytes.
  */
-gint
+gsize
 ggit_blob_get_raw_size (GgitBlob *blob)
 {
 	git_blob *b;
