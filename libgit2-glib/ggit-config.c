@@ -216,6 +216,144 @@ ggit_config_get_global (void)
 }
 
 /**
+ * ggit_config_get_int32:
+ * @config: a #GgitConfig.
+ * @name: the name of the configuration value.
+ * @error: A #GError
+ *
+ * Get a int32 configuration value.
+ *
+ * Returns: the value.
+ *
+ **/
+gint32
+ggit_config_get_int32 (GgitConfig   *config,
+                       const gchar  *name,
+                       GError      **error)
+{
+	gint ret;
+	gint32 retval;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), 0);
+	g_return_val_if_fail (name != NULL, 0);
+	g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+	ret = git_config_get_int32 (&retval, _ggit_native_get (config), name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return 0;
+	}
+
+	return retval;
+}
+
+/**
+ * ggit_config_set_int32:
+ * @config: a #GgitConfig.
+ * @name: the name of the configuration value
+ * @value: the new value
+ * @error: A #GError
+ *
+ * Set a int32 value.
+ *
+ * Returns: %TRUE if the value was successfully set, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_config_set_int32 (GgitConfig   *config,
+                       const gchar  *name,
+                       gint32        value,
+                       GError      **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
+	g_return_val_if_fail (name != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_config_set_int32 (_ggit_native_get (config), name, value);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_config_get_int64:
+ * @config: a #GgitConfig.
+ * @name: the name of the configuration value.
+ * @error: A #GError
+ *
+ * Get a int64 configuration value.
+ *
+ * Returns: the value.
+ *
+ **/
+gint64
+ggit_config_get_int64 (GgitConfig   *config,
+                       const gchar  *name,
+                       GError      **error)
+{
+	gint ret;
+	gint64 retval;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), 0);
+	g_return_val_if_fail (name != NULL, 0);
+	g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+	ret = git_config_get_int64 (&retval, _ggit_native_get (config), name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return 0;
+	}
+
+	return retval;
+}
+
+/**
+ * ggit_config_set_int64:
+ * @config: a #GgitConfig.
+ * @name: the name of the configuration value
+ * @value: the new value
+ * @error: A #GError
+ *
+ * Set a int64 value.
+ *
+ * Returns: %TRUE if the value was successfully set, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_config_set_int64 (GgitConfig   *config,
+                       const gchar  *name,
+                       gint64        value,
+                       GError      **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
+	g_return_val_if_fail (name != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_config_set_int64 (_ggit_native_get (config), name, value);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
  * ggit_config_get_bool:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.

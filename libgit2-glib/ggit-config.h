@@ -58,6 +58,24 @@ GType        ggit_config_get_type      (void) G_GNUC_CONST;
 GgitConfig  *ggit_config_new           (GFile                    *file);
 GgitConfig  *ggit_config_get_global    (void);
 
+gint32       ggit_config_get_int32     (GgitConfig               *config,
+                                        const gchar              *name,
+                                        GError                  **error);
+
+gboolean     ggit_config_set_int32     (GgitConfig               *config,
+                                        const gchar              *name,
+                                        gint32                    value,
+                                        GError                  **error);
+
+gint64       ggit_config_get_int64     (GgitConfig               *config,
+                                        const gchar              *name,
+                                        GError                  **error);
+
+gboolean     ggit_config_set_int64     (GgitConfig               *config,
+                                        const gchar              *name,
+                                        gint64                    value,
+                                        GError                  **error);
+
 gboolean     ggit_config_get_bool      (GgitConfig               *config,
                                         const gchar              *name,
                                         GError                  **error);
