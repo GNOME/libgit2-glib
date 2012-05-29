@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns:gnome="http://api.gnome.org/doap-extensions#"
+         xmlns="http://usefulinc.com/ns/doap#">
+  <name xml:lang="en">libgit2-glib</name>
+  <shortdesc xml:lang="en">GLib wrapper for libgit2</shortdesc>
+  <description>libgit2-glib is a glib library which wraps libgit2
+providing making it easier to develop manage git repositories in a
+GObject oriented application.</description>
+
+  <download-page rdf:resource="http://download.gnome.org/sources/libgit2-glib/" />
+  <bug-database rdf:resource="http://bugzilla.gnome.org/browse.cgi?product=gitg" />
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Ignacio Casal Quinteiro</foaf:name>
+      <foaf:mbox rdf:resource="mailto:icq@gnome.org" />
+      <gnome:userid>icq</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Jesse van den Kieboom</foaf:name>
+      <foaf:mbox rdf:resource="mailto:jessevdk@gnome.org" />
+      <gnome:userid>jessevdk</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Garrett Regier</foaf:name>
+      <foaf:mbox rdf:resource="mailto:garrettregier@gmail.com" />
+      <gnome:userid>gregier</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+
+</Project>
+
