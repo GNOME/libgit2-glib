@@ -106,13 +106,14 @@ ggit_index_get_property (GObject    *object,
 }
 
 static gboolean
-ggit_index_initable_init (GInitable    *initable,
-                          GCancellable *cancellable,
-                          GError      **error)
+ggit_index_initable_init (GInitable     *initable,
+                          GCancellable  *cancellable,
+                          GError       **error)
 {
 	GgitIndexPrivate *priv;
+	gchar *path = NULL;
 	git_index *idx;
-	gboolean success = TRUE;
+	gint err;
 
 	if (cancellable != NULL)
 	{
@@ -126,37 +127,31 @@ ggit_index_initable_init (GInitable    *initable,
 
 	if (priv->file != NULL)
 	{
-		gchar *path;
-		gint err = GIT_OK;
-
 		path = g_file_get_path (priv->file);
-
-		if (path != NULL)
-		{
-			err = git_index_open (&idx, path);
-		}
-
-		g_free (path);
-
-		if (err != GIT_OK)
-		{
-			_ggit_error_set (error, err);
-			success = FALSE;
-		}
-
-		_ggit_native_set (initable, idx,
-		                  (GDestroyNotify) git_index_free);
 	}
-	else
+
+	if (path == NULL)
 	{
 		g_set_error_literal (error,
 		                     G_IO_ERROR,
 		                     G_IO_ERROR_NOT_INITIALIZED,
 		                     "No file specified");
-		success = FALSE;
+		return FALSE;
 	}
 
-	return success;
+	err = git_index_open (&idx, path);
+	g_free (path);
+
+	if (err != GIT_OK)
+	{
+		_ggit_error_set (error, err);
+		return FALSE;
+	}
+
+	_ggit_native_set (initable, idx,
+		          (GDestroyNotify) git_index_free);
+
+	return TRUE;
 }
 
 static void
