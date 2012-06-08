@@ -26,6 +26,7 @@
 #include <git2/tag.h>
 #include <git2/branch.h>
 #include <git2/remote.h>
+#include <git2/reset.h>
 #include <git2/submodule.h>
 
 #include "ggit-error.h"
@@ -1556,6 +1557,38 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
 	}
 
 	return TRUE;
+}
+
+/**
+ * ggit_respository_reset:
+ * @repository: a #GgitRepository.
+ * @target: the target #GgitObject which is a commit or a tag.
+ * @reset_type: the #GgitResetType to perform.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Performs a reset of type @reset_type on @repository to @target,
+ * or @error will be set.
+ */
+void
+ggit_repository_reset (GgitRepository  *repository,
+                       GgitObject      *target,
+                       GgitResetType    reset_type,
+                       GError         **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (GGIT_IS_OBJECT (target));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_reset (_ggit_native_get (repository),
+	                 _ggit_native_get (target),
+	                 reset_type);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
 }
 
 /* ex:set ts=8 noet: */

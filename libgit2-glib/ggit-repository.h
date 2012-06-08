@@ -202,6 +202,11 @@ gboolean            ggit_repository_submodule_foreach  (GgitRepository          
                                                         gpointer                 user_data,
                                                         GError                 **error);
 
+void                ggit_repository_reset              (GgitRepository          *repository,
+                                                        GgitObject              *target,
+                                                        GgitResetType            reset_type,
+                                                        GError                 **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */
