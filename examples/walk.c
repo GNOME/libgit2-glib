@@ -74,7 +74,8 @@ main (int   argc,
 
 	if (argc < 2 || argc > 3)
 	{
-		g_print ("Usage: %s path_to_git_repository [N_REVISIONS]\n");
+		g_print ("Usage: %s path_to_git_repository [N_REVISIONS]\n",
+		         argv[0]);
 		return 1;
 	}
 
