@@ -18,9 +18,10 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef __GGIT_TYPES_H__
 #define __GGIT_TYPES_H__
+
+#include <glib.h>
 
 G_BEGIN_DECLS
 

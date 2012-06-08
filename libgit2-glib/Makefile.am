@@ -82,6 +82,7 @@ C_FILES =				\
 	ggit-tag.c			\
 	ggit-tree.c			\
 	ggit-tree-entry.c		\
+	ggit-types.c			\
 	ggit-utils.c
 
 libgit2_glib_1_0_la_SOURCES = 	\
