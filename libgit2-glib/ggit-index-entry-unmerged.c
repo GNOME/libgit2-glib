@@ -152,8 +152,8 @@ ggit_index_entries_unmerged_unref (GgitIndexEntriesUnmerged *entries)
  * #GgitIndexEntryUnmerged is _only_ valid as long as:
  *
  * 1) The associated index has been closed
- * 2) The entry has not been removed (see #ggit_index_remove)
- * 3) The index has not been refreshed (see #ggit_index_read)
+ * 2) The entry has not been removed (see ggit_index_remove())
+ * 3) The index has not been refreshed (see ggit_index_read())
  *
  * Returns: (transfer full): a #GgitIndexEntryUnmerged.
  *
@@ -259,6 +259,7 @@ ggit_index_entry_unmerged_get_mode (GgitIndexEntryUnmerged *entry,
 /**
  * ggit_index_entry_unmerged_get_id:
  * @entry: a #GgitIndexEntryUnmerged.
+ * @stage: the stage (0, 1 or 2)
  *
  * Get the oid of the index entry.
  *

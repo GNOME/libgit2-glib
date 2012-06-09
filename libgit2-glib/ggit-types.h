@@ -40,6 +40,13 @@ typedef struct _GgitBlob GgitBlob;
 typedef struct _GgitCommit GgitCommit;
 
 /**
+ * GgitCommitParents:
+ *
+ * Represents the parents of a commit object.
+ */
+typedef struct _GgitCommitParents GgitCommitParents;
+
+/**
  * GgitConfig:
  *
  * Represents a git configuration.
@@ -89,11 +96,60 @@ typedef struct _GgitDiffRange GgitDiffRange;
 typedef struct _GgitIndex GgitIndex;
 
 /**
+ * GgitIndexEntries:
+ *
+ * Represents the entries in an index object.
+ */
+typedef struct _GgitIndexEntries GgitIndexEntries;
+
+/**
+ * GgitIndexEntry:
+ *
+ * Represents an index entry object.
+ */
+typedef struct _GgitIndexEntry GgitIndexEntry;
+
+/**
+ * GgitIndexEntriesUnmerged:
+ *
+ * Represents the unmerged entries in an index object.
+ */
+typedef struct _GgitIndexEntriesUnmerged GgitIndexEntriesUnmerged;
+
+/**
+ * GgitIndexEntryUnmerged:
+ *
+ * Represents an unmerged index entry object.
+ */
+typedef struct _GgitIndexEntryUnmerged GgitIndexEntryUnmerged;
+
+/**
+ * GgitNative:
+ *
+ * Represents a generic native object.
+ */
+typedef struct _GgitNative GgitNative;
+
+/**
  * GgitObject:
  *
  * Represents a generic object in a repository.
  */
 typedef struct _GgitObject GgitObject;
+
+/**
+ * GgitObjectFactory:
+ *
+ * Represents an object factory.
+ */
+typedef struct _GgitObjectFactory GgitObjectFactory;
+
+/**
+ * GgitObjectFactoryBase:
+ *
+ * Represents the base type for objects created by an object factory.
+ */
+typedef struct _GgitObjectFactoryBase GgitObjectFactoryBase;
 
 /**
  * GgitOId:
@@ -244,7 +300,7 @@ typedef enum {
  * @GGIT_DIFF_INCLUDE_IGNORED: include ignored files.
  * @GGIT_DIFF_INCLUDE_UNTRACKED: include untracked files.
  * @GGIT_DIFF_INCLUDE_UNMODIFIED: include unmodified files.
- * @GGIT_DIFF_RECURSE_UNTRACKED_DIRS:
+ * @GGIT_DIFF_RECURSE_UNTRACKED_DIRS: recurse to untracked directories.
  *
  * How the diff should be generated.
  */
@@ -271,6 +327,8 @@ typedef enum {
  * @GGIT_DIFF_FILE_NOT_BINARY: if the file is not binary.
  * @GGIT_DIFF_FILE_FREE_DATA: if the data must be freed (libgit2 internal).
  * @GGIT_DIFF_FILE_UNMAP_DATA: if the data must be unmapped (libgit2 internal).
+ *
+ * Describes the diff file.
  */
 typedef enum {
 	GGIT_DIFF_FILE_VALID_OID  = 1 << 0,
@@ -434,11 +492,11 @@ typedef enum {
 
 /**
  * GgitSubmoduleUpdate:
- * GGIT_SUBMODULE_UPDATE_CHECKOUT: checkout the submodule.
- * GGIT_SUBMODULE_UPDATE_REBASE: rebase the current branch onto the
- *                               commit recorded in the superproject.
- * GGIT_SUBMODULE_UPDATE_MERGE: merge the commit recorded in the
- *                              superproject into the current branch.
+ * @GGIT_SUBMODULE_UPDATE_CHECKOUT: checkout the submodule.
+ * @GGIT_SUBMODULE_UPDATE_REBASE: rebase the current branch onto the
+ *                                commit recorded in the superproject.
+ * @GGIT_SUBMODULE_UPDATE_MERGE: merge the commit recorded in the
+ *                               superproject into the current branch.
  *
  * Describes how a submodule should be updated.
  */

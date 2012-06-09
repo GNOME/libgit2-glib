@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_TAG			(ggit_tag_get_type ())
 #define GGIT_TAG(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TAG, GgitTag))
-#define GGIT_TAG_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TAG, GgitTag const))
 #define GGIT_TAG_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_TAG, GgitTagClass))
 #define GGIT_IS_TAG(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_TAG))
 #define GGIT_IS_TAG_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_TAG))
@@ -48,6 +47,12 @@ struct _GgitTag
 	gpointer _priv;
 };
 
+/**
+ * GgitTagClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitTagClass.
+ */
 struct _GgitTagClass
 {
 	GgitObjectClass parent_class;

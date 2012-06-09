@@ -30,14 +30,9 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_INDEX_ENTRY       (ggit_index_entry_get_type ())
 #define GGIT_INDEX_ENTRY(obj)       ((GgitIndexEntry *)obj)
-#define GGIT_INDEX_ENTRY_CONST(obj) ((GgitIndexEntry const *)obj)
 
 #define GGIT_TYPE_INDEX_ENTRIES       (ggit_index_entries_get_type ())
 #define GGIT_INDEX_ENTRIES(obj)       ((GgitIndexEntries *)obj)
-#define GGIT_INDEX_ENTRIES_CONST(obj) ((GgitIndexEntries const *)obj)
-
-typedef struct _GgitIndexEntries GgitIndexEntries;
-typedef struct _GgitIndexEntry   GgitIndexEntry;
 
 GType             ggit_index_entries_get_type         (void) G_GNUC_CONST;
 GgitIndexEntries *_ggit_index_entries_new             (GgitIndex         *owner);

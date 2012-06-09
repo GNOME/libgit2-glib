@@ -164,7 +164,7 @@ ggit_config_init (GgitConfig *self)
  * @file: (allow-none): a #GFile
  *
  * Create a new config for a given file. If %NULL is specified for @file, an
- * an empty configuration is created. See also #ggit_config_get_global to get
+ * an empty configuration is created. See also ggit_config_get_global() to get
  * a config representing the global user configuration.
  *
  * Returns: (transfer full): a #GgitConfig

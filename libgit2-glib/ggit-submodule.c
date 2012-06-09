@@ -63,7 +63,7 @@ ggit_submodule_ref (GgitSubmodule *submodule)
 
 /**
  * ggit_submodule_unref:
- * submodule: a #GgitSubmodule.
+ * @submodule: a #GgitSubmodule.
  *
  * Atomically decrements the reference count of @submodule by one.
  * If the reference count drops to 0, @remote is freed.

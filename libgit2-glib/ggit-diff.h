@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_DIFF			(ggit_diff_get_type ())
 #define GGIT_DIFF(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF, GgitDiff))
-#define GGIT_DIFF_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF, GgitDiff const))
 #define GGIT_DIFF_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF, GgitDiffClass))
 #define GGIT_IS_DIFF(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF))
 #define GGIT_IS_DIFF_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF))
@@ -45,6 +44,12 @@ struct _GgitDiff
 	gpointer priv;
 };
 
+/**
+ * GgitDiffClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitDiffClass.
+ */
 struct _GgitDiffClass
 {
 	GgitNativeClass parent_class;

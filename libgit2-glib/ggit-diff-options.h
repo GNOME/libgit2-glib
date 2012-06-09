@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_DIFF_OPTIONS       (ggit_diff_options_get_type ())
 #define GGIT_DIFF_OPTIONS(obj)       ((GgitDiffOptions *)obj)
-#define GGIT_DIFF_OPTIONS_CONST(obj) ((GgitDiffOptions const *)obj)
 
 GType                   ggit_diff_options_get_type          (void) G_GNUC_CONST;
 

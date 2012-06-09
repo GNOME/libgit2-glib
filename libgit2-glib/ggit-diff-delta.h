@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_DIFF_DELTA       (ggit_diff_delta_get_type ())
 #define GGIT_DIFF_DELTA(obj)       ((GgitDiffDelta *)obj)
-#define GGIT_DIFF_DELTA_CONST(obj) ((GgitDiffDelta const *)obj)
 
 GType           ggit_diff_delta_get_type       (void) G_GNUC_CONST;
 

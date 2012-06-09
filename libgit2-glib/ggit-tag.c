@@ -143,7 +143,7 @@ ggit_tag_get_name (GgitTag *tag)
  * @tag: a #GgitTag.
  *
  * Get the tagger (author) of @tag. The returned value must be free with
- * ggit_signature_free().
+ * g_object_unref().
  *
  * Returns: (transfer full): the tagger (author) of the tag.
  */

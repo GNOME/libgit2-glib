@@ -138,7 +138,7 @@ ggit_object_factory_get_default (void)
  *
  * Register @subtype as the instantiation class for @basetype. Each time an
  * object of type @basetype is going to be created, an instance of @subtype
- * is created instead. @basetype must be subclassed from #GgitObjectFactoryObject.
+ * is created instead. @basetype must be subclassed from #GgitObjectFactoryBase.
  *
  **/
 void

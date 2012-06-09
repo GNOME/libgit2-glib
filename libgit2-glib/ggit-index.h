@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_INDEX			(ggit_index_get_type ())
 #define GGIT_INDEX(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_INDEX, GgitIndex))
-#define GGIT_INDEX_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_INDEX, GgitIndex const))
 #define GGIT_INDEX_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_INDEX, GgitIndexClass))
 #define GGIT_IS_INDEX(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_INDEX))
 #define GGIT_IS_INDEX_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_INDEX))
@@ -49,6 +48,12 @@ struct _GgitIndex
 	GgitIndexPrivate *priv;
 };
 
+/**
+ * GgitIndexClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitIndexClass.
+ */
 struct _GgitIndexClass
 {
 	GgitNativeClass parent_class;

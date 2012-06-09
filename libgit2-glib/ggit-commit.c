@@ -59,6 +59,15 @@ ggit_commit_parents_new (GgitCommit *commit)
 	return ret;
 }
 
+/**
+ * ggit_commit_parents_ref:
+ * @parents: a #GgitCommitParents.
+ *
+ * Atomically increments the reference count of @parents by one.
+ * This function is MT-safe and may be called from any thread.
+ *
+ * Returns: a #GgitCommitParents.
+ **/
 GgitCommitParents *
 ggit_commit_parents_ref (GgitCommitParents *parents)
 {
@@ -69,6 +78,13 @@ ggit_commit_parents_ref (GgitCommitParents *parents)
 	return parents;
 }
 
+/**
+ * ggit_commit_parents_unref:
+ * @parents: a #GgitCommitParents.
+ *
+ * Atomically decrements the reference count of @parents by one.
+ * If the reference count drops to 0, @parents is freed.
+ **/
 void
 ggit_commit_parents_unref (GgitCommitParents *parents)
 {
@@ -244,7 +260,7 @@ ggit_commit_get_subject (GgitCommit *commit)
  * @commit: a #GgitCommit.
  *
  * Gets the committer of @commit. The returned value must be free'd with
- * ggit_signature_free().
+ * g_object_unref().
  *
  * Returns: (transfer full): the committer of the commit.
  */
@@ -269,7 +285,7 @@ ggit_commit_get_committer (GgitCommit *commit)
  * @commit: a #GgitCommit.
  *
  * Gets the author of @commit. The returned value must be free'd with
- * ggit_signature_free().
+ * g_object_unref().
  *
  * Returns: (transfer full): the author of the commit.
  */
@@ -361,7 +377,7 @@ ggit_commit_parents_get (GgitCommitParents *parents,
  *
  * Get the #GgitOId of a parent.
  *
- * Returns: (transfer full): a #GgitOid.
+ * Returns: (transfer full): a #GgitOId.
  *
  **/
 GgitOId *
@@ -413,7 +429,7 @@ ggit_commit_get_tree (GgitCommit *commit)
  * @commit: a #GgitCommit.
  *
  * Get the #GgitOId of the tree of @commit. Note that this is more efficient
- * than getting the tree object with #ggit_commit_get_tree because no additional
+ * than getting the tree object with ggit_commit_get_tree() because no additional
  * files need to be read from disk.
  *
  * Returns: (transfer full) a #GgitOId.

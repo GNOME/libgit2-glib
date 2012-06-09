@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_CONFIG		(ggit_config_get_type ())
 #define GGIT_CONFIG(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CONFIG, GgitConfig))
-#define GGIT_CONFIG_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CONFIG, GgitConfig const))
 #define GGIT_CONFIG_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CONFIG, GgitConfigClass))
 #define GGIT_IS_CONFIG(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CONFIG))
 #define GGIT_IS_CONFIG_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CONFIG))
@@ -48,6 +47,12 @@ struct _GgitConfig
 	GgitConfigPrivate *priv;
 };
 
+/**
+ * GgitConfigClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitConfigClass.
+ */
 struct _GgitConfigClass
 {
 	GgitNativeClass parent_class;

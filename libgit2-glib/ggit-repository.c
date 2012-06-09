@@ -477,7 +477,7 @@ ggit_repository_lookup (GgitRepository  *repository,
  * @error: a #GError for error reporting, or %NULL.
  *
  * Lookups a reference by its name in @repository. The returned #GgitRef must
- * be freed with ggit_ref_free().
+ * be freed with g_object_unref().
  *
  * Returns: (transfer full): the searched reference.
  */
@@ -518,7 +518,7 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
  * Creates a new object id reference.
  *
  * The reference will be created in the repository and written
- * to the disk. The returned value must be freed with ggit_ref_free().
+ * to the disk. The returned value must be freed with g_object_unref().
  *
  * Returns: (transfer full): the newly created reference.
  */
@@ -561,7 +561,7 @@ ggit_repository_create_reference (GgitRepository  *repository,
  * Creates a new symbolic reference.
  *
  * The reference will be created in the repository and written
- * to the disk. The returned value must be freed with ggit_ref_free().
+ * to the disk. The returned value must be freed with g_object_unref().
  *
  * Returns: (transfer full): the newly created reference.
  */
@@ -1560,7 +1560,7 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
 }
 
 /**
- * ggit_respository_reset:
+ * ggit_repository_reset:
  * @repository: a #GgitRepository.
  * @target: the target #GgitObject which is a commit or a tag.
  * @reset_type: the #GgitResetType to perform.

@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_OID       (ggit_oid_get_type ())
 #define GGIT_OID(obj)       ((GgitOId *)obj)
-#define GGIT_OID_CONST(obj) ((GgitOId const *)obj)
 
 GType          ggit_oid_get_type        (void) G_GNUC_CONST;
 

@@ -1,6 +1,3 @@
-GTKDOC_CFLAGS = -I$(top_srcdir) $(LIBGIT2_CFLAGS)
-GTKDOC_LIBS = $(top_builddir)/libgit2-glib/libgit2-glib-1.0.la $(LIBGIT2_LIBS)
-
 ## Process this file with automake to produce Makefile.in
 AUTOMAKE_OPTIONS = 1.7
 
@@ -8,22 +5,22 @@ AUTOMAKE_OPTIONS = 1.7
 DOC_MODULE = libgit2-glib-1.0
 
 # The top-level SGML file.
-DOC_MAIN_SGML_FILE = libgit2-glib-docs.sgml
+DOC_MAIN_SGML_FILE = $(DOC_MODULE)-docs.sgml
 
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS =
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR = ../..
+DOC_SOURCE_DIR = $(top_srcdir)/libgit2-glib
 
 # Used for dependencies
 HFILE_GLOB = $(top_srcdir)/libgit2-glib/*.h
 CFILE_GLOB = $(top_srcdir)/libgit2-glib/*.c
 
 # Headers to ignore
-IGNORE_HFILES =					\
-	config.h				\
-	ggit-object-private.h			\
+IGNORE_HFILES = \
+	config.h	\
+	ggit-convert.h	\
 	ggit-utils.h
 
 update-sections: $(HFILE_GLOB)
@@ -36,6 +33,17 @@ update-sections: $(HFILE_GLOB)
 
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS = --sgml-mode --output-format=xml --ignore-files=trio
+
+# CFLAGS and LDFLAGS for compiling gtkdoc-scangobj with your library.
+# Only needed if you are using gtkdoc-scangobj to dynamically query widget
+# signals and properties.
+GTKDOC_CFLAGS = \
+	-I$(top_srcdir)	\
+	$(LIBGIT2_GLIB_CFLAGS)
+
+GTKDOC_LIBS = \
+	$(top_builddir)/libgit2-glib/libgit2-glib-1.0.la	\
+	$(LIBGIT2_GLIB_LIBS)
 
 # Images to copy into HTML directory
 HTML_IMAGES =
@@ -52,3 +60,5 @@ include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
 EXTRA_DIST +=
+
+# ex:set ts=8 noet:

@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_REFLOG       (ggit_reflog_get_type ())
 #define GGIT_REFLOG(obj)       ((GgitReflog *)obj)
-#define GGIT_REFLOG_CONST(obj) ((GgitReflog const *)obj)
 
 GType             ggit_reflog_get_type             (void) G_GNUC_CONST;
 

@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_SUBMODULE             (ggit_submodule_get_type ())
 #define GGIT_SUBMODULE(obj)             ((GgitSubmodule *)obj)
-#define GGIT_SUBMODULE_CONST(obj)       ((GgitSubmodule const *)obj)
 
 GType                   ggit_submodule_get_type              (void) G_GNUC_CONST;
 

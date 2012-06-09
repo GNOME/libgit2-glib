@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_REMOTE        (ggit_remote_get_type ())
 #define GGIT_REMOTE(obj)        ((GgitRemote *)obj)
-#define GGIT_REMOTE_CONST(obj)  ((GgitRemote const *)obj)
 
 GType              ggit_remote_get_type                 (void) G_GNUC_CONST;
 

@@ -65,7 +65,7 @@ ggit_remote_ref (GgitRemote *remote)
 
 /**
  * ggit_remote_unref:
- * remote: a #GgitRemote.
+ * @remote: a #GgitRemote.
  *
  * Atomically decrements the reference count of @remote by one.
  * If the reference count drops to 0, @remote is freed.
@@ -168,7 +168,7 @@ ggit_remote_connect (GgitRemote  *remote,
 }
 
 /**
- * ggit_remote_connected:
+ * ggit_remote_get_connected:
  * @remote: a #GgitRemote.
  *
  * Check whether @remote is connected.

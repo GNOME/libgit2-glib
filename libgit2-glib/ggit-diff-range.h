@@ -27,7 +27,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_DIFF_RANGE       (ggit_diff_range_get_type ())
 #define GGIT_DIFF_RANGE(obj)       ((GgitDiffRange *)obj)
-#define GGIT_DIFF_RANGE_CONST(obj) ((GgitDiffRange const *)obj)
 
 GType ggit_diff_range_get_type                 (void) G_GNUC_CONST;
 

@@ -63,7 +63,7 @@ ggit_reflog_ref (GgitReflog *reflog)
 
 /**
  * ggit_reflog_unref:
- * reflog: a #GgitReflog.
+ * @reflog: a #GgitReflog.
  *
  * Atomically decrements the reference count of @reflog by one.
  * If the reference count drops to 0, @reflog is freed.
@@ -97,7 +97,7 @@ ggit_reflog_get_entry_count (GgitReflog *reflog)
 }
 
 /**
- * ggit_reflog_get_from_index:
+ * ggit_reflog_get_entry_from_index:
  * @reflog: a #GgitReflog.
  * @idx: the position to lookup.
  *

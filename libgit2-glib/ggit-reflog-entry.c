@@ -65,7 +65,7 @@ ggit_reflog_entry_ref (GgitReflogEntry *reflog_entry)
 
 /**
  * ggit_reflog_entry_unref:
- * reflog_entry: a #GgitReflogEntry.
+ * @reflog_entry: a #GgitReflogEntry.
  *
  * Atomically decrements the reference count of @reflog_entry by one.
  * If the reference count drops to 0, @reflog_entry is freed.

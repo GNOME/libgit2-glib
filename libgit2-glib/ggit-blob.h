@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_BLOB			(ggit_blob_get_type ())
 #define GGIT_BLOB(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_BLOB, GgitBlob))
-#define GGIT_BLOB_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_BLOB, GgitBlob const))
 #define GGIT_BLOB_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_BLOB, GgitBlobClass))
 #define GGIT_IS_BLOB(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_BLOB))
 #define GGIT_IS_BLOB_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_BLOB))
@@ -48,6 +47,12 @@ struct _GgitBlob
 	gpointer _priv;
 };
 
+/**
+ * GgitBlobClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitBlobClass.
+ */
 struct _GgitBlobClass
 {
 	GgitObjectClass parent_class;

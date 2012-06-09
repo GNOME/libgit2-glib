@@ -29,7 +29,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_DIFF_FILE       (ggit_diff_file_get_type ())
 #define GGIT_DIFF_FILE(obj)       ((GgitDiffFile *)obj)
-#define GGIT_DIFF_FILE_CONST(obj) ((GgitDiffFile const *)obj)
 
 GType              ggit_diff_file_get_type  (void) G_GNUC_CONST;
 

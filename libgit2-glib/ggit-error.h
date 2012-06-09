@@ -27,6 +27,13 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GGIT_ERROR:
+ *
+ * Error domain for Ggit. Errors in this domain will
+ * be from the GgitError enumeration. See #GError for
+ * more information on error domains.
+ */
 #define GGIT_ERROR ggit_error_quark ()
 
 GQuark   ggit_error_quark (void);

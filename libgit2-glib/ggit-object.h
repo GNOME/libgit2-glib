@@ -32,7 +32,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_OBJECT		(ggit_object_get_type ())
 #define GGIT_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_OBJECT, GgitObject))
-#define GGIT_OBJECT_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_OBJECT, GgitObject const))
 #define GGIT_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_OBJECT, GgitObjectClass))
 #define GGIT_IS_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_OBJECT))
 #define GGIT_IS_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_OBJECT))
@@ -48,6 +47,12 @@ struct _GgitObject
 	gpointer _priv;
 };
 
+/**
+ * GgitObjectClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitObjectClass.
+ */
 struct _GgitObjectClass
 {
 	GgitNativeClass parent_class;

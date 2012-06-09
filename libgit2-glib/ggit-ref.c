@@ -93,11 +93,11 @@ ggit_ref_get_target (GgitRef *ref)
 }
 
 /**
- * ggit_ref_get_type:
+ * ggit_ref_get_reference_type:
  * @ref: a #GgitRef.
  *
- * Gets the type of @ref. Either direct (GGIT_REF_OID) or
- * symbolic (GGIT_REF_SYMBOLIC).
+ * Gets the type of @ref. Either direct (#GGIT_REF_OID) or
+ * symbolic (#GGIT_REF_SYMBOLIC).
  *
  * Returns: the type of a reference.
  */

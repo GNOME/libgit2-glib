@@ -30,7 +30,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_REVISION_WALKER		(ggit_revision_walker_get_type ())
 #define GGIT_REVISION_WALKER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalker))
-#define GGIT_REVISION_WALKER_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalker const))
 #define GGIT_REVISION_WALKER_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalkerClass))
 #define GGIT_IS_REVISION_WALKER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REVISION_WALKER))
 #define GGIT_IS_REVISION_WALKER_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REVISION_WALKER))
@@ -46,6 +45,12 @@ struct _GgitRevisionWalker
 	GgitRevisionWalkerPrivate *priv;
 };
 
+/**
+ * GgitRevisionWalkerClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitRevisionWalkerClass.
+ */
 struct _GgitRevisionWalkerClass
 {
 	GgitNativeClass parent_class;

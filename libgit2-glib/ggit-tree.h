@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 #define GGIT_TYPE_TREE			(ggit_tree_get_type ())
 #define GGIT_TREE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TREE, GgitTree))
-#define GGIT_TREE_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TREE, GgitTree const))
 #define GGIT_TREE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_TREE, GgitTreeClass))
 #define GGIT_IS_TREE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_TREE))
 #define GGIT_IS_TREE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_TREE))
@@ -47,6 +46,12 @@ struct _GgitTree
 	gpointer priv;
 };
 
+/**
+ * GgitTreeClass:
+ * @parent_class: The parent class.
+ *
+ * The class structure for #GgitTreeClass.
+ */
 struct _GgitTreeClass
 {
 	GgitObjectClass parent_class;
