@@ -22,6 +22,7 @@
 
 #include "ggit-remote.h"
 #include "ggit-error.h"
+#include "ggit-ref-spec.h"
 
 
 struct _GgitRemote
@@ -196,6 +197,110 @@ ggit_remote_disconnect (GgitRemote *remote)
 	g_return_if_fail (remote != NULL);
 
 	git_remote_disconnect (remote->remote);
+}
+
+/**
+ * ggit_remote_set_fetch_spec:
+ * @remote: a #GgitRemote.
+ * @fetch_spec: the fetch refspec.
+ * @error: a #GError or %NULL.
+ *
+ * Sets @remote's fetch spec to @fetch_spec.
+ */
+void
+ggit_remote_set_fetch_spec (GgitRemote   *remote,
+                            const gchar  *fetch_spec,
+                            GError      **error)
+{
+	gint ret;
+
+	g_return_if_fail (remote != NULL);
+	g_return_if_fail (fetch_spec != NULL && fetch_spec[0] != '\0');
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_remote_set_fetchspec (remote->remote, fetch_spec);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_remote_get_fetch_spec:
+ * @remote: a #GgitRemote.
+ *
+ * Gets @remote's fetch spec.
+ *
+ * Returns: the fetch spec of the remote, or %NULL.
+ */
+GgitRefSpec *
+ggit_remote_get_fetch_spec (GgitRemote *remote)
+{
+	const git_refspec *refspec;
+
+	g_return_val_if_fail (remote != NULL, NULL);
+
+	refspec = git_remote_fetchspec (remote->remote);
+
+	if (refspec == NULL)
+	{
+		return NULL;
+	}
+
+	return _ggit_ref_spec_wrap (refspec);
+}
+
+/**
+ * ggit_remote_set_push_spec:
+ * @remote: a #GgitRemote.
+ * @push_spec: the push refspec.
+ * @error: a #GError or %NULL.
+ *
+ * Sets @remote's push spec to @fetch_spec.
+ */
+void
+ggit_remote_set_push_spec (GgitRemote   *remote,
+                           const gchar  *push_spec,
+                           GError      **error)
+{
+	gint ret;
+
+	g_return_if_fail (remote != NULL);
+	g_return_if_fail (push_spec != NULL && push_spec[0] != '\0');
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_remote_set_pushspec (remote->remote, push_spec);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_remote_get_push_spec:
+ * @remote: a #GgitRemote.
+ *
+ * Gets @remote's push spec.
+ *
+ * Returns: the push spec of the remote, or %NULL.
+ */
+GgitRefSpec *
+ggit_remote_get_push_spec (GgitRemote *remote)
+{
+	const git_refspec *refspec;
+
+	g_return_val_if_fail (remote != NULL, NULL);
+
+	refspec = git_remote_pushspec (remote->remote);
+
+	if (refspec == NULL)
+	{
+		return NULL;
+	}
+
+	return _ggit_ref_spec_wrap (refspec);
 }
 
 /**

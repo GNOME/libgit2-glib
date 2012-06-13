@@ -18,6 +18,7 @@ ggit_object_factory_get_type
 ggit_object_get_type
 ggit_oid_get_type
 ggit_ref_get_type
+ggit_ref_spec_get_type
 ggit_reflog_entry_get_type
 ggit_reflog_get_type
 ggit_remote_get_type

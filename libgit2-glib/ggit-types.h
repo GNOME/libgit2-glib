@@ -166,6 +166,13 @@ typedef struct _GgitOId GgitOId;
 typedef struct _GgitRef GgitRef;
 
 /**
+ * GgitRefSpec:
+ *
+ * Reprensents a git reference specification.
+ */
+typedef struct _GgitRefSpec GgitRefSpec;
+
+/**
  * GgitReflog:
  *
  * Represents a reflog.

@@ -34,6 +34,7 @@ INST_H_FILES =				\
 	ggit-object-factory-base.h	\
 	ggit-oid.h			\
 	ggit-ref.h			\
+	ggit-ref-spec.h			\
 	ggit-reflog.h			\
 	ggit-reflog-entry.h		\
 	ggit-remote.h			\
@@ -72,6 +73,7 @@ C_FILES =				\
 	ggit-object-factory-base.c	\
 	ggit-oid.c			\
 	ggit-ref.c			\
+	ggit-ref-spec.c			\
 	ggit-reflog.c			\
 	ggit-reflog-entry.c		\
 	ggit-remote.c			\

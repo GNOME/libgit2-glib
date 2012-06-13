@@ -373,6 +373,21 @@ ggit_ref_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-ref-spec</FILE>
+<TITLE>GgitRefSpec</TITLE>
+GgitRefSpec
+ggit_ref_spec_ref
+ggit_ref_spec_unref
+ggit_ref_spec_get_source
+ggit_ref_spec_get_destination
+ggit_ref_spec_is_forced
+<SUBSECTION Standard>
+GGIT_REF_SPEC
+GGIT_TYPE_REF_SPEC
+ggit_ref_spec_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-reflog</FILE>
 <TITLE>GgitReflog</TITLE>
 GgitReflog
@@ -414,6 +429,10 @@ ggit_remote_get_url
 ggit_remote_connect
 ggit_remote_get_connected
 ggit_remote_disconnect
+ggit_remote_set_fetch_spec
+ggit_remote_get_fetch_spec
+ggit_remote_set_push_spec
+ggit_remote_get_push_spec
 ggit_remote_is_valid_url
 ggit_remote_is_supported_url
 <SUBSECTION Standard>

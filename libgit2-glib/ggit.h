@@ -40,6 +40,7 @@
 #include <libgit2-glib/ggit-object-factory-base.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-ref.h>
+#include <libgit2-glib/ggit-ref-spec.h>
 #include <libgit2-glib/ggit-reflog.h>
 #include <libgit2-glib/ggit-reflog-entry.h>
 #include <libgit2-glib/ggit-remote.h>
