@@ -54,6 +54,7 @@ gboolean           ggit_remote_get_connected            (GgitRemote       *remot
 void               ggit_remote_disconnect               (GgitRemote       *remote);
 
 gboolean           ggit_remote_is_valid_url             (const gchar      *url);
+gboolean           ggit_remote_is_supported_url         (const gchar      *url);
 
 G_END_DECLS
 

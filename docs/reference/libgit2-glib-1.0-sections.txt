@@ -415,6 +415,7 @@ ggit_remote_connect
 ggit_remote_get_connected
 ggit_remote_disconnect
 ggit_remote_is_valid_url
+ggit_remote_is_supported_url
 <SUBSECTION Standard>
 GGIT_REMOTE
 GGIT_TYPE_REMOTE
