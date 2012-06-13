@@ -63,6 +63,11 @@ void               ggit_remote_set_push_spec            (GgitRemote       *remot
                                                          GError          **error);
 GgitRefSpec       *ggit_remote_get_push_spec            (GgitRemote       *remote);
 
+void               ggit_remote_list                     (GgitRemote       *remote,
+                                                         GgitRemoteListCallback callback,
+                                                         gpointer          user_data,
+                                                         GError          **error);
+
 gboolean           ggit_remote_is_valid_url             (const gchar      *url);
 gboolean           ggit_remote_is_supported_url         (const gchar      *url);
 

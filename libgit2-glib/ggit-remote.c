@@ -22,6 +22,7 @@
 
 #include "ggit-remote.h"
 #include "ggit-error.h"
+#include "ggit-oid.h"
 #include "ggit-ref-spec.h"
 
 
@@ -301,6 +302,66 @@ ggit_remote_get_push_spec (GgitRemote *remote)
 	}
 
 	return _ggit_ref_spec_wrap (refspec);
+}
+
+typedef struct {
+	GgitRemoteListCallback callback;
+	gpointer user_data;
+} RemoteListData;
+
+static gint
+remote_list_callback_wrapper (git_remote_head *head,
+                              gpointer         user_data)
+{
+	RemoteListData *data = user_data;
+	GgitOId *oid;
+	GgitOId *loid;
+	gint ret;
+
+	oid = _ggit_oid_new (&head->oid);
+	loid = _ggit_oid_new (&head->loid);
+
+	ret = data->callback (head->name, oid, loid,
+	                      head->local, data->user_data);
+
+	ggit_oid_free (loid);
+	ggit_oid_free (oid);
+
+	return ret;
+}
+
+/**
+ * ggit_remote_list:
+ * @remote: a #GgitRemote.
+ * @callback: (scope call) (closure user_data): a #GgitRemoteListCallback.
+ * @user_data: callback user data.
+ * @error: a #GError or %NULL.
+ *
+ * Calls @callback for each ref at @remote.
+ */
+void
+ggit_remote_list (GgitRemote              *remote,
+                  GgitRemoteListCallback   callback,
+                  gpointer                 user_data,
+                  GError                 **error)
+{
+	RemoteListData data;
+	gint ret;
+
+	g_return_if_fail (remote != NULL);
+	g_return_if_fail (callback != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	data.callback = callback;
+	data.user_data = user_data;
+
+	ret = git_remote_ls (remote->remote,
+	                     remote_list_callback_wrapper, &data);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
 }
 
 /**

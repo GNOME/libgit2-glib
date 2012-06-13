@@ -613,6 +613,25 @@ typedef gint (* GgitReferencesCallback) (const gchar *name,
                                          gpointer     data);
 
 /**
+ * GgitRemoteListCallback:
+ * @name: the name of the reference.
+ * @oid: the reference's oid.
+ * @loid: the reference's loid.
+ * @local: if available locally.
+ * @user_data: (closure): user-supplied data.
+ *
+ * The type of the callback functions for listing the references of a
+ * #GgitRemote. See ggit_remote_list().
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitRemoteListCallback) (const gchar *name,
+                                         GgitOId     *oid,
+                                         GgitOId     *loid,
+                                         gboolean     local,
+                                         gpointer     user_data);
+
+/**
  * GgitStatusCallback:
  * @path: the file to retrieve status for, rooted at the repository working dir.
  * @status_flags: the status value.

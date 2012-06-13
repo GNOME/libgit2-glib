@@ -433,6 +433,7 @@ ggit_remote_set_fetch_spec
 ggit_remote_get_fetch_spec
 ggit_remote_set_push_spec
 ggit_remote_get_push_spec
+ggit_remote_list
 ggit_remote_is_valid_url
 ggit_remote_is_supported_url
 <SUBSECTION Standard>
@@ -632,6 +633,7 @@ GgitDiffFileCallback
 GgitDiffHunkCallback
 GgitDiffLineCallback
 GgitReferencesCallback
+GgitRemoteListCallback
 GgitStatusCallback
 GgitSubmoduleCallback
 </SECTION>
