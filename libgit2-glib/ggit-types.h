@@ -516,6 +516,22 @@ typedef enum {
 
 
 /**
+ * GgitBranchesCallback:
+ * @branch_name: the branch name.
+ * @branch_type: a #GgitBranchType.
+ * @user_data: (closure): user-supplied data.
+ *
+ * The type of the callback functions for retrieving the branches
+ * in a #GgitRepository. See ggit_repository_branches_foreach().
+ *
+ * Returns: 0 to go for the next branch or a #GgitError in case there was an error.
+ *
+ */
+typedef gint (* GgitBranchesCallback) (const gchar    *branch_name,
+                                       GgitBranchType  branch_type,
+                                       gpointer        user_data);
+
+/**
  * GgitConfigCallback:
  * @name: the name of the configuration value
  * @value: the value

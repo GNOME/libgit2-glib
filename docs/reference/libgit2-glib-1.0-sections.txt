@@ -460,7 +460,7 @@ ggit_repository_list_tags
 ggit_repository_create_branch
 ggit_repository_delete_branch
 ggit_repository_move_branch
-ggit_repository_list_branches
+ggit_repository_branches_foreach
 ggit_repository_get_remote
 ggit_repository_add_remote
 ggit_repository_list_remotes
@@ -627,6 +627,7 @@ GgitSortMode
 GgitStatusFlags
 GgitSubmoduleIgnore
 GgitSubmoduleUpdate
+GgitBranchesCallback
 GgitConfigCallback
 GgitConfigMatchCallback
 GgitDiffFileCallback

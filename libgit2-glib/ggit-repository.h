@@ -137,8 +137,10 @@ void                ggit_repository_move_branch       (GgitRepository        *re
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
-gchar             **ggit_repository_list_branches     (GgitRepository        *repository,
+void                ggit_repository_branches_foreach  (GgitRepository        *repository,
                                                        GgitBranchType         branch_type,
+                                                       GgitBranchesCallback   callback,
+                                                       gpointer               user_data,
                                                        GError               **error);
 
 GgitRemote         *ggit_repository_get_remote        (GgitRepository        *repository,

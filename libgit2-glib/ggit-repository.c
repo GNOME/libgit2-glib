@@ -1331,43 +1331,42 @@ ggit_repository_move_branch (GgitRepository   *repository,
 	}
 }
 
+typedef gint (* _GitBranchesCallback) (const gchar  *branch_name,
+                                       git_branch_t  branch_type,
+                                       gpointer      payload);
+
 /**
- * ggit_repository_list_branches:
+ * ggit_repository_branches_foreach:
  * @repository: a #GgitRepository.
  * @branch_type: a GgitBranchType.
+ * @callback: (scope call): a #GgitBranchesCallback.
+ * @user_data: callback user data.
  * @error: a #GError.
  *
- * Fill a list with all the branches in the Repository.
- *
- * Returns: (transfer full) (allow-none): a list with the branches specified by @branch_type.
+ * Foreach branch of type @branch_type the callback @callback is called.
  **/
-gchar **
-ggit_repository_list_branches (GgitRepository  *repository,
-                               GgitBranchType   branch_type,
-                               GError         **error)
+void
+ggit_repository_branches_foreach (GgitRepository        *repository,
+                                  GgitBranchType         branch_type,
+                                  GgitBranchesCallback   callback,
+                                  gpointer               user_data,
+                                  GError               **error)
 {
 	gint ret;
-	git_strarray branch_names;
-	gchar **branches;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (callback != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_branch_list (&branch_names,
-	                       _ggit_native_get (repository),
-	                       branch_type);
+	ret = git_branch_foreach (_ggit_native_get (repository),
+	                          branch_type,
+	                          (_GitBranchesCallback) callback,
+	                          user_data);
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
-		branches = NULL;
 	}
-	else
-	{
-		branches = ggit_utils_get_str_array_from_git_strarray (&branch_names);
-	}
-
-	return branches;
 }
 
 /**
