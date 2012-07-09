@@ -581,7 +581,7 @@ typedef gint (* GgitDiffFileCallback) (GgitDiffDelta *delta,
  * GgitDiffHunkCallback:
  * @delta: a #GgitDiffDelta.
  * @range: a #GgitDiffRange.
- * @header: the header.
+ * @header: (array length=header_len) (element-type guint8): the header.
  * @header_len: the header length.
  * @user_data: (closure): user-supplied data.
  *
@@ -600,7 +600,7 @@ typedef gint (* GgitDiffHunkCallback) (GgitDiffDelta *delta,
  * @delta: a #GgitDiffDelta.
  * @range: a #GgitDiffRange.
  * @line_type: a #GgitDiffLineType.
- * @content: the content.
+ * @content: (array length=content_len) (element-type guint8): the content.
  * @content_len: the content length.
  * @user_data: (closure): user-supplied data.
  *
