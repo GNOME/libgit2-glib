@@ -101,7 +101,7 @@ ggit_diff_delta_unref (GgitDiffDelta *delta)
  *
  * Gets the old file for @delta.
  *
- * Returns: the delta's old file.
+ * Returns: (transfer none): the delta's old file.
  */
 GgitDiffFile *
 ggit_diff_delta_get_old_file (GgitDiffDelta *delta)
@@ -117,7 +117,7 @@ ggit_diff_delta_get_old_file (GgitDiffDelta *delta)
  *
  * Gets the new file for @delta.
  *
- * Returns: the delta's new file.
+ * Returns: (transfer none): the delta's new file.
  */
 GgitDiffFile *
 ggit_diff_delta_get_new_file (GgitDiffDelta *delta)
