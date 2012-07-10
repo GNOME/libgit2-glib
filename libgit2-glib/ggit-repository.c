@@ -137,10 +137,6 @@ set_workdir (GgitRepository *repository,
 			g_free (path);
 		}
 	}
-	else if (_ggit_native_get (repository))
-	{
-		git_repository_set_workdir (_ggit_native_get (repository), NULL);
-	}
 }
 
 static void
