@@ -75,7 +75,7 @@ GgitSignature       *ggit_commit_get_committer        (GgitCommit        *commit
 
 GgitSignature       *ggit_commit_get_author           (GgitCommit        *commit);
 
-GgitCommitParents *  ggit_commit_get_parents          (GgitCommit        *commit);
+GgitCommitParents   *ggit_commit_get_parents          (GgitCommit        *commit);
 
 
 
@@ -84,15 +84,19 @@ void                 ggit_commit_parents_unref        (GgitCommitParents *parent
 
 guint                ggit_commit_parents_size         (GgitCommitParents *parents);
 
-GgitCommit *         ggit_commit_parents_get          (GgitCommitParents *parents,
+GgitCommit          *ggit_commit_parents_get          (GgitCommitParents *parents,
                                                        guint              idx);
 
-GgitOId *            ggit_commit_parents_get_id       (GgitCommitParents *parents,
+GgitOId             *ggit_commit_parents_get_id       (GgitCommitParents *parents,
                                                        guint              idx);
 
-GgitTree *           ggit_commit_get_tree             (GgitCommit        *commit);
+GgitTree            *ggit_commit_get_tree             (GgitCommit        *commit);
 
-GgitOId *            ggit_commit_get_tree_id          (GgitCommit        *commit);
+GgitOId             *ggit_commit_get_tree_id          (GgitCommit        *commit);
+
+GgitCommit          *ggit_commit_get_nth_ancestor     (GgitCommit        *commit,
+                                                       guint              n,
+                                                       GError           **error);
 
 G_END_DECLS
 

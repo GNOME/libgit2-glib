@@ -20,6 +20,7 @@
 
 #include <git2/errors.h>
 
+#include "ggit-error.h"
 #include "ggit-commit.h"
 #include "ggit-signature.h"
 #include "ggit-oid.h"
@@ -448,6 +449,41 @@ ggit_commit_get_tree_id (GgitCommit *commit)
 	oid = git_commit_tree_oid (c);
 
 	return _ggit_oid_new (oid);
+}
+
+/**
+ * ggit_commit_get_nth_ancestor:
+ * @commit: a #GgitCommit
+ * @n: the requested ancestor
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the commit object that is the <n>th generation ancestor
+ * of the named commit object, following only the first parents.
+ * Passing %0 to the @n parameter returns another instance of @commit.
+ *
+ * Returns: (transfer full): the @n ancestor commit.
+ */
+GgitCommit *
+ggit_commit_get_nth_ancestor (GgitCommit  *commit,
+                              guint        n,
+                              GError     **error)
+{
+	git_commit *ancestor;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+	g_return_val_if_fail (n >= 0, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_commit_nth_gen_ancestor (&ancestor, _ggit_native_get (commit), n);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_commit_wrap (ancestor, TRUE);
 }
 
 /* ex:set ts=8 noet: */
