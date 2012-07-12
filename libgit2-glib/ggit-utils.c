@@ -81,29 +81,23 @@ GgitObject *
 ggit_utils_create_real_object (git_object *obj,
                                gboolean    owned)
 {
-	GgitObject *object = NULL;
 	git_otype otype;
 
 	otype = git_object_type (obj);
 
-	if (otype == GIT_OBJ_TAG)
+	switch (otype)
 	{
-		object = GGIT_OBJECT (_ggit_tag_wrap ((git_tag *)obj, owned));
+		case GIT_OBJ_TAG:
+			return GGIT_OBJECT (_ggit_tag_wrap ((git_tag *)obj, owned));
+		case GIT_OBJ_BLOB:
+			return GGIT_OBJECT (_ggit_blob_wrap ((git_blob *)obj, owned));
+		case GIT_OBJ_COMMIT:
+			return GGIT_OBJECT (_ggit_commit_wrap ((git_commit *)obj, owned));
+		case GIT_OBJ_TREE:
+			return GGIT_OBJECT (_ggit_tree_wrap ((git_tree *)obj, owned));
+		default:
+			return NULL;
 	}
-	else if (otype == GGIT_TYPE_BLOB)
-	{
-		object = GGIT_OBJECT (_ggit_blob_wrap ((git_blob *)obj, owned));
-	}
-	else if (otype == GIT_OBJ_COMMIT)
-	{
-		object = GGIT_OBJECT (_ggit_commit_wrap ((git_commit *)obj, owned));
-	}
-	else if (otype == GIT_OBJ_TREE)
-	{
-		object = GGIT_OBJECT (_ggit_tree_wrap ((git_tree *)obj, owned));
-	}
-
-	return object;
 }
 
 gchar **
