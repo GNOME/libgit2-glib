@@ -491,4 +491,38 @@ ggit_ref_delete_reflog (GgitRef  *ref,
 	}
 }
 
+/**
+ * ggit_ref_get_remote_tracking_from_branch:
+ * @ref: a #GgitRef.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the reference supporting the remote tracking branch,
+ * given a reference branch. The input reference has to be located
+ * in the `refs/heads` namespace. If the remote tracking reference does not
+ * exits the error will be set to %GGIT_ERROR_NOTFOUND.
+ *
+ * Returns: (transfer full): the reference supporting the remote tracking branch,
+ * given a reference branch or %NULL on error.
+ */
+GgitRef *
+ggit_ref_get_remote_tracking_from_branch (GgitRef  *ref,
+                                          GError  **error)
+{
+	git_reference *reference;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_reference_remote_tracking_from_branch (&reference, _ggit_native_get (ref));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_ref_wrap (reference);
+}
+
 /* ex:set ts=8 noet: */

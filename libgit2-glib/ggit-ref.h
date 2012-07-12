@@ -106,6 +106,10 @@ void            ggit_ref_rename_reflog      (GgitRef        *ref,
 void            ggit_ref_delete_reflog      (GgitRef        *ref,
                                              GError        **error);
 
+GgitRef        *ggit_ref_get_remote_tracking_from_branch
+                                            (GgitRef        *ref,
+                                             GError        **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REF_H__ */
