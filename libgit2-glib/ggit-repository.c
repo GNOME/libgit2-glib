@@ -477,7 +477,7 @@ ggit_repository_lookup (GgitRepository  *repository,
  * or the documentation for `git rev-parse` for information on the syntax
  * accepted.
  *
- * Returns: a #GgitObject or %NULL if the revision could not be found.
+ * Returns: (transfer full): a #GgitObject or %NULL if the revision could not be found.
  *
  **/
 GgitObject *
