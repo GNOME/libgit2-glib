@@ -214,6 +214,10 @@ void                ggit_repository_reset              (GgitRepository          
                                                         GgitResetType            reset_type,
                                                         GError                 **error);
 
+GgitObject         *ggit_repository_revparse          (GgitRepository        *repository,
+                                                       const gchar           *spec,
+                                                       GError               **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

@@ -28,6 +28,7 @@
 #include <git2/remote.h>
 #include <git2/reset.h>
 #include <git2/submodule.h>
+#include <git2/revparse.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -453,6 +454,45 @@ ggit_repository_lookup (GgitRepository  *repository,
 	                         _ggit_native_get (repository),
 	                         id,
 	                         otype);
+
+	if (ret == GIT_OK)
+	{
+		object = ggit_utils_create_real_object (obj, TRUE);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return object;
+}
+
+/**
+ * ggit_repository_revparse:
+ * @repository: a #GgitRepository.
+ * @spec: the revision specification.
+ * @error: a #GError.
+ *
+ * Find an object, as specified by a revision string. See `man gitrevisions`,
+ * or the documentation for `git rev-parse` for information on the syntax
+ * accepted.
+ *
+ * Returns: a #GgitObject or %NULL if the revision could not be found.
+ *
+ **/
+GgitObject *
+ggit_repository_revparse (GgitRepository  *repository,
+                          const gchar     *spec,
+                          GError         **error)
+{
+	GgitObject *object = NULL;
+	git_object *obj = NULL;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (spec != NULL, NULL);
+
+	ret = git_revparse_single (&obj, _ggit_native_get (repository), spec);
 
 	if (ret == GIT_OK)
 	{
