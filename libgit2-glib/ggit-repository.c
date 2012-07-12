@@ -116,7 +116,8 @@ ggit_repository_get_property (GObject    *object,
 
 static void
 set_workdir (GgitRepository *repository,
-             GFile          *workdir)
+             GFile          *workdir,
+             gboolean        update_gitlink)
 {
 	GgitRepositoryPrivate *priv;
 
@@ -134,7 +135,8 @@ set_workdir (GgitRepository *repository,
 
 			path = g_file_get_path (priv->workdir);
 
-			git_repository_set_workdir (_ggit_native_get (repository), path);
+			git_repository_set_workdir (_ggit_native_get (repository),
+			                            path, update_gitlink);
 			g_free (path);
 		}
 	}
@@ -170,7 +172,7 @@ ggit_repository_set_property (GObject      *object,
 			break;
 		}
 		case PROP_WORKDIR:
-			set_workdir (repository, g_value_get_object (value));
+			set_workdir (repository, g_value_get_object (value), FALSE);
 			break;
 		case PROP_IS_BARE:
 			priv->is_bare = g_value_get_boolean (value);
@@ -306,7 +308,7 @@ ggit_repository_initable_init (GInitable    *initable,
 		if (path)
 		{
 			git_repository_set_workdir (_ggit_native_get (initable),
-			                            path);
+			                            path, FALSE);
 		}
 
 		g_free (path);
@@ -849,18 +851,21 @@ ggit_repository_get_workdir (GgitRepository *repository)
  * ggit_repository_set_workdir:
  * @repository: a #GgitRepository.
  * @workdir: the working directory
+ * @update_gitlink: create/update gitlink in workdir
  *
- * Sets the working directory of the repository.
- *
+ * Sets the working directory of the repository. If @update_gitlink is set to
+ * %TRUE "core.worktree" will be set in the config if workdir is not the parent
+ * of the .git directory).
  */
 void
 ggit_repository_set_workdir (GgitRepository *repository,
-                             GFile          *workdir)
+                             GFile          *workdir,
+                             gboolean        update_gitlink)
 {
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
 	g_return_if_fail (G_IS_FILE (workdir));
 
-	set_workdir (repository, workdir);
+	set_workdir (repository, workdir, update_gitlink);
 }
 
 /**

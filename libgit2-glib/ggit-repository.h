@@ -174,7 +174,8 @@ GFile              *ggit_repository_get_location      (GgitRepository        *re
 GFile              *ggit_repository_get_workdir       (GgitRepository        *repository);
 
 void                ggit_repository_set_workdir       (GgitRepository        *repository,
-                                                       GFile                 *workdir);
+                                                       GFile                 *workdir,
+                                                       gboolean               update_gitlink);
 
 gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 
