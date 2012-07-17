@@ -63,9 +63,8 @@ GType             ggit_blob_get_type         (void) G_GNUC_CONST;
 GgitBlob        *_ggit_blob_wrap             (git_blob *blob,
                                               gboolean  owned);
 
-gconstpointer     ggit_blob_get_raw_content  (GgitBlob *blob);
-
-gsize             ggit_blob_get_raw_size     (GgitBlob *blob);
+const guchar     *ggit_blob_get_raw_content  (GgitBlob *blob,
+                                              gsize    *length);
 
 G_END_DECLS
 

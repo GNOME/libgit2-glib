@@ -55,6 +55,7 @@ _ggit_blob_wrap (git_blob *blob,
 /**
  * ggit_blob_get_raw_content:
  * @blob: a #GgitBlob.
+ * @length: (out) (allow-none): return value of the length of the data.
  *
  * Gets a read-only buffer with the raw contents of @blob.
  *
@@ -63,10 +64,13 @@ _ggit_blob_wrap (git_blob *blob,
  * not be free'd. The pointer may be invalidated at a later
  * time.
  *
- * Returns: (transfer none): the contents or %NULL if @blob has no contents.
- */
-gconstpointer
-ggit_blob_get_raw_content (GgitBlob *blob)
+ * Returns: (array length=length) (element-type guchar): the blob content or
+ *          %NULL if the blob does not have any content.
+ *
+ **/
+const guchar *
+ggit_blob_get_raw_content (GgitBlob *blob,
+                           gsize    *length)
 {
 	git_blob *b;
 
@@ -74,27 +78,12 @@ ggit_blob_get_raw_content (GgitBlob *blob)
 
 	b = _ggit_native_get (blob);
 
-	return git_blob_rawcontent (b);
-}
+	if (length != NULL)
+	{
+		*length = git_blob_rawsize (b);
+	}
 
-/**
- * ggit_blob_get_raw_size:
- * @blob: a #GgitBlob.
- *
- * Gets the size in bytes of the contents of @blob.
- *
- * Returns: the size in bytes.
- */
-gsize
-ggit_blob_get_raw_size (GgitBlob *blob)
-{
-	git_blob *b;
-
-	g_return_val_if_fail (GGIT_IS_BLOB (blob), 0);
-
-	b = _ggit_native_get (blob);
-
-	return git_blob_rawsize (b);
+	return (const guchar *)git_blob_rawcontent (b);
 }
 
 /* ex:set ts=8 noet: */
