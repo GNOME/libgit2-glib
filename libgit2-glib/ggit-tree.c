@@ -185,7 +185,7 @@ walk_callback_wrapper (const char           *root,
  * @callback: (scope call): the callback to call for each entry
  * @mode: the walking order
  * @user_data: (closure): user data for the callback.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Walk all the entries of a tree object recursively (resolving and walking
  * subtrees of the tree as needed). The @error will be set to the error returned
