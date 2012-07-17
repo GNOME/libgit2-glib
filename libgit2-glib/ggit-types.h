@@ -513,6 +513,17 @@ typedef enum {
 	GGIT_SUBMODULE_UPDATE_MERGE    = 2
 } GgitSubmoduleUpdate;
 
+/**
+ * GgitTreeWalkMode:
+ * @GGIT_TREE_WALK_MODE_PRE: walk tree in pre-order
+ * @GGIT_TREE_WALK_MODE_POST: walk tree in post-order
+ *
+ * Describes in which order a tree walk should be performed.
+ */
+typedef enum {
+	GGIT_TREE_WALK_MODE_PRE = 0,
+	GGIT_TREE_WALK_MODE_POST = 1,
+} GgitTreeWalkMode;
 
 
 /**
@@ -674,6 +685,22 @@ typedef gint (* GgitStatusCallback) (const gchar     *path,
  */
 typedef gint (* GgitSubmoduleCallback) (const gchar *name,
                                         gpointer     data);
+
+/**
+ * GgitTreeWalkCallback:
+ * @root: the current (relative) root of the entry
+ * @entry: the tree entry
+ * @user_data: (closure): user-supplied data.
+ *
+ * The type of the callback functions for walking a tree.
+ * See ggit_tree_walk().
+ *
+ * Returns: 0 to go for the next entry or a #GgitError in case there was an error.
+ *
+ */
+typedef gint (* GgitTreeWalkCallback) (const gchar         *root,
+                                       const GgitTreeEntry *entry,
+                                       gpointer             user_data);
 
 G_END_DECLS
 

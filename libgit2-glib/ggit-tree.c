@@ -18,8 +18,11 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <git2/errors.h>
+
 #include "ggit-tree.h"
 #include "ggit-oid.h"
+#include "ggit-error.h"
 
 G_DEFINE_TYPE (GgitTree, ggit_tree, GGIT_TYPE_OBJECT)
 
@@ -150,6 +153,71 @@ ggit_tree_get_by_file (GgitTree *tree,
 	g_free (path);
 
 	return entry;
+}
+
+typedef struct
+{
+	GgitTreeWalkCallback callback;
+	gpointer user_data;
+} WalkInfo;
+
+static int
+walk_callback_wrapper (const char           *root,
+                       const git_tree_entry *entry,
+                       gpointer              payload)
+{
+	gint ret;
+	GgitTreeEntry *wentry;
+	WalkInfo *info = (WalkInfo *)payload;
+
+	wentry = _ggit_tree_entry_new (entry);
+
+	ret = info->callback(root, wentry, info->user_data);
+
+	ggit_tree_entry_unref (wentry);
+
+	return ret;
+}
+
+/**
+ * ggit_tree_walk:
+ * @tree: a #GgitTree.
+ * @callback: (scope call): the callback to call for each entry
+ * @mode: the walking order
+ * @user_data: (closure): user data for the callback.
+ * @error: a #GError.
+ *
+ * Walk all the entries of a tree object recursively (resolving and walking
+ * subtrees of the tree as needed). The @error will be set to the error returned
+ * by @callback (if any).
+ *
+ **/
+void
+ggit_tree_walk (GgitTree              *tree,
+                GgitTreeWalkCallback   callback,
+                GgitTreeWalkMode       mode,
+                gpointer               user_data,
+                GError               **error)
+{
+	gint ret;
+	WalkInfo info = {0,};
+
+	g_return_if_fail (GGIT_IS_TREE (tree));
+	g_return_if_fail (callback != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	info.callback = callback;
+	info.user_data = user_data;
+
+	ret = git_tree_walk (_ggit_native_get (tree),
+	                     (git_treewalk_cb)walk_callback_wrapper,
+	                     mode,
+	                     &info);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
 }
 
 /* ex:set ts=8 noet: */
