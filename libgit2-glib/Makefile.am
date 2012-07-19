@@ -87,13 +87,27 @@ C_FILES =				\
 	ggit-types.c			\
 	ggit-utils.c
 
+ENUM_TYPES =				\
+	$(INST_H_FILES)
+
+ggit-enum-types.h: ggit-enum-types.h.template $(ENUM_TYPES) $(GLIB_MKENUMS)
+	$(AM_V_GEN) (cd $(srcdir) && $(GLIB_MKENUMS) --template ggit-enum-types.h.template $(ENUM_TYPES)) > $@
+
+ggit-enum-types.c: ggit-enum-types.c.template $(ENUM_TYPES) $(GLIB_MKENUMS)
+	$(AM_V_GEN) (cd $(srcdir) && $(GLIB_MKENUMS) --template ggit-enum-types.c.template $(ENUM_TYPES)) > $@
+
+BUILT_SOURCES =				\
+	ggit-enum-types.c		\
+	ggit-enum-types.h
+
 libgit2_glib_1_0_la_SOURCES = 	\
 	$(INST_H_FILES)		\
 	$(NOINST_H_FILES)	\
+	$(BUILT_SOURCES)	\
 	$(C_FILES)
 
 headerdir = $(prefix)/include/libgit2-glib-1.0/libgit2-glib
-header_DATA = $(INST_H_FILES)
+header_DATA = $(INST_H_FILES) ggit-enum-types.h
 
 if ENABLE_PYTHON
 overridesdir = $(pyoverridesdir)
@@ -101,8 +115,12 @@ overrides_PYTHON =                      \
         Ggit.py
 endif
 
-EXTRA_DIST = Ggit.py
-CLEANFILES =
+EXTRA_DIST = 				\
+	Ggit.py				\
+	ggit-enum-types.h.template	\
+	ggit-enum-types.c.template
+
+CLEANFILES = $(BUILT_SOURCES)
 
 if HAVE_INTROSPECTION
   -include $(INTROSPECTION_MAKEFILE)

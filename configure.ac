@@ -28,6 +28,9 @@ AM_INIT_AUTOMAKE
 AC_PROG_LIBTOOL
 AC_PROG_CC
 
+# GLib enums
+AC_PATH_PROG(GLIB_MKENUMS, glib-mkenums)
+
 # Documentation
 GTK_DOC_CHECK([1.11], [--flavour=no-tmpl])
 
