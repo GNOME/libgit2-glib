@@ -26,6 +26,7 @@
 #include "ggit-signature.h"
 #include "ggit-utils.h"
 
+#include <git2/branch.h>
 #include <git2/errors.h>
 
 G_DEFINE_TYPE (GgitRef, ggit_ref, GGIT_TYPE_NATIVE)
@@ -426,10 +427,10 @@ ggit_ref_create_reflog (GgitRef        *ref,
 	g_return_val_if_fail (message != NULL && *message != '\0', NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_reflog_write (_ggit_native_get (ref),
-	                        _ggit_native_get (oid),
-	                        _ggit_native_get (committer),
-	                        message);
+	ret = git_reflog_append (_ggit_native_get (ref),
+	                         _ggit_native_get (oid),
+	                         _ggit_native_get (committer),
+	                         message);
 
 	if (ret != GIT_OK)
 	{
@@ -514,7 +515,7 @@ ggit_ref_get_remote_tracking_from_branch (GgitRef  *ref,
 	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_reference_remote_tracking_from_branch (&reference, _ggit_native_get (ref));
+	ret = git_branch_tracking (&reference, _ggit_native_get (ref));
 
 	if (ret != GIT_OK)
 	{

@@ -1267,10 +1267,10 @@ ggit_repository_list_tags (GgitRepository  *repository,
  *
  * Creates a new branch pointing at a target commit.
  *
- * Returns: (transfer full) (allow-none): the id to which the branch points, or
- *                                        %NULL in case of an error.
+ * Returns: (transfer full) (allow-none): the reference to which the branch
+ *                                        points, or %NULL in case of an error.
  **/
-GgitOId *
+GgitRef *
 ggit_repository_create_branch (GgitRepository   *repository,
                                const gchar      *branch_name,
                                GgitObject       *target,
@@ -1278,7 +1278,7 @@ ggit_repository_create_branch (GgitRepository   *repository,
                                GError          **error)
 {
 	gboolean force;
-	git_oid oid;
+	git_reference *reference;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
@@ -1288,7 +1288,7 @@ ggit_repository_create_branch (GgitRepository   *repository,
 
 	force = flags & GGIT_CREATE_FORCE;
 
-	ret = git_branch_create (&oid,
+	ret = git_branch_create (&reference,
 	                         _ggit_native_get (repository),
 	                         branch_name,
 	                         _ggit_native_get (target),
@@ -1300,7 +1300,7 @@ ggit_repository_create_branch (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_oid_new (&oid);
+	return _ggit_ref_wrap (reference);
 }
 
 /**
@@ -1337,7 +1337,7 @@ ggit_repository_delete_branch (GgitRepository   *repository,
 /**
  * ggit_repository_move_branch:
  * @repository: a #GgitRepository.
- * @old_branch_name: the old name of the branch.
+ * @branch: the #GgitRef for the branch.
  * @new_branch_name: the new name of the branch.
  * @flags: a GgitCreateFlags.
  * @error: a #GError.
@@ -1346,7 +1346,7 @@ ggit_repository_delete_branch (GgitRepository   *repository,
  **/
 void
 ggit_repository_move_branch (GgitRepository   *repository,
-                             const gchar      *old_branch_name,
+                             GgitRef          *branch,
                              const gchar      *new_branch_name,
                              GgitCreateFlags   flags,
                              GError          **error)
@@ -1355,14 +1355,13 @@ ggit_repository_move_branch (GgitRepository   *repository,
 	gint ret;
 
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
-	g_return_if_fail (old_branch_name != NULL);
+	g_return_if_fail (GGIT_IS_REF (branch));
 	g_return_if_fail (new_branch_name != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	force = flags & GGIT_CREATE_FORCE;
 
-	ret = git_branch_move (_ggit_native_get (repository),
-	                       old_branch_name,
+	ret = git_branch_move (_ggit_native_get (branch),
 	                       new_branch_name,
 	                       force ? 1 : 0);
 

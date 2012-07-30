@@ -120,7 +120,7 @@ GgitOId            *ggit_repository_create_tag_lightweight (
 gchar             **ggit_repository_list_tags         (GgitRepository        *repository,
                                                        GError               **error);
 
-GgitOId            *ggit_repository_create_branch     (GgitRepository        *repository,
+GgitRef            *ggit_repository_create_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,
                                                        GgitObject            *target,
                                                        GgitCreateFlags        flags,
@@ -132,7 +132,7 @@ void                ggit_repository_delete_branch     (GgitRepository        *re
                                                        GError               **error);
 
 void                ggit_repository_move_branch       (GgitRepository        *repository,
-                                                       const gchar           *old_branch_name,
+                                                       GgitRef               *branch,
                                                        const gchar           *new_branch_name,
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
