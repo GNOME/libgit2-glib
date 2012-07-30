@@ -42,6 +42,8 @@ Makefile.in
 /intltool-update.in
 /libgit2-glib-1.0.pc
 /libgit2-glib-*.tar.bz2
+/libgit2-glib/ggit-enum-types.c
+/libgit2-glib/ggit-enum-types.h
 /libtool
 /ltmain.sh
 /m4
