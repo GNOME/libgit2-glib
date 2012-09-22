@@ -31,6 +31,7 @@
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-tree.h>
+#include <libgit2-glib/ggit-branch.h>
 
 G_BEGIN_DECLS
 
@@ -120,20 +121,9 @@ GgitOId            *ggit_repository_create_tag_lightweight (
 gchar             **ggit_repository_list_tags         (GgitRepository        *repository,
                                                        GError               **error);
 
-GgitRef            *ggit_repository_create_branch     (GgitRepository        *repository,
+GgitBranch         *ggit_repository_create_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,
                                                        GgitObject            *target,
-                                                       GgitCreateFlags        flags,
-                                                       GError               **error);
-
-void                ggit_repository_delete_branch     (GgitRepository        *repository,
-                                                       const gchar           *branch_name,
-                                                       GgitBranchType         branch_type,
-                                                       GError               **error);
-
-void                ggit_repository_move_branch       (GgitRepository        *repository,
-                                                       GgitRef               *branch,
-                                                       const gchar           *new_branch_name,
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
@@ -141,6 +131,11 @@ void                ggit_repository_branches_foreach  (GgitRepository        *re
                                                        GgitBranchType         branch_type,
                                                        GgitBranchesCallback   callback,
                                                        gpointer               user_data,
+                                                       GError               **error);
+
+GgitBranch         *ggit_repository_lookup_branch     (GgitRepository        *repository,
+                                                       const gchar           *branch_name,
+                                                       GgitBranchType         branch_type,
                                                        GError               **error);
 
 GgitRemote         *ggit_repository_get_remote        (GgitRepository        *repository,

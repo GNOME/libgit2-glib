@@ -1270,7 +1270,7 @@ ggit_repository_list_tags (GgitRepository  *repository,
  * Returns: (transfer full) (allow-none): the reference to which the branch
  *                                        points, or %NULL in case of an error.
  **/
-GgitRef *
+GgitBranch *
 ggit_repository_create_branch (GgitRepository   *repository,
                                const gchar      *branch_name,
                                GgitObject       *target,
@@ -1300,75 +1300,7 @@ ggit_repository_create_branch (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_ref_wrap (reference);
-}
-
-/**
- * ggit_repository_delete_branch:
- * @repository: a #GgitRepository.
- * @branch_name: the name of the branch.
- * @branch_type: a #GgitBranchType.
- * @error: a #GError.
- *
- * Deletes an existing branch reference.
- **/
-void
-ggit_repository_delete_branch (GgitRepository   *repository,
-                               const gchar      *branch_name,
-                               GgitBranchType    branch_type,
-                               GError          **error)
-{
-	gint ret;
-
-	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
-	g_return_if_fail (branch_name != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_branch_delete (_ggit_native_get (repository),
-	                         branch_name,
-	                         branch_type);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
- * ggit_repository_move_branch:
- * @repository: a #GgitRepository.
- * @branch: the #GgitRef for the branch.
- * @new_branch_name: the new name of the branch.
- * @flags: a GgitCreateFlags.
- * @error: a #GError.
- *
- * Moves/renames an existing branch reference.
- **/
-void
-ggit_repository_move_branch (GgitRepository   *repository,
-                             GgitRef          *branch,
-                             const gchar      *new_branch_name,
-                             GgitCreateFlags   flags,
-                             GError          **error)
-{
-	gboolean force;
-	gint ret;
-
-	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
-	g_return_if_fail (GGIT_IS_REF (branch));
-	g_return_if_fail (new_branch_name != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	force = flags & GGIT_CREATE_FORCE;
-
-	ret = git_branch_move (_ggit_native_get (branch),
-	                       new_branch_name,
-	                       force ? 1 : 0);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
+	return _ggit_branch_wrap (reference);
 }
 
 typedef gint (* _GitBranchesCallback) (const gchar  *branch_name,
@@ -1407,6 +1339,44 @@ ggit_repository_branches_foreach (GgitRepository        *repository,
 	{
 		_ggit_error_set (error, ret);
 	}
+}
+
+/**
+ * ggit_repository_lookup_branch:
+ * @repository: a #GgitRepository.
+ * @branch_name: the name of the branch.
+ * @branch_type: a #GgitBranchType.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a branch by its name in a repository.
+ *
+ * Returns: (transfer full) (allow-none): a branch by its name in a repository.
+ */
+GgitBranch *
+ggit_repository_lookup_branch (GgitRepository *repository,
+                               const gchar    *branch_name,
+                               GgitBranchType  branch_type,
+                               GError         **error)
+{
+	gint ret;
+	git_reference *branch;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (branch_name != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_branch_lookup (&branch,
+	                         _ggit_native_get (repository),
+	                         branch_name,
+	                         branch_type);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_branch_wrap (branch);
 }
 
 /**

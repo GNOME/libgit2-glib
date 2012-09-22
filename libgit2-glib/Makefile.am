@@ -16,6 +16,7 @@ libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 INST_H_FILES =				\
 	ggit-blob.h			\
+	ggit-branch.h			\
 	ggit-commit.h			\
 	ggit-config.h			\
 	ggit-diff.h			\
@@ -54,6 +55,7 @@ NOINST_H_FILES =			\
 
 C_FILES =				\
 	ggit-blob.c			\
+	ggit-branch.c			\
 	ggit-commit.c			\
 	ggit-config.c			\
 	ggit-convert.c			\
