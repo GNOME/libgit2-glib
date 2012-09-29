@@ -19,6 +19,10 @@
  */
 
 #include "ggit-branch.h"
+#include "ggit-error.h"
+
+#include <git2/branch.h>
+#include <git2/errors.h>
 
 
 G_DEFINE_TYPE (GgitBranch, ggit_branch, GGIT_TYPE_REF)
