@@ -312,7 +312,7 @@ ggit_revision_walker_next (GgitRevisionWalker  *walker,
 	{
 		goid = _ggit_oid_new (&oid);
 	}
-	else if (ret != GIT_REVWALKOVER)
+	else if (ret != GIT_ITEROVER)
 	{
 		_ggit_error_set (error, ret);
 	}

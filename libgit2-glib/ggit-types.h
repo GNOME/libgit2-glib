@@ -383,8 +383,7 @@ typedef enum {
  * @GGIT_ERROR_AMBIGUOUS: The given error is ambiguous.
  * @GGIT_ERROR_BUFS: The buffer is too short.
  * @GGIT_ERROR_PASSTHROUGH: Skip and passthrough the given ODB backend.
- * @GGIT_ERROR_REVWALKOVER: The revision walker is empty; there
- *                          are no more commits left to iterate.
+ * @GGIT_ERROR_ITEROVER: The iteration has finished.
  *
  * Error codes for the %GGIT_ERROR error domain.
  */
@@ -395,7 +394,7 @@ typedef enum {
 	GGIT_ERROR_AMBIGUOUS   = -5,
 	GGIT_ERROR_BUFS        = -6,
 	GGIT_ERROR_PASSTHROUGH = -30,
-	GGIT_ERROR_REVWALKOVER = -31
+	GGIT_ERROR_ITEROVER    = -31
 } GgitError;
 
 /* NOTE: keep in sync with git2/refs.h */

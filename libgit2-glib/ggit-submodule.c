@@ -141,7 +141,7 @@ ggit_submodule_get_url (GgitSubmodule *submodule)
 GgitOId *
 ggit_submodule_get_index_oid (GgitSubmodule *submodule)
 {
-	GgitOID *oid = NULL;
+	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
 
