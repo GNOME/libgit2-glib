@@ -30,15 +30,15 @@ G_BEGIN_DECLS
 
 GType ggit_diff_range_get_type                 (void) G_GNUC_CONST;
 
-GgitDiffRange  *_ggit_diff_range_wrap          (git_diff_range *range);
+GgitDiffRange  *_ggit_diff_range_wrap          (const git_diff_range *range);
 
-GgitDiffRange  *ggit_diff_range_ref            (GgitDiffRange  *range);
-void            ggit_diff_range_unref          (GgitDiffRange  *range);
+GgitDiffRange  *ggit_diff_range_ref            (GgitDiffRange        *range);
+void            ggit_diff_range_unref          (GgitDiffRange        *range);
 
-gint            ggit_diff_range_get_old_start  (GgitDiffRange  *range);
-gint            ggit_diff_range_get_old_lines  (GgitDiffRange  *range);
-gint            ggit_diff_range_get_new_start  (GgitDiffRange  *range);
-gint            ggit_diff_range_get_new_lines  (GgitDiffRange  *range);
+gint            ggit_diff_range_get_old_start  (GgitDiffRange        *range);
+gint            ggit_diff_range_get_old_lines  (GgitDiffRange        *range);
+gint            ggit_diff_range_get_new_start  (GgitDiffRange        *range);
+gint            ggit_diff_range_get_new_lines  (GgitDiffRange        *range);
 
 G_END_DECLS
 

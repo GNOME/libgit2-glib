@@ -38,9 +38,9 @@ typedef struct {
 G_DEFINE_TYPE (GgitDiff, ggit_diff, GGIT_TYPE_NATIVE)
 
 static gint
-ggit_diff_file_callback_wrapper (gpointer        user_data,
-                                 git_diff_delta *delta,
-                                 gfloat          progress)
+ggit_diff_file_callback_wrapper (gpointer              user_data,
+                                 const git_diff_delta *delta,
+                                 gfloat                progress)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
@@ -56,11 +56,11 @@ ggit_diff_file_callback_wrapper (gpointer        user_data,
 }
 
 static gint
-ggit_diff_hunk_callback_wrapper (gpointer        user_data,
-                                 git_diff_delta *delta,
-                                 git_diff_range *range,
-                                 const gchar    *header,
-                                 gsize           header_len)
+ggit_diff_hunk_callback_wrapper (gpointer              user_data,
+                                 const git_diff_delta *delta,
+                                 const git_diff_range *range,
+                                 const gchar          *header,
+                                 gsize                 header_len)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
@@ -80,12 +80,12 @@ ggit_diff_hunk_callback_wrapper (gpointer        user_data,
 }
 
 static gint
-ggit_diff_line_callback_wrapper (gpointer          user_data,
-                                 git_diff_delta   *delta,
-                                 git_diff_range   *range,
-                                 gchar             line_type,
-                                 const gchar      *content,
-                                 gsize             content_len)
+ggit_diff_line_callback_wrapper (gpointer              user_data,
+                                 const git_diff_delta *delta,
+                                 const git_diff_range *range,
+                                 gchar                 line_type,
+                                 const gchar          *content,
+                                 gsize                 content_len)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;

@@ -32,16 +32,16 @@ G_BEGIN_DECLS
 
 GType           ggit_diff_delta_get_type       (void) G_GNUC_CONST;
 
-GgitDiffDelta  *_ggit_diff_delta_wrap          (git_diff_delta *delta);
+GgitDiffDelta  *_ggit_diff_delta_wrap          (const git_diff_delta *delta);
 
-GgitDiffDelta  *ggit_diff_delta_ref            (GgitDiffDelta  *delta);
-void            ggit_diff_delta_unref          (GgitDiffDelta  *delta);
+GgitDiffDelta  *ggit_diff_delta_ref            (GgitDiffDelta        *delta);
+void            ggit_diff_delta_unref          (GgitDiffDelta        *delta);
 
-GgitDiffFile   *ggit_diff_delta_get_old_file   (GgitDiffDelta  *delta);
-GgitDiffFile   *ggit_diff_delta_get_new_file   (GgitDiffDelta  *delta);
-GgitDeltaType   ggit_diff_delta_get_status     (GgitDiffDelta  *delta);
-guint           ggit_diff_delta_get_similarity (GgitDiffDelta  *delta);
-gint            ggit_diff_delta_get_binary     (GgitDiffDelta  *delta);
+GgitDiffFile   *ggit_diff_delta_get_old_file   (GgitDiffDelta        *delta);
+GgitDiffFile   *ggit_diff_delta_get_new_file   (GgitDiffDelta        *delta);
+GgitDeltaType   ggit_diff_delta_get_status     (GgitDiffDelta        *delta);
+guint           ggit_diff_delta_get_similarity (GgitDiffDelta        *delta);
+gint            ggit_diff_delta_get_binary     (GgitDiffDelta        *delta);
 
 G_END_DECLS
 

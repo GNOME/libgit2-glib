@@ -39,7 +39,7 @@ G_DEFINE_BOXED_TYPE (GgitDiffDelta, ggit_diff_delta,
                      ggit_diff_delta_ref, ggit_diff_delta_unref)
 
 GgitDiffDelta *
-_ggit_diff_delta_wrap (git_diff_delta *delta)
+_ggit_diff_delta_wrap (const git_diff_delta *delta)
 {
 	GgitDiffDelta *gdelta;
 

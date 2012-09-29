@@ -38,7 +38,7 @@ G_DEFINE_BOXED_TYPE (GgitDiffFile, ggit_diff_file,
                      ggit_diff_file_ref, ggit_diff_file_unref)
 
 GgitDiffFile *
-_ggit_diff_file_wrap (git_diff_file *file)
+_ggit_diff_file_wrap (const git_diff_file *file)
 {
 	GgitDiffFile *gfile;
 

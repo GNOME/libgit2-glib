@@ -37,7 +37,7 @@ G_DEFINE_BOXED_TYPE (GgitDiffRange, ggit_diff_range,
 
 
 GgitDiffRange *
-_ggit_diff_range_wrap (git_diff_range *range)
+_ggit_diff_range_wrap (const git_diff_range *range)
 {
 	GgitDiffRange *grange;
 

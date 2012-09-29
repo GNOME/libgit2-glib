@@ -32,16 +32,16 @@ G_BEGIN_DECLS
 
 GType              ggit_diff_file_get_type  (void) G_GNUC_CONST;
 
-GgitDiffFile      *_ggit_diff_file_wrap     (git_diff_file *file);
+GgitDiffFile      *_ggit_diff_file_wrap     (const git_diff_file *file);
 
-GgitDiffFile      *ggit_diff_file_ref       (GgitDiffFile  *file);
-void               ggit_diff_file_unref     (GgitDiffFile  *file);
+GgitDiffFile      *ggit_diff_file_ref       (GgitDiffFile        *file);
+void               ggit_diff_file_unref     (GgitDiffFile        *file);
 
-GgitOId           *ggit_diff_file_get_oid   (GgitDiffFile  *file);
-const gchar       *ggit_diff_file_get_path  (GgitDiffFile  *file);
-guint16            ggit_diff_file_get_mode  (GgitDiffFile  *file);
-gint64             ggit_diff_file_get_size  (GgitDiffFile  *file);
-GgitDiffFileFlags  ggit_diff_file_get_flags (GgitDiffFile  *file);
+GgitOId           *ggit_diff_file_get_oid   (GgitDiffFile        *file);
+const gchar       *ggit_diff_file_get_path  (GgitDiffFile        *file);
+guint16            ggit_diff_file_get_mode  (GgitDiffFile        *file);
+gint64             ggit_diff_file_get_size  (GgitDiffFile        *file);
+GgitDiffFileFlags  ggit_diff_file_get_flags (GgitDiffFile        *file);
 
 G_END_DECLS
 
