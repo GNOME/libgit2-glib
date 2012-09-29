@@ -83,20 +83,19 @@ ggit_tree_entry_unref (GgitTreeEntry *entry)
 }
 
 /**
- * ggit_tree_entry_get_attributes:
+ * ggit_tree_entry_get_file_mode:
  * @entry: a #GgitTreeEntry.
  *
- * Get the attributes of the tree entry.
+ * Get the UNIX file attributes of a tree entry.
  *
- * Returns: attributes of the tree entry.
- *
+ * Returns: the UNIX file attributes of a tree entry.
  **/
-guint
-ggit_tree_entry_get_attributes (GgitTreeEntry *entry)
+GgitFileMode
+ggit_tree_entry_get_file_mode (GgitTreeEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, 0);
 
-	return git_tree_entry_attributes (entry->entry);
+	return git_tree_entry_filemode (entry->entry);
 }
 
 /**

@@ -398,6 +398,16 @@ typedef enum {
 } GgitError;
 
 /* NOTE: keep in sync with git2/refs.h */
+typedef enum {
+	GGIT_FILEMODE_NEW             = 0000000,
+	GGIT_FILEMODE_TREE            = 0040000,
+	GGIT_FILEMODE_BLOB            = 0100644,
+	GGIT_FILEMODE_BLOB_EXECUTABLE = 0100755,
+	GGIT_FILEMODE_LINK            = 0120000,
+	GGIT_FILEMODE_COMMIT          = 0160000
+} GgitFileMode;
+
+/* NOTE: keep in sync with git2/refs.h */
 /**
  * GgitRefType:
  * @GGIT_REF_INVALID: An invalid reference.

@@ -36,7 +36,7 @@ GgitTreeEntry *_ggit_tree_entry_new            (const git_tree_entry *entry);
 GgitTreeEntry *ggit_tree_entry_ref             (GgitTreeEntry        *entry);
 void           ggit_tree_entry_unref           (GgitTreeEntry        *entry);
 
-guint          ggit_tree_entry_get_attributes  (GgitTreeEntry        *entry);
+GgitFileMode   ggit_tree_entry_get_file_mode   (GgitTreeEntry        *entry);
 GgitOId       *ggit_tree_entry_get_id          (GgitTreeEntry        *entry);
 const gchar *  ggit_tree_entry_get_name        (GgitTreeEntry        *entry);
 
