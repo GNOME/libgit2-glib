@@ -92,7 +92,7 @@ ggit_submodule_get_name (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	return submodule->submodule->name;
+	return git_submodule_name (submodule->submodule);
 }
 
 /**
@@ -110,7 +110,7 @@ ggit_submodule_get_path (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	return submodule->submodule->path;
+	return git_submodule_path (submodule->submodule);
 }
 
 /**
@@ -127,23 +127,30 @@ ggit_submodule_get_url (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	return submodule->submodule->url;
+	return git_submodule_url (submodule->submodule);
 }
 
 /**
- * ggit_submodule_get_oid:
+ * ggit_submodule_get_index_oid:
  * @submodule: a #GgitSubmodule.
  *
- * Gets the HEAD SHA1 for the submodule or zero if not committed.
+ * Gets the OID for the submodule in the index or %NULL if there is no index.
  *
- * Returns: (transfer full): the HEAD SHA1 for the submodule.
+ * Returns: (transfer full) (allow-none): the OID for the submodule in the index or %NULL.
  */
 GgitOId *
-ggit_submodule_get_oid (GgitSubmodule *submodule)
+ggit_submodule_get_index_oid (GgitSubmodule *submodule)
 {
+	GgitOID *oid = NULL;
+
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	return _ggit_oid_new (&submodule->submodule->oid);
+	if (git_submodule_index_oid (submodule->submodule))
+	{
+		oid = _ggit_oid_new (git_submodule_index_oid (submodule->submodule));
+	}
+
+	return oid;
 }
 
 /**
@@ -159,7 +166,7 @@ ggit_submodule_get_update (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return submodule->submodule->update;
+	return git_submodule_update (submodule->submodule);
 }
 
 /**
@@ -175,7 +182,7 @@ ggit_submodule_get_ignore (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return submodule->submodule->ignore;
+	return git_submodule_ignore (submodule->submodule);
 }
 
 /**
@@ -191,7 +198,7 @@ ggit_submodule_get_fetch_recurse (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, FALSE);
 
-	return submodule->submodule->fetch_recurse;
+	return git_submodule_fetch_recurse_submodules (submodule->submodule);
 }
 
 /* ex:set ts=8 noet: */

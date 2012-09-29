@@ -1535,6 +1535,8 @@ ggit_repository_lookup_submodule (GgitRepository  *repository,
 	return gsubmodule;
 }
 
+#if 0
+
 /**
  * ggit_repository_submodule_foreach:
  * @repository: a #GgitRepository.
@@ -1574,6 +1576,8 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
 
 	return TRUE;
 }
+
+#endif
 
 /**
  * ggit_repository_reset:

@@ -44,7 +44,7 @@ const gchar            *ggit_submodule_get_path              (GgitSubmodule     
 
 const gchar            *ggit_submodule_get_url               (GgitSubmodule       *submodule);
 
-GgitOId                *ggit_submodule_get_oid               (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_index_oid         (GgitSubmodule       *submodule);
 
 GgitSubmoduleUpdate     ggit_submodule_get_update            (GgitSubmodule       *submodule);
 
