@@ -536,7 +536,14 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 
 	if (ret == GIT_OK)
 	{
-		ref = _ggit_ref_wrap (reference);
+		if (g_str_has_prefix (name, "refs/heads/"))
+		{
+			ref = GGIT_REF (_ggit_branch_wrap (reference));
+		}
+		else
+		{
+			ref = _ggit_ref_wrap (reference);
+		}
 	}
 	else
 	{
