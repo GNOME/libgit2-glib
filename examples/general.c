@@ -49,7 +49,7 @@ main (int argc, char *argv[])
 
 	if (error != NULL)
 	{
-		g_message (error->message);
+		g_message ("%s", error->message);
 		return 1;
 	}
 
@@ -61,7 +61,7 @@ main (int argc, char *argv[])
 
 	if (error != NULL)
 	{
-		g_message (error->message);
+		g_message ("%s", error->message);
 		return 1;
 	}
 
