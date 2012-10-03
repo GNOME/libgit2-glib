@@ -7,7 +7,7 @@ EXAMPLE_PROGS		= general
 general_SOURCES		= general.c
 general_LDADD		= $(progs_ldadd)
 
-EXAMPLE_PROGS		= walk
+EXAMPLE_PROGS		+= walk
 walk_SOURCES		= walk.c
 walk_LDADD		= $(progs_ldadd)
 
