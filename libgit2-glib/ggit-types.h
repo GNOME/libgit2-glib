@@ -492,9 +492,25 @@ typedef enum {
 
 /**
  * GgitSubmoduleIgnore:
- * FIXME
+ * GGIT_SUBMODULE_IGNORE_DEFAULT: reset to default.
+ * GGIT_SUBMODULE_IGNORE_NONE: any change or untracked == dirty.
+ * GGIT_SUBMODULE_IGNORE_UNTRACKED: dirty if tracked files change.
+ * GGIT_SUBMODULE_IGNORE_DIRTY: only dirty if HEAD moved.
+ * GGIT_SUBMODULE_IGNORE_ALL: never dirty
  *
  * Describes which submodules should be ignored.
+ */
+typedef enum {
+	GGIT_SUBMODULE_IGNORE_DEFAULT   = -1,
+	GGIT_SUBMODULE_IGNORE_NONE      = 0,
+	GGIT_SUBMODULE_IGNORE_UNTRACKED = 1,
+	GGIT_SUBMODULE_IGNORE_DIRTY     = 2,
+	GGIT_SUBMODULE_IGNORE_ALL       = 3
+} GgitSubmoduleIgnore;
+
+/**
+ * GgitSubmoduleStatus:
+ * FIXME
  */
 typedef enum {
 	GGIT_SUBMODULE_STATUS_IN_HEAD           = 1 << 0,
@@ -511,7 +527,7 @@ typedef enum {
 	GGIT_SUBMODULE_STATUS_WD_INDEX_MODIFIED = 1 << 11,
 	GGIT_SUBMODULE_STATUS_WD_WD_MODIFIED    = 1 << 12,
 	GGIT_SUBMODULE_STATUS_WD_UNTRACKED      = 1 << 13
-} GgitSubmoduleIgnore;
+} GgitSubmoduleStatus;
 
 /**
  * GgitSubmoduleUpdate:
