@@ -86,9 +86,9 @@ ggit_tree_entry_unref (GgitTreeEntry *entry)
  * ggit_tree_entry_get_file_mode:
  * @entry: a #GgitTreeEntry.
  *
- * Get the UNIX file attributes of a tree entry.
+ * Gets the #GgitFileMode of a tree entry.
  *
- * Returns: the UNIX file attributes of a tree entry.
+ * Returns: the #GgitFileMode of a tree entry.
  **/
 GgitFileMode
 ggit_tree_entry_get_file_mode (GgitTreeEntry *entry)
