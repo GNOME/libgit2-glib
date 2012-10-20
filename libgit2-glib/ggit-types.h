@@ -480,14 +480,17 @@ typedef enum {
  * Describes a file's status.
  */
 typedef enum {
-	GGIT_STATUS_CURRENT               = 0,
-	GGIT_STATUS_INDEX_NEW             = 1 << 0,
-	GGIT_STATUS_INDEX_MODIFIED        = 1 << 1,
-	GGIT_STATUS_INDEX_DELETED         = 1 << 2,
-	GGIT_STATUS_WORKING_TREE_NEW      = 1 << 3,
-	GGIT_STATUS_WORKING_TREE_MODIFIED = 1 << 4,
-	GGIT_STATUS_WORKING_TREE_DELETED  = 1 << 5,
-	GGIT_STATUS_IGNORED               = 1 << 6
+	GGIT_STATUS_CURRENT                 = 0,
+	GGIT_STATUS_INDEX_NEW               = 1 << 0,
+	GGIT_STATUS_INDEX_MODIFIED          = 1 << 1,
+	GGIT_STATUS_INDEX_DELETED           = 1 << 2,
+	GGIT_STATUS_INDEX_RENAMED           = 1 << 3,
+	GGIT_STATUS_INDEX_TYPECHANGE        = 1 << 4,
+	GGIT_STATUS_WORKING_TREE_NEW        = 1 << 7,
+	GGIT_STATUS_WORKING_TREE_MODIFIED   = 1 << 8,
+	GGIT_STATUS_WORKING_TREE_DELETED    = 1 << 9,
+	GGIT_STATUS_WORKING_TREE_TYPECHANGE = 1 << 10,
+	GGIT_STATUS_IGNORED                 = 1 << 14
 } GgitStatusFlags;
 
 /**
