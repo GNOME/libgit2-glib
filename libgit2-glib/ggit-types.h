@@ -252,10 +252,32 @@ typedef struct _GgitTreeEntry GgitTreeEntry;
  *
  * The type of a branch.
  */
-typedef enum {
+typedef enum
+{
 	GGIT_BRANCH_LOCAL  = 1,
 	GGIT_BRANCH_REMOTE = 2
 } GgitBranchType;
+
+/**
+ * GgitConfigLevel:
+ * @GGIT_CONFIG_LEVEL_SYSTEM: System-wide configuration file.
+ * @GGIT_CONFIG_LEVEL_XDG: XDG compatible configuration file (.config/git/config).
+ * @GGIT_CONFIG_LEVEL_GLOBAL: User-specific configuration file, also called Global configuration file.
+ * @GGIT_CONFIG_LEVEL_LOCAL: Repository specific configuration file.
+ * @GGIT_CONFIG_LEVEL_HIGHEST: Represents the highest level of a config file.
+ *
+ * Priority level of a config file.
+ * These priority levels correspond to the natural escalation logic
+ * (from higher to lower) when searching for config entries in git.git.
+ */
+typedef enum
+{
+	GGIT_CONFIG_LEVEL_SYSTEM = 1,
+	GGIT_CONFIG_LEVEL_XDG = 2,
+	GGIT_CONFIG_LEVEL_GLOBAL = 3,
+	GGIT_CONFIG_LEVEL_LOCAL = 4,
+	GGIT_CONFIG_LEVEL_HIGHEST = -1
+} GgitConfigLevel;
 
 /**
  * GgitCreateFlags:
