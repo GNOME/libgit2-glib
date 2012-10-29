@@ -19,6 +19,7 @@ INST_H_FILES =				\
 	ggit-branch.h			\
 	ggit-commit.h			\
 	ggit-config.h			\
+	ggit-config-entry.h		\
 	ggit-diff.h			\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
@@ -58,6 +59,7 @@ C_FILES =				\
 	ggit-branch.c			\
 	ggit-commit.c			\
 	ggit-config.c			\
+	ggit-config-entry.c		\
 	ggit-convert.c			\
 	ggit-diff.c			\
 	ggit-diff-delta.c		\
