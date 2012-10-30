@@ -774,6 +774,7 @@ typedef gint (* GgitStatusCallback) (const gchar     *path,
 
 /**
  * GgitSubmoduleCallback:
+ * @submodule: a #GgitSubmodule.
  * @name: the name of the submodule.
  * @data: (closure): user-supplied data.
  *
@@ -782,8 +783,9 @@ typedef gint (* GgitStatusCallback) (const gchar     *path,
  *
  * Returns: 0 to go for the next submodule or a #GgitError in case there was an error.
  */
-typedef gint (* GgitSubmoduleCallback) (const gchar *name,
-                                        gpointer     data);
+typedef gint (* GgitSubmoduleCallback) (GgitSubmodule *submodule,
+                                        const gchar   *name,
+                                        gpointer       data);
 
 /**
  * GgitTreeWalkCallback:

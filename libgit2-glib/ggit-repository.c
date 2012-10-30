@@ -1537,7 +1537,30 @@ ggit_repository_lookup_submodule (GgitRepository  *repository,
 	return gsubmodule;
 }
 
-#if 0
+typedef struct
+{
+	gpointer user_data;
+
+	GgitSubmoduleCallback callback;
+} SubmoduleCallbackWrapperData;
+
+static gint
+submodule_wrapper_callback (git_submodule *submodule,
+                            const gchar   *name,
+                            gpointer       user_data)
+{
+	SubmoduleCallbackWrapperData *wrapper_data = (SubmoduleCallbackWrapperData *)user_data;
+	GgitSubmodule *gsubmodule;
+	gint ret;
+
+	gsubmodule = _ggit_submodule_new (submodule);
+
+	ret = wrapper_data->callback (gsubmodule, name, wrapper_data->user_data);
+
+	ggit_submodule_unref (gsubmodule);
+
+	return ret;
+}
 
 /**
  * ggit_repository_submodule_foreach:
@@ -1560,15 +1583,19 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
                                    gpointer               user_data,
                                    GError               **error)
 {
+	SubmoduleCallbackWrapperData wrapper_data;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
+	wrapper_data.user_data = user_data;
+	wrapper_data.callback = callback;
+
 	ret = git_submodule_foreach (_ggit_native_get (repository),
-	                             callback,
-	                             user_data);
+	                             submodule_wrapper_callback,
+	                             &wrapper_data);
 
 	if (ret != GIT_OK)
 	{
@@ -1578,8 +1605,6 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
 
 	return TRUE;
 }
-
-#endif
 
 /**
  * ggit_repository_reset:
