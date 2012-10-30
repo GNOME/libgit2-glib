@@ -18,7 +18,7 @@ def _wrap_to_string(self):
     return "<%s.%s at %s: %s>" % (mod, b.__name__, hex(id(self)), self.to_string())
 
 def _wrap_iter(self):
-    for i in xrange(0, self.size()):
+    for i in range(0, self.size()):
         yield self.get(i)
 
 def _wrap_initable_init(self, *args, **kwargs):

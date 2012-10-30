@@ -18,7 +18,7 @@ AM_INIT_AUTOMAKE([1.11 tar-ustar dist-xz no-dist-gzip])
 AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
-AM_PATH_PYTHON
+AM_PATH_PYTHON(3.2.3)
 
 # Initialize libtool
 LT_PREREQ([2.2])
