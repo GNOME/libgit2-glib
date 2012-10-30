@@ -42,7 +42,7 @@ const gchar       *ggit_config_entry_get_name       (GgitConfigEntry        *ent
 
 const gchar       *ggit_config_entry_get_value      (GgitConfigEntry        *entry);
 
-GgitConfigLevel    ggit_config_entry_level          (GgitConfigEntry        *entry);
+GgitConfigLevel    ggit_config_entry_get_level      (GgitConfigEntry        *entry);
 
 G_END_DECLS
 

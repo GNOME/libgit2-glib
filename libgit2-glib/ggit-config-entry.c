@@ -113,7 +113,7 @@ ggit_config_entry_get_value (GgitConfigEntry *entry)
 }
 
 /**
- * ggit_config_entry_level:
+ * ggit_config_entry_get_level:
  * @entry: a #GgitConfigEntry.
  *
  * Gets the #GgitConfigLevel of @entry.
@@ -121,7 +121,7 @@ ggit_config_entry_get_value (GgitConfigEntry *entry)
  * Returns: the #GgitConfigLevel of @entry.
  */
 GgitConfigLevel
-ggit_config_entry_level (GgitConfigEntry *entry)
+ggit_config_entry_get_level (GgitConfigEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, 0);
 
