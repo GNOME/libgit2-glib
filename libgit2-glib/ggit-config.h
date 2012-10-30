@@ -38,13 +38,13 @@ G_BEGIN_DECLS
 #define GGIT_CONFIG_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CONFIG, GgitConfigClass))
 
 typedef struct _GgitConfigClass		GgitConfigClass;
-typedef struct _GgitConfigPrivate	GgitConfigPrivate;
 
 struct _GgitConfig
 {
 	GgitNative parent;
 
-	GgitConfigPrivate *priv;
+	/* priv padding */
+	gpointer priv;
 };
 
 /**
@@ -60,8 +60,14 @@ struct _GgitConfigClass
 
 GType        ggit_config_get_type      (void) G_GNUC_CONST;
 
-GgitConfig  *ggit_config_new           (GFile                    *file);
-GgitConfig  *ggit_config_get_global    (void);
+GgitConfig  *ggit_config_new           (void);
+GgitConfig  *ggit_config_get_default   (void);
+
+void         ggit_config_add_file      (GgitConfig               *config,
+                                        GFile                    *file,
+                                        GgitConfigLevel           level,
+                                        gboolean                  force,
+                                        GError                  **error);
 
 gint32       ggit_config_get_int32     (GgitConfig               *config,
                                         const gchar              *name,

@@ -20,7 +20,7 @@
 
 #include "ggit-config-entry.h"
 
-struct _GgitTreeEntry
+struct _GgitConfigEntry
 {
 	const git_config_entry *entry;
 	gint ref_count;
@@ -34,9 +34,9 @@ G_DEFINE_BOXED_TYPE (GgitConfigEntry,
 GgitConfigEntry *
 _ggit_config_entry_wrap (const git_config_entry *entry)
 {
-	GgitTreeEntry *ret;
+	GgitConfigEntry *ret;
 
-	ret = g_slice_new (GgitTreeEntry);
+	ret = g_slice_new (GgitConfigEntry);
 	ret->entry = entry;
 	ret->ref_count = 1;
 
@@ -76,7 +76,7 @@ ggit_config_entry_unref (GgitConfigEntry *entry)
 
 	if (g_atomic_int_dec_and_test (&entry->ref_count))
 	{
-		g_slice_free (GgitTreeEntry, entry);
+		g_slice_free (GgitConfigEntry, entry);
 	}
 }
 

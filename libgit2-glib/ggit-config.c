@@ -19,6 +19,7 @@
  */
 
 #include "ggit-config.h"
+#include "ggit-config-entry.h"
 
 #include <git2/errors.h>
 #include <git2/config.h>
@@ -27,100 +28,31 @@
 
 #define GGIT_CONFIG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_CONFIG, GgitConfigPrivate))
 
-struct _GgitConfigPrivate
-{
-	GFile *file;
-};
-
 G_DEFINE_TYPE (GgitConfig, ggit_config, GGIT_TYPE_NATIVE)
 
-enum
+typedef struct
 {
-	PROP_0,
-	PROP_FILE
-};
+	gpointer user_data;
+
+	GgitConfigCallback callback;
+} CallbackWrapperData;
+
+GgitConfig *
+_ggit_config_wrap (git_config *config)
+{
+	GgitConfig *ret;
+
+	g_return_val_if_fail (config != NULL, NULL);
+
+	ret = g_object_new (GGIT_TYPE_CONFIG, "native", config, NULL);
+
+	return ret;
+}
 
 static void
 ggit_config_finalize (GObject *object)
 {
-	GgitConfig *config = GGIT_CONFIG (object);
-
-	if (config->priv->file)
-	{
-		g_object_unref (config->priv->file);
-	}
-
 	G_OBJECT_CLASS (ggit_config_parent_class)->finalize (object);
-}
-
-static void
-ggit_config_constructed (GObject *object)
-{
-	GgitConfig *config = GGIT_CONFIG (object);
-
-	if (config->priv->file)
-	{
-		gchar *path;
-
-		path = g_file_get_path (config->priv->file);
-
-		if (path != NULL)
-		{
-			git_config_add_file_ondisk (_ggit_native_get (config),
-			                            path,
-			                            0);
-		}
-
-		g_free (path);
-	}
-}
-
-static void
-ggit_config_set_property (GObject      *object,
-                          guint         prop_id,
-                          const GValue *value,
-                          GParamSpec   *pspec)
-{
-	GgitConfig *self = GGIT_CONFIG (object);
-
-	switch (prop_id)
-	{
-		case PROP_FILE:
-		{
-			GFile *f;
-
-			f = g_value_get_object (value);
-
-			if (f)
-			{
-				self->priv->file = g_file_dup (f);
-			}
-
-			break;
-		}
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			break;
-	}
-}
-
-static void
-ggit_config_get_property (GObject    *object,
-                          guint       prop_id,
-                          GValue     *value,
-                          GParamSpec *pspec)
-{
-	GgitConfig *self = GGIT_CONFIG (object);
-
-	switch (prop_id)
-	{
-		case PROP_FILE:
-			g_value_set_object (value, self->priv->file);
-			break;
-		default:
-			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			break;
-	}
 }
 
 static void
@@ -129,90 +61,107 @@ ggit_config_class_init (GgitConfigClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ggit_config_finalize;
-
-	object_class->get_property = ggit_config_get_property;
-	object_class->set_property = ggit_config_set_property;
-
-	object_class->constructed = ggit_config_constructed;
-
-	g_type_class_add_private (object_class, sizeof (GgitConfigPrivate));
-
-	g_object_class_install_property (object_class,
-	                                 PROP_FILE,
-	                                 g_param_spec_object ("file",
-	                                                      "File",
-	                                                      "File",
-	                                                      G_TYPE_FILE,
-	                                                      G_PARAM_READWRITE |
-	                                                      G_PARAM_CONSTRUCT_ONLY |
-	                                                      G_PARAM_STATIC_STRINGS));
 }
 
 static void
-ggit_config_init (GgitConfig *self)
+ggit_config_init (GgitConfig *config)
 {
-	git_config *config;
-
-	self->priv = GGIT_CONFIG_GET_PRIVATE (self);
-
-	git_config_new (&config);
-	_ggit_native_set (self, config, (GDestroyNotify) git_config_free);
+	_ggit_native_set_destroy_func (config, (GDestroyNotify) git_config_free);
 }
 
 /**
  * ggit_config_new:
- * @file: (allow-none): a #GFile
  *
- * Create a new config for a given file. If %NULL is specified for @file, an
- * an empty configuration is created. See also ggit_config_get_global() to get
- * a config representing the global user configuration.
+ * Create a new config.See also ggit_config_get_default() to get
+ * a config representing the global, XDG and system configuration files.
  *
- * Returns: (transfer full): a #GgitConfig
+ * Returns: (transfer full): a #GgitConfig.
  *
  **/
 GgitConfig *
-ggit_config_new (GFile *file)
+ggit_config_new (void)
 {
-	return g_object_new (GGIT_TYPE_CONFIG,
-	                     "file", file,
-	                     NULL);
+	git_config *config;
+
+	git_config_new (&config);
+
+	return _ggit_config_wrap (config);
 }
 
 /**
- * ggit_config_get_global:
+ * ggit_config_get_default:
  *
- * Get the global config.
+ * Get the global, XDG and system configuration files.
  *
  * Returns: (transfer none): A #GgitConfig
  *
  **/
 GgitConfig *
-ggit_config_get_global (void)
+ggit_config_get_default (void)
 {
-	static GgitConfig *config = NULL;
+	static GgitConfig *default_config = NULL;
 
-	if (!config)
+	if (!default_config)
 	{
-		gchar global_path[GIT_PATH_MAX];
+		git_config *config;
 
-		if (git_config_find_global (global_path, GIT_PATH_MAX) == GIT_OK)
+		if (git_config_open_default (&config) != GIT_OK)
 		{
-			GFile *f;
-
-			f = g_file_new_for_path (global_path);
-			config = ggit_config_new (f);
-			g_object_unref (f);
-		}
-		else
-		{
-			config = ggit_config_new (NULL);
+			git_config_new (&config);
 		}
 
-		g_object_add_weak_pointer (G_OBJECT (config),
-		                           (gpointer *)&config);
+		default_config = _ggit_config_wrap (config);
+
+		g_object_add_weak_pointer (G_OBJECT (default_config),
+		                           (gpointer *)&default_config);
 	}
 
-	return config;
+	return default_config;
+}
+
+/**
+ * ggit_config_add_file:
+ * @config: a #GgitConfig.
+ * @file: a #GFile.
+ * @level: a #GgitConfigLevel.
+ * @force: if a config file already exists for the given priority level, replace it.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Add an on-disk config file instance to an existing config
+ *
+ * The on-disk file pointed at by @file will be opened and
+ * parsed; it's expected to be a native Git config file following
+ * the default Git config syntax (see man git-config).
+ *
+ * Further queries on this config object will access each
+ * of the config file instances in order (instances with
+ * a higher priority level will be accessed first).
+ */
+void
+ggit_config_add_file (GgitConfig      *config,
+                      GFile           *file,
+                      GgitConfigLevel  level,
+                      gboolean         force,
+                      GError         **error)
+{
+	gint ret;
+	gchar *path;
+
+	g_return_if_fail (GGIT_IS_CONFIG (config));
+	g_return_if_fail (G_IS_FILE (file));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	path = g_file_get_path (file);
+	ret = git_config_add_file_ondisk (_ggit_native_get (config),
+	                                  path,
+	                                  level,
+	                                  force);
+	g_free (path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
 }
 
 /**
@@ -533,6 +482,26 @@ ggit_config_delete (GgitConfig   *config,
 	return TRUE;
 }
 
+static gint
+callback_wrapper (const git_config_entry *config_entry,
+                  gpointer                payload)
+{
+	CallbackWrapperData *wrapper_data = (CallbackWrapperData *)payload;
+	GgitConfigEntry *entry;
+	gint ret;
+
+	entry = _ggit_config_entry_wrap (config_entry);
+
+	if (wrapper_data->callback != NULL)
+	{
+		ret = wrapper_data->callback (entry, wrapper_data->user_data);
+	}
+
+	ggit_config_entry_unref (entry);
+
+	return ret;
+}
+
 /**
  * ggit_config_foreach:
  * @config: a #GgitConfig.
@@ -552,12 +521,16 @@ ggit_config_foreach (GgitConfig          *config,
                      GError             **error)
 {
 	gint ret;
+	CallbackWrapperData wrapper_data;
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), FALSE);
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_foreach (_ggit_native_get (config), callback, user_data);
+	wrapper_data.user_data = user_data;
+	wrapper_data.callback = callback;
+
+	ret = git_config_foreach (_ggit_native_get (config), callback_wrapper, &wrapper_data);
 
 	if (ret != GIT_OK)
 	{
@@ -692,19 +665,6 @@ ggit_config_match_foreach (GgitConfig               *config,
 	                            (GgitConfigCallback)match_foreach,
 	                             &info,
 	                             error);
-}
-
-GgitConfig *
-_ggit_config_wrap (git_config *config)
-{
-	GgitConfig *ret;
-
-	g_return_val_if_fail (config != NULL, NULL);
-
-	ret = g_object_new (GGIT_TYPE_CONFIG, NULL);
-	_ggit_native_set (ret, config, (GDestroyNotify) git_config_free);
-
-	return ret;
 }
 
 /* ex:set ts=8 noet: */

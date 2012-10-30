@@ -21,6 +21,7 @@
 #ifndef __GGIT_CONFIG_ENTRY_H__
 #define __GGIT_CONFIG_ENTRY_H__
 
+#include <glib-object.h>
 #include <git2/config.h>
 
 #include "ggit-types.h"

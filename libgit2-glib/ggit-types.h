@@ -54,6 +54,13 @@ typedef struct _GgitCommitParents GgitCommitParents;
 typedef struct _GgitConfig GgitConfig;
 
 /**
+ * GgitConfigEntry:
+ *
+ * Represents a git configuration entry.
+ */
+typedef struct _GgitConfigEntry GgitConfigEntry;
+
+/**
  * GgitDiff:
  *
  * Represents a diff.
@@ -601,8 +608,7 @@ typedef gint (* GgitBranchesCallback) (const gchar    *branch_name,
 
 /**
  * GgitConfigCallback:
- * @name: the name of the configuration value
- * @value: the value
+ * @entry: a #GgitConfigEntry.
  * @data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving values from a #GgitConfig.
@@ -611,9 +617,8 @@ typedef gint (* GgitBranchesCallback) (const gchar    *branch_name,
  * Returns: 0 to go for the next config value or a #GgitError in case there was
  *          an error.
  */
-typedef gint (* GgitConfigCallback) (const gchar *name,
-                                     const gchar *value,
-                                     gpointer     data);
+typedef gint (* GgitConfigCallback) (GgitConfigEntry *entry,
+                                     gpointer         data);
 
 /**
  * GgitConfigMatchCallback:

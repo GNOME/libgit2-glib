@@ -24,6 +24,7 @@
 #include <git2/status.h>
 #include <git2/submodule.h>
 #include <git2/types.h>
+#include <git2/config.h>
 
 #include "ggit-types.h"
 
