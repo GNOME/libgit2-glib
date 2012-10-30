@@ -28,7 +28,7 @@ INST_H_FILES =				\
 	ggit-error.h			\
 	ggit-index.h			\
 	ggit-index-entry.h		\
-	ggit-index-entry-unmerged.h	\
+	ggit-index-entry-resolve-undo.h	\
 	ggit-main.h			\
 	ggit-native.h			\
 	ggit-object.h			\
@@ -69,7 +69,7 @@ C_FILES =				\
 	ggit-error.c			\
 	ggit-index.c			\
 	ggit-index-entry.c		\
-	ggit-index-entry-unmerged.c	\
+	ggit-index-entry-resolve-undo.c	\
 	ggit-main.c			\
 	ggit-native.c			\
 	ggit-object.c			\

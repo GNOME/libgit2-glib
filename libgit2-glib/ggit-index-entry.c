@@ -144,7 +144,7 @@ ggit_index_entries_unref (GgitIndexEntries *entries)
 }
 
 /**
- * ggit_index_entries_get:
+ * ggit_index_entries_get_by_index:
  * @entries: a #GgitIndexEntries.
  * @idx: the index of the entry.
  *
@@ -162,8 +162,8 @@ ggit_index_entries_unref (GgitIndexEntries *entries)
  *
  **/
 GgitIndexEntry *
-ggit_index_entries_get (GgitIndexEntries *entries,
-                        guint             idx)
+ggit_index_entries_get_by_index (GgitIndexEntries *entries,
+                                 gsize             idx)
 {
 	git_index *gidx;
 
@@ -171,7 +171,47 @@ ggit_index_entries_get (GgitIndexEntries *entries,
 
 	gidx = _ggit_index_get_index (entries->owner);
 
-	return ggit_index_entry_new (git_index_get (gidx, idx));
+	return ggit_index_entry_new (git_index_get_byindex (gidx, idx));
+}
+
+/**
+ * ggit_index_entries_get_by_path:
+ * @entries: a #GgitIndexEntries.
+ * @file: the path to search.
+ * @stage: stage to search.
+ *
+ * Get a #GgitIndexEntry by index. Note that the returned #GgitIndexEntry is
+ * _only_ valid as long as:
+ *
+ * 1) The associated index has been closed
+ * 2) The entry has not been removed (see ggit_index_remove())
+ * 3) The index has not been refreshed (see ggit_index_read())
+ *
+ * Changes to the #GgitIndexEntry will be reflected in the index once written
+ * back to disk using ggit_index_write().
+ *
+ * Returns: (transfer full): a #GgitIndexEntry.
+ *
+ **/
+GgitIndexEntry *
+ggit_index_entries_get_by_path (GgitIndexEntries *entries,
+                                GFile            *file,
+                                gboolean          stage)
+{
+	git_index *gidx;
+	git_index_entry *entry;
+	gchar *path;
+
+	g_return_val_if_fail (entries != NULL, NULL);
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
+	g_return_val_if_fail (stage >= 0 && stage <= 3, NULL);
+
+	gidx = _ggit_index_get_index (entries->owner);
+	path = g_file_get_path (file);
+	entry = git_index_get_bypath (gidx, path, stage);
+	g_free (path);
+
+	return ggit_index_entry_new (entry);
 }
 
 /**
@@ -368,6 +408,14 @@ ggit_index_entry_get_file (GgitIndexEntry *entry)
 	}
 
 	return g_file_new_for_path (entry->entry->path);
+}
+
+git_index_entry *
+_ggit_index_entry_get_native (GgitIndexEntry *entry)
+{
+	g_return_val_if_fail (entry != NULL, NULL);
+
+	return entry->entry;
 }
 
 /* ex:set ts=8 noet: */

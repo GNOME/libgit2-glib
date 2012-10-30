@@ -26,7 +26,7 @@
 #include <git2/index.h>
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-index-entry.h>
-#include <libgit2-glib/ggit-index-entry-unmerged.h>
+#include <libgit2-glib/ggit-index-entry-resolve-undo.h>
 #include "ggit-native.h"
 
 G_BEGIN_DECLS
@@ -59,37 +59,32 @@ struct _GgitIndexClass
 	GgitNativeClass parent_class;
 };
 
-GType                     ggit_index_get_type             (void) G_GNUC_CONST;
+GType                     ggit_index_get_type                 (void) G_GNUC_CONST;
 
-git_index                *_ggit_index_get_index           (GgitIndex  *idx);
-GgitIndex                *_ggit_index_wrap                (git_index  *idx);
+git_index                *_ggit_index_get_index               (GgitIndex  *idx);
+GgitIndex                *_ggit_index_wrap                    (git_index  *idx);
 
-GgitIndex                *ggit_index_open                 (GFile      *file,
-                                                           GError    **error);
+GgitIndex                *ggit_index_open                     (GFile      *file,
+                                                               GError    **error);
 
+gboolean                  ggit_index_read                     (GgitIndex  *idx,
+                                                               GError    **error);
 
-gboolean                  ggit_index_read                 (GgitIndex  *idx,
-                                                           GError    **error);
-gboolean                  ggit_index_write                (GgitIndex  *idx,
-                                                           GError    **error);
-void                      ggit_index_uniq                 (GgitIndex  *idx);
+gboolean                  ggit_index_write                    (GgitIndex  *idx,
+                                                               GError    **error);
 
-gboolean                  ggit_index_remove               (GgitIndex  *idx,
-                                                           gint        position,
-                                                           GError    **error);
+gboolean                  ggit_index_remove                   (GgitIndex  *idx,
+                                                               GFile      *file,
+                                                               gint        stage,
+                                                               GError    **error);
 
-gboolean                  ggit_index_append               (GgitIndex  *idx,
-                                                           GFile      *file,
-                                                           gint        stage,
-                                                           GError    **error);
+gboolean                  ggit_index_add                      (GgitIndex       *idx,
+                                                               GgitIndexEntry  *entry,
+                                                               GError         **error);
 
-gboolean                  ggit_index_add                  (GgitIndex  *idx,
-                                                           GFile      *file,
-                                                           gint        stage,
-                                                           GError    **error);
-
-GgitIndexEntries         *ggit_index_get_entries          (GgitIndex  *idx);
-GgitIndexEntriesUnmerged *ggit_index_get_entries_unmerged (GgitIndex  *idx);
+GgitIndexEntries         *ggit_index_get_entries              (GgitIndex  *idx);
+GgitIndexEntriesResolveUndo *
+                          ggit_index_get_entries_resolve_undo (GgitIndex  *idx);
 
 G_END_DECLS
 

@@ -25,6 +25,7 @@
 #include <gio/gio.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-types.h>
+#include <git2/index.h>
 
 G_BEGIN_DECLS
 
@@ -39,8 +40,12 @@ GgitIndexEntries *_ggit_index_entries_new             (GgitIndex         *owner)
 GgitIndexEntries *ggit_index_entries_ref              (GgitIndexEntries  *entries);
 void              ggit_index_entries_unref            (GgitIndexEntries  *entries);
 
-GgitIndexEntry   *ggit_index_entries_get              (GgitIndexEntries  *entries,
-                                                       guint              idx);
+GgitIndexEntry   *ggit_index_entries_get_by_index      (GgitIndexEntries  *entries,
+                                                        gsize              idx);
+
+GgitIndexEntry   *ggit_index_entries_get_by_path       (GgitIndexEntries *entries,
+                                                        GFile            *file,
+                                                        gboolean          stage);
 
 guint             ggit_index_entries_size             (GgitIndexEntries  *entries);
 
@@ -61,6 +66,8 @@ guint             ggit_index_entry_get_flags          (GgitIndexEntry    *entry)
 guint             ggit_index_entry_get_flags_extended (GgitIndexEntry    *entry);
 
 GFile            *ggit_index_entry_get_file           (GgitIndexEntry    *entry);
+
+git_index_entry *_ggit_index_entry_get_native         (GgitIndexEntry    *entry);
 
 G_END_DECLS
 

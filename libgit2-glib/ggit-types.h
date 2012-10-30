@@ -117,18 +117,18 @@ typedef struct _GgitIndexEntries GgitIndexEntries;
 typedef struct _GgitIndexEntry GgitIndexEntry;
 
 /**
- * GgitIndexEntriesUnmerged:
+ * GgitIndexEntriesResolveUndo:
  *
- * Represents the unmerged entries in an index object.
+ * Represents the resolve undo entries in an index object.
  */
-typedef struct _GgitIndexEntriesUnmerged GgitIndexEntriesUnmerged;
+typedef struct _GgitIndexEntriesResolveUndo GgitIndexEntriesResolveUndo;
 
 /**
- * GgitIndexEntryUnmerged:
+ * GgitIndexEntryResolveUndo:
  *
- * Represents an unmerged index entry object.
+ * Represents an resolve undo index entry object.
  */
-typedef struct _GgitIndexEntryUnmerged GgitIndexEntryUnmerged;
+typedef struct _GgitIndexEntryResolveUndo GgitIndexEntryResolveUndo;
 
 /**
  * GgitNative:

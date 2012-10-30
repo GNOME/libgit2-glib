@@ -300,24 +300,10 @@ ggit_index_write (GgitIndex  *idx,
 }
 
 /**
- * ggit_index_uniq:
- * @idx: a #GgitIndex.
- *
- * Remove all entries with equal path except last added.
- *
- **/
-void
-ggit_index_uniq (GgitIndex *idx)
-{
-	g_return_if_fail (GGIT_IS_INDEX (idx));
-
-	git_index_uniq (_ggit_native_get (idx));
-}
-
-/**
  * ggit_index_remove:
  * @idx: a #GgitIndex.
- * @position: the position of the file in the index.
+ * @file: the file to search.
+ * @stage: the stage to search.
  * @error: a #GError.
  *
  * Remove a file from the index (specified by position).
@@ -327,39 +313,6 @@ ggit_index_uniq (GgitIndex *idx)
  **/
 gboolean
 ggit_index_remove (GgitIndex  *idx,
-                   gint        position,
-                   GError    **error)
-{
-	gint ret;
-
-	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-	ret = git_index_remove (_ggit_native_get (idx), position);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-		return FALSE;
-	}
-
-	return TRUE;
-}
-
-/**
- * ggit_index_append:
- * @idx: a #GgitIndex.
- * @file: a #GFile.
- * @stage: the stage.
- * @error: a #GError.
- *
- * Append a file to the index.
- *
- * Returns: %TRUE if the file was appended successfully, %FALSE otherwise.
- *
- **/
-gboolean
-ggit_index_append (GgitIndex  *idx,
                    GFile      *file,
                    gint        stage,
                    GError    **error)
@@ -369,13 +322,14 @@ ggit_index_append (GgitIndex  *idx,
 
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
+	g_return_val_if_fail (stage >= 0 && stage <= 3, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	path = g_file_get_path (file);
 
 	g_return_val_if_fail (path != NULL, FALSE);
 
-	ret = git_index_append (_ggit_native_get (idx), path, stage);
+	ret = git_index_remove (_ggit_native_get (idx), path, stage);
 	g_free (path);
 
 	if (ret != GIT_OK)
@@ -390,8 +344,7 @@ ggit_index_append (GgitIndex  *idx,
 /**
  * ggit_index_add:
  * @idx: a #GgitIndex.
- * @file: a #GFile.
- * @stage: the stage.
+ * @entry: a #GgitIndexEntry
  * @error: a #GError.
  *
  * Add a file to the index.
@@ -400,24 +353,18 @@ ggit_index_append (GgitIndex  *idx,
  *
  **/
 gboolean
-ggit_index_add (GgitIndex  *idx,
-                GFile      *file,
-                gint        stage,
-                GError    **error)
+ggit_index_add (GgitIndex       *idx,
+                GgitIndexEntry  *entry,
+                GError         **error)
 {
 	gint ret;
-	gchar *path;
 
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
-	g_return_val_if_fail (G_IS_FILE (file), FALSE);
+	g_return_val_if_fail (entry != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	path = g_file_get_path (file);
-
-	g_return_val_if_fail (path != NULL, FALSE);
-
-	ret = git_index_add (_ggit_native_get (idx), path, stage);
-	g_free (path);
+	ret = git_index_add (_ggit_native_get (idx),
+	                     _ggit_index_entry_get_native (entry));
 
 	if (ret != GIT_OK)
 	{
@@ -446,20 +393,20 @@ ggit_index_get_entries (GgitIndex *idx)
 }
 
 /**
- * ggit_index_get_entries_unmerged:
+ * ggit_index_get_entries_resolve_undo:
  * @idx: a #GgitIndex.
  *
- * Get the unmerged entries enumerator.
+ * Get the resolve undo entries enumerator.
  *
- * Returns: (transfer full): a #GgitIndexEntriesUnmerged.
+ * Returns: (transfer full): a #GgitIndexEntriesResolveUndo.
  *
  **/
-GgitIndexEntriesUnmerged *
-ggit_index_get_entries_unmerged (GgitIndex *idx)
+GgitIndexEntriesResolveUndo *
+ggit_index_get_entries_resolve_undo (GgitIndex *idx)
 {
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
 
-	return _ggit_index_entries_unmerged_new (idx);
+	return _ggit_index_entries_resolve_undo_new (idx);
 }
 
 /* ex:set ts=8 noet: */
