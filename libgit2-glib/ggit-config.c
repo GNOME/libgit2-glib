@@ -488,7 +488,7 @@ callback_wrapper (const git_config_entry *config_entry,
 {
 	CallbackWrapperData *wrapper_data = (CallbackWrapperData *)payload;
 	GgitConfigEntry *entry;
-	gint ret;
+	gint ret = 0;
 
 	entry = _ggit_config_entry_wrap (config_entry);
 
