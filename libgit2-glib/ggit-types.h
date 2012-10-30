@@ -494,6 +494,25 @@ typedef enum {
 	GGIT_SORT_REVERSE     = 1 << 2
 } GgitSortMode;
 
+/**
+ * GgitStashFlags:
+ * @GGIT_STASH_DEFAULT: default stash.
+ * @GGIT_STASH_KEEP_INDEX: All changes already added to the index
+ * are left intact in the working directory.
+ * @GGIT_STASH_INCLUDE_UNTRACKED: All untracked files are also stashed and then
+ * cleaned up from the working directory.
+ * @GGIT_STASH_INCLUDE_IGNORED: All ignored files are also stashed and then
+ * cleaned up from the working directory.
+ *
+ * Describes how a stash should be applied.
+ */
+typedef enum {
+	GGIT_STASH_DEFAULT           = 0,
+	GGIT_STASH_KEEP_INDEX        = 1 << 0,
+	GGIT_STASH_INCLUDE_UNTRACKED = 1 << 1,
+	GGIT_STASH_INCLUDE_IGNORED   = 1 << 2
+} GgitStashFlags;
+
 /* NOTE: keep in sync with git2/status.h */
 /**
  * GgitStatusFlags:
@@ -719,6 +738,24 @@ typedef gint (* GgitRemoteListCallback) (const gchar *name,
                                          GgitOId     *loid,
                                          gboolean     local,
                                          gpointer     user_data);
+
+/**
+ * GgitStashCallback:
+ * @index: the position within the stash list. 0 points to the
+ * most recent stashed state.
+ * @message: the stash message.
+ * @stash_oid: the commit oid of the stashed state.
+ * @user_data: (closure): user-suplied data.
+ *
+ * When iterating over all the stashed states, callback that will be
+ * issued per entry. See ggit_repository_foreach_stash().
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitStashCallback) (gsize        index,
+                                    const gchar *message,
+                                    GgitOId     *stash_oid,
+                                    gpointer    *user_data);
 
 /**
  * GgitStatusCallback:

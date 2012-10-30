@@ -214,6 +214,21 @@ GgitObject         *ggit_repository_revparse          (GgitRepository        *re
                                                        const gchar           *spec,
                                                        GError               **error);
 
+GgitOId            *ggit_repository_save_stash        (GgitRepository        *repository,
+                                                       GgitSignature         *stasher,
+                                                       const gchar           *message,
+                                                       GgitStashFlags         flags,
+                                                       GError               **error);
+
+void                ggit_repository_drop_stash        (GgitRepository        *repository,
+                                                       gsize                  index,
+                                                       GError               **error);
+
+gboolean            ggit_repository_stash_foreach     (GgitRepository        *repository,
+                                                       GgitStashCallback      callback,
+                                                       gpointer               user_data,
+                                                       GError               **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */
