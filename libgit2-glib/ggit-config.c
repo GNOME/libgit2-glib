@@ -72,8 +72,10 @@ ggit_config_init (GgitConfig *config)
 /**
  * ggit_config_new:
  *
- * Create a new config.See also ggit_config_get_default() to get
- * a config representing the global, XDG and system configuration files.
+ * Create a new config. See also ggit_config_get_default() to get
+ * a #GgitConfig representing the global, XDG and system configuration files.
+ * To get a #GgitConfig for a repository use #ggit_repository_get_config
+ * instead.
  *
  * Returns: (transfer full): a #GgitConfig.
  *
@@ -89,34 +91,77 @@ ggit_config_new (void)
 }
 
 /**
- * ggit_config_get_default:
+ * ggit_config_new_from_file:
+ * @file: the file to load
+ * @error: a #GError for error reporting, or %NULL.
  *
- * Get the global, XDG and system configuration files.
+ * Create a new config from a single on disk file. This is a convenience
+ * API and is exactly the same as creating an empty #GgitConfig using
+ * #ggit_config_new and adding the file with #ggit_config_add_file. The
+ * level will be set to #GGIT_CONFIG_LEVEL_LOCAL. If the config could not be
+ * loaded this function returns %NULL and @error will be set accordingly.
+ *
+ * Returns: (transfer full): a #GgitConfig.
+ *
+ **/
+GgitConfig *
+ggit_config_new_from_file (GFile   *file,
+                           GError **error)
+{
+	git_config *config;
+	gchar *path;
+	gint ret;
+
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+	path = g_file_get_path (file);
+
+	g_return_val_if_fail (path != NULL, NULL);
+
+	ret = git_config_open_ondisk (&config, path);
+	g_free (path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	else
+	{
+		return _ggit_config_wrap (config);
+	}
+}
+
+/**
+ * ggit_config_new_default:
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Get the global, XDG and system configuration files merged into one
+ * #GgitConfig with their appropriate priority levels. If an error occured
+ * trying to load the various configuration files, this function will return
+ * %NULL and @error will be set accordingly.
  *
  * Returns: (transfer none): A #GgitConfig
  *
  **/
 GgitConfig *
-ggit_config_get_default (void)
+ggit_config_new_default (GError **error)
 {
-	static GgitConfig *default_config = NULL;
+	git_config *config;
+	gint ret;
 
-	if (!default_config)
+	ret = git_config_open_default (&config);
+
+	if (ret != GIT_OK)
 	{
-		git_config *config;
-
-		if (git_config_open_default (&config) != GIT_OK)
-		{
-			git_config_new (&config);
-		}
-
-		default_config = _ggit_config_wrap (config);
-
-		g_object_add_weak_pointer (G_OBJECT (default_config),
-		                           (gpointer *)&default_config);
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	else
+	{
+		return _ggit_config_wrap (config);
 	}
 
-	return default_config;
 }
 
 /**
