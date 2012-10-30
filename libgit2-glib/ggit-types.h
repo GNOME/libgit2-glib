@@ -628,7 +628,7 @@ typedef gint (* GgitBranchesCallback) (const gchar    *branch_name,
 /**
  * GgitConfigCallback:
  * @entry: a #GgitConfigEntry.
- * @data: (closure): user-supplied data.
+ * @user_data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving values from a #GgitConfig.
  * See ggit_config_foreach().
@@ -637,13 +637,13 @@ typedef gint (* GgitBranchesCallback) (const gchar    *branch_name,
  *          an error.
  */
 typedef gint (* GgitConfigCallback) (GgitConfigEntry *entry,
-                                     gpointer         data);
+                                     gpointer         user_data);
 
 /**
  * GgitConfigMatchCallback:
  * @match_info: the match
  * @value: the value
- * @data: (closure): user-supplied data.
+ * @user_data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving values from a #GgitConfig
  * using a regular expression. See ggit_config_match_foreach().
@@ -653,7 +653,7 @@ typedef gint (* GgitConfigCallback) (GgitConfigEntry *entry,
  */
 typedef gint (* GgitConfigMatchCallback) (GMatchInfo  *match_info,
                                           const gchar *value,
-                                          gpointer     data);
+                                          gpointer     user_data);
 
 /**
  * GgitDiffFileCallback:
@@ -710,7 +710,7 @@ typedef gint (* GgitDiffLineCallback) (GgitDiffDelta    *delta,
 /**
  * GgitReferencesCallback:
  * @name: the name of the reference
- * @data: (closure): user-supplied data.
+ * @user_data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving the references
  * in a #GgitRepository. See ggit_repository_references_foreach().
@@ -718,7 +718,7 @@ typedef gint (* GgitDiffLineCallback) (GgitDiffDelta    *delta,
  * Returns: 0 to go for the next references or a #GgitError in case there was an error.
  */
 typedef gint (* GgitReferencesCallback) (const gchar *name,
-                                         gpointer     data);
+                                         gpointer     user_data);
 
 /**
  * GgitRemoteListCallback:
@@ -761,7 +761,7 @@ typedef gint (* GgitStashCallback) (gsize        index,
  * GgitStatusCallback:
  * @path: the file to retrieve status for, rooted at the repository working dir.
  * @status_flags: the status value.
- * @data: (closure): user-supplied data.
+ * @user_data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving the status of the files
  * in a #GgitRepository. See ggit_repository_file_status_foreach().
@@ -770,13 +770,13 @@ typedef gint (* GgitStashCallback) (gsize        index,
  */
 typedef gint (* GgitStatusCallback) (const gchar     *path,
                                      GgitStatusFlags  status_flags,
-                                     gpointer         data);
+                                     gpointer         user_data);
 
 /**
  * GgitSubmoduleCallback:
  * @submodule: a #GgitSubmodule.
  * @name: the name of the submodule.
- * @data: (closure): user-supplied data.
+ * @user_data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving the submodules
  * in a #GgitRepository. See ggit_repository_submodule_foreach().
@@ -785,7 +785,7 @@ typedef gint (* GgitStatusCallback) (const gchar     *path,
  */
 typedef gint (* GgitSubmoduleCallback) (GgitSubmodule *submodule,
                                         const gchar   *name,
-                                        gpointer       data);
+                                        gpointer       user_data);
 
 /**
  * GgitTreeWalkCallback:
