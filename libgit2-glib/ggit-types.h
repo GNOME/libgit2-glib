@@ -748,7 +748,7 @@ typedef gint (* GgitRemoteListCallback) (const gchar *name,
  * @user_data: (closure): user-suplied data.
  *
  * When iterating over all the stashed states, callback that will be
- * issued per entry. See ggit_repository_foreach_stash().
+ * issued per entry. See ggit_repository_stash_foreach().
  *
  * Returns: 0 to go continue or a #GgitError in case there was an error.
  */
