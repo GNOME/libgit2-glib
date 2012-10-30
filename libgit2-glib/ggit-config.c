@@ -161,7 +161,62 @@ ggit_config_new_default (GError **error)
 	{
 		return _ggit_config_wrap (config);
 	}
+}
 
+/**
+ * ggit_config_find_global:
+ *
+ * Find the file representing the users global git configuration. This file
+ * is usually located at $HOME/.gitconfig. This function will try to guess
+ * the full path to that file, if the file exists. The returned file may then
+ * be used with #ggit_config_new_from_file or #ggit_config_add_file. This
+ * function returns %NULL if the global config could not be found.
+ *
+ * Returns: (transfer full): a #GFile or %NULL if the global config could not be found.
+ *
+ **/
+GFile *
+ggit_config_find_global (void)
+{
+	gchar path[GIT_PATH_MAX];
+
+	if (git_config_find_global (path, GIT_PATH_MAX) != GIT_OK)
+	{
+		return NULL;
+	}
+	else
+	{
+		return g_file_new_for_path (path);
+	}
+}
+
+/**
+ * ggit_config_find_system:
+ *
+ * Find the file representing the systems global git configuration. This file
+ * is usually located at /etc/gitconfig on UNIX type systems or
+ * %PROGRAMFILES%\Git\etc\gitconfig on windows. This function will try to guess
+ * the full path to that file, if the file exists. The returned file may then
+ * be used with #ggit_config_new_from_file or #ggit_config_add_file. This
+ * function returns %NULL if the system config could not be found.
+ *
+ * Returns: (transfer full): a #GFile or %NULL if the system config could not
+ *                           be found.
+ *
+ **/
+GFile *
+ggit_config_find_system (void)
+{
+	gchar path[GIT_PATH_MAX];
+
+	if (git_config_find_system (path, GIT_PATH_MAX) != GIT_OK)
+	{
+		return NULL;
+	}
+	else
+	{
+		return g_file_new_for_path (path);
+	}
 }
 
 /**

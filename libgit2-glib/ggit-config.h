@@ -67,6 +67,9 @@ GgitConfig  *ggit_config_new_default   (GError                 **error);
 GgitConfig  *ggit_config_new_from_file (GFile                   *file,
                                         GError                 **error);
 
+GFile       *ggit_config_find_global   (void);
+GFile       *ggit_config_find_system   (void);
+
 void         ggit_config_add_file      (GgitConfig               *config,
                                         GFile                    *file,
                                         GgitConfigLevel           level,
