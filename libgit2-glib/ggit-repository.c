@@ -1734,7 +1734,7 @@ stash_callback_wrapper (gsize          index,
 	return ret;
 }
 
-/*
+/**
  * ggit_repository_stash_foreach:
  * @repository: a #GgitRepository.
  * @callback: (scope call): a #GgitStashCallback.
