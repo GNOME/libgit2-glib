@@ -158,7 +158,7 @@ ggit_index_entries_unref (GgitIndexEntries *entries)
  * Changes to the #GgitIndexEntry will be reflected in the index once written
  * back to disk using ggit_index_write().
  *
- * Returns: (transfer full): a #GgitIndexEntry.
+ * Returns: (transfer full): a #GgitIndexEntry or %NULL if out of bounds.
  *
  **/
 GgitIndexEntry *
@@ -166,12 +166,21 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
                                  gsize             idx)
 {
 	git_index *gidx;
+	git_index_entry *entry;
 
 	g_return_val_if_fail (entries != NULL, NULL);
 
 	gidx = _ggit_index_get_index (entries->owner);
+	entry = git_index_get_byindex (gidx, idx);
 
-	return ggit_index_entry_new (git_index_get_byindex (gidx, idx));
+	if (entry)
+	{
+		return ggit_index_entry_new (entry);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 /**
@@ -190,7 +199,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
  * Changes to the #GgitIndexEntry will be reflected in the index once written
  * back to disk using ggit_index_write().
  *
- * Returns: (transfer full): a #GgitIndexEntry.
+ * Returns: (transfer full): a #GgitIndexEntry or %NULL if it was not found.
  *
  **/
 GgitIndexEntry *
@@ -211,7 +220,14 @@ ggit_index_entries_get_by_path (GgitIndexEntries *entries,
 	entry = git_index_get_bypath (gidx, path, stage);
 	g_free (path);
 
-	return ggit_index_entry_new (entry);
+	if (entry)
+	{
+		return ggit_index_entry_new (entry);
+	}
+	else
+	{
+		return NULL;
+	}
 }
 
 /**
