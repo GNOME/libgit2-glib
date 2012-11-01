@@ -76,6 +76,9 @@ void         ggit_config_add_file      (GgitConfig               *config,
                                         gboolean                  force,
                                         GError                  **error);
 
+void         ggit_config_refresh       (GgitConfig               *config,
+                                        GError                  **error);
+
 gint32       ggit_config_get_int32     (GgitConfig               *config,
                                         const gchar              *name,
                                         GError                  **error);
