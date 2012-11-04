@@ -43,18 +43,17 @@ G_DEFINE_TYPE_EXTENDED (GgitIndex, ggit_index, GGIT_TYPE_NATIVE,
                                                ggit_index_initable_iface_init))
 
 static void
-ggit_index_finalize (GObject *object)
+ggit_index_dispose (GObject *object)
 {
-	GgitIndex *idx;
+	GgitIndexPrivate *priv = GGIT_INDEX (object)->priv;
 
-	idx = GGIT_INDEX (object);
-
-	if (idx->priv->file)
+	if (priv->file)
 	{
-		g_object_unref (idx->priv->file);
+		g_object_unref (priv->file);
+		priv->file = NULL;
 	}
 
-	G_OBJECT_CLASS (ggit_index_parent_class)->finalize (object);
+	G_OBJECT_CLASS (ggit_index_parent_class)->dispose (object);
 }
 
 static void
@@ -165,7 +164,7 @@ ggit_index_class_init (GgitIndexClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = ggit_index_finalize;
+	object_class->dispose = ggit_index_dispose;
 
 	object_class->get_property = ggit_index_get_property;
 	object_class->set_property = ggit_index_set_property;
