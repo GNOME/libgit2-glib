@@ -35,6 +35,12 @@ GType              ggit_remote_get_type                 (void) G_GNUC_CONST;
 
 GgitRemote       *_ggit_remote_wrap                     (const git_remote *remote);
 
+GgitRemote        *ggit_remote_new                      (GgitRepository   *repository,
+                                                         const gchar      *name,
+                                                         const gchar      *url,
+                                                         const gchar      *fetch_spec,
+                                                         GError          **error);
+
 GgitRemote        *ggit_remote_ref                      (GgitRemote       *remote);
 void               ggit_remote_unref                    (GgitRemote       *remote);
 

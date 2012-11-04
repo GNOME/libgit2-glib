@@ -24,6 +24,7 @@
 #include "ggit-error.h"
 #include "ggit-oid.h"
 #include "ggit-ref-spec.h"
+#include "ggit-repository.h"
 
 
 struct _GgitRemote
@@ -44,6 +45,46 @@ _ggit_remote_wrap (const git_remote *remote)
 	glib_remote->ref_count = 1;
 
 	return glib_remote;
+}
+
+/**
+ * ggit_remote_new:
+ * @repository: a #GgitRepository.
+ * @name: the remote's name.
+ * @url: the remote repository's URL.
+ * @fetch_spec: the fetch refspec to use for this remote.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a remote with the default refspecs in memory. You can use
+ * this when you have a URL instead of a remote's name.
+ *
+ * Returns: (transfer full): a newly allocated #GgitRemote.
+ */
+GgitRemote *
+ggit_remote_new (GgitRepository   *repository,
+                 const gchar      *name,
+                 const gchar      *url,
+                 const gchar      *fetch_spec,
+                 GError          **error)
+{
+	gint ret;
+	git_remote *remote;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (url != NULL, NULL);
+	g_return_val_if_fail (fetch_spec != NULL, NULL);
+
+	ret = git_remote_new (&remote, _ggit_native_get (repository),
+	                      name, url, fetch_spec);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_remote_wrap (remote);
 }
 
 /**
@@ -144,7 +185,7 @@ ggit_remote_get_url (GgitRemote *remote)
  * ggit_remote_connect:
  * @remote: a #GgitRemote.
  * @direction: whether you want to receive or send data.
- * @error: a #GError or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Opens a connection to a remote.
  * The transport is selected based on the URL. The direction argument
@@ -204,7 +245,7 @@ ggit_remote_disconnect (GgitRemote *remote)
  * ggit_remote_set_fetch_spec:
  * @remote: a #GgitRemote.
  * @fetch_spec: the fetch refspec.
- * @error: a #GError or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Sets @remote's fetch spec to @fetch_spec.
  */
@@ -256,7 +297,7 @@ ggit_remote_get_fetch_spec (GgitRemote *remote)
  * ggit_remote_set_push_spec:
  * @remote: a #GgitRemote.
  * @push_spec: the push refspec.
- * @error: a #GError or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Sets @remote's push spec to @fetch_spec.
  */
@@ -335,7 +376,7 @@ remote_list_callback_wrapper (git_remote_head *head,
  * @remote: a #GgitRemote.
  * @callback: (scope call) (closure user_data): a #GgitRemoteListCallback.
  * @user_data: callback user data.
- * @error: a #GError or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Calls @callback for each ref at @remote.
  */
