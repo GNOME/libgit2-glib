@@ -147,9 +147,8 @@ _ggit_signature_wrap (git_signature *signature,
 	return ret;
 }
 
-/* https://bugzilla.gnome.org/show_bug.cgi?id=676922 */
 /**
- * ggit_signature_new: (skip)
+ * ggit_signature_new:
  * @name: the name of the person.
  * @email: the email of the person.
  * @signature_time: the time when the action happened.
