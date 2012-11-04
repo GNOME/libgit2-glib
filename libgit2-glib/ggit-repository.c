@@ -1420,7 +1420,7 @@ ggit_repository_get_remote (GgitRepository  *repository,
 		return NULL;
 	}
 
-	return _ggit_remote_new (remote);
+	return _ggit_remote_wrap (remote);
 }
 
 /**
@@ -1458,7 +1458,7 @@ ggit_repository_add_remote (GgitRepository  *repository,
 		return NULL;
 	}
 
-	return _ggit_remote_new (remote);
+	return _ggit_remote_wrap (remote);
 }
 
 /**

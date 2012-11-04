@@ -35,7 +35,7 @@ struct _GgitRemote
 G_DEFINE_BOXED_TYPE (GgitRemote, ggit_remote, ggit_remote_ref, ggit_remote_unref)
 
 GgitRemote *
-_ggit_remote_new (const git_remote *remote)
+_ggit_remote_wrap (const git_remote *remote)
 {
 	GgitRemote *glib_remote;
 

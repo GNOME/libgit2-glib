@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 GType              ggit_remote_get_type                 (void) G_GNUC_CONST;
 
-GgitRemote       *_ggit_remote_new                      (const git_remote *remote);
+GgitRemote       *_ggit_remote_wrap                     (const git_remote *remote);
 
 GgitRemote        *ggit_remote_ref                      (GgitRemote       *remote);
 void               ggit_remote_unref                    (GgitRemote       *remote);
