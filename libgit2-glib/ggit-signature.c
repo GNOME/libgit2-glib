@@ -320,9 +320,8 @@ ggit_signature_get_time (GgitSignature *signature)
 	return g_date_time_new_from_unix_utc (s->when.time);
 }
 
-/* https://bugzilla.gnome.org/show_bug.cgi?id=676922 */
 /**
- * ggit_signature_get_time_zone: (skip)
+ * ggit_signature_get_time_zone:
  * @signature: a #GgitSignature.
  *
  * Gets the timezone in which the action happened.
