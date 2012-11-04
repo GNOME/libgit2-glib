@@ -183,25 +183,22 @@ ggit_index_class_init (GgitIndexClass *klass)
 }
 
 static void
-ggit_index_init (GgitIndex *self)
+ggit_index_init (GgitIndex *index)
 {
-	self->priv = GGIT_INDEX_GET_PRIVATE (self);
+	index->priv = GGIT_INDEX_GET_PRIVATE (index);
+
+	_ggit_native_set_destroy_func (index, (GDestroyNotify) git_index_free);
 }
 
 GgitIndex *
 _ggit_index_wrap (git_index *idx)
 {
-	GgitIndex *ret;
-
 	if (idx == NULL)
 	{
 		return NULL;
 	}
 
-	ret = g_object_new (GGIT_TYPE_INDEX, NULL);
-	_ggit_native_set (ret, idx, (GDestroyNotify) git_index_free);
-
-	return ret;
+	return GGIT_INDEX (g_object_new (GGIT_TYPE_INDEX, "native", idx, NULL));
 }
 
 git_index *
