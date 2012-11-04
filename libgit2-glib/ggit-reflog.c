@@ -31,7 +31,7 @@ struct _GgitReflog
 G_DEFINE_BOXED_TYPE (GgitReflog, ggit_reflog, ggit_reflog_ref, ggit_reflog_unref)
 
 GgitReflog *
-_ggit_reflog_new (git_reflog *reflog)
+_ggit_reflog_wrap (git_reflog *reflog)
 {
 	GgitReflog *greflog;
 
@@ -120,7 +120,7 @@ ggit_reflog_get_entry_from_index (GgitReflog *reflog,
 		return NULL;
 	}
 
-	return _ggit_reflog_entry_new (reflog_entry);
+	return _ggit_reflog_entry_wrap (reflog_entry);
 }
 
 /* ex:set ts=8 noet: */

@@ -49,7 +49,7 @@ G_DEFINE_BOXED_TYPE (GgitCommitParents,
                      ggit_commit_parents_unref)
 
 static GgitCommitParents *
-ggit_commit_parents_new (GgitCommit *commit)
+ggit_commit_parents_wrap (GgitCommit *commit)
 {
 	GgitCommitParents *ret;
 
@@ -319,7 +319,7 @@ ggit_commit_get_parents (GgitCommit *commit)
 {
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	return ggit_commit_parents_new (commit);
+	return ggit_commit_parents_wrap (commit);
 }
 
 /**
@@ -393,7 +393,7 @@ ggit_commit_parents_get_id (GgitCommitParents *parents,
 	c = _ggit_native_get (parents->commit);
 
 	oid = git_commit_parent_oid (c, idx);
-	return _ggit_oid_new (oid);
+	return _ggit_oid_wrap (oid);
 }
 
 /**
@@ -448,7 +448,7 @@ ggit_commit_get_tree_id (GgitCommit *commit)
 
 	oid = git_commit_tree_oid (c);
 
-	return _ggit_oid_new (oid);
+	return _ggit_oid_wrap (oid);
 }
 
 /**

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 GType          ggit_tree_entry_get_type        (void) G_GNUC_CONST;
 
-GgitTreeEntry *_ggit_tree_entry_new            (const git_tree_entry *entry);
+GgitTreeEntry *_ggit_tree_entry_wrap           (const git_tree_entry *entry);
 GgitTreeEntry *ggit_tree_entry_ref             (GgitTreeEntry        *entry);
 void           ggit_tree_entry_unref           (GgitTreeEntry        *entry);
 

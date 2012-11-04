@@ -52,7 +52,7 @@ ggit_object_get_id (GgitObject *object)
 
 	oid = git_object_id (_ggit_native_get (object));
 
-	return _ggit_oid_new ((git_oid *)oid);
+	return _ggit_oid_wrap ((git_oid *)oid);
 }
 
 /**

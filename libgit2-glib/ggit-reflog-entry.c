@@ -33,7 +33,7 @@ G_DEFINE_BOXED_TYPE (GgitReflogEntry, ggit_reflog_entry,
                      ggit_reflog_entry_ref, ggit_reflog_entry_unref)
 
 GgitReflogEntry *
-_ggit_reflog_entry_new (const git_reflog_entry *reflog_entry)
+_ggit_reflog_entry_wrap (const git_reflog_entry *reflog_entry)
 {
 	GgitReflogEntry *greflog_entry;
 
@@ -98,7 +98,7 @@ ggit_reflog_entry_get_old_oid (GgitReflogEntry *reflog_entry)
 
 	oid = git_reflog_entry_oidold (reflog_entry->reflog_entry);
 
-	return _ggit_oid_new (oid);
+	return _ggit_oid_wrap (oid);
 }
 
 /**
@@ -118,7 +118,7 @@ ggit_reflog_entry_get_new_oid (GgitReflogEntry *reflog_entry)
 
 	oid = git_reflog_entry_oidnew (reflog_entry->reflog_entry);
 
-	return _ggit_oid_new (oid);
+	return _ggit_oid_wrap (oid);
 }
 
 /**

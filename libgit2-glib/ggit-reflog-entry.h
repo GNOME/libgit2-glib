@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 GType             ggit_reflog_entry_get_type       (void) G_GNUC_CONST;
 
-GgitReflogEntry  *_ggit_reflog_entry_new           (const git_reflog_entry *reflog_entry);
+GgitReflogEntry  *_ggit_reflog_entry_wrap          (const git_reflog_entry *reflog_entry);
 
 GgitReflogEntry  *ggit_reflog_entry_ref            (GgitReflogEntry        *reflog_entry);
 void              ggit_reflog_entry_unref          (GgitReflogEntry        *reflog_entry);

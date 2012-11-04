@@ -1136,7 +1136,7 @@ ggit_repository_create_tag (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_oid_new (&oid);
+	return _ggit_oid_wrap (&oid);
 }
 
 /**
@@ -1180,7 +1180,7 @@ ggit_repository_create_tag_from_buffer (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_oid_new (&oid);
+	return _ggit_oid_wrap (&oid);
 }
 
 /**
@@ -1227,7 +1227,7 @@ ggit_repository_create_tag_lightweight (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_oid_new (&oid);
+	return _ggit_oid_wrap (&oid);
 }
 
 /**
@@ -1527,7 +1527,7 @@ ggit_repository_lookup_submodule (GgitRepository  *repository,
 
 	if (ret == GIT_OK)
 	{
-		gsubmodule = _ggit_submodule_new (submodule);
+		gsubmodule = _ggit_submodule_wrap (submodule);
 	}
 	else
 	{
@@ -1553,7 +1553,7 @@ submodule_wrapper_callback (git_submodule *submodule,
 	GgitSubmodule *gsubmodule;
 	gint ret;
 
-	gsubmodule = _ggit_submodule_new (submodule);
+	gsubmodule = _ggit_submodule_wrap (submodule);
 
 	ret = wrapper_data->callback (gsubmodule, name, wrapper_data->user_data);
 
@@ -1678,7 +1678,7 @@ ggit_repository_save_stash (GgitRepository  *repository,
 		return NULL;
 	}
 
-	return _ggit_oid_new (&oid);
+	return _ggit_oid_wrap (&oid);
 }
 
 /**
@@ -1726,7 +1726,7 @@ stash_callback_wrapper (gsize          index,
 	GgitOId *oid;
 	gint ret;
 
-	oid = _ggit_oid_new (stash_oid);
+	oid = _ggit_oid_wrap (stash_oid);
 
 	ret = wrapper_data->callback (index, message, oid, wrapper_data->user_data);
 	ggit_oid_free (oid);

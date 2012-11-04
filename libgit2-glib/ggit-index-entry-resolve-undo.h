@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define GGIT_INDEX_ENTRIES_RESOLVE_UNDO(obj)    ((GgitIndexEntriesResolveUndo *)obj)
 
 GgitIndexEntriesResolveUndo *
-        _ggit_index_entries_resolve_undo_new        (GgitIndex                   *owner);
+        _ggit_index_entries_resolve_undo_wrap       (GgitIndex                   *owner);
 
 GgitIndexEntryResolveUndo *
          ggit_index_entries_resolve_undo_get        (GgitIndexEntriesResolveUndo *entries,

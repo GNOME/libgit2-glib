@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 GType             ggit_reflog_get_type             (void) G_GNUC_CONST;
 
-GgitReflog       *_ggit_reflog_new                 (git_reflog *reflog);
+GgitReflog       *_ggit_reflog_wrap                (git_reflog *reflog);
 
 GgitReflog       *ggit_reflog_ref                  (GgitReflog *reflog);
 void              ggit_reflog_unref                (GgitReflog *reflog);

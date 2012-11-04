@@ -115,7 +115,7 @@ ggit_tag_get_target_id (GgitTag *tag)
 	t = _ggit_native_get (tag);
 	oid = git_tag_target_oid (t);
 
-	return _ggit_oid_new ((git_oid *)oid);
+	return _ggit_oid_wrap ((git_oid *)oid);
 }
 
 /**

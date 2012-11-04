@@ -35,7 +35,7 @@ struct _GgitSubmodule
 G_DEFINE_BOXED_TYPE (GgitSubmodule, ggit_submodule, ggit_submodule_ref, ggit_submodule_unref)
 
 GgitSubmodule *
-_ggit_submodule_new (const git_submodule *submodule)
+_ggit_submodule_wrap (const git_submodule *submodule)
 {
 	GgitSubmodule *glib_submodule;
 
@@ -231,7 +231,7 @@ ggit_submodule_get_index_oid (GgitSubmodule *submodule)
 
 	if (git_submodule_index_oid (submodule->submodule))
 	{
-		oid = _ggit_oid_new (git_submodule_index_oid (submodule->submodule));
+		oid = _ggit_oid_wrap (git_submodule_index_oid (submodule->submodule));
 	}
 
 	return oid;
@@ -254,7 +254,7 @@ ggit_submodule_get_head_oid (GgitSubmodule *submodule)
 
 	if (git_submodule_head_oid (submodule->submodule))
 	{
-		oid = _ggit_oid_new (git_submodule_head_oid (submodule->submodule));
+		oid = _ggit_oid_wrap (git_submodule_head_oid (submodule->submodule));
 	}
 
 	return oid;
@@ -281,7 +281,7 @@ ggit_submodule_get_workdir_oid (GgitSubmodule *submodule)
 
 	if (git_submodule_wd_oid (submodule->submodule))
 	{
-		oid = _ggit_oid_new (git_submodule_wd_oid (submodule->submodule));
+		oid = _ggit_oid_wrap (git_submodule_wd_oid (submodule->submodule));
 	}
 
 	return oid;

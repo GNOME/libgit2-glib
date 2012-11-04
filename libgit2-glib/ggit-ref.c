@@ -70,7 +70,7 @@ ggit_ref_get_id (GgitRef *ref)
 
 	if (oid != NULL)
 	{
-		goid = _ggit_oid_new ((git_oid *)oid);
+		goid = _ggit_oid_wrap ((git_oid *)oid);
 	}
 
 	return goid;
@@ -397,7 +397,7 @@ ggit_ref_get_reflog (GgitRef  *ref,
 		return NULL;
 	}
 
-	return _ggit_reflog_new (reflog);
+	return _ggit_reflog_wrap (reflog);
 }
 
 /**

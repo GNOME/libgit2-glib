@@ -36,16 +36,16 @@ G_BEGIN_DECLS
 #define GGIT_INDEX_ENTRIES(obj)       ((GgitIndexEntries *)obj)
 
 GType             ggit_index_entries_get_type         (void) G_GNUC_CONST;
-GgitIndexEntries *_ggit_index_entries_new             (GgitIndex         *owner);
+GgitIndexEntries *_ggit_index_entries_wrap            (GgitIndex         *owner);
 GgitIndexEntries *ggit_index_entries_ref              (GgitIndexEntries  *entries);
 void              ggit_index_entries_unref            (GgitIndexEntries  *entries);
 
-GgitIndexEntry   *ggit_index_entries_get_by_index      (GgitIndexEntries  *entries,
-                                                        gsize              idx);
+GgitIndexEntry   *ggit_index_entries_get_by_index     (GgitIndexEntries  *entries,
+                                                       gsize              idx);
 
-GgitIndexEntry   *ggit_index_entries_get_by_path       (GgitIndexEntries *entries,
-                                                        GFile            *file,
-                                                        gboolean          stage);
+GgitIndexEntry   *ggit_index_entries_get_by_path      (GgitIndexEntries *entries,
+                                                       GFile            *file,
+                                                       gboolean          stage);
 
 guint             ggit_index_entries_size             (GgitIndexEntries  *entries);
 

@@ -44,7 +44,7 @@ G_DEFINE_BOXED_TYPE (GgitIndexEntryResolveUndo,
                      ggit_index_entry_resolve_undo_unref)
 
 static GgitIndexEntryResolveUndo *
-ggit_index_entry_resolve_undo_new (git_index_reuc_entry *entry)
+ggit_index_entry_resolve_undo_wrap (git_index_reuc_entry *entry)
 {
 	GgitIndexEntryResolveUndo *ret;
 
@@ -56,7 +56,7 @@ ggit_index_entry_resolve_undo_new (git_index_reuc_entry *entry)
 }
 
 GgitIndexEntriesResolveUndo *
-_ggit_index_entries_resolve_undo_new (GgitIndex *owner)
+_ggit_index_entries_resolve_undo_wrap (GgitIndex *owner)
 {
 	GgitIndexEntriesResolveUndo *ret;
 
@@ -170,7 +170,7 @@ ggit_index_entries_resolve_undo_get (GgitIndexEntriesResolveUndo *entries,
 	gidx = _ggit_index_get_index (entries->owner);
 	ret = git_index_reuc_get_byindex (gidx, idx);
 
-	return ggit_index_entry_resolve_undo_new ((git_index_reuc_entry *)ret);
+	return ggit_index_entry_resolve_undo_wrap ((git_index_reuc_entry *)ret);
 }
 
 /**
@@ -227,7 +227,7 @@ ggit_index_entries_resolve_undo_get_by_file (GgitIndexEntriesResolveUndo  *entri
 
 	if (ret)
 	{
-		return ggit_index_entry_resolve_undo_new ((git_index_reuc_entry *)ret);
+		return ggit_index_entry_resolve_undo_wrap ((git_index_reuc_entry *)ret);
 	}
 	else
 	{
@@ -273,7 +273,7 @@ ggit_index_entry_resolve_undo_get_id (GgitIndexEntryResolveUndo *entry,
 	g_return_val_if_fail (entry != NULL, NULL);
 	g_return_val_if_fail (stage >= 0 && stage <= 3, NULL);
 
-	return _ggit_oid_new (&entry->entry->oid[stage]);
+	return _ggit_oid_wrap (&entry->entry->oid[stage]);
 }
 
 /**

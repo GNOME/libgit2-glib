@@ -30,7 +30,7 @@ struct _GgitOId
 G_DEFINE_BOXED_TYPE (GgitOId, ggit_oid, ggit_oid_copy, ggit_oid_free)
 
 GgitOId *
-_ggit_oid_new (const git_oid *oid)
+_ggit_oid_wrap (const git_oid *oid)
 {
 	GgitOId *glib_oid;
 
@@ -59,7 +59,7 @@ ggit_oid_copy (GgitOId *oid)
 {
 	g_return_val_if_fail (oid != NULL, NULL);
 
-	return _ggit_oid_new (&oid->oid);
+	return _ggit_oid_wrap (&oid->oid);
 }
 
 /**
@@ -96,7 +96,7 @@ ggit_oid_new_from_string (const gchar *str)
 
 	if (git_oid_fromstr (&oid, str) == GIT_OK)
 	{
-		glib_oid = _ggit_oid_new (&oid);
+		glib_oid = _ggit_oid_wrap (&oid);
 	}
 
 	return glib_oid;
@@ -119,7 +119,7 @@ ggit_oid_new_from_raw (const guchar *raw)
 
 	git_oid_fromraw (&oid, raw);
 
-	return _ggit_oid_new (&oid);
+	return _ggit_oid_wrap (&oid);
 }
 
 /**

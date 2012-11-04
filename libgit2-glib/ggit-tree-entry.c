@@ -34,7 +34,7 @@ G_DEFINE_BOXED_TYPE (GgitTreeEntry,
                      ggit_tree_entry_unref)
 
 GgitTreeEntry *
-_ggit_tree_entry_new (const git_tree_entry *entry)
+_ggit_tree_entry_wrap (const git_tree_entry *entry)
 {
 	GgitTreeEntry *ret;
 
@@ -112,7 +112,7 @@ ggit_tree_entry_get_id (GgitTreeEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, NULL);
 
-	return _ggit_oid_new (git_tree_entry_id (entry->entry));
+	return _ggit_oid_wrap (git_tree_entry_id (entry->entry));
 }
 
 /**

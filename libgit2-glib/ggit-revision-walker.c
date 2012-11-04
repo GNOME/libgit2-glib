@@ -310,7 +310,7 @@ ggit_revision_walker_next (GgitRevisionWalker  *walker,
 
 	if (ret == GIT_OK)
 	{
-		goid = _ggit_oid_new (&oid);
+		goid = _ggit_oid_wrap (&oid);
 	}
 	else if (ret != GIT_ITEROVER)
 	{

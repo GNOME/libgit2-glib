@@ -359,8 +359,8 @@ remote_list_callback_wrapper (git_remote_head *head,
 	GgitOId *loid;
 	gint ret;
 
-	oid = _ggit_oid_new (&head->oid);
-	loid = _ggit_oid_new (&head->loid);
+	oid = _ggit_oid_wrap (&head->oid);
+	loid = _ggit_oid_wrap (&head->loid);
 
 	ret = data->callback (head->name, oid, loid,
 	                      head->local, data->user_data);

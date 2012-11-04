@@ -44,7 +44,7 @@ G_DEFINE_BOXED_TYPE (GgitIndexEntry,
                      ggit_index_entry_unref)
 
 static GgitIndexEntry *
-ggit_index_entry_new (git_index_entry *entry)
+ggit_index_entry_wrap (git_index_entry *entry)
 {
 	GgitIndexEntry *ret;
 
@@ -57,7 +57,7 @@ ggit_index_entry_new (git_index_entry *entry)
 }
 
 GgitIndexEntries *
-_ggit_index_entries_new (GgitIndex *owner)
+_ggit_index_entries_wrap (GgitIndex *owner)
 {
 	GgitIndexEntries *ret;
 
@@ -175,7 +175,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
 
 	if (entry)
 	{
-		return ggit_index_entry_new (entry);
+		return ggit_index_entry_wrap (entry);
 	}
 	else
 	{
@@ -222,7 +222,7 @@ ggit_index_entries_get_by_path (GgitIndexEntries *entries,
 
 	if (entry)
 	{
-		return ggit_index_entry_new (entry);
+		return ggit_index_entry_wrap (entry);
 	}
 	else
 	{
@@ -367,7 +367,7 @@ ggit_index_entry_get_id (GgitIndexEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, NULL);
 
-	return _ggit_oid_new (&entry->entry->oid);
+	return _ggit_oid_wrap (&entry->entry->oid);
 }
 
 /**

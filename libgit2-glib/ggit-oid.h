@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 GType          ggit_oid_get_type        (void) G_GNUC_CONST;
 
-GgitOId       *_ggit_oid_new            (const git_oid *oid);
+GgitOId       *_ggit_oid_wrap           (const git_oid *oid);
 
 const git_oid *_ggit_oid_get_oid        (GgitOId       *oid);
 

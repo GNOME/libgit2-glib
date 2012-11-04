@@ -389,7 +389,7 @@ ggit_index_get_entries (GgitIndex *idx)
 {
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
 
-	return _ggit_index_entries_new (idx);
+	return _ggit_index_entries_wrap (idx);
 }
 
 /**
@@ -406,7 +406,7 @@ ggit_index_get_entries_resolve_undo (GgitIndex *idx)
 {
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
 
-	return _ggit_index_entries_resolve_undo_new (idx);
+	return _ggit_index_entries_resolve_undo_wrap (idx);
 }
 
 /* ex:set ts=8 noet: */
