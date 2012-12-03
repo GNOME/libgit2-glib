@@ -392,7 +392,7 @@ ggit_commit_parents_get_id (GgitCommitParents *parents,
 
 	c = _ggit_native_get (parents->commit);
 
-	oid = git_commit_parent_oid (c, idx);
+	oid = git_commit_parent_id (c, idx);
 	return _ggit_oid_wrap (oid);
 }
 
@@ -446,7 +446,7 @@ ggit_commit_get_tree_id (GgitCommit *commit)
 
 	c = _ggit_native_get (commit);
 
-	oid = git_commit_tree_oid (c);
+	oid = git_commit_tree_id (c);
 
 	return _ggit_oid_wrap (oid);
 }

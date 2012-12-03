@@ -561,7 +561,7 @@ ggit_config_set_string (GgitConfig   *config,
 
 	if (value == NULL)
 	{
-		ret = git_config_delete (_ggit_native_get (config), name);
+		ret = git_config_delete_entry (_ggit_native_get (config), name);
 	}
 	else
 	{
@@ -579,20 +579,20 @@ ggit_config_set_string (GgitConfig   *config,
 }
 
 /**
- * ggit_config_delete:
+ * ggit_config_delete_entry:
  * @config: a #GgitConfig.
  * @name: the configuration value.
  * @error: A #GError
  *
- * Delete a configuration value.
+ * Delete a config variable from the config file.
  *
  * Returns: %TRUE if the configuration value was deleted, %FALSE otherwise.
  *
  **/
 gboolean
-ggit_config_delete (GgitConfig   *config,
-                    const gchar  *name,
-                    GError      **error)
+ggit_config_delete_entry (GgitConfig   *config,
+                          const gchar  *name,
+                          GError      **error)
 {
 	gint ret;
 
@@ -600,7 +600,7 @@ ggit_config_delete (GgitConfig   *config,
 	g_return_val_if_fail (name != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_config_delete (_ggit_native_get (config), name);
+	ret = git_config_delete_entry (_ggit_native_get (config), name);
 
 	if (ret != GIT_OK)
 	{
