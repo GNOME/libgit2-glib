@@ -38,9 +38,9 @@ typedef struct {
 G_DEFINE_TYPE (GgitDiff, ggit_diff, GGIT_TYPE_NATIVE)
 
 static gint
-ggit_diff_file_callback_wrapper (gpointer              user_data,
-                                 const git_diff_delta *delta,
-                                 gfloat                progress)
+ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
+                                 gfloat                progress,
+                                 gpointer              user_data)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
@@ -56,11 +56,11 @@ ggit_diff_file_callback_wrapper (gpointer              user_data,
 }
 
 static gint
-ggit_diff_hunk_callback_wrapper (gpointer              user_data,
-                                 const git_diff_delta *delta,
+ggit_diff_hunk_callback_wrapper (const git_diff_delta *delta,
                                  const git_diff_range *range,
                                  const gchar          *header,
-                                 gsize                 header_len)
+                                 gsize                 header_len,
+                                 gpointer              user_data)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
@@ -80,12 +80,12 @@ ggit_diff_hunk_callback_wrapper (gpointer              user_data,
 }
 
 static gint
-ggit_diff_line_callback_wrapper (gpointer              user_data,
-                                 const git_diff_delta *delta,
+ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
                                  const git_diff_range *range,
                                  gchar                 line_type,
                                  const gchar          *content,
-                                 gsize                 content_len)
+                                 gsize                 content_len,
+                                 gpointer              user_data)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
@@ -139,9 +139,9 @@ _ggit_diff_wrap (git_diff_list *diff,
 /**
  * ggit_diff_new_tree_to_tree:
  * @repository: a #GgitRepository.
- * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @old_tree: a #GgitTree to diff from.
  * @new_tree: a #GgitTree to diff to.
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a #GgitDiff which compares @old_tree and @new_tree.
@@ -153,9 +153,9 @@ _ggit_diff_wrap (git_diff_list *diff,
  */
 GgitDiff *
 ggit_diff_new_tree_to_tree (GgitRepository   *repository,
-                            GgitDiffOptions  *diff_options,
                             GgitTree         *old_tree,
                             GgitTree         *new_tree,
+                            GgitDiffOptions  *diff_options,
                             GError          **error)
 {
 	git_diff_list *diff;
@@ -166,11 +166,11 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_TREE (new_tree), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_tree_to_tree (_ggit_native_get (repository),
-	                             _ggit_diff_options_get_diff_options (diff_options),
+	ret = git_diff_tree_to_tree (&diff,
+	                             _ggit_native_get (repository),
 	                             _ggit_native_get (old_tree),
 	                             _ggit_native_get (new_tree),
-	                             &diff);
+	                             _ggit_diff_options_get_diff_options (diff_options));
 
 	if (ret != GIT_OK)
 	{
@@ -184,12 +184,14 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
 /**
  * ggit_diff_new_index_to_tree:
  * @repository: a #GgitRepository.
- * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @old_tree: a #GgitTree to diff from.
+ * @index: (allow-none): a #GgitIndex, or %NULL.
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a #GgitDiff which compares @old_tree and the index.
  *
+ * If @index is %NULL then @repository index is used.
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
@@ -197,8 +199,9 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
  */
 GgitDiff *
 ggit_diff_new_index_to_tree (GgitRepository   *repository,
-                             GgitDiffOptions  *diff_options,
                              GgitTree         *old_tree,
+                             GgitIndex        *index,
+                             GgitDiffOptions  *diff_options,
                              GError          **error)
 {
 	git_diff_list *diff;
@@ -208,10 +211,11 @@ ggit_diff_new_index_to_tree (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_TREE (old_tree), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_index_to_tree (_ggit_native_get (repository),
-	                              _ggit_diff_options_get_diff_options (diff_options),
+	ret = git_diff_index_to_tree (&diff,
+	                              _ggit_native_get (repository),
 	                              _ggit_native_get (old_tree),
-	                              &diff);
+	                              index ? _ggit_native_get (index) : NULL,
+	                              _ggit_diff_options_get_diff_options (diff_options));
 
 	if (ret != GIT_OK)
 	{
@@ -225,11 +229,13 @@ ggit_diff_new_index_to_tree (GgitRepository   *repository,
 /**
  * ggit_diff_new_workdir_to_index:
  * @repository: a #GgitRepository.
+ * @index: (allow-none): a #GgitIndex, or %NULL.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a #GgitDiff which compares the working directory and the index.
  *
+ * If @index is %NULL then @repository index is used.
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
@@ -237,6 +243,7 @@ ggit_diff_new_index_to_tree (GgitRepository   *repository,
  */
 GgitDiff *
 ggit_diff_new_workdir_to_index (GgitRepository   *repository,
+                                GgitIndex        *index,
                                 GgitDiffOptions  *diff_options,
                                 GError          **error)
 {
@@ -246,9 +253,10 @@ ggit_diff_new_workdir_to_index (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_workdir_to_index (_ggit_native_get (repository),
-	                                 _ggit_diff_options_get_diff_options (diff_options),
-	                                 &diff);
+	ret = git_diff_workdir_to_index (&diff,
+	                                 _ggit_native_get (repository),
+	                                 index ? _ggit_native_get (index) : NULL,
+	                                 _ggit_diff_options_get_diff_options (diff_options));
 
 	if (ret != GIT_OK)
 	{
@@ -262,8 +270,8 @@ ggit_diff_new_workdir_to_index (GgitRepository   *repository,
 /**
  * ggit_diff_new_workdir_to_tree:
  * @repository: a #GgitRepository.
- * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @old_tree: a #GgitTree to diff from.
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a #GgitDiff which compares the working directory and @old_tree.
@@ -275,8 +283,8 @@ ggit_diff_new_workdir_to_index (GgitRepository   *repository,
  */
 GgitDiff *
 ggit_diff_new_workdir_to_tree (GgitRepository   *repository,
-                               GgitDiffOptions  *diff_options,
                                GgitTree         *old_tree,
+                               GgitDiffOptions  *diff_options,
                                GError          **error)
 {
 	git_diff_list *diff;
@@ -286,10 +294,10 @@ ggit_diff_new_workdir_to_tree (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_TREE (old_tree), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_workdir_to_tree (_ggit_native_get (repository),
-	                                _ggit_diff_options_get_diff_options (diff_options),
+	ret = git_diff_workdir_to_tree (&diff,
+	                                _ggit_native_get (repository),
 	                                _ggit_native_get (old_tree),
-	                                &diff);
+	                                _ggit_diff_options_get_diff_options (diff_options));
 
 	if (ret != GIT_OK)
 	{
@@ -352,9 +360,9 @@ ggit_diff_foreach (GgitDiff              *diff,
 {
 	gint ret;
 	CallbackWrapperData wrapper_data;
-	git_diff_file_fn real_file_cb = NULL;
-	git_diff_hunk_fn real_hunk_cb = NULL;
-	git_diff_data_fn real_line_cb = NULL;
+	git_diff_file_cb real_file_cb = NULL;
+	git_diff_hunk_cb real_hunk_cb = NULL;
+	git_diff_data_cb real_line_cb = NULL;
 
 	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
@@ -380,8 +388,9 @@ ggit_diff_foreach (GgitDiff              *diff,
 		wrapper_data.line_cb = line_cb;
 	}
 
-	ret = git_diff_foreach (_ggit_native_get (diff), &wrapper_data,
-	                        real_file_cb, real_hunk_cb, real_line_cb);
+	ret = git_diff_foreach (_ggit_native_get (diff),
+	                        real_file_cb, real_hunk_cb, real_line_cb,
+	                        &wrapper_data);
 
 	if (ret != GIT_OK)
 	{
@@ -414,8 +423,9 @@ ggit_diff_print_compact (GgitDiff              *diff,
 	wrapper_data.user_data = user_data;
 	wrapper_data.line_cb = print_cb;
 
-	ret = git_diff_print_compact (_ggit_native_get (diff), &wrapper_data,
-	                              ggit_diff_line_callback_wrapper);
+	ret = git_diff_print_compact (_ggit_native_get (diff),
+	                              ggit_diff_line_callback_wrapper,
+	                              &wrapper_data);
 
 	if (ret != GIT_OK)
 	{
@@ -448,8 +458,9 @@ ggit_diff_print_patch (GgitDiff              *diff,
 	wrapper_data.user_data = user_data;
 	wrapper_data.line_cb = print_cb;
 
-	ret = git_diff_print_patch (_ggit_native_get (diff), &wrapper_data,
-	                            ggit_diff_line_callback_wrapper);
+	ret = git_diff_print_patch (_ggit_native_get (diff),
+	                            ggit_diff_line_callback_wrapper,
+	                            &wrapper_data);
 
 	if (ret != GIT_OK)
 	{
@@ -492,9 +503,9 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 	gint ret;
 	const git_diff_options *gdiff_options;
 	CallbackWrapperData wrapper_data;
-	git_diff_file_fn real_file_cb = NULL;
-	git_diff_hunk_fn real_hunk_cb = NULL;
-	git_diff_data_fn real_line_cb = NULL;
+	git_diff_file_cb real_file_cb = NULL;
+	git_diff_hunk_cb real_hunk_cb = NULL;
+	git_diff_data_cb real_line_cb = NULL;
 
 	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
@@ -523,8 +534,9 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 
 	ret = git_diff_blobs (_ggit_native_get (old_blob),
 	                      _ggit_native_get (new_blob),
-	                      (git_diff_options *) gdiff_options, &wrapper_data,
-	                      real_file_cb, real_hunk_cb, real_line_cb);
+	                      (git_diff_options *) gdiff_options,
+	                      real_file_cb, real_hunk_cb, real_line_cb,
+	                      &wrapper_data);
 
 	if (ret != GIT_OK)
 	{

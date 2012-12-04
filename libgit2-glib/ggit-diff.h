@@ -61,20 +61,22 @@ GgitDiff  *_ggit_diff_wrap                (git_diff_list         *diff,
                                            gboolean               owned);
 
 GgitDiff  *ggit_diff_new_tree_to_tree     (GgitRepository        *repository,
-                                           GgitDiffOptions       *diff_options,
                                            GgitTree              *old_tree,
                                            GgitTree              *new_tree,
+                                           GgitDiffOptions       *diff_options,
                                            GError               **error);
 GgitDiff  *ggit_diff_new_index_to_tree    (GgitRepository        *repository,
-                                           GgitDiffOptions       *diff_options,
                                            GgitTree              *old_tree,
+                                           GgitIndex             *index,
+                                           GgitDiffOptions       *diff_options,
                                            GError               **error);
 GgitDiff  *ggit_diff_new_workdir_to_index (GgitRepository        *repository,
+                                           GgitIndex             *index,
                                            GgitDiffOptions       *diff_options,
                                            GError               **error);
 GgitDiff  *ggit_diff_new_workdir_to_tree  (GgitRepository        *repository,
-                                           GgitDiffOptions       *diff_options,
                                            GgitTree              *old_tree,
+                                           GgitDiffOptions       *diff_options,
                                            GError               **error);
 
 void       ggit_diff_merge                (GgitDiff              *onto,
