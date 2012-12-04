@@ -115,7 +115,7 @@ main (int   argc,
 	head = ggit_repository_get_head (repo, &err);
 	g_assert_no_error (err);
 
-	oid = ggit_ref_get_id (head);
+	oid = ggit_ref_get_target (head);
 	ggit_revision_walker_push (revwalker, oid, &err);
 	g_assert_no_error (err);
 
@@ -170,9 +170,10 @@ main (int   argc,
 			commit_tree = ggit_commit_get_tree (commit);
 			parent_tree = ggit_commit_get_tree (parent_commit);
 
-			diff = ggit_diff_new_tree_to_tree (repo, NULL,
+			diff = ggit_diff_new_tree_to_tree (repo,
 			                                   parent_tree,
-			                                   commit_tree, &err);
+			                                   commit_tree,
+			                                   NULL, &err);
 			g_assert_no_error (err);
 
 			ggit_diff_print_patch (diff, diff_print_cb, NULL, &err);
