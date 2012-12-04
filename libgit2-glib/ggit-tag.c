@@ -113,7 +113,7 @@ ggit_tag_get_target_id (GgitTag *tag)
 	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
 
 	t = _ggit_native_get (tag);
-	oid = git_tag_target_oid (t);
+	oid = git_tag_target_id (t);
 
 	return _ggit_oid_wrap ((git_oid *)oid);
 }
