@@ -29,7 +29,7 @@ struct _GgitIndexEntries
 
 struct _GgitIndexEntry
 {
-	git_index_entry *entry;
+	const git_index_entry *entry;
 	gint ref_count;
 };
 
@@ -44,7 +44,7 @@ G_DEFINE_BOXED_TYPE (GgitIndexEntry,
                      ggit_index_entry_unref)
 
 static GgitIndexEntry *
-ggit_index_entry_wrap (git_index_entry *entry)
+ggit_index_entry_wrap (const git_index_entry *entry)
 {
 	GgitIndexEntry *ret;
 
@@ -166,7 +166,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
                                  gsize             idx)
 {
 	git_index *gidx;
-	git_index_entry *entry;
+	const git_index_entry *entry;
 
 	g_return_val_if_fail (entries != NULL, NULL);
 
@@ -208,7 +208,7 @@ ggit_index_entries_get_by_path (GgitIndexEntries *entries,
                                 gboolean          stage)
 {
 	git_index *gidx;
-	git_index_entry *entry;
+	const git_index_entry *entry;
 	gchar *path;
 
 	g_return_val_if_fail (entries != NULL, NULL);
@@ -426,7 +426,7 @@ ggit_index_entry_get_file (GgitIndexEntry *entry)
 	return g_file_new_for_path (entry->entry->path);
 }
 
-git_index_entry *
+const git_index_entry *
 _ggit_index_entry_get_native (GgitIndexEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, NULL);

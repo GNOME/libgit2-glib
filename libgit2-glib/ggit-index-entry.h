@@ -67,7 +67,7 @@ guint             ggit_index_entry_get_flags_extended (GgitIndexEntry    *entry)
 
 GFile            *ggit_index_entry_get_file           (GgitIndexEntry    *entry);
 
-git_index_entry *_ggit_index_entry_get_native         (GgitIndexEntry    *entry);
+const git_index_entry *_ggit_index_entry_get_native         (GgitIndexEntry    *entry);
 
 G_END_DECLS
 
