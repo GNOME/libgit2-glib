@@ -182,8 +182,8 @@ walk_callback_wrapper (const char           *root,
 /**
  * ggit_tree_walk:
  * @tree: a #GgitTree.
- * @callback: (scope call): the callback to call for each entry
  * @mode: the walking order
+ * @callback: (scope call): the callback to call for each entry
  * @user_data: (closure): user data for the callback.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -194,8 +194,8 @@ walk_callback_wrapper (const char           *root,
  **/
 void
 ggit_tree_walk (GgitTree              *tree,
-                GgitTreeWalkCallback   callback,
                 GgitTreeWalkMode       mode,
+                GgitTreeWalkCallback   callback,
                 gpointer               user_data,
                 GError               **error)
 {
@@ -210,8 +210,8 @@ ggit_tree_walk (GgitTree              *tree,
 	info.user_data = user_data;
 
 	ret = git_tree_walk (_ggit_native_get (tree),
-	                     (git_treewalk_cb)walk_callback_wrapper,
 	                     mode,
+	                     (git_treewalk_cb)walk_callback_wrapper,
 	                     &info);
 
 	if (ret != GIT_OK)

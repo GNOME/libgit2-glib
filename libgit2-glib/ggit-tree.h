@@ -73,8 +73,8 @@ GgitTreeEntry *ggit_tree_get_by_file    (GgitTree *tree,
                                          GFile    *file);
 
 void           ggit_tree_walk           (GgitTree              *tree,
-                                         GgitTreeWalkCallback   callback,
                                          GgitTreeWalkMode       mode,
+                                         GgitTreeWalkCallback   callback,
                                          gpointer               user_data,
                                          GError               **error);
 
