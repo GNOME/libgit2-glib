@@ -583,8 +583,8 @@ ggit_repository_create_reference (GgitRepository  *repository,
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (oid != NULL, NULL);
 
-	ret = git_reference_create_oid (&reference, _ggit_native_get (repository),
-	                                name, _ggit_oid_get_oid (oid), FALSE);
+	ret = git_reference_create (&reference, _ggit_native_get (repository),
+	                            name, _ggit_oid_get_oid (oid), FALSE);
 
 	if (ret == GIT_OK)
 	{
@@ -626,7 +626,7 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (target != NULL, NULL);
 
-	ret = git_reference_create_symbolic (&reference, _ggit_native_get (repository),
+	ret = git_reference_symbolic_create (&reference, _ggit_native_get (repository),
 	                                     name, target, FALSE);
 
 	if (ret == GIT_OK)
