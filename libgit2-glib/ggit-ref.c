@@ -29,6 +29,8 @@
 #include <git2/branch.h>
 #include <git2/errors.h>
 
+/* FIXME: we should have a ref superclass and direct and symbolic subclasses */
+
 G_DEFINE_TYPE (GgitRef, ggit_ref, GGIT_TYPE_NATIVE)
 
 static void
@@ -50,23 +52,24 @@ _ggit_ref_wrap (git_reference *ref)
 }
 
 /**
- * ggit_ref_get_id:
+ * ggit_ref_get_target:
  * @ref: a #GgitRef.
  *
- * Get the OID pointed to by a reference.
- * Only available if the reference is direct (i.e. not symbolic).
+ * Get the OID pointed to by a direct reference.
+ * Only available if the reference is direct (i.e. an object id reference,
+ * not a symbolic one).
  *
  * Returns: (transfer full): a new oid if available, %NULL otherwise.
  */
 GgitOId *
-ggit_ref_get_id (GgitRef *ref)
+ggit_ref_get_target (GgitRef *ref)
 {
 	GgitOId *goid = NULL;
 	const git_oid *oid;
 
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	oid = git_reference_oid (_ggit_native_get (ref));
+	oid = git_reference_target (_ggit_native_get (ref));
 
 	if (oid != NULL)
 	{
@@ -77,20 +80,20 @@ ggit_ref_get_id (GgitRef *ref)
 }
 
 /**
- * ggit_ref_get_target:
+ * ggit_ref_get_symbolic_target:
  * @ref: a #GgitRef.
  *
- * Gets the full name to the reference pointed by this reference.
+ * Get full name to the reference pointed to by a symbolic reference.
  * Only available if the reference is symbolic.
  *
  * Returns: the name if available, %NULL otherwise.
  */
 const gchar *
-ggit_ref_get_target (GgitRef *ref)
+ggit_ref_get_symbolic_target (GgitRef *ref)
 {
 	g_return_val_if_fail (ref != NULL, NULL);
 
-	return git_reference_target (_ggit_native_get (ref));
+	return git_reference_symbolic_target (_ggit_native_get (ref));
 }
 
 /**
@@ -199,7 +202,7 @@ ggit_ref_get_owner (GgitRef *ref)
 }
 
 /**
- * ggit_ref_set_target:
+ * ggit_ref_set_symbolic_target:
  * @ref: a #GgitRef.
  * @target: The new target for the reference.
  * @error: a #GError for error reporting, or %NULL.
@@ -213,9 +216,9 @@ ggit_ref_get_owner (GgitRef *ref)
  * memory and on disk.
  */
 void
-ggit_ref_set_target (GgitRef      *ref,
-                     const gchar  *target,
-                     GError      **error)
+ggit_ref_set_symbolic_target (GgitRef      *ref,
+                              const gchar  *target,
+                              GError      **error)
 {
 	gint ret;
 
@@ -223,7 +226,7 @@ ggit_ref_set_target (GgitRef      *ref,
 	g_return_if_fail (target != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_reference_set_target (_ggit_native_get (ref), target);
+	ret = git_reference_symbolic_set_target (_ggit_native_get (ref), target);
 
 	if (ret != GIT_OK)
 	{
@@ -232,7 +235,7 @@ ggit_ref_set_target (GgitRef      *ref,
 }
 
 /**
- * ggit_ref_set_oid:
+ * ggit_ref_set_target:
  * @ref: a #GgitRef.
  * @oid: a #GgitOId.
  * @error: a #GError for error reporting, or %NULL.
@@ -246,9 +249,9 @@ ggit_ref_set_target (GgitRef      *ref,
  * memory and on disk.
  */
 void
-ggit_ref_set_oid (GgitRef  *ref,
-                  GgitOId  *oid,
-                  GError  **error)
+ggit_ref_set_target (GgitRef  *ref,
+                     GgitOId  *oid,
+                     GError  **error)
 {
 	gint ret;
 
@@ -256,7 +259,7 @@ ggit_ref_set_oid (GgitRef  *ref,
 	g_return_if_fail (oid != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_reference_set_oid (_ggit_native_get (ref), _ggit_oid_get_oid (oid));
+	ret = git_reference_set_target (_ggit_native_get (ref), _ggit_oid_get_oid (oid));
 
 	if (ret != GIT_OK)
 	{
@@ -356,7 +359,7 @@ ggit_ref_lookup (GgitRef  *ref,
 
 	ret = git_object_lookup (&obj,
 	                         git_reference_owner (r),
-	                         git_reference_oid (r),
+	                         git_reference_target (r),
 	                         GIT_OBJ_ANY);
 
 	if (ret != GIT_OK)

@@ -60,9 +60,9 @@ GType           ggit_ref_get_type           (void) G_GNUC_CONST;
 
 GgitRef        *_ggit_ref_wrap              (git_reference  *ref);
 
-GgitOId        *ggit_ref_get_id             (GgitRef        *ref);
+GgitOId        *ggit_ref_get_target         (GgitRef        *ref);
 
-const gchar    *ggit_ref_get_target         (GgitRef        *ref);
+const gchar    *ggit_ref_get_symbolic_target(GgitRef        *ref);
 
 GgitRefType     ggit_ref_get_reference_type (GgitRef        *ref);
 
@@ -74,11 +74,11 @@ GgitRef        *ggit_ref_resolve            (GgitRef        *ref,
 
 GgitRepository *ggit_ref_get_owner          (GgitRef        *ref);
 
-void            ggit_ref_set_target         (GgitRef        *ref,
+void            ggit_ref_set_symbolic_target(GgitRef        *ref,
                                              const gchar    *target,
                                              GError        **error);
 
-void            ggit_ref_set_oid            (GgitRef        *ref,
+void            ggit_ref_set_target         (GgitRef        *ref,
                                              GgitOId        *oid,
                                              GError        **error);
 
