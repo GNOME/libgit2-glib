@@ -462,12 +462,14 @@ typedef enum {
  * @GGIT_RESET_SOFT: The head will be moved to the commit.
  * @GGIT_RESET_MIXED: the head will be moved to the commit and the index
  *                    will be replaced with the content of the commit tree.
+ * @GGIT_RESET_HARD: MIXED plus changes in working tree discarded.
  *
  * Describes the type of reset to perform.
  */
 typedef enum {
 	GGIT_RESET_SOFT  = 1,
-	GGIT_RESET_MIXED = 2
+	GGIT_RESET_MIXED = 2,
+	GGIT_RESET_HARD  = 3
 } GgitResetType;
 
 /**
