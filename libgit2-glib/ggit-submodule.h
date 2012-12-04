@@ -53,11 +53,11 @@ void                    ggit_submodule_set_url               (GgitSubmodule     
                                                               const gchar         *url,
                                                               GError             **error);
 
-GgitOId                *ggit_submodule_get_index_oid         (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_index_id          (GgitSubmodule       *submodule);
 
-GgitOId                *ggit_submodule_get_head_oid          (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_head_id           (GgitSubmodule       *submodule);
 
-GgitOId                *ggit_submodule_get_workdir_oid       (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_workdir_id        (GgitSubmodule       *submodule);
 
 GgitSubmoduleIgnore     ggit_submodule_get_ignore            (GgitSubmodule       *submodule);
 

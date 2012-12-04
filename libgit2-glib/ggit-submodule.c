@@ -215,7 +215,7 @@ ggit_submodule_set_url (GgitSubmodule       *submodule,
 }
 
 /**
- * ggit_submodule_get_index_oid:
+ * ggit_submodule_get_index_id:
  * @submodule: a #GgitSubmodule.
  *
  * Gets the OID for the submodule in the index or %NULL if there is no index.
@@ -223,15 +223,15 @@ ggit_submodule_set_url (GgitSubmodule       *submodule,
  * Returns: (transfer full) (allow-none): the OID for the submodule in the index or %NULL.
  */
 GgitOId *
-ggit_submodule_get_index_oid (GgitSubmodule *submodule)
+ggit_submodule_get_index_id (GgitSubmodule *submodule)
 {
 	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	if (git_submodule_index_oid (submodule->submodule))
+	if (git_submodule_index_id (submodule->submodule))
 	{
-		oid = _ggit_oid_wrap (git_submodule_index_oid (submodule->submodule));
+		oid = _ggit_oid_wrap (git_submodule_index_id (submodule->submodule));
 	}
 
 	return oid;
@@ -246,22 +246,22 @@ ggit_submodule_get_index_oid (GgitSubmodule *submodule)
  * Returns: (transfer full) (allow-none): the OID for the submodule in the current HEAD tree or %NULL.
  */
 GgitOId *
-ggit_submodule_get_head_oid (GgitSubmodule *submodule)
+ggit_submodule_get_head_id (GgitSubmodule *submodule)
 {
 	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	if (git_submodule_head_oid (submodule->submodule))
+	if (git_submodule_head_id (submodule->submodule))
 	{
-		oid = _ggit_oid_wrap (git_submodule_head_oid (submodule->submodule));
+		oid = _ggit_oid_wrap (git_submodule_head_id (submodule->submodule));
 	}
 
 	return oid;
 }
 
 /**
- * ggit_submodule_get_workdir_oid:
+ * ggit_submodule_get_workdir_id:
  * @submodule: a #GgitSubmodule.
  *
  * Gets the OID for the submodule in the current working directory.
@@ -273,15 +273,15 @@ ggit_submodule_get_head_oid (GgitSubmodule *submodule)
  * Returns: (transfer full) (allow-none): the OID for the submodule in the current working directory or %NULL.
  */
 GgitOId *
-ggit_submodule_get_workdir_oid (GgitSubmodule *submodule)
+ggit_submodule_get_workdir_id (GgitSubmodule *submodule)
 {
 	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
 
-	if (git_submodule_wd_oid (submodule->submodule))
+	if (git_submodule_wd_id (submodule->submodule))
 	{
-		oid = _ggit_oid_wrap (git_submodule_wd_oid (submodule->submodule));
+		oid = _ggit_oid_wrap (git_submodule_wd_id (submodule->submodule));
 	}
 
 	return oid;
