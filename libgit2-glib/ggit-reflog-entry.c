@@ -82,7 +82,7 @@ ggit_reflog_entry_unref (GgitReflogEntry *reflog_entry)
 }
 
 /**
- * ggit_reflog_entry_get_old_oid:
+ * ggit_reflog_entry_get_old_id:
  * @reflog_entry: a #GgitReflogEntry.
  *
  * Gets the old #GgitOId.
@@ -90,19 +90,19 @@ ggit_reflog_entry_unref (GgitReflogEntry *reflog_entry)
  * Returns: the old oid.
  */
 GgitOId *
-ggit_reflog_entry_get_old_oid (GgitReflogEntry *reflog_entry)
+ggit_reflog_entry_get_old_id (GgitReflogEntry *reflog_entry)
 {
 	const git_oid *oid;
 
 	g_return_val_if_fail (reflog_entry != NULL, NULL);
 
-	oid = git_reflog_entry_oidold (reflog_entry->reflog_entry);
+	oid = git_reflog_entry_id_old (reflog_entry->reflog_entry);
 
 	return _ggit_oid_wrap (oid);
 }
 
 /**
- * ggit_reflog_entry_get_new_oid:
+ * ggit_reflog_entry_get_new_id:
  * @reflog_entry: a #GgitReflogEntry.
  *
  * Gets the new #GgitOId.
@@ -110,13 +110,13 @@ ggit_reflog_entry_get_old_oid (GgitReflogEntry *reflog_entry)
  * Returns: the new oid.
  */
 GgitOId *
-ggit_reflog_entry_get_new_oid (GgitReflogEntry *reflog_entry)
+ggit_reflog_entry_get_new_id (GgitReflogEntry *reflog_entry)
 {
 	const git_oid *oid;
 
 	g_return_val_if_fail (reflog_entry != NULL, NULL);
 
-	oid = git_reflog_entry_oidnew (reflog_entry->reflog_entry);
+	oid = git_reflog_entry_id_new (reflog_entry->reflog_entry);
 
 	return _ggit_oid_wrap (oid);
 }
@@ -132,7 +132,7 @@ ggit_reflog_entry_get_new_oid (GgitReflogEntry *reflog_entry)
 GgitSignature *
 ggit_reflog_entry_get_committer (GgitReflogEntry *reflog_entry)
 {
-	git_signature *committer;
+	const git_signature *committer;
 
 	g_return_val_if_fail (reflog_entry != NULL, NULL);
 
@@ -154,7 +154,7 @@ ggit_reflog_entry_get_message (GgitReflogEntry *reflog_entry)
 {
 	g_return_val_if_fail (reflog_entry != NULL, NULL);
 
-	return git_reflog_entry_msg (reflog_entry->reflog_entry);
+	return git_reflog_entry_message (reflog_entry->reflog_entry);
 }
 
 /* ex:set ts=8 noet: */

@@ -125,9 +125,9 @@ ggit_signature_init (GgitSignature *self)
 }
 
 GgitSignature *
-_ggit_signature_wrap (git_signature *signature,
-                      const gchar   *encoding,
-                      gboolean       owned)
+_ggit_signature_wrap (const git_signature *signature,
+                      const gchar         *encoding,
+                      gboolean             owned)
 {
 	GgitSignature *ret;
 
@@ -136,12 +136,12 @@ _ggit_signature_wrap (git_signature *signature,
 	if (owned)
 	{
 		_ggit_native_set (ret,
-		                  signature,
+		                  (gpointer)signature,
 		                  (GDestroyNotify)git_signature_free);
 	}
 	else
 	{
-		_ggit_native_set (ret, signature, NULL);
+		_ggit_native_set (ret, (gpointer)signature, NULL);
 	}
 
 	return ret;

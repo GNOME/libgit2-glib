@@ -37,8 +37,8 @@ GgitReflogEntry  *_ggit_reflog_entry_wrap          (const git_reflog_entry *refl
 GgitReflogEntry  *ggit_reflog_entry_ref            (GgitReflogEntry        *reflog_entry);
 void              ggit_reflog_entry_unref          (GgitReflogEntry        *reflog_entry);
 
-GgitOId          *ggit_reflog_entry_get_old_oid    (GgitReflogEntry        *reflog_entry);
-GgitOId          *ggit_reflog_entry_get_new_oid    (GgitReflogEntry        *reflog_entry);
+GgitOId          *ggit_reflog_entry_get_old_id     (GgitReflogEntry        *reflog_entry);
+GgitOId          *ggit_reflog_entry_get_new_id     (GgitReflogEntry        *reflog_entry);
 GgitSignature    *ggit_reflog_entry_get_committer  (GgitReflogEntry        *reflog_entry);
 const gchar      *ggit_reflog_entry_get_message    (GgitReflogEntry        *reflog_entry);
 

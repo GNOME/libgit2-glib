@@ -58,27 +58,27 @@ struct _GgitSignatureClass
 
 GType                 ggit_signature_get_type          (void) G_GNUC_CONST;
 
-GgitSignature        *_ggit_signature_wrap             (git_signature *signature,
-                                                        const gchar   *encoding,
-                                                        gboolean       owned);
+GgitSignature        *_ggit_signature_wrap             (const git_signature *signature,
+                                                        const gchar         *encoding,
+                                                        gboolean             owned);
 
-GgitSignature        *ggit_signature_new               (const gchar    *name,
-                                                        const gchar    *email,
-                                                        GDateTime      *signature_time,
-                                                        GTimeZone      *signature_time_zone,
-                                                        GError        **error);
+GgitSignature        *ggit_signature_new               (const gchar         *name,
+                                                        const gchar         *email,
+                                                        GDateTime           *signature_time,
+                                                        GTimeZone           *signature_time_zone,
+                                                        GError             **error);
 
-GgitSignature        *ggit_signature_new_now           (const gchar    *name,
-                                                        const gchar    *email,
-                                                        GError        **error);
+GgitSignature        *ggit_signature_new_now           (const gchar         *name,
+                                                        const gchar         *email,
+                                                        GError             **error);
 
-const gchar          *ggit_signature_get_name          (GgitSignature  *signature);
+const gchar          *ggit_signature_get_name          (GgitSignature       *signature);
 
-const gchar          *ggit_signature_get_email         (GgitSignature  *signature);
+const gchar          *ggit_signature_get_email         (GgitSignature       *signature);
 
-GDateTime            *ggit_signature_get_time          (GgitSignature  *signature);
+GDateTime            *ggit_signature_get_time          (GgitSignature       *signature);
 
-GTimeZone            *ggit_signature_get_time_zone     (GgitSignature  *signature);
+GTimeZone            *ggit_signature_get_time_zone     (GgitSignature       *signature);
 
 G_END_DECLS
 
