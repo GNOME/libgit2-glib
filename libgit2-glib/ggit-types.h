@@ -166,6 +166,13 @@ typedef struct _GgitObjectFactoryBase GgitObjectFactoryBase;
 typedef struct _GgitOId GgitOId;
 
 /**
+ * GgitPush:
+ *
+ * Represents a git push.
+ */
+typedef struct _GgitPush GgitPush;
+
+/**
  * GgitRef:
  *
  * Reprensents a git reference.
