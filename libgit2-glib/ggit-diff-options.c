@@ -92,8 +92,8 @@ ggit_diff_options_free (GgitDiffOptions *diff_options)
 	g_return_if_fail (diff_options != NULL);
 
 	gdiff_options = &diff_options->diff_options;
-	g_free (gdiff_options->old_prefix);
-	g_free (gdiff_options->new_prefix);
+	g_free ((gchar *)gdiff_options->old_prefix);
+	g_free ((gchar *)gdiff_options->new_prefix);
 	git_strarray_free (&gdiff_options->pathspec);
 
 	g_slice_free (GgitDiffOptions, diff_options);
