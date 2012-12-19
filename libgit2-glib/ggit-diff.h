@@ -65,16 +65,16 @@ GgitDiff  *ggit_diff_new_tree_to_tree     (GgitRepository        *repository,
                                            GgitTree              *new_tree,
                                            GgitDiffOptions       *diff_options,
                                            GError               **error);
-GgitDiff  *ggit_diff_new_index_to_tree    (GgitRepository        *repository,
+GgitDiff  *ggit_diff_new_tree_to_index    (GgitRepository        *repository,
                                            GgitTree              *old_tree,
                                            GgitIndex             *index,
                                            GgitDiffOptions       *diff_options,
                                            GError               **error);
-GgitDiff  *ggit_diff_new_workdir_to_index (GgitRepository        *repository,
+GgitDiff  *ggit_diff_new_index_to_workdir (GgitRepository        *repository,
                                            GgitIndex             *index,
                                            GgitDiffOptions       *diff_options,
                                            GError               **error);
-GgitDiff  *ggit_diff_new_workdir_to_tree  (GgitRepository        *repository,
+GgitDiff  *ggit_diff_new_tree_to_workdir  (GgitRepository        *repository,
                                            GgitTree              *old_tree,
                                            GgitDiffOptions       *diff_options,
                                            GError               **error);

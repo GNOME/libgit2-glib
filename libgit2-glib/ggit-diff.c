@@ -182,7 +182,7 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
 }
 
 /**
- * ggit_diff_new_index_to_tree:
+ * ggit_diff_new_tree_to_index:
  * @repository: a #GgitRepository.
  * @old_tree: a #GgitTree to diff from.
  * @index: (allow-none): a #GgitIndex, or %NULL.
@@ -198,7 +198,7 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
  * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
 GgitDiff *
-ggit_diff_new_index_to_tree (GgitRepository   *repository,
+ggit_diff_new_tree_to_index (GgitRepository   *repository,
                              GgitTree         *old_tree,
                              GgitIndex        *index,
                              GgitDiffOptions  *diff_options,
@@ -211,7 +211,7 @@ ggit_diff_new_index_to_tree (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_TREE (old_tree), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_index_to_tree (&diff,
+	ret = git_diff_tree_to_index (&diff,
 	                              _ggit_native_get (repository),
 	                              _ggit_native_get (old_tree),
 	                              index ? _ggit_native_get (index) : NULL,
@@ -227,7 +227,7 @@ ggit_diff_new_index_to_tree (GgitRepository   *repository,
 }
 
 /**
- * ggit_diff_new_workdir_to_index:
+ * ggit_diff_new_index_to_workdir:
  * @repository: a #GgitRepository.
  * @index: (allow-none): a #GgitIndex, or %NULL.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
@@ -242,7 +242,7 @@ ggit_diff_new_index_to_tree (GgitRepository   *repository,
  * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
 GgitDiff *
-ggit_diff_new_workdir_to_index (GgitRepository   *repository,
+ggit_diff_new_index_to_workdir (GgitRepository   *repository,
                                 GgitIndex        *index,
                                 GgitDiffOptions  *diff_options,
                                 GError          **error)
@@ -253,7 +253,7 @@ ggit_diff_new_workdir_to_index (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_workdir_to_index (&diff,
+	ret = git_diff_index_to_workdir (&diff,
 	                                 _ggit_native_get (repository),
 	                                 index ? _ggit_native_get (index) : NULL,
 	                                 _ggit_diff_options_get_diff_options (diff_options));
@@ -268,7 +268,7 @@ ggit_diff_new_workdir_to_index (GgitRepository   *repository,
 }
 
 /**
- * ggit_diff_new_workdir_to_tree:
+ * ggit_diff_new_tree_to_workdir:
  * @repository: a #GgitRepository.
  * @old_tree: a #GgitTree to diff from.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
@@ -282,7 +282,7 @@ ggit_diff_new_workdir_to_index (GgitRepository   *repository,
  * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
 GgitDiff *
-ggit_diff_new_workdir_to_tree (GgitRepository   *repository,
+ggit_diff_new_tree_to_workdir (GgitRepository   *repository,
                                GgitTree         *old_tree,
                                GgitDiffOptions  *diff_options,
                                GError          **error)
@@ -294,7 +294,7 @@ ggit_diff_new_workdir_to_tree (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_TREE (old_tree), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_workdir_to_tree (&diff,
+	ret = git_diff_tree_to_workdir (&diff,
 	                                _ggit_native_get (repository),
 	                                _ggit_native_get (old_tree),
 	                                _ggit_diff_options_get_diff_options (diff_options));
