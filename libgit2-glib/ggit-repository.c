@@ -1424,7 +1424,7 @@ ggit_repository_get_remote (GgitRepository  *repository,
 }
 
 /**
- * ggit_repository_add_remote:
+ * ggit_repository_create_remote:
  * @repository: a #GgitRepository.
  * @name: the name of the new remote.
  * @url: the url of the remote.
@@ -1435,10 +1435,10 @@ ggit_repository_get_remote (GgitRepository  *repository,
  * Returns: (transfer full) (allow-none): a new #GgitRemote or %NULL if there is an error.
  */
 GgitRemote *
-ggit_repository_add_remote (GgitRepository  *repository,
-                            const gchar     *name,
-                            const gchar     *url,
-                            GError         **error)
+ggit_repository_create_remote (GgitRepository  *repository,
+                               const gchar     *name,
+                               const gchar     *url,
+                               GError         **error)
 {
 	gint ret;
 	git_remote *remote;
@@ -1447,10 +1447,10 @@ ggit_repository_add_remote (GgitRepository  *repository,
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_remote_add (&remote,
-	                      _ggit_native_get (repository),
-	                      name,
-	                      url);
+	ret = git_remote_create (&remote,
+	                         _ggit_native_get (repository),
+	                         name,
+	                         url);
 
 	if (ret != GIT_OK)
 	{

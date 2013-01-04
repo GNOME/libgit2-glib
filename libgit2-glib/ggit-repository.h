@@ -142,7 +142,7 @@ GgitRemote         *ggit_repository_get_remote        (GgitRepository        *re
                                                        const gchar           *name,
                                                        GError               **error);
 
-GgitRemote         *ggit_repository_add_remote        (GgitRepository        *repository,
+GgitRemote         *ggit_repository_create_remote     (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        const gchar           *url,
                                                        GError               **error);
