@@ -107,6 +107,16 @@ void       ggit_diff_blobs                (GgitDiffOptions       *diff_options,
                                            gpointer              *user_data,
                                            GError               **error);
 
+void       ggit_diff_blob_to_buffer       (GgitDiffOptions       *diff_options,
+                                           GgitBlob              *old_blob,
+                                           const gchar           *buffer,
+                                           gsize                  buffer_len,
+                                           GgitDiffFileCallback   file_cb,
+                                           GgitDiffHunkCallback   hunk_cb,
+                                           GgitDiffLineCallback   line_cb,
+                                           gpointer              *user_data,
+                                           GError               **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_DIFF_H__ */

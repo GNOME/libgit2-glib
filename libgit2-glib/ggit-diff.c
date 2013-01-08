@@ -544,4 +544,77 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 	}
 }
 
+/**
+ * ggit_diff_blob_to_buffer:
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
+ * @old_blob: (allow-none): a #GgitBlob to diff from.
+ * @buffer: (allow-none) (array length=buffer_len): a buffer to diff to.
+ * @buffer_len: length of @buffer.
+ * @file_cb: (allow-none) (scope call) (closure user_data):
+ *  a #GgitDiffFileCallback.
+ * @hunk_cb: (allow-none) (scope call) (closure user_data):
+ *  a #GgitDiffHunkCallback.
+ * @line_cb: (allow-none) (scope call) (closure user_data):
+ *  a #GgitDiffLineCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Same as ggit_diff_blobs() but using a buffer.
+ */
+void
+ggit_diff_blob_to_buffer (GgitDiffOptions       *diff_options,
+                          GgitBlob              *old_blob,
+                          const gchar           *buffer,
+                          gsize                  buffer_len,
+                          GgitDiffFileCallback   file_cb,
+                          GgitDiffHunkCallback   hunk_cb,
+                          GgitDiffLineCallback   line_cb,
+                          gpointer              *user_data,
+                          GError               **error)
+{
+	gint ret;
+	const git_diff_options *gdiff_options;
+	CallbackWrapperData wrapper_data;
+	git_diff_file_cb real_file_cb = NULL;
+	git_diff_hunk_cb real_hunk_cb = NULL;
+	git_diff_data_cb real_line_cb = NULL;
+
+	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
+
+	wrapper_data.user_data = user_data;
+
+	if (file_cb != NULL)
+	{
+		real_file_cb = ggit_diff_file_callback_wrapper;
+		wrapper_data.file_cb = file_cb;
+	}
+
+	if (hunk_cb != NULL)
+	{
+		real_hunk_cb = ggit_diff_hunk_callback_wrapper;
+		wrapper_data.hunk_cb = hunk_cb;
+	}
+
+	if (line_cb != NULL)
+	{
+		real_line_cb = ggit_diff_line_callback_wrapper;
+		wrapper_data.line_cb = line_cb;
+	}
+
+	ret = git_diff_blob_to_buffer (_ggit_native_get (old_blob),
+	                               buffer,
+	                               buffer_len,
+	                               (git_diff_options *) gdiff_options,
+	                               real_file_cb, real_hunk_cb, real_line_cb,
+	                               &wrapper_data);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
 /* ex:set ts=8 noet: */
