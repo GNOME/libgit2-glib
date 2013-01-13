@@ -137,22 +137,19 @@ ggit_tree_size (GgitTree *tree)
  *
  **/
 GgitTreeEntry *
-ggit_tree_get_by_file (GgitTree *tree,
-                       GFile    *file)
+ggit_tree_get_by_name (GgitTree    *tree,
+                       const gchar *name)
 {
 	git_tree *t;
-	gchar *path;
 	GgitTreeEntry *entry = NULL;
 	const git_tree_entry *tree_entry;
 
 	g_return_val_if_fail (GGIT_IS_TREE (tree), NULL);
-	g_return_val_if_fail (G_IS_FILE (file), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
 
 	t = _ggit_native_get (tree);
 
-	path = g_file_get_path (file);
-	tree_entry = git_tree_entry_byname (t, path);
-	g_free (path);
+	tree_entry = git_tree_entry_byname (t, name);
 
 	if (tree_entry != NULL)
 	{
