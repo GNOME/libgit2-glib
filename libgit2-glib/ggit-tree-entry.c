@@ -21,10 +21,12 @@
 #include "ggit-tree-entry.h"
 #include "ggit-oid.h"
 #include "ggit-utils.h"
+#include <git2/errors.h>
 
 struct _GgitTreeEntry
 {
-	const git_tree_entry *entry;
+	git_tree_entry *entry;
+	gboolean free_entry;
 	gint ref_count;
 };
 
@@ -34,12 +36,14 @@ G_DEFINE_BOXED_TYPE (GgitTreeEntry,
                      ggit_tree_entry_unref)
 
 GgitTreeEntry *
-_ggit_tree_entry_wrap (const git_tree_entry *entry)
+_ggit_tree_entry_wrap (git_tree_entry *entry,
+                       gboolean        free_entry)
 {
 	GgitTreeEntry *ret;
 
 	ret = g_slice_new (GgitTreeEntry);
 	ret->entry = entry;
+	ret->free_entry = free_entry;
 	ret->ref_count = 1;
 
 	return ret;
@@ -78,6 +82,11 @@ ggit_tree_entry_unref (GgitTreeEntry *entry)
 
 	if (g_atomic_int_dec_and_test (&entry->ref_count))
 	{
+		if (entry->free_entry)
+		{
+			git_tree_entry_free (entry->entry);
+		}
+
 		g_slice_free (GgitTreeEntry, entry);
 	}
 }

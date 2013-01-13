@@ -102,7 +102,7 @@ ggit_tree_get (GgitTree *tree,
 
 	entry = git_tree_entry_byindex (t, i);
 
-	return _ggit_tree_entry_wrap (entry);
+	return _ggit_tree_entry_wrap ((git_tree_entry *)entry, FALSE);
 }
 
 /**
@@ -127,11 +127,11 @@ ggit_tree_size (GgitTree *tree)
 }
 
 /**
- * ggit_tree_get_by_file:
+ * ggit_tree_get_by_name:
  * @tree: a #GgitTree.
- * @file: a #GFile.
+ * @name: a filename.
  *
- * Get a tree entry by file.
+ * Get a tree entry by name.
  *
  * Returns: (transfer full): a #GgitTreeEntry.
  *
@@ -153,7 +153,42 @@ ggit_tree_get_by_name (GgitTree    *tree,
 
 	if (tree_entry != NULL)
 	{
-		entry = _ggit_tree_entry_wrap (tree_entry);
+		entry = _ggit_tree_entry_wrap ((git_tree_entry *)tree_entry, FALSE);
+	}
+
+	return entry;
+}
+
+/**
+ * ggit_tree_get_by_path:
+ * @tree: a #GgitTree.
+ * @path: a path.
+ *
+ * Retrieves a tree entry contained in a tree or in any of its subtrees,
+ * given its relative path.
+ *
+ * Returns: (transfer full): a #GgitTreeEntry.
+ *
+ **/
+GgitTreeEntry *
+ggit_tree_get_by_path (GgitTree    *tree,
+                       const gchar *path)
+{
+	git_tree *t;
+	GgitTreeEntry *entry = NULL;
+	git_tree_entry *tree_entry;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_TREE (tree), NULL);
+	g_return_val_if_fail (path != NULL, NULL);
+
+	t = _ggit_native_get (tree);
+
+	ret = git_tree_entry_bypath (&tree_entry, t, path);
+
+	if (ret == GIT_OK)
+	{
+		entry = _ggit_tree_entry_wrap (tree_entry, TRUE);
 	}
 
 	return entry;
@@ -174,7 +209,7 @@ walk_callback_wrapper (const char           *root,
 	GgitTreeEntry *wentry;
 	WalkInfo *info = (WalkInfo *)payload;
 
-	wentry = _ggit_tree_entry_wrap (entry);
+	wentry = _ggit_tree_entry_wrap ((git_tree_entry *)entry, FALSE);
 
 	ret = info->callback(root, wentry, info->user_data);
 
