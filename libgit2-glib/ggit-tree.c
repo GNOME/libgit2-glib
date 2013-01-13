@@ -142,15 +142,22 @@ ggit_tree_get_by_file (GgitTree *tree,
 {
 	git_tree *t;
 	gchar *path;
-	GgitTreeEntry *entry;
+	GgitTreeEntry *entry = NULL;
+	const git_tree_entry *tree_entry;
 
 	g_return_val_if_fail (GGIT_IS_TREE (tree), NULL);
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
 
 	t = _ggit_native_get (tree);
 
 	path = g_file_get_path (file);
-	entry = _ggit_tree_entry_wrap (git_tree_entry_byname (t, path));
+	tree_entry = git_tree_entry_byname (t, path);
 	g_free (path);
+
+	if (tree_entry != NULL)
+	{
+		entry = _ggit_tree_entry_wrap (tree_entry);
+	}
 
 	return entry;
 }
