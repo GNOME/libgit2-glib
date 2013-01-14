@@ -163,6 +163,7 @@ ggit_tree_get_by_name (GgitTree    *tree,
  * ggit_tree_get_by_path:
  * @tree: a #GgitTree.
  * @path: a path.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Retrieves a tree entry contained in a tree or in any of its subtrees,
  * given its relative path.
@@ -171,8 +172,9 @@ ggit_tree_get_by_name (GgitTree    *tree,
  *
  **/
 GgitTreeEntry *
-ggit_tree_get_by_path (GgitTree    *tree,
-                       const gchar *path)
+ggit_tree_get_by_path (GgitTree     *tree,
+                       const gchar  *path,
+                       GError      **error)
 {
 	git_tree *t;
 	GgitTreeEntry *entry = NULL;
@@ -189,6 +191,10 @@ ggit_tree_get_by_path (GgitTree    *tree,
 	if (ret == GIT_OK)
 	{
 		entry = _ggit_tree_entry_wrap (tree_entry, TRUE);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
 	}
 
 	return entry;

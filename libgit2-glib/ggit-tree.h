@@ -72,8 +72,9 @@ guint          ggit_tree_size           (GgitTree *tree);
 GgitTreeEntry *ggit_tree_get_by_name    (GgitTree    *tree,
                                          const gchar *name);
 
-GgitTreeEntry *ggit_tree_get_by_path    (GgitTree    *tree,
-                                         const gchar *path);
+GgitTreeEntry *ggit_tree_get_by_path    (GgitTree     *tree,
+                                         const gchar  *path,
+                                         GError      **error);
 
 void           ggit_tree_walk           (GgitTree              *tree,
                                          GgitTreeWalkMode       mode,
