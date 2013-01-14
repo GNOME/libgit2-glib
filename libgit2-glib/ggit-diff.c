@@ -507,7 +507,6 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 	git_diff_hunk_cb real_hunk_cb = NULL;
 	git_diff_data_cb real_line_cb = NULL;
 
-	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
@@ -532,8 +531,8 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 		wrapper_data.line_cb = line_cb;
 	}
 
-	ret = git_diff_blobs (_ggit_native_get (old_blob),
-	                      _ggit_native_get (new_blob),
+	ret = git_diff_blobs (old_blob ? _ggit_native_get (old_blob) : NULL,
+	                      new_blob ? _ggit_native_get (new_blob) : NULL,
 	                      (git_diff_options *) gdiff_options,
 	                      real_file_cb, real_hunk_cb, real_line_cb,
 	                      &wrapper_data);
@@ -579,7 +578,6 @@ ggit_diff_blob_to_buffer (GgitDiffOptions       *diff_options,
 	git_diff_hunk_cb real_hunk_cb = NULL;
 	git_diff_data_cb real_line_cb = NULL;
 
-	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
@@ -604,7 +602,7 @@ ggit_diff_blob_to_buffer (GgitDiffOptions       *diff_options,
 		wrapper_data.line_cb = line_cb;
 	}
 
-	ret = git_diff_blob_to_buffer (_ggit_native_get (old_blob),
+	ret = git_diff_blob_to_buffer (old_blob ? _ggit_native_get (old_blob) : NULL,
 	                               buffer,
 	                               buffer_len,
 	                               (git_diff_options *) gdiff_options,
