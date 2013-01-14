@@ -100,7 +100,7 @@ ggit_diff_file_unref (GgitDiffFile *file)
  *
  * Gets the #GgitOId for @file.
  *
- * Returns: the file's #GgitOId.
+ * Returns: (transfer none): the file's #GgitOId.
  */
 GgitOId *
 ggit_diff_file_get_oid (GgitDiffFile *file)
