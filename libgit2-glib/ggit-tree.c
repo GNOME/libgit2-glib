@@ -215,7 +215,7 @@ walk_callback_wrapper (const char           *root,
 	GgitTreeEntry *wentry;
 	WalkInfo *info = (WalkInfo *)payload;
 
-	wentry = _ggit_tree_entry_wrap ((git_tree_entry *)entry, FALSE);
+	wentry = _ggit_tree_entry_wrap (git_tree_entry_dup(entry), TRUE);
 
 	ret = info->callback(root, wentry, info->user_data);
 
