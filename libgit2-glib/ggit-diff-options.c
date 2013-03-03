@@ -113,7 +113,7 @@ ggit_diff_options_free (GgitDiffOptions *diff_options)
  * Returns: a newly allocated #GgitDiffOptions.
  */
 GgitDiffOptions *
-ggit_diff_options_new (GgitDiffFlags   flags,
+ggit_diff_options_new (GgitDiffOption  flags,
                        gint            n_context_lines,
                        gint            n_interhunk_lines,
                        const gchar    *old_prefix,

@@ -41,7 +41,7 @@ GgitOId           *ggit_diff_file_get_oid   (GgitDiffFile        *file);
 const gchar       *ggit_diff_file_get_path  (GgitDiffFile        *file);
 guint16            ggit_diff_file_get_mode  (GgitDiffFile        *file);
 gint64             ggit_diff_file_get_size  (GgitDiffFile        *file);
-GgitDiffFileFlags  ggit_diff_file_get_flags (GgitDiffFile        *file);
+GgitDiffFlag       ggit_diff_file_get_flags (GgitDiffFile        *file);
 
 G_END_DECLS
 

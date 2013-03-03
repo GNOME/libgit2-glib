@@ -31,8 +31,8 @@ struct _GgitDiffDelta {
 	GgitDiffFile *old_file;
 	GgitDiffFile *new_file;
 	GgitDeltaType status;
-	guint similarity;
-	gint binary;
+	guint32 similarity;
+	guint32 flags;
 };
 
 G_DEFINE_BOXED_TYPE (GgitDiffDelta, ggit_diff_delta,
@@ -51,7 +51,7 @@ _ggit_diff_delta_wrap (const git_diff_delta *delta)
 	gdelta->new_file = _ggit_diff_file_wrap (&delta->new_file);
 	gdelta->status = delta->status;
 	gdelta->similarity = delta->similarity;
-	gdelta->binary = delta->binary;
+	gdelta->flags = delta->flags;
 
 	return gdelta;
 }
@@ -160,19 +160,19 @@ ggit_diff_delta_get_similarity (GgitDiffDelta *delta)
 }
 
 /**
- * ggit_diff_delta_get_binary:
+ * ggit_diff_delta_get_flags:
  * @delta: a #GgitDiffDelta.
  *
- * Gets if @delta is binary.
+ * Gets flags for @delta.
  *
- * Returns: 0 if not binary, 1 if binary and -1 if unknown.
+ * Returns: the delta flags
  */
-gint
-ggit_diff_delta_get_binary (GgitDiffDelta *delta)
+GgitDiffFlag
+ggit_diff_delta_get_flags (GgitDiffDelta *delta)
 {
-	g_return_val_if_fail (delta != NULL, -1);
+	g_return_val_if_fail (delta != NULL, 0);
 
-	return delta->binary;
+	return delta->flags;
 }
 
 /* ex:set ts=8 noet: */

@@ -41,7 +41,7 @@ GgitDiffFile   *ggit_diff_delta_get_old_file   (GgitDiffDelta        *delta);
 GgitDiffFile   *ggit_diff_delta_get_new_file   (GgitDiffDelta        *delta);
 GgitDeltaType   ggit_diff_delta_get_status     (GgitDiffDelta        *delta);
 guint           ggit_diff_delta_get_similarity (GgitDiffDelta        *delta);
-gint            ggit_diff_delta_get_binary     (GgitDiffDelta        *delta);
+GgitDiffFlag    ggit_diff_delta_get_flags      (GgitDiffDelta        *delta);
 
 G_END_DECLS
 

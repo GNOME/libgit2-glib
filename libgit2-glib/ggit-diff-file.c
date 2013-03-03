@@ -31,7 +31,7 @@ struct _GgitDiffFile {
 	gchar *path;
 	guint16 mode;
 	gint64 size;
-	GgitDiffFileFlags flags;
+	GgitDiffFlag flags;
 };
 
 G_DEFINE_BOXED_TYPE (GgitDiffFile, ggit_diff_file,
@@ -162,11 +162,11 @@ ggit_diff_file_get_size (GgitDiffFile *file)
  * ggit_diff_file_get_flags:
  * @file: a #GgitDiffFile.
  *
- * Gets the #GgitDiffFileFlags for @file.
+ * Gets the #GgitDifflags for @file.
  *
  * Returns: the file's flags.
  */
-GgitDiffFileFlags
+GgitDiffFlag
 ggit_diff_file_get_flags (GgitDiffFile *file)
 {
 	g_return_val_if_fail (file != NULL, 0);

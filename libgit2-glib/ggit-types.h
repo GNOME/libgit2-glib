@@ -258,7 +258,6 @@ typedef struct _GgitTree GgitTree;
 typedef struct _GgitTreeEntry GgitTreeEntry;
 
 
-
 /**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
@@ -331,7 +330,7 @@ typedef enum {
 } GgitDeltaType;
 
 /**
- * GgitDiffFlags:
+ * GgitDiffOption:
  * @GGIT_DIFF_NORMAL: normal.
  * @GGIT_DIFF_REVERSE: reverse.
  * @GGIT_DIFF_FORCE_TEXT: force text.
@@ -360,27 +359,21 @@ typedef enum {
 	GGIT_DIFF_INCLUDE_UNTRACKED        = 1 << 8,
 	GGIT_DIFF_INCLUDE_UNMODIFIED       = 1 << 9,
 	GGIT_DIFF_RECURSE_UNTRACKED_DIRS   = 1 << 10
-} GgitDiffFlags;
+} GgitDiffOption;
 
 /**
- * GgitDiffFileFlags:
- * @GGIT_DIFF_FILE_VALID_OID: if the OID is valid.
- * @GGIT_DIFF_FILE_FREE_PATH: if the path must be freed (libgit2 internal).
- * @GGIT_DIFF_FILE_BINARY: if the file is binary.
- * @GGIT_DIFF_FILE_NOT_BINARY: if the file is not binary.
- * @GGIT_DIFF_FILE_FREE_DATA: if the data must be freed (libgit2 internal).
- * @GGIT_DIFF_FILE_UNMAP_DATA: if the data must be unmapped (libgit2 internal).
+ * GgitDiffFlag:
+ * @GGIT_DIFF_VALID_OID: if the OID is valid.
+ * @GGIT_DIFF_BINARY: if the file is binary.
+ * @GGIT_DIFF_NOT_BINARY: if the file is not binary.
  *
- * Describes the diff file.
+ * Describes the diff file and/or delta flags
  */
 typedef enum {
-	GGIT_DIFF_FILE_VALID_OID  = 1 << 0,
-	GGIT_DIFF_FILE_FREE_PATH  = 1 << 1,
-	GGIT_DIFF_FILE_BINARY     = 1 << 2,
-	GGIT_DIFF_FILE_NOT_BINARY = 1 << 3,
-	GGIT_DIFF_FILE_FREE_DATA  = 1 << 4,
-	GGIT_DIFF_FILE_UNMAP_DATA = 1 << 5
-} GgitDiffFileFlags;
+	GGIT_DIFF_FLAG_BINARY     = 1 << 0,
+	GGIT_DIFF_FLAG_NOT_BINARY = 1 << 1,
+	GGIT_DIFF_FLAG_VALID_OID  = 1 << 2
+} GgitDiffFlag;
 
 /**
  * GgitDiffLineType:

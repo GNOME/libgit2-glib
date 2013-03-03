@@ -39,7 +39,7 @@ const git_diff_options *_ggit_diff_options_get_diff_options (GgitDiffOptions    
 GgitDiffOptions        *ggit_diff_options_copy              (GgitDiffOptions        *diff_options);
 void                    ggit_diff_options_free              (GgitDiffOptions        *diff_options);
 
-GgitDiffOptions        *ggit_diff_options_new               (GgitDiffFlags           flags,
+GgitDiffOptions        *ggit_diff_options_new               (GgitDiffOption          flags,
                                                              gint                    n_context_lines,
                                                              gint                    n_interhunk_lines,
                                                              const gchar            *old_prefix,
