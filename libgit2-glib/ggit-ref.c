@@ -207,31 +207,40 @@ ggit_ref_get_owner (GgitRef *ref)
  * @target: The new target for the reference.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Sets the symbolic target of @ref.
+ * Create a new reference with the same name as the given reference but a
+ * different symbolic target. The reference must be a symbolic reference,
+ * otherwise this will fail.
  *
- * The reference must be a symbolic reference, otherwise
- * this method will fail.
+ * The new reference will be written to disk, overwriting the given reference.
  *
- * The reference will be automatically updated in
- * memory and on disk.
+ * The target name will be checked for validity.
+ * See `ggit_ref_create_symbolic()` for rules about valid names.
+ *
+ * Returns: (transfer full): the newly created #GgitRef.
  */
-void
+GgitRef *
 ggit_ref_set_symbolic_target (GgitRef      *ref,
                               const gchar  *target,
                               GError      **error)
 {
+	git_reference *out;
 	gint ret;
 
-	g_return_if_fail (ref != NULL);
-	g_return_if_fail (target != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (ref != NULL, NULL);
+	g_return_val_if_fail (target != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_reference_symbolic_set_target (_ggit_native_get (ref), target);
+	ret = git_reference_symbolic_set_target (&out,
+	                                         _ggit_native_get (ref),
+	                                         target);
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+		return NULL;
 	}
+
+	return _ggit_ref_wrap (out);
 }
 
 /**
@@ -240,31 +249,37 @@ ggit_ref_set_symbolic_target (GgitRef      *ref,
  * @oid: a #GgitOId.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Sets the OID target of @ref.
+ * Create a new reference with the same name as the given reference but a
+ * different OID target. The reference must be a direct reference, otherwise
+ * this will fail.
  *
- * The reference must be a direct reference, otherwise
- * this method will fail.
+ * The new reference will be written to disk, overwriting the given reference.
  *
- * The reference will be automatically updated in
- * memory and on disk.
+ * Returns: (transfer full): the newly created #GgitRef.
  */
-void
+GgitRef *
 ggit_ref_set_target (GgitRef  *ref,
                      GgitOId  *oid,
                      GError  **error)
 {
+	git_reference *out;
 	gint ret;
 
-	g_return_if_fail (ref != NULL);
-	g_return_if_fail (oid != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (ref != NULL, NULL);
+	g_return_val_if_fail (oid != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_reference_set_target (_ggit_native_get (ref), _ggit_oid_get_oid (oid));
+	ret = git_reference_set_target (&out,
+	                                _ggit_native_get (ref),
+	                                _ggit_oid_get_oid (oid));
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+		return NULL;
 	}
+
+	return _ggit_ref_wrap (out);
 }
 
 /**
@@ -274,35 +289,55 @@ ggit_ref_set_target (GgitRef  *ref,
  * @force: %TRUE to force the renaming.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Renames @ref.
+ * Rename an existing reference.
  *
  * This method works for both direct and symbolic references.
- * The new name will be checked for validity and may be
- * modified into a normalized form.
  *
- * The refernece will be immediately renamed in-memory
- * and on disk.
+ * The new name will be checked for validity.
+ * See `ggit_ref_create_symbolic()` for rules about valid names.
+ *
+ * If not error, @ref will be deleted from disk and a
+ * new #GgitRef will be returned.
+ *
+ * The reference will be immediately renamed in-memory and on disk.
+ *
+ * If the `force` flag is not enabled, and there's already
+ * a reference with the given name, the renaming will fail.
+ *
+ * IMPORTANT:
+ * The user needs to write a proper reflog entry if the
+ * reflog is enabled for the repository. We only rename
+ * the reflog if it exists.
+ *
+ * Returns: (transfer full): a newly created #GgitRef.
  */
-void
+GgitRef *
 ggit_ref_rename (GgitRef     *ref,
                  const gchar *new_name,
                  gboolean     force,
                  GError     **error)
 {
+	git_reference *out;
 	gint ret;
 
-	g_return_if_fail (ref != NULL);
-	g_return_if_fail (new_name != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (ref != NULL, NULL);
+	g_return_val_if_fail (new_name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	force = (force != FALSE);
 
-	ret = git_reference_rename (_ggit_native_get (ref), new_name, force);
+	ret = git_reference_rename (&out,
+	                            _ggit_native_get (ref),
+	                            new_name,
+	                            force);
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+		return NULL;
 	}
+
+	return _ggit_ref_wrap (out);
 }
 
 /**
@@ -367,10 +402,8 @@ ggit_ref_lookup (GgitRef  *ref,
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
-	else
-	{
-		return ggit_utils_create_real_object (obj, TRUE);
-	}
+
+	return ggit_utils_create_real_object (obj, TRUE);
 }
 
 /**
@@ -380,7 +413,7 @@ ggit_ref_lookup (GgitRef  *ref,
  *
  * Gets the #GgitReflog for @ref.
  *
- * Returns: the reflog.
+ * Returns: (transfer full): the reflog.
  */
 GgitReflog *
 ggit_ref_get_reflog (GgitRef  *ref,
@@ -413,7 +446,7 @@ ggit_ref_get_reflog (GgitRef  *ref,
  *
  * Creates a #GgitReflog with the given properties.
  *
- * Returns: the created reflog, or %NULL if error is set.
+ * Returns: (transfer full): the created reflog, or %NULL if error is set.
  */
 GgitReflog *
 ggit_ref_create_reflog (GgitRef        *ref,

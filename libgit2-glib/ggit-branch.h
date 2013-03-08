@@ -56,7 +56,7 @@ GgitBranch        *_ggit_branch_wrap               (git_reference    *ref);
 void                ggit_branch_delete             (GgitBranch       *branch,
                                                     GError          **error);
 
-void                ggit_branch_move               (GgitBranch       *branch,
+GgitBranch         *ggit_branch_move               (GgitBranch       *branch,
                                                     const gchar      *new_branch_name,
                                                     GgitCreateFlags   flags,
                                                     GError          **error);

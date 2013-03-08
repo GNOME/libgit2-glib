@@ -74,15 +74,15 @@ GgitRef        *ggit_ref_resolve            (GgitRef        *ref,
 
 GgitRepository *ggit_ref_get_owner          (GgitRef        *ref);
 
-void            ggit_ref_set_symbolic_target(GgitRef        *ref,
+GgitRef        *ggit_ref_set_symbolic_target(GgitRef        *ref,
                                              const gchar    *target,
                                              GError        **error);
 
-void            ggit_ref_set_target         (GgitRef        *ref,
+GgitRef        *ggit_ref_set_target         (GgitRef        *ref,
                                              GgitOId        *oid,
                                              GError        **error);
 
-void            ggit_ref_rename             (GgitRef        *ref,
+GgitRef        *ggit_ref_rename             (GgitRef        *ref,
                                              const gchar    *new_name,
                                              gboolean        force,
                                              GError        **error);

@@ -80,30 +80,37 @@ ggit_branch_delete (GgitBranch  *branch,
  * @error: a #GError for error reporting, or %NULL.
  *
  * Moves/renames an existing branch reference.
+ *
+ * Returns: (transfer full): the new branch.
  **/
-void
+GgitBranch *
 ggit_branch_move (GgitBranch       *branch,
                   const gchar      *new_branch_name,
                   GgitCreateFlags   flags,
                   GError          **error)
 {
+	git_reference *out;
 	gboolean force;
 	gint ret;
 
-	g_return_if_fail (GGIT_IS_BRANCH (branch));
-	g_return_if_fail (new_branch_name != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (GGIT_IS_BRANCH (branch), NULL);
+	g_return_val_if_fail (new_branch_name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	force = flags & GGIT_CREATE_FORCE;
 
-	ret = git_branch_move (_ggit_native_get (branch),
+	ret = git_branch_move (&out,
+	                       _ggit_native_get (branch),
 	                       new_branch_name,
 	                       force ? 1 : 0);
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+		return NULL;
 	}
+
+	return _ggit_branch_wrap (out);
 }
 
 /**
