@@ -363,9 +363,9 @@ typedef enum {
 
 /**
  * GgitDiffFlag:
- * @GGIT_DIFF_BINARY: if the file is binary.
- * @GGIT_DIFF_NOT_BINARY: if the file is not binary.
- * @GGIT_DIFF_VALID_OID: if the OID is valid.
+ * @GGIT_DIFF_FLAG_BINARY: if the file is binary.
+ * @GGIT_DIFF_FLAG_NOT_BINARY: if the file is not binary.
+ * @GGIT_DIFF_FLAG_VALID_OID: if the OID is valid.
  *
  * Describes the diff file and/or delta flags
  */
