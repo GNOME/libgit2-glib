@@ -61,6 +61,9 @@ GgitBranch         *ggit_branch_move               (GgitBranch       *branch,
                                                     GgitCreateFlags   flags,
                                                     GError          **error);
 
+const gchar        *ggit_branch_get_name           (GgitBranch       *branch,
+                                                    GError          **error);
+
 GgitBranch         *ggit_branch_get_tracking       (GgitBranch       *branch,
                                                     GError          **error);
 

@@ -114,6 +114,37 @@ ggit_branch_move (GgitBranch       *branch,
 }
 
 /**
+ * ggit_branch_get_name:
+ * @branch: a #GgitBranch.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the name of the given local or remote branch.
+ *
+ * Returns: the name of the given local or remote branch.
+ */
+const gchar *
+ggit_branch_get_name (GgitBranch  *branch,
+                      GError     **error)
+{
+	const gchar *out;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_BRANCH (branch), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_branch_name (&out,
+	                       _ggit_native_get (branch));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return out;
+}
+
+/**
  * ggit_branch_get_tracking:
  * @branch: a #GgitBranch.
  * @error: a #GError for error reporting, or %NULL.
@@ -144,5 +175,7 @@ ggit_branch_get_tracking (GgitBranch  *branch,
 
 	return _ggit_branch_wrap (tracking);
 }
+
+
 
 /* ex:set ts=8 noet: */
