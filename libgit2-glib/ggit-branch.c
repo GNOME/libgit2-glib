@@ -176,6 +176,31 @@ ggit_branch_get_tracking (GgitBranch  *branch,
 	return _ggit_branch_wrap (tracking);
 }
 
+/**
+ * ggit_branch_is_head:
+ * @branch: a #GgitBranch.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Determines if the current local branch is pointed at by HEAD.
+ *
+ * Returns: %TRUE if the current local branch is pointed at by HEAD.
+ */
+gboolean
+ggit_branch_is_head (GgitBranch  *branch,
+                     GError     **error)
+{
+	gint ret;
 
+	g_return_val_if_fail (GGIT_IS_BRANCH (branch), FALSE);
+
+	ret = git_branch_is_head (_ggit_native_get (branch));
+
+	if (ret > 1)
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return (ret == 0);
+}
 
 /* ex:set ts=8 noet: */

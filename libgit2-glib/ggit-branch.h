@@ -67,6 +67,9 @@ const gchar        *ggit_branch_get_name           (GgitBranch       *branch,
 GgitBranch         *ggit_branch_get_tracking       (GgitBranch       *branch,
                                                     GError          **error);
 
+gboolean            ggit_branch_is_head            (GgitBranch       *branch,
+                                                    GError          **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_BRANCH_H__ */
