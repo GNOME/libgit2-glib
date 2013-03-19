@@ -237,8 +237,6 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                      G_PARAM_CONSTRUCT |
 	                                                      G_PARAM_STATIC_STRINGS));
 
-	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
-
 	g_object_class_install_property (object_class,
 	                                 PROP_HEAD,
 	                                 g_param_spec_object ("head",
@@ -246,6 +244,8 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                      "Head",
 	                                                      GGIT_TYPE_REF,
 	                                                      G_PARAM_READABLE));
+
+	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
 }
 
 static void
