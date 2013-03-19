@@ -33,6 +33,13 @@ G_BEGIN_DECLS
 typedef struct _GgitBlob GgitBlob;
 
 /**
+ * GgitCloneOptions:
+ *
+ * Represents the options used when cloning.
+ */
+typedef struct _GgitCloneOptions GgitCloneOptions;
+
+/**
  * GgitCommit:
  *
  * Represents a commit object.

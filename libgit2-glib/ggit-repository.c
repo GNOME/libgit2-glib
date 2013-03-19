@@ -39,13 +39,17 @@
 #include "ggit-remote.h"
 #include "ggit-submodule.h"
 #include "ggit-signature.h"
+#include "ggit-clone-options.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
 struct _GgitRepositoryPrivate
 {
+	gchar *url;
 	GFile *location;
 	GFile *workdir;
+
+	GgitCloneOptions *clone_options;
 
 	guint is_bare : 1;
 	guint init : 1;
@@ -54,11 +58,13 @@ struct _GgitRepositoryPrivate
 enum
 {
 	PROP_0,
+	PROP_URL,
 	PROP_LOCATION,
 	PROP_IS_BARE,
 	PROP_INIT,
 	PROP_WORKDIR,
-	PROP_HEAD
+	PROP_HEAD,
+	PROP_CLONE_OPTIONS
 };
 
 static void ggit_repository_initable_iface_init (GInitableIface  *iface);
@@ -73,6 +79,7 @@ ggit_repository_finalize (GObject *object)
 {
 	GgitRepositoryPrivate *priv = GGIT_REPOSITORY (object)->priv;
 
+	g_free (priv->url);
 	g_clear_object (&priv->location);
 	g_clear_object (&priv->workdir);
 
@@ -90,6 +97,9 @@ ggit_repository_get_property (GObject    *object,
 
 	switch (prop_id)
 	{
+		case PROP_URL:
+			g_value_set_string (value, priv->url);
+			break;
 		case PROP_LOCATION:
 			g_value_take_object (value,
 			                     ggit_repository_get_location (repository));
@@ -109,6 +119,9 @@ ggit_repository_get_property (GObject    *object,
 		case PROP_HEAD:
 			g_value_set_object (value,
 			                    ggit_repository_get_head (repository, NULL));
+			break;
+		case PROP_CLONE_OPTIONS:
+			g_value_set_boxed (value, priv->clone_options);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -158,6 +171,9 @@ ggit_repository_set_property (GObject      *object,
 
 	switch (prop_id)
 	{
+		case PROP_URL:
+			priv->url = g_value_dup_string (value);
+			break;
 		case PROP_LOCATION:
 		{
 			GFile *f;
@@ -182,6 +198,9 @@ ggit_repository_set_property (GObject      *object,
 		case PROP_INIT:
 			priv->init = g_value_get_boolean (value);
 			break;
+		case PROP_CLONE_OPTIONS:
+			priv->clone_options = g_value_get_boxed (value);
+			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
@@ -196,6 +215,16 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	object_class->finalize = ggit_repository_finalize;
 	object_class->get_property = ggit_repository_get_property;
 	object_class->set_property = ggit_repository_set_property;
+
+	g_object_class_install_property (object_class,
+	                                 PROP_URL,
+	                                 g_param_spec_string ("url",
+	                                                      "URL for cloning a repository",
+	                                                      "The URL for cloning a repository",
+	                                                      NULL,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY |
+	                                                      G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_LOCATION,
@@ -245,6 +274,15 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                      GGIT_TYPE_REF,
 	                                                      G_PARAM_READABLE));
 
+	g_object_class_install_property (object_class,
+	                                 PROP_CLONE_OPTIONS,
+	                                 g_param_spec_boxed ("clone-options",
+	                                                     "Clone options",
+	                                                     "Clone options",
+	                                                     GGIT_TYPE_CLONE_OPTIONS,
+	                                                     G_PARAM_READWRITE |
+	                                                     G_PARAM_CONSTRUCT_ONLY));
+
 	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
 }
 
@@ -288,6 +326,13 @@ ggit_repository_initable_init (GInitable    *initable,
 		err = git_repository_init (&repo,
 		                           path,
 		                           priv->is_bare);
+	}
+	else if (priv->url != NULL)
+	{
+		err = git_clone (&repo,
+		                 priv->url,
+		                 path,
+		                 _ggit_clone_options_get_clone_options (priv->clone_options));
 	}
 	else
 	{
@@ -416,6 +461,34 @@ ggit_repository_init_repository (GFile     *location,
 	                       "location", location,
 	                       "is-bare", is_bare,
 	                       "init", TRUE,
+	                       NULL);
+}
+
+/**
+ * ggit_repository_clone:
+ * @url: url to fetch the repository from.
+ * @location: the location of the repository.
+ * @options: (allow-none): a #GgitCloneOptions.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Clones a new git repository in the given folder.
+ *
+ * Returns: (transfer full): a newly created #GgitRepository.
+ */
+GgitRepository *
+ggit_repository_clone (const gchar       *url,
+                       GFile             *location,
+                       GgitCloneOptions  *options,
+                       GError           **error)
+{
+	g_return_val_if_fail (url != NULL, NULL);
+	g_return_val_if_fail (G_IS_FILE (location), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	return g_initable_new (GGIT_TYPE_REPOSITORY, NULL, error,
+	                       "url", url,
+	                       "location", location,
+	                       "clone-options", options,
 	                       NULL);
 }
 

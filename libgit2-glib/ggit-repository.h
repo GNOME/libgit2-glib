@@ -77,6 +77,11 @@ GgitRepository     *ggit_repository_init_repository   (GFile                 *lo
                                                        gboolean               is_bare,
                                                        GError               **error);
 
+GgitRepository     *ggit_repository_clone             (const gchar           *url,
+                                                       GFile                 *location,
+                                                       GgitCloneOptions      *options,
+                                                       GError               **error);
+
 GgitObject         *ggit_repository_lookup            (GgitRepository        *repository,
                                                        GgitOId               *oid,
                                                        GType                  gtype,
