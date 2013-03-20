@@ -244,6 +244,19 @@ typedef struct _GgitSubmodule GgitSubmodule;
 typedef struct _GgitTag GgitTag;
 
 /**
+ * GgitTransferProgress:
+ *
+ * Represents transfering progress.
+ */
+typedef struct _GgitTransferProgress
+{
+	guint total_objects;
+	guint indexed_objects;
+	guint received_objects;
+	gsize received_bytes;
+} GgitTransferProgress;
+
+/**
  * GgitTree:
  *
  * Represents a tree object.
@@ -799,6 +812,18 @@ typedef gint (* GgitStatusCallback) (const gchar     *path,
 typedef gint (* GgitSubmoduleCallback) (GgitSubmodule *submodule,
                                         const gchar   *name,
                                         gpointer       user_data);
+
+/**
+ * GgitTransferProgressCallback:
+ * @stats: a #GgitTransferProgress.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Progress callbacks during indexing.
+ *
+ * Returns: a value less than zero to cancel the transfer.
+ */
+typedef gint (* GgitTransferProgressCallback) (const GgitTransferProgress *stats,
+                                               gpointer                    user_data);
 
 /**
  * GgitTreeWalkCallback:
