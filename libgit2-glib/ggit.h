@@ -22,8 +22,11 @@
 #define __GGIT_H__
 
 #include <libgit2-glib/ggit-blob.h>
+#include <libgit2-glib/ggit-clone-options.h>
 #include <libgit2-glib/ggit-commit.h>
 #include <libgit2-glib/ggit-config.h>
+#include <libgit2-glib/ggit-cred.h>
+#include <libgit2-glib/ggit-cred-plaintext.h>
 #include <libgit2-glib/ggit-diff.h>
 #include <libgit2-glib/ggit-diff-delta.h>
 #include <libgit2-glib/ggit-diff-file.h>
