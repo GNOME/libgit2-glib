@@ -438,6 +438,21 @@ typedef enum {
 
 /* NOTE: keep in sync with git2/refs.h */
 /**
+ * GgitRemoteDownloadTagsType:
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_UNSET:
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_NONE:
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_AUTO:
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_ALL:
+ */
+typedef enum {
+	GGIT_REMOTE_DOWNLOAD_TAGS_UNSET,
+	GGIT_REMOTE_DOWNLOAD_TAGS_NONE,
+	GGIT_REMOTE_DOWNLOAD_TAGS_AUTO,
+	GGIT_REMOTE_DOWNLOAD_TAGS_ALL
+} GgitRemoteDownloadTagsType;
+
+/* NOTE: keep in sync with git2/refs.h */
+/**
  * GgitRefType:
  * @GGIT_REF_INVALID: An invalid reference.
  * @GGIT_REF_OID: A reference which points at an object id.
