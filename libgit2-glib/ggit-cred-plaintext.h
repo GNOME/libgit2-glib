@@ -23,7 +23,7 @@
 #define __GGIT_CRED_PLAINTEXT_H__
 
 #include <glib-object.h>
-#include <libgit2-glib/ggit-native.h>
+#include <libgit2-glib/ggit-cred.h>
 
 G_BEGIN_DECLS
 
@@ -35,20 +35,19 @@ G_BEGIN_DECLS
 #define GGIT_IS_CRED_PLAINTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CRED_PLAINTEXT))
 #define GGIT_CRED_PLAINTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED_PLAINTEXT, GgitCredPlaintextClass))
 
-typedef struct _GgitCredPlaintext		GgitCredPlaintext;
 typedef struct _GgitCredPlaintextClass		GgitCredPlaintextClass;
 typedef struct _GgitCredPlaintextPrivate	GgitCredPlaintextPrivate;
 
 struct _GgitCredPlaintext
 {
-	GgitNative parent;
+	GgitCred parent;
 
 	GgitCredPlaintextPrivate *priv;
 };
 
 struct _GgitCredPlaintextClass
 {
-	GgitNativeClass parent_class;
+	GgitCredClass parent_class;
 };
 
 GType                ggit_cred_plaintext_get_type      (void) G_GNUC_CONST;

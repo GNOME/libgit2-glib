@@ -41,7 +41,7 @@ enum
 
 static void ggit_cred_plaintext_initable_iface_init (GInitableIface  *iface);
 
-G_DEFINE_TYPE_EXTENDED (GgitCredPlaintext, ggit_cred_plaintext, GGIT_TYPE_NATIVE,
+G_DEFINE_TYPE_EXTENDED (GgitCredPlaintext, ggit_cred_plaintext, GGIT_TYPE_CRED,
                         0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_cred_plaintext_initable_iface_init))

@@ -61,6 +61,20 @@ typedef struct _GgitConfig GgitConfig;
 typedef struct _GgitConfigEntry GgitConfigEntry;
 
 /**
+ * GgitCred:
+ *
+ * Represents a git credential.
+ */
+typedef struct _GgitCred GgitCred;
+
+/**
+ * GgitCredPlaintext:
+ *
+ * Represents a plain text credential.
+ */
+typedef struct _GgitCredPlaintext GgitCredPlaintext;
+
+/**
  * GgitDiff:
  *
  * Represents a diff.
@@ -679,6 +693,23 @@ typedef gint (* GgitConfigCallback) (GgitConfigEntry *entry,
  */
 typedef gint (* GgitConfigMatchCallback) (GMatchInfo  *match_info,
                                           const gchar *value,
+                                          gpointer     user_data);
+
+/**
+ * GgitCredAcquireCallback:
+ * @url: the resource for which we are demanding a credential.
+ * @username_from_url: (allow-none): The username that was embedded in a "user@host"
+ *                                   remote url, or NULL if not included.
+ * @allowed_types: a bitmask stating which cred types are OK to return.
+ * @cred: (transfer full): newly created credential object.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Signature of a function which acquires a credential object.
+ */
+typedef gint (* GgitCredAcquireCallback) (const gchar *url,
+                                          const gchar *username_from_url,
+                                          guint        allowed_types,
+                                          GgitCred   **cred,
                                           gpointer     user_data);
 
 /**
