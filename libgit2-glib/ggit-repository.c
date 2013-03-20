@@ -82,6 +82,7 @@ ggit_repository_finalize (GObject *object)
 	g_free (priv->url);
 	g_clear_object (&priv->location);
 	g_clear_object (&priv->workdir);
+	ggit_clone_options_free (priv->clone_options);
 
 	G_OBJECT_CLASS (ggit_repository_parent_class)->finalize (object);
 }
@@ -199,7 +200,7 @@ ggit_repository_set_property (GObject      *object,
 			priv->init = g_value_get_boolean (value);
 			break;
 		case PROP_CLONE_OPTIONS:
-			priv->clone_options = g_value_get_boxed (value);
+			priv->clone_options = g_value_dup_boxed (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
