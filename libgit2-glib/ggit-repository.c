@@ -82,7 +82,11 @@ ggit_repository_finalize (GObject *object)
 	g_free (priv->url);
 	g_clear_object (&priv->location);
 	g_clear_object (&priv->workdir);
-	ggit_clone_options_free (priv->clone_options);
+
+	if (priv->clone_options != NULL)
+	{
+		ggit_clone_options_free (priv->clone_options);
+	}
 
 	G_OBJECT_CLASS (ggit_repository_parent_class)->finalize (object);
 }
