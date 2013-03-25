@@ -305,6 +305,12 @@ typedef enum
 	GGIT_BRANCH_REMOTE = 2
 } GgitBranchType;
 
+typedef enum
+{
+	GGIT_CAP_THREADS = 1 << 0,
+	GGIT_CAP_HTTPS   = 1 << 1
+} GgitCapFlags;
+
 /**
  * GgitConfigLevel:
  * @GGIT_CONFIG_LEVEL_SYSTEM: System-wide configuration file.

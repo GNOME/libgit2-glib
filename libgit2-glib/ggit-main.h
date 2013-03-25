@@ -22,8 +22,11 @@
 #define __GGIT_MAIN_H__
 
 #include <glib.h>
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
+
+GgitCapFlags ggit_get_capabilities (void);
 
 void ggit_init (void);
 

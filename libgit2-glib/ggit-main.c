@@ -23,6 +23,19 @@
 #include "ggit-main.h"
 
 /**
+ * ggit_get_capabilities:
+ *
+ * Gets the capabilities of the library.
+ *
+ * Returns: a #GgitCapFlags.
+ */
+GgitCapFlags
+ggit_get_capabilities (void)
+{
+	return git_libgit2_capabilities ();
+}
+
+/**
  * ggit_init:
  *
  * Call this function before using any other libgit2-glib function.
