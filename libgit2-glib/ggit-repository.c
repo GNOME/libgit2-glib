@@ -30,6 +30,7 @@
 #include <git2/submodule.h>
 #include <git2/revparse.h>
 #include <git2/stash.h>
+#include <git2/graph.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -1851,6 +1852,50 @@ ggit_repository_stash_foreach (GgitRepository     *repository,
 	}
 
 	return TRUE;
+}
+
+/**
+ * ggit_repository_get_ahead_behind:
+ * @repository: a #GgitRepository.
+ * @local: the commit for local.
+ * @upstream: the commit for upstream.
+ * @ahead: number of unique from commits in @upstream.
+ * @behind: number of unique from commits in @local.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Count the number of unique commits between two commit objects.
+ *
+ * There is no need for branches containing the commits to have any
+ * upstream relationship, but it helps to think of one as a branch and
+ * the other as its upstream, the @ahead and @behind values will be
+ * what git would report for the branches.
+ */
+void
+ggit_repository_get_ahead_behind (GgitRepository  *repository,
+                                  GgitOId         *local,
+                                  GgitOId         *upstream,
+                                  gsize           *ahead,
+                                  gsize           *behind,
+                                  GError         **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (local != NULL);
+	g_return_if_fail (upstream != NULL);
+	g_return_if_fail (ahead != NULL);
+	g_return_if_fail (behind != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_graph_ahead_behind (ahead, behind,
+	                              _ggit_native_get (repository),
+	                              _ggit_oid_get_oid (local),
+	                              _ggit_oid_get_oid (upstream));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
 }
 
 /* ex:set ts=8 noet: */

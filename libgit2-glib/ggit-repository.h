@@ -234,6 +234,13 @@ gboolean            ggit_repository_stash_foreach     (GgitRepository        *re
                                                        gpointer               user_data,
                                                        GError               **error);
 
+void                ggit_repository_get_ahead_behind  (GgitRepository        *repository,
+                                                       GgitOId               *local,
+                                                       GgitOId               *upstream,
+                                                       gsize                 *ahead,
+                                                       gsize                 *behind,
+                                                       GError               **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */
