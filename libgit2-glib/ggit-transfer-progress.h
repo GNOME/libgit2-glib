@@ -30,10 +30,18 @@ G_BEGIN_DECLS
 #define GGIT_TYPE_TRANSFER_PROGRESS       (ggit_transfer_progress_get_type ())
 #define GGIT_TRANSFER_PROGRESS(obj)       ((GgitTransferProgress *)obj)
 
-GType                   ggit_transfer_progress_get_type        (void) G_GNUC_CONST;
+GType                   ggit_transfer_progress_get_type             (void) G_GNUC_CONST;
 
-GgitTransferProgress   *ggit_transfer_progress_copy            (GgitTransferProgress     *progress);
-void                    ggit_transfer_progress_free            (GgitTransferProgress     *progress);
+GgitTransferProgress   *ggit_transfer_progress_copy                 (GgitTransferProgress     *progress);
+void                    ggit_transfer_progress_free                 (GgitTransferProgress     *progress);
+
+guint                   ggit_transfer_progress_get_total_objects    (GgitTransferProgress     *progress);
+
+guint                   ggit_transfer_progress_get_indexed_objects  (GgitTransferProgress     *progress);
+
+guint                   ggit_transfer_progress_get_received_objects (GgitTransferProgress     *progress);
+
+gsize                   ggit_transfer_progress_get_received_bytes   (GgitTransferProgress     *progress);
 
 G_END_DECLS
 

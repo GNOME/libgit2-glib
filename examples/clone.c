@@ -6,14 +6,17 @@ static int
 fetch_progress (const GgitTransferProgress *stats,
                 gpointer                    useless)
 {
-	gint network_percent = (100 * stats->received_objects) / stats->total_objects;
-	gint index_percent = (100 * stats->indexed_objects) / stats->total_objects;
-	gint kbytes = stats->received_bytes / 1024;
+	gint network_percent = (100 * ggit_transfer_progress_get_received_objects (stats)) / ggit_transfer_progress_get_total_objects (stats);
+	gint index_percent = (100 * ggit_transfer_progress_get_indexed_objects (stats)) / ggit_transfer_progress_get_total_objects (stats);
+	gint kbytes = ggit_transfer_progress_get_received_bytes (stats) / 1024;
 
 	g_message ("net %3d%% (%4d kb, %5d/%5d)  /  idx %3d%% (%5d/%5d)",
 	           network_percent, kbytes,
-	           stats->received_objects, stats->total_objects,
-	           index_percent, stats->indexed_objects, stats->total_objects);
+	           ggit_transfer_progress_get_received_objects (stats),
+	           ggit_transfer_progress_get_total_objects (stats),
+	           index_percent,
+	           ggit_transfer_progress_get_indexed_objects (stats),
+	           ggit_transfer_progress_get_total_objects (stats));
 
 	return 0;
 }

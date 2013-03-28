@@ -269,13 +269,7 @@ typedef struct _GgitTag GgitTag;
  *
  * Represents transfering progress.
  */
-typedef struct _GgitTransferProgress
-{
-	guint total_objects;
-	guint indexed_objects;
-	guint received_objects;
-	gsize received_bytes;
-} GgitTransferProgress;
+typedef struct _GgitTransferProgress GgitTransferProgress;
 
 /**
  * GgitTree:

@@ -20,6 +20,14 @@
 
 #include "ggit-transfer-progress.h"
 
+struct _GgitTransferProgress
+{
+	guint total_objects;
+	guint indexed_objects;
+	guint received_objects;
+	gsize received_bytes;
+};
+
 G_DEFINE_BOXED_TYPE (GgitTransferProgress, ggit_transfer_progress,
                      ggit_transfer_progress_copy,
                      ggit_transfer_progress_free)
@@ -60,6 +68,70 @@ ggit_transfer_progress_free (GgitTransferProgress *progress)
 	g_return_if_fail (progress != NULL);
 
 	g_slice_free (GgitTransferProgress, progress);
+}
+
+/**
+ * ggit_transfer_progress_get_total_objects:
+ * @progress: a #GgitTransferProgress.
+ *
+ * Gets the total objects of the transfer.
+ *
+ * Returns: the total objects of the transfer.
+ */
+guint
+ggit_transfer_progress_get_total_objects (GgitTransferProgress *progress)
+{
+	g_return_val_if_fail (progress != NULL, 0);
+
+	return progress->total_objects;
+}
+
+/**
+ * ggit_transfer_progress_get_indexed_objects:
+ * @progress: a #GgitTransferProgress.
+ *
+ * Gets the indexed objects of the transfer.
+ *
+ * Returns: the indexed objects of the transfer.
+ */
+guint
+ggit_transfer_progress_get_indexed_objects (GgitTransferProgress *progress)
+{
+	g_return_val_if_fail (progress != NULL, 0);
+
+	return progress->indexed_objects;
+}
+
+/**
+ * ggit_transfer_progress_get_received_objects:
+ * @progress: a #GgitTransferProgress.
+ *
+ * Gets the received objects of the transfer.
+ *
+ * Returns: the received objects of the transfer.
+ */
+guint
+ggit_transfer_progress_get_received_objects (GgitTransferProgress *progress)
+{
+	g_return_val_if_fail (progress != NULL, 0);
+
+	return progress->received_objects;
+}
+
+/**
+ * ggit_transfer_progress_get_received_bytes:
+ * @progress: a #GgitTransferProgress.
+ *
+ * Gets the received bytes of the transfer.
+ *
+ * Returns: the received bytes of the transfer.
+ */
+gsize
+ggit_transfer_progress_get_received_bytes (GgitTransferProgress *progress)
+{
+	g_return_val_if_fail (progress != NULL, 0);
+
+	return progress->received_bytes;
 }
 
 /* ex:set ts=8 noet: */
