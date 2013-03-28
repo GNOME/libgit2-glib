@@ -22,7 +22,7 @@
     <xi:include href="xml/ggit-error.xml"/>
     <xi:include href="xml/ggit-index.xml"/>
     <xi:include href="xml/ggit-index-entry.xml"/>
-    <xi:include href="xml/ggit-index-entry-unmerged.xml"/>
+    <xi:include href="xml/ggit-index-entry-resolve-undo.xml"/>
     <xi:include href="xml/ggit-main.xml"/>
     <xi:include href="xml/ggit-native.xml"/>
     <xi:include href="xml/ggit-object.xml"/>
