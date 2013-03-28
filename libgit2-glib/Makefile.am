@@ -49,6 +49,7 @@ INST_H_FILES =				\
 	ggit-signature.h		\
 	ggit-submodule.h		\
 	ggit-tag.h			\
+	ggit-transfer-progress.h	\
 	ggit-tree.h			\
 	ggit-tree-entry.h		\
 	ggit-types.h			\
@@ -94,6 +95,7 @@ C_FILES =				\
 	ggit-signature.c		\
 	ggit-submodule.c		\
 	ggit-tag.c			\
+	ggit-transfer-progress.c	\
 	ggit-tree.c			\
 	ggit-tree-entry.c		\
 	ggit-types.c			\
