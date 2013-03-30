@@ -200,7 +200,7 @@ ggit_branch_is_head (GgitBranch  *branch,
 		_ggit_error_set (error, ret);
 	}
 
-	return (ret == 0);
+	return (ret == 1);
 }
 
 /* ex:set ts=8 noet: */
