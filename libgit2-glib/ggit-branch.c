@@ -195,7 +195,7 @@ ggit_branch_is_head (GgitBranch  *branch,
 
 	ret = git_branch_is_head (_ggit_native_get (branch));
 
-	if (ret > 1)
+	if (ret < 0)
 	{
 		_ggit_error_set (error, ret);
 	}
