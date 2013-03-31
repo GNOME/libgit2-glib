@@ -32,7 +32,7 @@ update-sections: $(HFILE_GLOB)
 	mv $(DOC_MODULE)-sections.txt.old $(DOC_MODULE)-sections.txt
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS = --sgml-mode --output-format=xml --ignore-files=trio
+MKDB_OPTIONS = --xml-mode --output-format=xml
 
 # CFLAGS and LDFLAGS for compiling gtkdoc-scangobj with your library.
 # Only needed if you are using gtkdoc-scangobj to dynamically query widget
@@ -53,7 +53,10 @@ content_files =			\
 	version.xml
 
 # Extra options to supply to gtkdoc-fixref
-FIXXREF_OPTIONS=
+FIXXREF_OPTIONS=							\
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gobject		\
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/glib		\
+	--extra-dir=$(GLIB_PREFIX)/share/gtk-doc/html/gio
 
 # include common portion ...
 include $(top_srcdir)/gtk-doc.make

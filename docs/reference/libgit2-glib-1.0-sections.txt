@@ -4,7 +4,6 @@
 GgitBlob
 GgitBlobClass
 ggit_blob_get_raw_content
-ggit_blob_get_raw_size
 <SUBSECTION Standard>
 GGIT_BLOB
 GGIT_BLOB_CLASS
@@ -52,7 +51,12 @@ ggit_commit_parents_get_type
 GgitConfig
 GgitConfigClass
 ggit_config_new
-ggit_config_get_global
+ggit_config_new_default
+ggit_config_new_from_file
+ggit_config_find_global
+ggit_config_find_system
+ggit_config_add_file
+ggit_config_refresh
 ggit_config_get_int32
 ggit_config_set_int32
 ggit_config_get_int64
@@ -61,7 +65,7 @@ ggit_config_get_bool
 ggit_config_set_bool
 ggit_config_get_string
 ggit_config_set_string
-ggit_config_delete
+ggit_config_delete_entry
 ggit_config_foreach
 ggit_config_match
 ggit_config_match_foreach
@@ -226,7 +230,7 @@ ggit_index_entry_get_type
 </SECTION>
 
 <SECTION>
-<FILE>ggit-index-entry-resolve-undo/FILE>
+<FILE>ggit-index-entry-resolve-undo</FILE>
 <TITLE>GgitIndexEntryResolveUndo</TITLE>
 GgitIndexEntriesResolveUndo
 GgitIndexEntryResolveUndo
@@ -252,6 +256,7 @@ ggit_index_entry_resolve_undo_get_type
 <SECTION>
 <FILE>ggit-main</FILE>
 <TITLE>Ggit Main</TITLE>
+ggit_get_capabilities
 ggit_init
 </SECTION>
 
