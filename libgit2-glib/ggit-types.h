@@ -590,11 +590,11 @@ typedef enum {
 
 /**
  * GgitSubmoduleIgnore:
- * GGIT_SUBMODULE_IGNORE_DEFAULT: reset to default.
- * GGIT_SUBMODULE_IGNORE_NONE: any change or untracked == dirty.
- * GGIT_SUBMODULE_IGNORE_UNTRACKED: dirty if tracked files change.
- * GGIT_SUBMODULE_IGNORE_DIRTY: only dirty if HEAD moved.
- * GGIT_SUBMODULE_IGNORE_ALL: never dirty
+ * @GGIT_SUBMODULE_IGNORE_DEFAULT: reset to default.
+ * @GGIT_SUBMODULE_IGNORE_NONE: any change or untracked == dirty.
+ * @GGIT_SUBMODULE_IGNORE_UNTRACKED: dirty if tracked files change.
+ * @GGIT_SUBMODULE_IGNORE_DIRTY: only dirty if HEAD moved.
+ * @GGIT_SUBMODULE_IGNORE_ALL: never dirty
  *
  * Describes which submodules should be ignored.
  */
