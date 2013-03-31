@@ -66,7 +66,7 @@ ggit_push_get_property (GObject    *object,
 	switch (prop_id)
 	{
 		case PROP_REMOTE:
-			g_value_set_object (value, priv->remote);
+			g_value_set_boxed (value, priv->remote);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -85,7 +85,7 @@ ggit_push_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_REMOTE:
-			priv->remote = g_value_get_object (value);
+			priv->remote = g_value_get_boxed (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -104,13 +104,12 @@ ggit_push_class_init (GgitPushClass *klass)
 
 	g_object_class_install_property (object_class,
 	                                 PROP_REMOTE,
-	                                 g_param_spec_boolean ("remote",
+	                                 g_param_spec_boxed ("remote",
 	                                                       "Remote",
 	                                                       "The remote associated with this push",
-	                                                       FALSE,
+	                                                       GGIT_TYPE_REMOTE,
 	                                                       G_PARAM_READWRITE |
-	                                                       G_PARAM_CONSTRUCT_ONLY |
-	                                                       G_PARAM_STATIC_STRINGS));
+	                                                       G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (GgitPushPrivate));
 }
