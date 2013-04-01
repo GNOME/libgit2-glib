@@ -453,11 +453,11 @@ ggit_commit_get_tree_id (GgitCommit *commit)
 
 /**
  * ggit_commit_get_nth_ancestor:
- * @commit: a #GgitCommit
- * @n: the requested ancestor
+ * @commit: a #GgitCommit.
+ * @n: the requested ancestor.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Gets the commit object that is the <n>th generation ancestor
+ * Gets the commit object that is the n-th generation ancestor
  * of the named commit object, following only the first parents.
  * Passing %0 to the @n parameter returns another instance of @commit.
  *

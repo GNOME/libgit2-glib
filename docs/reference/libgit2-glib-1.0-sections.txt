@@ -82,6 +82,7 @@ ggit_commit_parents_get
 ggit_commit_parents_get_id
 ggit_commit_get_tree
 ggit_commit_get_tree_id
+ggit_commit_get_nth_ancestor
 <SUBSECTION Standard>
 GGIT_COMMIT
 GGIT_COMMIT_CLASS
