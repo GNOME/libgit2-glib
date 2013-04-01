@@ -131,6 +131,21 @@ ggit_config_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-config-entry</FILE>
+<TITLE>GgitConfigEntry</TITLE>
+GgitConfigentry
+ggit_config_entry_ref
+ggit_config_entry_unref
+ggit_config_entry_get_name
+ggit_config_entry_get_value
+ggit_config_entry_get_level
+<SUBSECTION Standard>
+GGIT_CONFIG_ENTRY
+GGIT_TYPE_CONFIG_ENTRY
+ggit_config_entry_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-diff</FILE>
 <TITLE>GgitDiff</TITLE>
 GgitDiff
