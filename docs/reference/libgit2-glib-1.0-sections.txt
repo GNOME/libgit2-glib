@@ -15,6 +15,26 @@ ggit_blob_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-branch</FILE>
+<TITLE>GgitBranch</TITLE>
+GgitBranch
+GgitBranchClass
+ggit_branch_delete
+ggit_branch_move
+ggit_branch_get_name
+ggit_branch_get_tracking
+ggit_branch_is_head
+<SUBSECTION Standard>
+GGIT_BRANCH
+GGIT_BRANCH_CLASS
+GGIT_BRANCH_GET_CLASS
+GGIT_IS_BRANCH
+GGIT_IS_BRANCH_CLASS
+GGIT_TYPE_BRANCH
+ggit_branch_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-commit</FILE>
 <TITLE>GgitCommit</TITLE>
 GgitCommit
