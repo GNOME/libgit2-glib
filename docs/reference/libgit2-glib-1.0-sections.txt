@@ -503,21 +503,6 @@ ggit_ref_get_type
 </SECTION>
 
 <SECTION>
-<FILE>ggit-ref-spec</FILE>
-<TITLE>GgitRefSpec</TITLE>
-GgitRefSpec
-ggit_ref_spec_ref
-ggit_ref_spec_unref
-ggit_ref_spec_get_source
-ggit_ref_spec_get_destination
-ggit_ref_spec_is_forced
-<SUBSECTION Standard>
-GGIT_REF_SPEC
-GGIT_TYPE_REF_SPEC
-ggit_ref_spec_get_type
-</SECTION>
-
-<SECTION>
 <FILE>ggit-reflog</FILE>
 <TITLE>GgitReflog</TITLE>
 GgitReflog
@@ -545,6 +530,21 @@ ggit_reflog_entry_get_message
 GGIT_REFLOG_ENTRY
 GGIT_TYPE_REFLOG_ENTRY
 ggit_reflog_entry_get_type
+</SECTION>
+
+<SECTION>
+<FILE>ggit-ref-spec</FILE>
+<TITLE>GgitRefSpec</TITLE>
+GgitRefSpec
+ggit_ref_spec_ref
+ggit_ref_spec_unref
+ggit_ref_spec_get_source
+ggit_ref_spec_get_destination
+ggit_ref_spec_is_forced
+<SUBSECTION Standard>
+GGIT_REF_SPEC
+GGIT_TYPE_REF_SPEC
+ggit_ref_spec_get_type
 </SECTION>
 
 <SECTION>
@@ -579,6 +579,7 @@ GgitRepository
 GgitRepositoryClass
 ggit_repository_open
 ggit_repository_init_repository
+ggit_repository_clone
 ggit_repository_lookup
 ggit_repository_lookup_reference
 ggit_repository_create_reference
@@ -588,9 +589,8 @@ ggit_repository_create_tag_from_buffer
 ggit_repository_create_tag_lightweight
 ggit_repository_list_tags
 ggit_repository_create_branch
-ggit_repository_delete_branch
-ggit_repository_move_branch
 ggit_repository_branches_foreach
+ggit_repository_lookup_branch
 ggit_repository_get_remote
 ggit_repository_create_remote
 ggit_repository_list_remotes
@@ -611,6 +611,11 @@ ggit_repository_get_index
 ggit_repository_lookup_submodule
 ggit_repository_submodule_foreach
 ggit_repository_reset
+ggit_repository_revparse
+ggit_repository_save_stash
+ggit_repository_drop_stash
+ggit_repository_stash_foreach
+ggit_repository_get_ahead_behind
 <SUBSECTION Standard>
 GGIT_IS_REPOSITORY
 GGIT_IS_REPOSITORY_CLASS

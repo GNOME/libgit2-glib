@@ -37,9 +37,9 @@
     <xi:include href="xml/ggit-oid.xml"/>
     <xi:include href="xml/ggit-push.xml"/>
     <xi:include href="xml/ggit-ref.xml"/>
-    <xi:include href="xml/ggit-ref-spec.xml"/>
     <xi:include href="xml/ggit-reflog.xml"/>
     <xi:include href="xml/ggit-reflog-entry.xml"/>
+    <xi:include href="xml/ggit-ref-spec.xml"/>
     <xi:include href="xml/ggit-remote.xml"/>
     <xi:include href="xml/ggit-repository.xml"/>
     <xi:include href="xml/ggit-revision-walker.xml"/>
