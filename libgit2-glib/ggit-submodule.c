@@ -388,7 +388,7 @@ ggit_submodule_get_fetch_recurse (GgitSubmodule *submodule)
  * @submodule: a #GgitSubmodule.
  * @fetch_recurse: %TRUE to fetch recurse submodules.
  *
- * Sets the submodule.<name>.fetchRecurseSubmodules value for
+ * Sets the submodule.'name'.fetchRecurseSubmodules value for
  * the submodule.  You should call ggit_submodule_save() if you want
  * to persist the new value.
  *
@@ -491,7 +491,7 @@ ggit_submodule_reload (GgitSubmodule  *submodule,
  *
  * Gets the status for a submodule.
  * This looks at a submodule and tries to determine the status.  It
- * will return a combination of the `GGIT_SUBMODULE_STATUS` values.
+ * will return a combination of the %GGIT_SUBMODULE_STATUS values.
  * How deeply it examines the working directory to do this will depend
  * on the #GgitSubmoduleIgnore value for the submodule - which can be
  * set either temporarily or permanently with ggit_submodule_set_ignore().
