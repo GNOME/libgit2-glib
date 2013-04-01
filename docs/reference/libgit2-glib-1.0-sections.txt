@@ -219,7 +219,7 @@ ggit_diff_delta_get_old_file
 ggit_diff_delta_get_new_file
 ggit_diff_delta_get_status
 ggit_diff_delta_get_similarity
-ggit_diff_delta_get_binary
+ggit_diff_delta_get_flags
 <SUBSECTION Standard>
 GGIT_DIFF_DELTA
 GGIT_TYPE_DIFF_DELTA
