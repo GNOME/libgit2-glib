@@ -452,6 +452,25 @@ ggit_oid_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-push</FILE>
+<TITLE>GgitPush</TITLE>
+GgitPush
+GgitPushClass
+ggit_push_new
+ggit_push_add_refspec
+ggit_push_finish
+ggit_push_is_unpack_ok
+<SUBSECTION Standard>
+GGIT_IS_PUSH
+GGIT_IS_PUSH_CLASS
+GGIT_PUSH
+GGIT_PUSH_CLASS
+GGIT_PUSH_GET_CLASS
+GGIT_TYPE_PUSH
+ggit_push_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-ref</FILE>
 <TITLE>GgitRef</TITLE>
 GgitRef
