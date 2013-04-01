@@ -747,7 +747,9 @@ GgitTreeClass
 ggit_tree_get_id
 ggit_tree_get
 ggit_tree_size
-ggit_tree_get_by_file
+ggit_tree_get_by_name
+ggit_tree_get_by_path
+ggit_tree_walk
 <SUBSECTION Standard>
 GGIT_IS_TREE
 GGIT_IS_TREE_CLASS
@@ -764,7 +766,7 @@ ggit_tree_get_type
 GgitTreeEntry
 ggit_tree_entry_ref
 ggit_tree_entry_unref
-ggit_tree_entry_get_attributes
+ggit_tree_entry_get_file_mode
 ggit_tree_entry_get_id
 ggit_tree_entry_get_name
 ggit_tree_entry_get_object_type
