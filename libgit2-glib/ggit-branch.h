@@ -35,7 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct _GgitBranch		GgitBranch;
 typedef struct _GgitBranchClass		GgitBranchClass;
-typedef struct _GgitBranchPrivate	GgitBranchPrivate;
 
 struct _GgitBranch
 {

@@ -19,6 +19,8 @@ ggit_blob_get_type
 <TITLE>GgitBranch</TITLE>
 GgitBranch
 GgitBranchClass
+GgitBranchType
+GgitBranchesCallback
 ggit_branch_delete
 ggit_branch_move
 ggit_branch_get_name
@@ -31,7 +33,10 @@ GGIT_BRANCH_GET_CLASS
 GGIT_IS_BRANCH
 GGIT_IS_BRANCH_CLASS
 GGIT_TYPE_BRANCH
+GGIT_BRANCH_CONST
+GGIT_TYPE_BRANCH_TYPE
 ggit_branch_get_type
+ggit_branch_type_get_type
 </SECTION>
 
 <SECTION>
@@ -100,6 +105,9 @@ ggit_commit_parents_get_type
 <TITLE>GgitConfig</TITLE>
 GgitConfig
 GgitConfigClass
+GgitConfigCallback
+GgitConfigLevel
+GgitConfigMatchCallback
 ggit_config_new
 ggit_config_new_default
 ggit_config_new_from_file
@@ -126,8 +134,10 @@ GGIT_CONFIG_GET_CLASS
 GGIT_IS_CONFIG
 GGIT_IS_CONFIG_CLASS
 GGIT_TYPE_CONFIG
+GGIT_TYPE_CONFIG_LEVEL
 GgitConfigPrivate
 ggit_config_get_type
+ggit_config_level_get_type
 </SECTION>
 
 <SECTION>
@@ -150,6 +160,7 @@ ggit_config_entry_get_type
 <TITLE>GgitCred</TITLE>
 GgitCred
 GgitCredClass
+GgitCredAcquireCallback
 <SUBSECTION Standard>
 GGIT_CRED
 GGIT_CRED_CLASS
@@ -157,6 +168,7 @@ GGIT_CRED_GET_CLASS
 GGIT_IS_CRED
 GGIT_IS_CRED_CLASS
 GGIT_TYPE_CRED
+GGIT_CRED_CONST
 ggit_cred_get_type
 </SECTION>
 
@@ -175,6 +187,8 @@ GGIT_CRED_PLAINTEXT_GET_CLASS
 GGIT_IS_CRED_PLAINTEXT
 GGIT_IS_CRED_PLAINTEXT_CLASS
 GGIT_TYPE_CRED_PLAINTEXT
+GGIT_CRED_PLAINTEXT_CONST
+GgitCredPlaintextPrivate
 ggit_cred_plaintext_get_type
 </SECTION>
 
@@ -183,6 +197,12 @@ ggit_cred_plaintext_get_type
 <TITLE>GgitDiff</TITLE>
 GgitDiff
 GgitDiffClass
+GgitDiffFileCallback
+GgitDiffFlag
+GgitDiffHunkCallback
+GgitDiffLineCallback
+GgitDiffLineType
+GgitDiffOption
 ggit_diff_new_tree_to_tree
 ggit_diff_new_tree_to_index
 ggit_diff_new_index_to_workdir
@@ -200,13 +220,20 @@ GGIT_DIFF_GET_CLASS
 GGIT_IS_DIFF
 GGIT_IS_DIFF_CLASS
 GGIT_TYPE_DIFF
+GGIT_TYPE_DIFF_FLAG
+GGIT_TYPE_DIFF_LINE_TYPE
+GGIT_TYPE_DIFF_OPTION
 ggit_diff_get_type
+ggit_diff_flag_get_type
+ggit_diff_line_type_get_type
+ggit_diff_option_get_type
 </SECTION>
 
 <SECTION>
 <FILE>ggit-diff-delta</FILE>
 <TITLE>GgitDiffDelta</TITLE>
 GgitDiffDelta
+GgitDeltaType
 ggit_diff_delta_ref
 ggit_diff_delta_unref
 ggit_diff_delta_get_old_file
@@ -218,6 +245,7 @@ ggit_diff_delta_get_flags
 GGIT_DIFF_DELTA
 GGIT_TYPE_DIFF_DELTA
 ggit_diff_delta_get_type
+ggit_delta_type_get_type
 </SECTION>
 
 <SECTION>
@@ -269,6 +297,7 @@ ggit_diff_range_get_type
 <SECTION>
 <FILE>ggit-error</FILE>
 <TITLE>GgitError</TITLE>
+GgitError
 GGIT_ERROR
 ggit_error_quark
 </SECTION>
@@ -282,7 +311,6 @@ ggit_index_open
 ggit_index_read
 ggit_index_write
 ggit_index_remove
-ggit_index_append
 ggit_index_add
 ggit_index_get_entries
 ggit_index_get_entries_resolve_undo
@@ -355,8 +383,11 @@ ggit_index_entry_resolve_undo_get_type
 <SECTION>
 <FILE>ggit-main</FILE>
 <TITLE>Ggit Main</TITLE>
+GgitCapFlags
 ggit_get_capabilities
 ggit_init
+<SUBSECTION Standard>
+GGIT_TYPE_CAP_FLAGS
 </SECTION>
 
 <SECTION>
@@ -461,6 +492,8 @@ GGIT_PUSH
 GGIT_PUSH_CLASS
 GGIT_PUSH_GET_CLASS
 GGIT_TYPE_PUSH
+GGIT_PUSH_CONST
+GgitPushPrivate
 ggit_push_get_type
 </SECTION>
 
@@ -469,6 +502,7 @@ ggit_push_get_type
 <TITLE>GgitRef</TITLE>
 GgitRef
 GgitRefClass
+GgitRefType
 ggit_ref_get_target
 ggit_ref_get_symbolic_target
 ggit_ref_get_reference_type
@@ -516,8 +550,8 @@ ggit_reflog_get_type
 GgitReflogEntry
 ggit_reflog_entry_ref
 ggit_reflog_entry_unref
-ggit_reflog_entry_get_old_oid
-ggit_reflog_entry_get_new_oid
+ggit_reflog_entry_get_old_id
+ggit_reflog_entry_get_new_id
 ggit_reflog_entry_get_committer
 ggit_reflog_entry_get_message
 <SUBSECTION Standard>
@@ -545,6 +579,9 @@ ggit_ref_spec_get_type
 <FILE>ggit-remote</FILE>
 <TITLE>GgitRemote</TITLE>
 GgitRemote
+GgitRemoteDownloadTagsType
+GgitRemoteListCallback
+ggit_remote_new
 ggit_remote_ref
 ggit_remote_unref
 ggit_remote_save
@@ -564,6 +601,7 @@ ggit_remote_is_supported_url
 GGIT_REMOTE
 GGIT_TYPE_REMOTE
 ggit_remote_get_type
+ggit_remote_download_tags_type_get_type
 </SECTION>
 
 <SECTION>
@@ -571,6 +609,11 @@ ggit_remote_get_type
 <TITLE>GgitRepository</TITLE>
 GgitRepository
 GgitRepositoryClass
+GgitReferencesCallback
+GgitStashCallback
+GgitStashFlags
+GgitStatusCallback
+GgitStatusFlags
 ggit_repository_open
 ggit_repository_init_repository
 ggit_repository_clone
@@ -626,6 +669,7 @@ ggit_repository_get_type
 <TITLE>GgitRevisionWalker</TITLE>
 GgitRevisionWalker
 GgitRevisionWalkerClass
+GgitSortMode
 ggit_revision_walker_new
 ggit_revision_walker_reset
 ggit_revision_walker_push
@@ -640,8 +684,10 @@ GGIT_REVISION_WALKER
 GGIT_REVISION_WALKER_CLASS
 GGIT_REVISION_WALKER_GET_CLASS
 GGIT_TYPE_REVISION_WALKER
+GGIT_TYPE_SORT_MODE
 GgitRevisionWalkerPrivate
 ggit_revision_walker_get_type
+ggit_sort_mode_get_type
 </SECTION>
 
 <SECTION>
@@ -670,6 +716,10 @@ ggit_signature_get_type
 <FILE>ggit-submodule</FILE>
 <TITLE>GgitSubmodule</TITLE>
 GgitSubmodule
+GgitSubmoduleCallback
+GgitSubmoduleIgnore
+GgitSubmoduleStatus
+GgitSubmoduleUpdate
 ggit_submodule_ref
 ggit_submodule_unref
 ggit_submodule_save
@@ -694,7 +744,13 @@ ggit_submodule_get_status
 <SUBSECTION Standard>
 GGIT_SUBMODULE
 GGIT_TYPE_SUBMODULE
+GGIT_TYPE_SUBMODULE_IGNORE
+GGIT_TYPE_SUBMODULE_STATUS
+GGIT_TYPE_SUBMODULE_UPDATE
 ggit_submodule_get_type
+ggit_submodule_ignore_get_type
+ggit_submodule_status_get_type
+ggit_submodule_update_get_type
 </SECTION>
 
 <SECTION>
@@ -721,6 +777,7 @@ ggit_tag_get_type
 <FILE>ggit-transfer-progress</FILE>
 <TITLE>GgitTransferProgress</TITLE>
 GgitTransferProgress
+GgitTransferProgressCallback
 ggit_transfer_progress_copy
 ggit_transfer_progress_free
 ggit_transfer_progress_get_total_objects
@@ -738,6 +795,8 @@ ggit_transfer_progress_get_type
 <TITLE>GgitTree</TITLE>
 GgitTree
 GgitTreeClass
+GgitTreeWalkCallback
+GgitTreeWalkMode
 ggit_tree_get_id
 ggit_tree_get
 ggit_tree_size
@@ -758,6 +817,7 @@ ggit_tree_get_type
 <FILE>ggit-tree-entry</FILE>
 <TITLE>GgitTreeEntry</TITLE>
 GgitTreeEntry
+GgitFileMode
 ggit_tree_entry_ref
 ggit_tree_entry_unref
 ggit_tree_entry_get_file_mode
@@ -769,32 +829,3 @@ GGIT_TREE_ENTRY
 GGIT_TYPE_TREE_ENTRY
 ggit_tree_entry_get_type
 </SECTION>
-
-<SECTION>
-<FILE>ggit-types</FILE>
-<TITLE>Ggit Types</TITLE>
-GgitBranchType
-GgitCreateFlags
-GgitDeltaType
-GgitDiffFlags
-GgitDiffFileFlags
-GgitDiffLineType
-GgitError
-GgitRefType
-GgitResetType
-GgitSortMode
-GgitStatusFlags
-GgitSubmoduleIgnore
-GgitSubmoduleUpdate
-GgitBranchesCallback
-GgitConfigCallback
-GgitConfigMatchCallback
-GgitDiffFileCallback
-GgitDiffHunkCallback
-GgitDiffLineCallback
-GgitReferencesCallback
-GgitRemoteListCallback
-GgitStatusCallback
-GgitSubmoduleCallback
-</SECTION>
-
