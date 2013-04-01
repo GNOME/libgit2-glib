@@ -95,6 +95,16 @@ convert_and_check (const gchar  *str,
 
 }
 
+/**
+ * ggit_convert_utf8:
+ * @str: (array length=size): string to convert to utf-8.
+ * @size: the size of @str.
+ * @from_charset: the charset @str is currently in.
+ *
+ * Converts @str from the charset @from_charset to utf-8.
+ *
+ * Returns: the utf-8 representation of @str.
+ */
 gchar *
 ggit_convert_utf8 (const gchar *str,
                    gssize       size,
