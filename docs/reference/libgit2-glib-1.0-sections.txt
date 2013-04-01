@@ -190,14 +190,15 @@ ggit_cred_plaintext_get_type
 GgitDiff
 GgitDiffClass
 ggit_diff_new_tree_to_tree
-ggit_diff_new_index_to_tree
-ggit_diff_new_workdir_to_index
-ggit_diff_new_workdir_to_tree
+ggit_diff_new_tree_to_index
+ggit_diff_new_index_to_workdir
+ggit_diff_new_tree_to_workdir
 ggit_diff_merge
 ggit_diff_foreach
 ggit_diff_print_compact
 ggit_diff_print_patch
 ggit_diff_blobs
+ggit_diff_blob_to_buffer
 <SUBSECTION Standard>
 GGIT_DIFF
 GGIT_DIFF_CLASS
