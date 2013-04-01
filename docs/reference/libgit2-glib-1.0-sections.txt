@@ -475,15 +475,15 @@ ggit_push_get_type
 <TITLE>GgitRef</TITLE>
 GgitRef
 GgitRefClass
-ggit_ref_get_id
 ggit_ref_get_target
+ggit_ref_get_symbolic_target
 ggit_ref_get_reference_type
 ggit_ref_get_name
 ggit_ref_to_string
 ggit_ref_resolve
 ggit_ref_get_owner
+ggit_ref_set_symbolic_target
 ggit_ref_set_target
-ggit_ref_set_oid
 ggit_ref_rename
 ggit_ref_delete
 ggit_ref_lookup
@@ -491,6 +491,7 @@ ggit_ref_get_reflog
 ggit_ref_create_reflog
 ggit_ref_rename_reflog
 ggit_ref_delete_reflog
+ggit_ref_get_remote_tracking_from_branch
 <SUBSECTION Standard>
 GGIT_IS_REF
 GGIT_IS_REF_CLASS
