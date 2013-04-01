@@ -13,6 +13,7 @@
     <title>API reference</title>
     <xi:include href="xml/ggit-blob.xml"/>
     <xi:include href="xml/ggit-branch.xml"/>
+    <xi:include href="xml/ggit-clone-options.xml"/>
     <xi:include href="xml/ggit-commit.xml"/>
     <xi:include href="xml/ggit-config.xml"/>
     <xi:include href="xml/ggit-diff.xml"/>

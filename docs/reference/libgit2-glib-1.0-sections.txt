@@ -35,6 +35,35 @@ ggit_branch_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-clone-options</FILE>
+<TITLE>GgitCloneOptions</TITLE>
+GgitCloneOptions
+ggit_clone_options_copy
+ggit_clone_options_free
+ggit_clone_options_new
+ggit_clone_options_get_is_bare
+ggit_clone_options_set_is_bare
+ggit_clone_options_set_fetch_progress_callback
+ggit_clone_options_get_remote_name
+ggit_clone_options_set_remote_name
+ggit_clone_options_get_push_url
+ggit_clone_options_set_push_url
+ggit_clone_options_get_fetch_spec
+ggit_clone_options_set_fetch_spec
+ggit_clone_options_get_push_spec
+ggit_clone_options_set_push_spec
+ggit_clone_options_set_cred_acquire_callback
+ggit_clone_options_get_remote_auto_tag
+ggit_clone_options_set_remote_auto_tag
+ggit_clone_options_get_checkout_branch
+ggit_clone_options_set_checkout_branch
+<SUBSECTION Standard>
+GGIT_CLONE_OPTIONS
+GGIT_TYPE_CLONE_OPTIONS
+ggit_clone_options_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-commit</FILE>
 <TITLE>GgitCommit</TITLE>
 GgitCommit
