@@ -8,7 +8,7 @@ DOC_MODULE = libgit2-glib-1.0
 DOC_MAIN_SGML_FILE = $(DOC_MODULE)-docs.sgml
 
 # Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS =
+SCAN_OPTIONS = --rebuild-types
 
 # The directory containing the source code. Relative to $(srcdir)
 DOC_SOURCE_DIR = $(top_srcdir)/libgit2-glib
