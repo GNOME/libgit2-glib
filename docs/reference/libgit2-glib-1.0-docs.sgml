@@ -17,6 +17,7 @@
     <xi:include href="xml/ggit-commit.xml"/>
     <xi:include href="xml/ggit-config.xml"/>
     <xi:include href="xml/ggit-config-entry.xml"/>
+    <xi:include href="xml/ggit-convert.xml"/>
     <xi:include href="xml/ggit-diff.xml"/>
     <xi:include href="xml/ggit-diff-delta.xml"/>
     <xi:include href="xml/ggit-diff-file.xml"/>

@@ -146,6 +146,12 @@ ggit_config_entry_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-convert</FILE>
+<TITLE>GgitConvert</TITLE>
+ggit_convert_utf8
+</SECTION>
+
+<SECTION>
 <FILE>ggit-diff</FILE>
 <TITLE>GgitDiff</TITLE>
 GgitDiff
