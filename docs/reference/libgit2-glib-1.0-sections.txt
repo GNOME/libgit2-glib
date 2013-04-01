@@ -167,6 +167,24 @@ ggit_cred_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-cred-plaintext</FILE>
+<TITLE>GgitCredPlaintext</TITLE>
+GgitCredPlaintext
+GgitCredPlaintextClass
+ggit_cred_plaintext_new
+ggit_cred_plaintext_get_username
+ggit_cred_plaintext_get_password
+<SUBSECTION Standard>
+GGIT_CRED_PLAINTEXT
+GGIT_CRED_PLAINTEXT_CLASS
+GGIT_CRED_PLAINTEXT_GET_CLASS
+GGIT_IS_CRED_PLAINTEXT
+GGIT_IS_CRED_PLAINTEXT_CLASS
+GGIT_TYPE_CRED_PLAINTEXT
+ggit_cred_plaintext_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-diff</FILE>
 <TITLE>GgitDiff</TITLE>
 GgitDiff
