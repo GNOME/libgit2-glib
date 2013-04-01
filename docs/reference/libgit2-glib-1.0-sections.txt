@@ -152,6 +152,21 @@ ggit_convert_utf8
 </SECTION>
 
 <SECTION>
+<FILE>ggit-cred</FILE>
+<TITLE>GgitCred</TITLE>
+GgitCred
+GgitCredClass
+<SUBSECTION Standard>
+GGIT_CRED
+GGIT_CRED_CLASS
+GGIT_CRED_GET_CLASS
+GGIT_IS_CRED
+GGIT_IS_CRED_CLASS
+GGIT_TYPE_CRED
+ggit_cred_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-diff</FILE>
 <TITLE>GgitDiff</TITLE>
 GgitDiff
