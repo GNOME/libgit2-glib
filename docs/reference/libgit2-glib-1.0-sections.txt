@@ -133,7 +133,7 @@ ggit_config_get_type
 <SECTION>
 <FILE>ggit-config-entry</FILE>
 <TITLE>GgitConfigEntry</TITLE>
-GgitConfigentry
+GgitConfigEntry
 ggit_config_entry_ref
 ggit_config_entry_unref
 ggit_config_entry_get_name
