@@ -287,12 +287,11 @@ GgitIndexClass
 ggit_index_open
 ggit_index_read
 ggit_index_write
-ggit_index_uniq
 ggit_index_remove
 ggit_index_append
 ggit_index_add
 ggit_index_get_entries
-ggit_index_get_entries_unmerged
+ggit_index_get_entries_resolve_undo
 <SUBSECTION Standard>
 GGIT_INDEX
 GGIT_INDEX_CLASS
