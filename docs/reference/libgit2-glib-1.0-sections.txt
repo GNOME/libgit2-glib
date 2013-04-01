@@ -724,6 +724,22 @@ ggit_tag_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-transfer-progress</FILE>
+<TITLE>GgitTransferProgress</TITLE>
+GgitTransferProgress
+ggit_transfer_progress_copy
+ggit_transfer_progress_free
+ggit_transfer_progress_get_total_objects
+ggit_transfer_progress_get_indexed_objects
+ggit_transfer_progress_get_received_objects
+ggit_transfer_progress_get_received_bytes
+<SUBSECTION Standard>
+GGIT_TRANSFER_PROGRESS
+GGIT_TYPE_TRANSFER_PROGRESS
+ggit_transfer_progress_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-tree</FILE>
 <TITLE>GgitTree</TITLE>
 GgitTree

@@ -46,6 +46,7 @@
     <xi:include href="xml/ggit-signature.xml"/>
     <xi:include href="xml/ggit-submodule.xml"/>
     <xi:include href="xml/ggit-tag.xml"/>
+    <xi:include href="xml/ggit-transfer-progress.xml"/>
     <xi:include href="xml/ggit-tree.xml"/>
     <xi:include href="xml/ggit-tree-entry.xml"/>
     <xi:include href="xml/ggit-types.xml"/>
