@@ -310,7 +310,8 @@ GgitIndexEntries
 GgitIndexEntry
 ggit_index_entries_ref
 ggit_index_entries_unref
-ggit_index_entries_get
+ggit_index_entries_get_by_index
+ggit_index_entries_get_by_path
 ggit_index_entries_size
 ggit_index_entry_ref
 ggit_index_entry_unref
