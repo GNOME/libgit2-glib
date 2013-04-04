@@ -33,7 +33,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_BRANCH_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_BRANCH))
 #define GGIT_BRANCH_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_BRANCH, GgitBranchClass))
 
-typedef struct _GgitBranch		GgitBranch;
 typedef struct _GgitBranchClass		GgitBranchClass;
 
 struct _GgitBranch

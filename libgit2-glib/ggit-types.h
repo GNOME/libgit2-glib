@@ -33,6 +33,13 @@ G_BEGIN_DECLS
 typedef struct _GgitBlob GgitBlob;
 
 /**
+ * GgitBranch:
+ *
+ * Represents a branch object.
+ */
+typedef struct _GgitBranch GgitBranch;
+
+/**
  * GgitCloneOptions:
  *
  * Represents the options used when cloning.
