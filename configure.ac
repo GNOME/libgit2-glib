@@ -18,7 +18,6 @@ AM_INIT_AUTOMAKE([1.11 tar-ustar dist-xz no-dist-gzip])
 AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
-AM_PATH_PYTHON(3.2.3)
 
 # Initialize libtool
 LT_PREREQ([2.2])
@@ -68,6 +67,8 @@ if test "x$enable_python" = "xauto"; then
 fi
 
 if test "x$enable_python" = "xyes"; then
+        AM_PATH_PYTHON(3.2.3)
+
         PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
 
         pyoverridesdir=`$PYTHON -c "import gi; print(gi._overridesdir)"`
