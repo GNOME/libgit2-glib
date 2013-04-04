@@ -38,6 +38,7 @@ typedef struct _GgitObjectFactoryBaseClass	GgitObjectFactoryBaseClass;
 
 struct _GgitObjectFactoryBase
 {
+	/*< private >*/
 	GObject parent;
 };
 
@@ -49,6 +50,7 @@ struct _GgitObjectFactoryBase
  */
 struct _GgitObjectFactoryBaseClass
 {
+	/*< private >*/
 	GObjectClass parent_class;
 };
 

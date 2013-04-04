@@ -41,6 +41,7 @@ typedef struct _GgitTagClass	GgitTagClass;
 
 struct _GgitTag
 {
+	/*< private >*/
 	GgitObject parent;
 
 	/* priv padding */
@@ -55,6 +56,7 @@ struct _GgitTag
  */
 struct _GgitTagClass
 {
+	/*< private >*/
 	GgitObjectClass parent_class;
 };
 

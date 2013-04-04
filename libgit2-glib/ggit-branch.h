@@ -38,6 +38,7 @@ typedef struct _GgitBranchClass		GgitBranchClass;
 
 struct _GgitBranch
 {
+	/*< private >*/
 	GgitRef parent;
 
 	gpointer *_priv;
@@ -45,6 +46,7 @@ struct _GgitBranch
 
 struct _GgitBranchClass
 {
+	/*< private >*/
 	GgitRefClass parent_class;
 };
 

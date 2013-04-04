@@ -47,6 +47,7 @@ typedef struct _GgitRepositoryPrivate	GgitRepositoryPrivate;
 
 struct _GgitRepository
 {
+	/*< private >*/
 	GgitNative parent;
 
 	GgitRepositoryPrivate *priv;
@@ -60,6 +61,7 @@ struct _GgitRepository
  */
 struct _GgitRepositoryClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

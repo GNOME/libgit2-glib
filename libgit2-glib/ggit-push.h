@@ -41,6 +41,7 @@ typedef struct _GgitPushPrivate	GgitPushPrivate;
 
 struct _GgitPush
 {
+	/*< private >*/
 	GgitNative parent;
 
 	GgitPushPrivate *priv;
@@ -48,6 +49,7 @@ struct _GgitPush
 
 struct _GgitPushClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

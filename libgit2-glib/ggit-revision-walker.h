@@ -40,6 +40,7 @@ typedef struct _GgitRevisionWalkerPrivate	GgitRevisionWalkerPrivate;
 
 struct _GgitRevisionWalker
 {
+	/*< private >*/
 	GgitNative parent;
 
 	GgitRevisionWalkerPrivate *priv;
@@ -53,6 +54,7 @@ struct _GgitRevisionWalker
  */
 struct _GgitRevisionWalkerClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

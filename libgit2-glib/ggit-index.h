@@ -43,6 +43,7 @@ typedef struct _GgitIndexPrivate	GgitIndexPrivate;
 
 struct _GgitIndex
 {
+	/*< private >*/
 	GgitNative parent;
 
 	GgitIndexPrivate *priv;
@@ -56,6 +57,7 @@ struct _GgitIndex
  */
 struct _GgitIndexClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

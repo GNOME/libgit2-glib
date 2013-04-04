@@ -42,6 +42,7 @@ typedef struct _GgitCommitPrivate	GgitCommitPrivate;
 
 struct _GgitCommit
 {
+	/*< private >*/
 	GgitObject parent;
 
 	/* priv padding */
@@ -56,6 +57,7 @@ struct _GgitCommit
  */
 struct _GgitCommitClass
 {
+	/*< private >*/
 	GgitObjectClass parent_class;
 };
 

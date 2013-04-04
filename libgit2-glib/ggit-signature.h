@@ -39,6 +39,7 @@ typedef struct _GgitSignaturePrivate	GgitSignaturePrivate;
 
 struct _GgitSignature
 {
+	/*< private >*/
 	GgitNative parent;
 
 	/* priv padding */
@@ -53,6 +54,7 @@ struct _GgitSignature
  */
 struct _GgitSignatureClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

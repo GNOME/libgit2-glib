@@ -39,6 +39,7 @@ typedef struct _GgitCredClass	GgitCredClass;
 
 struct _GgitCred
 {
+	/*< private >*/
 	GgitNative parent;
 
 	gpointer *priv;
@@ -46,6 +47,7 @@ struct _GgitCred
 
 struct _GgitCredClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

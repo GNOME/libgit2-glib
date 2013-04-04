@@ -38,6 +38,7 @@ typedef struct _GgitDiffClass	GgitDiffClass;
 
 struct _GgitDiff
 {
+	/*< private >*/
 	GgitNative parent;
 
 	/* priv padding */
@@ -52,6 +53,7 @@ struct _GgitDiff
  */
 struct _GgitDiffClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

@@ -39,6 +39,7 @@ typedef struct _GgitRefClass	GgitRefClass;
 
 struct _GgitRef
 {
+	/*< private >*/
 	GgitNative parent;
 
 	/* priv padding */
@@ -53,6 +54,7 @@ struct _GgitRef
  */
 struct _GgitRefClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 

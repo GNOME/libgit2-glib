@@ -38,6 +38,7 @@ typedef struct _GgitNativePrivate	GgitNativePrivate;
 
 struct _GgitNative
 {
+	/*< private >*/
 	GgitObjectFactoryBase parent;
 
 	GgitNativePrivate *priv;
@@ -51,6 +52,7 @@ struct _GgitNative
  */
 struct _GgitNativeClass
 {
+	/*< private >*/
 	GgitObjectFactoryBaseClass parent_class;
 };
 

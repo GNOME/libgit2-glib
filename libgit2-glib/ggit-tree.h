@@ -40,6 +40,7 @@ typedef struct _GgitTreeClass	GgitTreeClass;
 
 struct _GgitTree
 {
+	/*< private >*/
 	GgitObject parent;
 
 	/* priv padding */
@@ -54,6 +55,7 @@ struct _GgitTree
  */
 struct _GgitTreeClass
 {
+	/*< private >*/
 	GgitObjectClass parent_class;
 };
 

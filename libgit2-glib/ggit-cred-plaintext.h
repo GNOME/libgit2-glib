@@ -40,6 +40,7 @@ typedef struct _GgitCredPlaintextPrivate	GgitCredPlaintextPrivate;
 
 struct _GgitCredPlaintext
 {
+	/*< private >*/
 	GgitCred parent;
 
 	GgitCredPlaintextPrivate *priv;
@@ -47,6 +48,7 @@ struct _GgitCredPlaintext
 
 struct _GgitCredPlaintextClass
 {
+	/*< private >*/
 	GgitCredClass parent_class;
 };
 

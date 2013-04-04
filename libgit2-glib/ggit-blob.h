@@ -41,6 +41,7 @@ typedef struct _GgitBlobClass	GgitBlobClass;
 
 struct _GgitBlob
 {
+	/*< private >*/
 	GgitObject parent;
 
 	/* priv padding */
@@ -55,6 +56,7 @@ struct _GgitBlob
  */
 struct _GgitBlobClass
 {
+	/*< private >*/
 	GgitObjectClass parent_class;
 };
 

@@ -41,6 +41,7 @@ typedef struct _GgitObjectClass		GgitObjectClass;
 
 struct _GgitObject
 {
+	/*< private >*/
 	GgitNative parent;
 
 	/* priv padding */
@@ -55,6 +56,7 @@ struct _GgitObject
  */
 struct _GgitObjectClass
 {
+	/*< private >*/
 	GgitNativeClass parent_class;
 };
 
