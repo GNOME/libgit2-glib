@@ -379,7 +379,7 @@ ggit_config_get_int64 (GgitConfig   *config,
                        GError      **error)
 {
 	gint ret;
-	gint64 retval;
+	int64_t retval;
 
 	g_return_val_if_fail (GGIT_IS_CONFIG (config), 0);
 	g_return_val_if_fail (name != NULL, 0);
@@ -393,7 +393,7 @@ ggit_config_get_int64 (GgitConfig   *config,
 		return 0;
 	}
 
-	return retval;
+	return (gint64)retval;
 }
 
 /**
