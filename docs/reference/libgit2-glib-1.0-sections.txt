@@ -24,7 +24,6 @@ GgitBranchesCallback
 ggit_branch_delete
 ggit_branch_move
 ggit_branch_get_name
-ggit_branch_get_tracking
 ggit_branch_is_head
 <SUBSECTION Standard>
 GGIT_BRANCH
@@ -519,7 +518,6 @@ ggit_ref_get_reflog
 ggit_ref_create_reflog
 ggit_ref_rename_reflog
 ggit_ref_delete_reflog
-ggit_ref_get_remote_tracking_from_branch
 <SUBSECTION Standard>
 GGIT_IS_REF
 GGIT_IS_REF_CLASS
