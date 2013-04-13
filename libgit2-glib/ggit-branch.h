@@ -64,7 +64,7 @@ GgitBranch         *ggit_branch_move               (GgitBranch       *branch,
 const gchar        *ggit_branch_get_name           (GgitBranch       *branch,
                                                     GError          **error);
 
-GgitBranch         *ggit_branch_get_tracking       (GgitBranch       *branch,
+GgitBranch         *ggit_branch_get_upstream       (GgitBranch       *branch,
                                                     GError          **error);
 
 gboolean            ggit_branch_is_head            (GgitBranch       *branch,

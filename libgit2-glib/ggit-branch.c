@@ -145,7 +145,7 @@ ggit_branch_get_name (GgitBranch  *branch,
 }
 
 /**
- * ggit_branch_get_tracking:
+ * ggit_branch_get_upstream:
  * @branch: a #GgitBranch.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -155,16 +155,16 @@ ggit_branch_get_name (GgitBranch  *branch,
  * Returns: (transfer full) (allow-none): the reference supporting the remote tracking branch.
  */
 GgitBranch *
-ggit_branch_get_tracking (GgitBranch  *branch,
+ggit_branch_get_upstream (GgitBranch  *branch,
                           GError     **error)
 {
 	gint ret;
-	git_reference *tracking;
+	git_reference *upstream;
 
 	g_return_val_if_fail (GGIT_IS_BRANCH (branch), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_branch_tracking (&tracking,
+	ret = git_branch_upstream (&upstream,
 	                           _ggit_native_get (branch));
 
 	if (ret != GIT_OK)
@@ -173,7 +173,7 @@ ggit_branch_get_tracking (GgitBranch  *branch,
 		return NULL;
 	}
 
-	return _ggit_branch_wrap (tracking);
+	return _ggit_branch_wrap (upstream);
 }
 
 /**
