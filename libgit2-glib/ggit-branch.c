@@ -154,12 +154,14 @@ ggit_branch_get_name (GgitBranch  *branch,
  *
  * Returns: (transfer full) (allow-none): the reference supporting the remote tracking branch.
  */
-GgitBranch *
+GgitRef *
 ggit_branch_get_upstream (GgitBranch  *branch,
                           GError     **error)
 {
 	gint ret;
 	git_reference *upstream;
+	const gchar *name;
+	GgitRef *ref;
 
 	g_return_val_if_fail (GGIT_IS_BRANCH (branch), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -173,7 +175,18 @@ ggit_branch_get_upstream (GgitBranch  *branch,
 		return NULL;
 	}
 
-	return _ggit_branch_wrap (upstream);
+	name = git_reference_name (_ggit_native_get (upstream));
+
+	if (g_str_has_prefix (name, "refs/heads/"))
+	{
+		ref = GGIT_REF (_ggit_branch_wrap (upstream));
+	}
+	else
+	{
+		ref = _ggit_ref_wrap (upstream);
+	}
+
+	return ref;
 }
 
 /**
