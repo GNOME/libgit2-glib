@@ -9,8 +9,11 @@ INCLUDES =								\
 	-DDATADIR=\""$(datadir)"\"					\
 	-DLIBDIR=\""$(libdir)"\"
 
-libgit2_glib_1_0_la_LDFLAGS = \
-	-export-dynamic -no-undefined -export-symbols-regex "^[^_].*"
+libgit2_glib_1_0_la_LDFLAGS =				\
+	-version-info $(LIBGIT2_GLIB_LT_VERSION)	\
+	-export-dynamic					\
+	-no-undefined					\
+	-export-symbols-regex "^[^_].*"
 
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 

@@ -10,6 +10,27 @@ AC_INIT([libgit2-glib],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=libgit2-glib],
         [libgit2-glib])
 
+# Libtool versioning
+#
+# For development releases, keep the same numbers.
+#
+# For stable releases, apply the following algorithm step by step:
+# 1. If the library source code has changed at all since the last
+#    update, then increment REVISION.
+# 2. If any exported functions or data have been added, removed, or
+#    changed since the last update, increment CURRENT and set REVISION
+#    to 0.
+# 3. If any exported functions or data have been added since the last
+#    public release, increment AGE.
+# 4. If any exported functions or data have been removed since the last
+#    public release, set AGE to 0.
+
+LIBGIT2_GLIB_LT_CURRENT=0
+LIBGIT2_GLIB_LT_REVISION=0
+LIBGIT2_GLIB_LT_AGE=0
+LIBGIT2_GLIB_LT_VERSION="$LIBGIT2_GLIB_LT_CURRENT:$LIBGIT2_GLIB_LT_REVISION:$LIBGIT2_GLIB_LT_AGE"
+AC_SUBST(LIBGIT2_GLIB_LT_VERSION)
+
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([libgit2-glib/ggit-repository.c])
 AC_CONFIG_MACRO_DIR([m4])
