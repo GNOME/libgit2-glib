@@ -20,6 +20,7 @@
 
 #include "ggit-index-entry-resolve-undo.h"
 #include "ggit-index.h"
+#include <git2/sys/index.h>
 
 struct _GgitIndexEntriesResolveUndo
 {

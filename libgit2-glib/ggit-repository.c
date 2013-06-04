@@ -22,6 +22,7 @@
 #include <git2/errors.h>
 #include <git2/repository.h>
 #include <git2/refs.h>
+#include <git2/diff.h>
 #include <git2/status.h>
 #include <git2/tag.h>
 #include <git2/branch.h>
@@ -1062,10 +1063,9 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 }
 
 /**
- * ggit_repository_references_foreach:
+ * ggit_repository_references_foreach_name:
  * @repository: a #GgitRepository.
- * @reftype: a #GgitRefType
- * @callback: (scope call): a #GgitReferencesCallback.
+ * @callback: (scope call): a #GgitReferencesNameCallback.
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -1073,18 +1073,16 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
  *
  * To the callback is passed the name of the reference and the data pointer
  * passed to this function. If the callback returns something other than
- * 0, the iteration will stop and @error will be set. The references are
- * filtered by @reftype.
+ * 0, the iteration will stop and @error will be set.
  *
  * Returns: %TRUE if there was no error, %FALSE otherwise
  *
  */
 gboolean
-ggit_repository_references_foreach (GgitRepository          *repository,
-                                    GgitRefType              reftype,
-                                    GgitReferencesCallback   callback,
-                                    gpointer                 user_data,
-                                    GError                 **error)
+ggit_repository_references_foreach_name (GgitRepository             *repository,
+                                         GgitReferencesNameCallback  callback,
+                                         gpointer                    user_data,
+                                         GError                    **error)
 {
 	gint ret;
 
@@ -1092,10 +1090,9 @@ ggit_repository_references_foreach (GgitRepository          *repository,
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_reference_foreach (_ggit_native_get (repository),
-	                             reftype,
-	                             callback,
-	                             user_data);
+	ret = git_reference_foreach_name (_ggit_native_get (repository),
+	                                  callback,
+	                                  user_data);
 
 	if (ret != GIT_OK)
 	{

@@ -588,10 +588,8 @@ ggit_remote_get_url
 ggit_remote_connect
 ggit_remote_get_connected
 ggit_remote_disconnect
-ggit_remote_set_fetch_spec
-ggit_remote_get_fetch_spec
-ggit_remote_set_push_spec
-ggit_remote_get_push_spec
+ggit_remote_add_fetch_spec
+ggit_remote_add_push_spec
 ggit_remote_list
 ggit_remote_is_valid_url
 ggit_remote_is_supported_url

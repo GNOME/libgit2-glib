@@ -473,9 +473,11 @@ ggit_diff_print_patch (GgitDiff              *diff,
 
 /**
  * ggit_diff_blobs:
- * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @old_blob: (allow-none): a #GgitBlob to diff from.
+ * @old_as_path: (allow-none): treat @old_blob as if it had this filename, or %NULL,
  * @new_blob: (allow-none): a #GgitBlob to diff to.
+ * @new_as_path: (allow-none): treat @new_blob as if it had this filename, or %NULL,
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @file_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffFileCallback.
  * @hunk_cb: (allow-none) (scope call) (closure user_data):
@@ -494,9 +496,11 @@ ggit_diff_print_patch (GgitDiff              *diff,
  * ggit_diff_options_new() are used.
  */
 void
-ggit_diff_blobs (GgitDiffOptions       *diff_options,
-                 GgitBlob              *old_blob,
+ggit_diff_blobs (GgitBlob              *old_blob,
+                 const gchar           *old_as_path,
                  GgitBlob              *new_blob,
+                 const gchar           *new_as_path,
+                 GgitDiffOptions       *diff_options,
                  GgitDiffFileCallback   file_cb,
                  GgitDiffHunkCallback   hunk_cb,
                  GgitDiffLineCallback   line_cb,
@@ -535,7 +539,9 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 	}
 
 	ret = git_diff_blobs (old_blob ? _ggit_native_get (old_blob) : NULL,
+	                      old_as_path,
 	                      new_blob ? _ggit_native_get (new_blob) : NULL,
+	                      new_as_path,
 	                      (git_diff_options *) gdiff_options,
 	                      real_file_cb, real_hunk_cb, real_line_cb,
 	                      &wrapper_data);
@@ -548,10 +554,12 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
 
 /**
  * ggit_diff_blob_to_buffer:
- * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @old_blob: (allow-none): a #GgitBlob to diff from.
+ * @old_as_path: (allow-none): treat @old_blob as if it had this filename, or %NULL,
  * @buffer: (allow-none) (array length=buffer_len): a buffer to diff to.
  * @buffer_len: length of @buffer.
+ * @buffer_as_path: (allow-none): treat @buffer as if it had this filename, or %NULL,
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @file_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffFileCallback.
  * @hunk_cb: (allow-none) (scope call) (closure user_data):
@@ -564,10 +572,12 @@ ggit_diff_blobs (GgitDiffOptions       *diff_options,
  * Same as ggit_diff_blobs() but using a buffer.
  */
 void
-ggit_diff_blob_to_buffer (GgitDiffOptions       *diff_options,
-                          GgitBlob              *old_blob,
+ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
+                          const gchar           *old_as_path,
                           const gchar           *buffer,
                           gsize                  buffer_len,
+                          const gchar           *buffer_as_path,
+                          GgitDiffOptions       *diff_options,
                           GgitDiffFileCallback   file_cb,
                           GgitDiffHunkCallback   hunk_cb,
                           GgitDiffLineCallback   line_cb,
@@ -606,8 +616,10 @@ ggit_diff_blob_to_buffer (GgitDiffOptions       *diff_options,
 	}
 
 	ret = git_diff_blob_to_buffer (old_blob ? _ggit_native_get (old_blob) : NULL,
+	                               old_as_path,
 	                               buffer,
 	                               buffer_len,
+	                               buffer_as_path,
 	                               (git_diff_options *) gdiff_options,
 	                               real_file_cb, real_hunk_cb, real_line_cb,
 	                               &wrapper_data);

@@ -58,15 +58,13 @@ gboolean           ggit_remote_get_connected            (GgitRemote       *remot
 
 void               ggit_remote_disconnect               (GgitRemote       *remote);
 
-void               ggit_remote_set_fetch_spec           (GgitRemote       *remote,
+void               ggit_remote_add_fetch_spec           (GgitRemote       *remote,
                                                          const gchar      *fetch_spec,
                                                          GError          **error);
-GgitRefSpec       *ggit_remote_get_fetch_spec           (GgitRemote       *remote);
 
-void               ggit_remote_set_push_spec            (GgitRemote       *remote,
+void               ggit_remote_add_push_spec            (GgitRemote       *remote,
                                                          const gchar      *push_spec,
                                                          GError          **error);
-GgitRefSpec       *ggit_remote_get_push_spec            (GgitRemote       *remote);
 
 void               ggit_remote_list                     (GgitRemote       *remote,
                                                          GgitRemoteListCallback callback,

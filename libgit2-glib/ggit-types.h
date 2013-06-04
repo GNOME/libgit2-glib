@@ -434,6 +434,7 @@ typedef enum {
  * @GGIT_DIFF_LINE_CONTEXT: line is part of the context.
  * @GGIT_DIFF_LINE_ADDITION: line that was added.
  * @GGIT_DIFF_LINE_DELETION: line that was removed.
+ * @GGIT_DIFF_LINE_CONTEXT_EOFNL: Both files have no LF at end.
  * @GGIT_DIFF_LINE_ADD_EOFNL: LF was added at end of file.
  * @GGIT_DIFF_LINE_DEL_EOFNL: LF was removed at end of file.
  * @GGIT_DIFF_LINE_FILE_HDR: the file header.
@@ -447,14 +448,15 @@ typedef enum {
  * #GGIT_DIFF_LINE_BINARY values are only sent when the diff is being printed.
  */
 typedef enum {
-	GGIT_DIFF_LINE_CONTEXT   = ' ',
-	GGIT_DIFF_LINE_ADDITION  = '+',
-	GGIT_DIFF_LINE_DELETION  = '-',
-	GGIT_DIFF_LINE_ADD_EOFNL = '\n',
-	GGIT_DIFF_LINE_DEL_EOFNL = '\0',
-	GGIT_DIFF_LINE_FILE_HDR  = 'F',
-	GGIT_DIFF_LINE_HUNK_HDR  = 'H',
-	GGIT_DIFF_LINE_BINARY    = 'B'
+	GGIT_DIFF_LINE_CONTEXT       = ' ',
+	GGIT_DIFF_LINE_ADDITION      = '+',
+	GGIT_DIFF_LINE_DELETION      = '-',
+	GGIT_DIFF_LINE_CONTEXT_EOFNL = '=',
+	GGIT_DIFF_LINE_ADD_EOFNL     = '>',
+	GGIT_DIFF_LINE_DEL_EOFNL     = '<',
+	GGIT_DIFF_LINE_FILE_HDR      = 'F',
+	GGIT_DIFF_LINE_HUNK_HDR      = 'H',
+	GGIT_DIFF_LINE_BINARY        = 'B'
 } GgitDiffLineType;
 
 /* NOTE: keep in sync with git2/errors.h */
@@ -493,16 +495,14 @@ typedef enum {
 /* NOTE: keep in sync with git2/refs.h */
 /**
  * GgitRemoteDownloadTagsType:
- * @GGIT_REMOTE_DOWNLOAD_TAGS_UNSET:
- * @GGIT_REMOTE_DOWNLOAD_TAGS_NONE:
  * @GGIT_REMOTE_DOWNLOAD_TAGS_AUTO:
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_NONE:
  * @GGIT_REMOTE_DOWNLOAD_TAGS_ALL:
  */
 typedef enum {
-	GGIT_REMOTE_DOWNLOAD_TAGS_UNSET,
-	GGIT_REMOTE_DOWNLOAD_TAGS_NONE,
-	GGIT_REMOTE_DOWNLOAD_TAGS_AUTO,
-	GGIT_REMOTE_DOWNLOAD_TAGS_ALL
+	GGIT_REMOTE_DOWNLOAD_TAGS_AUTO = 0,
+	GGIT_REMOTE_DOWNLOAD_TAGS_NONE = 1,
+	GGIT_REMOTE_DOWNLOAD_TAGS_ALL  = 2
 } GgitRemoteDownloadTagsType;
 
 /* NOTE: keep in sync with git2/refs.h */
@@ -843,17 +843,17 @@ typedef gint (* GgitDiffLineCallback) (GgitDiffDelta    *delta,
                                        gpointer          user_data);
 
 /**
- * GgitReferencesCallback:
+ * GgitReferencesNameCallback:
  * @name: the name of the reference
  * @user_data: (closure): user-supplied data.
  *
  * The type of the callback functions for retrieving the references
- * in a #GgitRepository. See ggit_repository_references_foreach().
+ * in a #GgitRepository. See ggit_repository_references_foreach_name().
  *
  * Returns: 0 to go for the next references or a #GgitError in case there was an error.
  */
-typedef gint (* GgitReferencesCallback) (const gchar *name,
-                                         gpointer     user_data);
+typedef gint (* GgitReferencesNameCallback) (const gchar *name,
+                                             gpointer     user_data);
 
 /**
  * GgitRemoteListCallback:

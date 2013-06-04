@@ -25,6 +25,7 @@
 
 #include <glib-object.h>
 #include <git2/strarray.h>
+#include <git2/diff.h>
 #include <git2/status.h>
 
 #include "ggit-types.h"
