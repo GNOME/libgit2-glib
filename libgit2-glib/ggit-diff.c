@@ -164,7 +164,7 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (old_tree == NULL || GGIT_IS_TREE (old_tree), NULL);
 	g_return_val_if_fail (new_tree == NULL || GGIT_IS_TREE (new_tree), NULL);
-	g_return_val_if_fail (new_tree != NULL || new_tree != NULL, NULL);
+	g_return_val_if_fail (old_tree != NULL || new_tree != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_diff_tree_to_tree (&diff,
