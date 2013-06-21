@@ -104,6 +104,22 @@ GgitRef            *ggit_repository_create_symbolic_reference
                                                        const gchar           *target,
                                                        GError               **error);
 
+GgitOId            *ggit_repository_create_blob_from_buffer (
+                                                       GgitRepository        *repository,
+                                                       gconstpointer          buffer,
+                                                       gsize                  size,
+                                                       GError               **error);
+
+GgitOId            *ggit_repository_create_blob_from_file (
+                                                       GgitRepository        *repository,
+                                                       GFile                 *file,
+                                                       GError               **error);
+
+GgitOId            *ggit_repository_create_blob_from_path (
+                                                       GgitRepository        *repository,
+                                                       const gchar           *path,
+                                                       GError               **error);
+
 GgitOId            *ggit_repository_create_tag        (GgitRepository        *repository,
                                                        const gchar           *tag_name,
                                                        GgitObject            *target,

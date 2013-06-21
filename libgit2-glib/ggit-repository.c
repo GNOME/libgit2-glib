@@ -31,6 +31,7 @@
 #include <git2/revparse.h>
 #include <git2/stash.h>
 #include <git2/graph.h>
+#include <git2/blob.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"
@@ -1896,6 +1897,123 @@ ggit_repository_get_ahead_behind (GgitRepository  *repository,
 	{
 		_ggit_error_set (error, ret);
 	}
+}
+
+/**
+ * ggit_repository_create_blob_from_buffer:
+ * @repository: a #GgitRepository.
+ * @buffer: (array length=size) (element-type guint8): the data.
+ * @size: the length (in bytes) of the data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Write an in-memory buffer to the object database as a blob.
+ *
+ * @return the new #GgitOid of the written blob, or %NULL if writing the blob
+ * failed.
+ */
+GgitOId *
+ggit_repository_create_blob_from_buffer (GgitRepository  *repository,
+                                         gconstpointer    buffer,
+                                         gsize            size,
+                                         GError         **error)
+{
+	gint ret;
+	git_oid oid;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (buffer != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_blob_create_frombuffer (&oid,
+	                                  _ggit_native_get (repository),
+	                                  buffer,
+	                                  size);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
+/**
+ * ggit_repository_create_blob_from_file:
+ * @repository: a #GgitRepository.
+ * @file: a #GFile.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Write a file to the object database as a blob.
+ *
+ * @return the new #GgitOid of the written blob, or %NULL if writing the blob
+ * failed.
+ */
+GgitOId *
+ggit_repository_create_blob_from_file (GgitRepository  *repository,
+                                       GFile           *file,
+                                       GError         **error)
+{
+	gint ret;
+	git_oid oid;
+	gchar *path;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	path = g_file_get_path (file);
+
+	ret = git_blob_create_fromdisk (&oid,
+	                                _ggit_native_get (repository),
+	                                path);
+
+	g_free (path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
+/**
+ * ggit_repository_create_blob_from_path:
+ * @repository: a #GgitRepository.
+ * @path: the file path.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Write a path relative to the repository working directory to the object
+ * database as a blob.
+ *
+ * @return the new #GgitOid of the written blob, or %NULL if writing the blob
+ * failed.
+ */
+GgitOId *
+ggit_repository_create_blob_from_path (GgitRepository  *repository,
+                                       const gchar     *path,
+                                       GError         **error)
+{
+	gint ret;
+	git_oid oid;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_blob_create_fromworkdir (&oid,
+	                                _ggit_native_get (repository),
+	                                path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
 }
 
 /* ex:set ts=8 noet: */
