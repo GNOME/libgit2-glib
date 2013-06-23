@@ -90,7 +90,7 @@ ggit_status_options_free (GgitStatusOptions *status_options)
 
 /**
  * ggit_status_options_new:
- * @flags: status flags.
+ * @options: status options.
  * @show: status show options.
  * @pathspec: (allow-none): which paths to show, defaults to showing all paths.
  *
@@ -99,16 +99,16 @@ ggit_status_options_free (GgitStatusOptions *status_options)
  * Returns: a newly allocated #GgitStatusOptions.
  */
 GgitStatusOptions *
-ggit_status_options_new (GgitStatusFlag   flags,
-                         GgitStatusShow   show,
-                         const gchar    **pathspec)
+ggit_status_options_new (GgitStatusOption   options,
+                         GgitStatusShow     show,
+                         const gchar      **pathspec)
 {
 	GgitStatusOptions *status_options;
 	git_status_options gstatus_options = GIT_STATUS_OPTIONS_INIT;
 
 	status_options = g_slice_new (GgitStatusOptions);
 
-	gstatus_options.flags = flags;
+	gstatus_options.flags = options;
 	gstatus_options.show = show;
 
 	ggit_utils_get_git_strarray_from_str_array (pathspec,

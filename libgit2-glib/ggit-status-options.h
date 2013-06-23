@@ -42,7 +42,7 @@ const git_status_options *
 GgitStatusOptions *ggit_status_options_copy               (GgitStatusOptions        *status_options);
 void               ggit_status_options_free               (GgitStatusOptions        *status_options);
 
-GgitStatusOptions *ggit_status_options_new                (GgitStatusFlag            flags,
+GgitStatusOptions *ggit_status_options_new                (GgitStatusOption          options,
                                                            GgitStatusShow            show,
                                                            const gchar             **pathspec);
 

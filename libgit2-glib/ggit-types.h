@@ -676,35 +676,35 @@ typedef enum {
 } GgitTreeWalkMode;
 
 /**
- * GgitStatusFlag:
- * GGIT_STATUS_FLAG_INCLUDE_UNTRACKED: include untracked files (default).
- * GGIT_STATUS_FLAG_INCLUDE_IGNORED: include ignored files (default).
- * GGIT_STATUS_FLAG_INCLUDE_UNMODIFIED: include unmodified files.
- * GGIT_STATUS_FLAG_EXCLUDE_SUBMODULES: exclude submodules.
- * GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS: search untracked directories recursively (default).
- * GGIT_STATUS_FLAG_DISABLE_PATHSPEC_MATCH: do not match path specifications.
- * GGIT_STATUS_FLAG_RECURSE_IGNORED_DIRS: search ignored directories recursively.
- * GGIT_STATUS_FLAG_SORT_CASE_SENSITIVELY: sort case sensitive.
- * GGIT_STATUS_FLAG_SORT_CASE_INSENSITIVELY: sort case insensitive.
- * GGIT_STATUS_FLAG_DEFAULT: default flags.
+ * GgitStatusOption:
+ * GGIT_STATUS_OPTION_INCLUDE_UNTRACKED: include untracked files (default).
+ * GGIT_STATUS_OPTION_INCLUDE_IGNORED: include ignored files (default).
+ * GGIT_STATUS_OPTION_INCLUDE_UNMODIFIED: include unmodified files.
+ * GGIT_STATUS_OPTION_EXCLUDE_SUBMODULES: exclude submodules.
+ * GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS: search untracked directories recursively (default).
+ * GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH: do not match path specifications.
+ * GGIT_STATUS_OPTION_RECURSE_IGNORED_DIRS: search ignored directories recursively.
+ * GGIT_STATUS_OPTION_SORT_CASE_SENSITIVELY: sort case sensitive.
+ * GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY: sort case insensitive.
+ * GGIT_STATUS_OPTION_DEFAULT: default flags.
  *
- * Status flags specified when using #ggit_repository_file_status_foreach.
+ * Status options specified when using #ggit_repository_file_status_foreach.
  *
  */
 typedef enum {
-	GGIT_STATUS_FLAG_INCLUDE_UNTRACKED        = (1 << 0),
-	GGIT_STATUS_FLAG_INCLUDE_IGNORED          = (1 << 1),
-	GGIT_STATUS_FLAG_INCLUDE_UNMODIFIED       = (1 << 2),
-	GGIT_STATUS_FLAG_EXCLUDE_SUBMODULES       = (1 << 3),
-	GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS   = (1 << 4),
-	GGIT_STATUS_FLAG_DISABLE_PATHSPEC_MATCH   = (1 << 5),
-	GGIT_STATUS_FLAG_RECURSE_IGNORED_DIRS     = (1 << 6),
-	GGIT_STATUS_FLAG_SORT_CASE_SENSITIVELY    = (1 << 9),
-	GGIT_STATUS_FLAG_SORT_CASE_INSENSITIVELY  = (1 << 10),
-	GGIT_STATUS_FLAG_DEFAULT                  = GGIT_STATUS_FLAG_INCLUDE_IGNORED |
-	                                            GGIT_STATUS_FLAG_INCLUDE_UNTRACKED |
-	                                            GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS
-} GgitStatusFlag;
+	GGIT_STATUS_OPTION_INCLUDE_UNTRACKED        = (1 << 0),
+	GGIT_STATUS_OPTION_INCLUDE_IGNORED          = (1 << 1),
+	GGIT_STATUS_OPTION_INCLUDE_UNMODIFIED       = (1 << 2),
+	GGIT_STATUS_OPTION_EXCLUDE_SUBMODULES       = (1 << 3),
+	GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS   = (1 << 4),
+	GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH   = (1 << 5),
+	GGIT_STATUS_OPTION_RECURSE_IGNORED_DIRS     = (1 << 6),
+	GGIT_STATUS_OPTION_SORT_CASE_SENSITIVELY    = (1 << 9),
+	GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY  = (1 << 10),
+	GGIT_STATUS_OPTION_DEFAULT                  = GGIT_STATUS_OPTION_INCLUDE_IGNORED |
+	                                              GGIT_STATUS_OPTION_INCLUDE_UNTRACKED |
+	                                              GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS
+} GgitStatusOption;
 
 /**
  * GgitStatusShow:
