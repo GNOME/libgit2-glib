@@ -708,12 +708,13 @@ typedef enum {
 
 /**
  * GgitStatusShow:
- * @GGIT_STATUS_SHOW_INDEX_AND_WORKDIR: receive callback for files in both the
- *                                      index and the workdir (default).
+ * @GGIT_STATUS_SHOW_INDEX_AND_WORKDIR: receive one callback for each file,
+ * even if the file is in both the index and the workdir (combining #GgitStatusFlags).
  * @GGIT_STATUS_SHOW_INDEX_ONLY: only receive callbacks for files in the index.
  * @GGIT_STATUS_SHOW_WORKDIR_ONLY: only receive callbacks for files in the workdir.
  * @GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR: receive callbacks first for files in
- *                                       the index, and then in the workdir.
+ * the index, and then in the workdir. This is equivalent to first specifying
+ * #GGIT_STATUS_SHOW_INDEX_ONLY and then #GGIT_STATUS_SHOW_WORKDIR_ONLY.
  *
  * Show options for #ggit_repository_file_status_foreach. Determines which
  * files are included in the status.
