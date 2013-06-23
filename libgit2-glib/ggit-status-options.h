@@ -3,6 +3,7 @@
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Garrett Regier
+ * Copyright (C) 2013 - Jesse van den Kieboom
  *
  * libgit2-glib is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
