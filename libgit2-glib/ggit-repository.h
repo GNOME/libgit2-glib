@@ -203,6 +203,7 @@ GgitStatusFlags     ggit_repository_file_status       (GgitRepository        *re
 
 gboolean            ggit_repository_file_status_foreach
                                                      (GgitRepository         *repository,
+                                                      GgitStatusOptions      *options,
                                                       GgitStatusCallback      callback,
                                                       gpointer                user_data,
                                                       GError                **error);

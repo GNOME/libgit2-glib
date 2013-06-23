@@ -258,6 +258,13 @@ typedef struct _GgitRevisionWalker GgitRevisionWalker;
 typedef struct _GgitSignature GgitSignature;
 
 /**
+ * GgitStatusOptions:
+ *
+ * Represents the options used when creating getting file status.
+ */
+typedef struct _GgitStatusOptions GgitStatusOptions;
+
+/**
  * GgitSubmodule:
  *
  * Represents a git submodule.
@@ -668,6 +675,49 @@ typedef enum {
 	GGIT_TREE_WALK_MODE_POST = 1,
 } GgitTreeWalkMode;
 
+/**
+ * GgitStatusFlag:
+ * GGIT_STATUS_FLAG_INCLUDE_UNTRACKED:
+ * GGIT_STATUS_FLAG_INCLUDE_IGNORED:
+ * GGIT_STATUS_FLAG_INCLUDE_UNMODIFIED:
+ * GGIT_STATUS_FLAG_EXCLUDE_SUBMODULES:
+ * GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS:
+ * GGIT_STATUS_FLAG_DISABLE_PATHSPEC_MATCH:
+ * GGIT_STATUS_FLAG_RECURSE_IGNORED_DIRS:
+ * GGIT_STATUS_FLAG_SORT_CASE_SENSITIVELY:
+ * GGIT_STATUS_FLAG_SORT_CASE_INSENSITIVELY:
+ * GGIT_STATUS_FLAG_DEFAULT:
+ *
+ */
+typedef enum {
+	GGIT_STATUS_FLAG_INCLUDE_UNTRACKED        = (1 << 0),
+	GGIT_STATUS_FLAG_INCLUDE_IGNORED          = (1 << 1),
+	GGIT_STATUS_FLAG_INCLUDE_UNMODIFIED       = (1 << 2),
+	GGIT_STATUS_FLAG_EXCLUDE_SUBMODULES       = (1 << 3),
+	GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS   = (1 << 4),
+	GGIT_STATUS_FLAG_DISABLE_PATHSPEC_MATCH   = (1 << 5),
+	GGIT_STATUS_FLAG_RECURSE_IGNORED_DIRS     = (1 << 6),
+	GGIT_STATUS_FLAG_SORT_CASE_SENSITIVELY    = (1 << 9),
+	GGIT_STATUS_FLAG_SORT_CASE_INSENSITIVELY  = (1 << 10),
+	GGIT_STATUS_FLAG_DEFAULT                  = GGIT_STATUS_FLAG_INCLUDE_IGNORED |
+	                                            GGIT_STATUS_FLAG_INCLUDE_UNTRACKED |
+	                                            GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS
+} GgitStatusFlag;
+
+/**
+ * GgitStatusShow:
+ * @GGIT_STATUS_SHOW_INDEX_AND_WORKDIR:
+ * @GGIT_STATUS_SHOW_INDEX_ONLY:
+ * @GGIT_STATUS_SHOW_WORKDIR_ONLY:
+ * @GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR:
+ *
+ */
+typedef enum {
+	GGIT_STATUS_SHOW_INDEX_AND_WORKDIR = 0,
+	GGIT_STATUS_SHOW_INDEX_ONLY = 1,
+	GGIT_STATUS_SHOW_WORKDIR_ONLY = 2,
+	GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR = 3,
+} GgitStatusShow;
 
 /**
  * GgitBranchesCallback:

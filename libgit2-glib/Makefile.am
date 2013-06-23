@@ -50,6 +50,7 @@ INST_H_FILES =				\
 	ggit-repository.h		\
 	ggit-revision-walker.h		\
 	ggit-signature.h		\
+	ggit-status-options.h		\
 	ggit-submodule.h		\
 	ggit-tag.h			\
 	ggit-transfer-progress.h	\
@@ -97,6 +98,7 @@ C_FILES =				\
 	ggit-repository.c		\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
+	ggit-status-options.c		\
 	ggit-submodule.c		\
 	ggit-tag.c			\
 	ggit-transfer-progress.c	\

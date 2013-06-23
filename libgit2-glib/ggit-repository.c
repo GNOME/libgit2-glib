@@ -42,6 +42,7 @@
 #include "ggit-submodule.h"
 #include "ggit-signature.h"
 #include "ggit-clone-options.h"
+#include "ggit-status-options.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -1017,6 +1018,7 @@ ggit_repository_file_status (GgitRepository  *repository,
 /**
  * ggit_repository_file_status_foreach:
  * @repository: a #GgitRepository.
+ * @options: (allow-none): status options, or %NULL.
  * @callback: (scope call): a #GgitStatusCallback.
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
@@ -1027,11 +1029,14 @@ ggit_repository_file_status (GgitRepository  *repository,
  * passed to this function. If the callback returns something other than
  * 0, the iteration will stop and @error will be set.
  *
+ * Set @options to %NULL to get the default status options.
+ *
  * Returns: %TRUE if there was no error, %FALSE otherwise
  *
  */
 gboolean
 ggit_repository_file_status_foreach (GgitRepository     *repository,
+                                     GgitStatusOptions  *options,
                                      GgitStatusCallback  callback,
                                      gpointer            user_data,
                                      GError            **error)
@@ -1042,9 +1047,10 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 	g_return_val_if_fail (callback != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_status_foreach (_ggit_native_get (repository),
-	                          callback,
-	                          user_data);
+	ret = git_status_foreach_ext (_ggit_native_get (repository),
+	                              _ggit_status_options_get_status_options (options),
+	                              callback,
+	                              user_data);
 
 	if (ret != GIT_OK)
 	{
