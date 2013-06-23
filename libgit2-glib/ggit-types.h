@@ -292,6 +292,12 @@ typedef struct _GgitTree GgitTree;
  */
 typedef struct _GgitTreeEntry GgitTreeEntry;
 
+/**
+ * GgitTreeBuilder:
+ *
+ * Represents a tree object.
+ */
+typedef struct _GgitTreeBuilder GgitTreeBuilder;
 
 /**
  * GgitBranchType:
