@@ -23,6 +23,7 @@
 #include "ggit-tree.h"
 #include "ggit-oid.h"
 #include "ggit-error.h"
+#include "ggit-tree-builder.h"
 
 G_DEFINE_TYPE (GgitTree, ggit_tree, GGIT_TYPE_OBJECT)
 
@@ -263,6 +264,38 @@ ggit_tree_walk (GgitTree              *tree,
 	{
 		_ggit_error_set (error, ret);
 	}
+}
+
+/**
+ * ggit_tree_create_builder:
+ * @tree: (allow-none): a #GgitTree.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a tree builder for initialized with @tree. If @tree is %NULL,
+ * then the builder will initially be empty.
+ *
+ * Returns: (transfer full): a new #GgitTreeBuilder object, or %NULL if there was an error.
+ *
+ **/
+GgitTreeBuilder *
+ggit_tree_create_builder (GgitTree  *tree,
+                          GError   **error)
+{
+	gint ret;
+	git_treebuilder *builder;
+
+	g_return_val_if_fail (tree == NULL || GGIT_IS_TREE (tree), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_treebuilder_create (&builder, _ggit_native_get (tree));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_tree_builder_wrap (builder, TRUE);
 }
 
 /* ex:set ts=8 noet: */

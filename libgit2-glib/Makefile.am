@@ -54,6 +54,7 @@ INST_H_FILES =				\
 	ggit-tag.h			\
 	ggit-transfer-progress.h	\
 	ggit-tree.h			\
+	ggit-tree-builder.h		\
 	ggit-tree-entry.h		\
 	ggit-types.h			\
 	ggit.h
@@ -100,6 +101,7 @@ C_FILES =				\
 	ggit-tag.c			\
 	ggit-transfer-progress.c	\
 	ggit-tree.c			\
+	ggit-tree-builder.c		\
 	ggit-tree-entry.c		\
 	ggit-types.c			\
 	ggit-utils.c
