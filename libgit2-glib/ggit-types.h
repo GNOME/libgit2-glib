@@ -677,16 +677,18 @@ typedef enum {
 
 /**
  * GgitStatusFlag:
- * GGIT_STATUS_FLAG_INCLUDE_UNTRACKED:
- * GGIT_STATUS_FLAG_INCLUDE_IGNORED:
- * GGIT_STATUS_FLAG_INCLUDE_UNMODIFIED:
- * GGIT_STATUS_FLAG_EXCLUDE_SUBMODULES:
- * GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS:
- * GGIT_STATUS_FLAG_DISABLE_PATHSPEC_MATCH:
- * GGIT_STATUS_FLAG_RECURSE_IGNORED_DIRS:
- * GGIT_STATUS_FLAG_SORT_CASE_SENSITIVELY:
- * GGIT_STATUS_FLAG_SORT_CASE_INSENSITIVELY:
- * GGIT_STATUS_FLAG_DEFAULT:
+ * GGIT_STATUS_FLAG_INCLUDE_UNTRACKED: include untracked files (default).
+ * GGIT_STATUS_FLAG_INCLUDE_IGNORED: include ignored files (default).
+ * GGIT_STATUS_FLAG_INCLUDE_UNMODIFIED: include unmodified files.
+ * GGIT_STATUS_FLAG_EXCLUDE_SUBMODULES: exclude submodules.
+ * GGIT_STATUS_FLAG_RECURSE_UNTRACKED_DIRS: search untracked directories recursively (default).
+ * GGIT_STATUS_FLAG_DISABLE_PATHSPEC_MATCH: do not match path specifications.
+ * GGIT_STATUS_FLAG_RECURSE_IGNORED_DIRS: search ignored directories recursively.
+ * GGIT_STATUS_FLAG_SORT_CASE_SENSITIVELY: sort case sensitive.
+ * GGIT_STATUS_FLAG_SORT_CASE_INSENSITIVELY: sort case insensitive.
+ * GGIT_STATUS_FLAG_DEFAULT: default flags.
+ *
+ * Status flags specified when using #ggit_repository_file_status_foreach.
  *
  */
 typedef enum {
@@ -706,10 +708,15 @@ typedef enum {
 
 /**
  * GgitStatusShow:
- * @GGIT_STATUS_SHOW_INDEX_AND_WORKDIR:
- * @GGIT_STATUS_SHOW_INDEX_ONLY:
- * @GGIT_STATUS_SHOW_WORKDIR_ONLY:
- * @GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR:
+ * @GGIT_STATUS_SHOW_INDEX_AND_WORKDIR: receive callback for files in both the
+ *                                      index and the workdir (default).
+ * @GGIT_STATUS_SHOW_INDEX_ONLY: only receive callbacks for files in the index.
+ * @GGIT_STATUS_SHOW_WORKDIR_ONLY: only receive callbacks for files in the workdir.
+ * @GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR: receive callbacks first for files in
+ *                                       the index, and then in the workdir.
+ *
+ * Show options for #ggit_repository_file_status_foreach. Determines which
+ * files are included in the status.
  *
  */
 typedef enum {
