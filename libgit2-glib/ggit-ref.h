@@ -22,7 +22,7 @@
 #define __GGIT_REF_H__
 
 #include <glib-object.h>
-#include <git2/refs.h>
+#include <git2.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-native.h>
 

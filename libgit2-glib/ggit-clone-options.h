@@ -23,7 +23,7 @@
 #define __GGIT_CLONE_OPTIONS_H__
 
 #include <glib-object.h>
-#include <git2/clone.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

@@ -22,9 +22,7 @@
 #define __GGIT_UTILS_H__
 
 #include <glib-object.h>
-#include <git2/strarray.h>
-#include <git2/object.h>
-#include <git2/types.h>
+#include <git2.h>
 
 #include "ggit-object.h"
 

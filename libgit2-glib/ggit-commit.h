@@ -23,7 +23,7 @@
 #define __GGIT_COMMIT_H__
 
 #include <glib-object.h>
-#include <git2/commit.h>
+#include <git2.h>
 
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-types.h>

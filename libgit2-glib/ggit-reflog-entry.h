@@ -22,7 +22,7 @@
 #define __GGIT_REFLOG_ENTRY_H__
 
 #include <glib-object.h>
-#include <git2/reflog.h>
+#include <git2.h>
 #include "ggit-types.h"
 
 G_BEGIN_DECLS

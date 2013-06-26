@@ -24,9 +24,7 @@
 #define __GGIT_STATUS_OPTIONS_H__
 
 #include <glib-object.h>
-#include <git2/strarray.h>
-#include <git2/diff.h>
-#include <git2/status.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

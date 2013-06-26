@@ -21,8 +21,7 @@
 #include "ggit-config.h"
 #include "ggit-config-entry.h"
 
-#include <git2/errors.h>
-#include <git2/config.h>
+#include <git2.h>
 
 #include "ggit-error.h"
 

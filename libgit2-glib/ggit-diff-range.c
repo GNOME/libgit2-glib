@@ -19,7 +19,7 @@
  */
 
 #include <glib-object.h>
-#include <git2/diff.h>
+#include <git2.h>
 
 #include "ggit-diff-range.h"
 

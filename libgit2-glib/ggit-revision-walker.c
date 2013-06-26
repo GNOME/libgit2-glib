@@ -20,8 +20,7 @@
 
 
 #include <gio/gio.h>
-#include <git2/errors.h>
-#include <git2/revwalk.h>
+#include <git2.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"

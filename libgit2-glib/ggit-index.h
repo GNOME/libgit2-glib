@@ -23,7 +23,7 @@
 
 #include <glib-object.h>
 #include <gio/gio.h>
-#include <git2/index.h>
+#include <git2.h>
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-index-entry.h>
 #include <libgit2-glib/ggit-index-entry-resolve-undo.h>

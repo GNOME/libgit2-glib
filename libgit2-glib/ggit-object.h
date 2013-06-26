@@ -23,7 +23,7 @@
 #define __GGIT_OBJECT_H__
 
 #include <glib-object.h>
-#include <git2/object.h>
+#include <git2.h>
 #include <libgit2-glib/ggit-native.h>
 
 #include "ggit-types.h"

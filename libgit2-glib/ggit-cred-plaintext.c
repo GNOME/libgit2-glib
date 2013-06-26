@@ -18,8 +18,7 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <git2/transport.h>
-#include <git2/errors.h>
+#include <git2.h>
 #include <gio/gio.h>
 
 #include "ggit-error.h"

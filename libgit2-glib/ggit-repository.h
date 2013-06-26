@@ -23,7 +23,7 @@
 #define __GGIT_REPOSITORY_H__
 
 #include <glib-object.h>
-#include <git2/repository.h>
+#include <git2.h>
 #include <gio/gio.h>
 #include <libgit2-glib/ggit-config.h>
 #include <libgit2-glib/ggit-index.h>

@@ -21,7 +21,7 @@
 #ifndef __GGIT_DIFF_H__
 #define __GGIT_DIFF_H__
 
-#include <git2/diff.h>
+#include <git2.h>
 #include "ggit-native.h"
 #include "ggit-types.h"
 

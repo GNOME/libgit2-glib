@@ -25,7 +25,7 @@
 #include <gio/gio.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-types.h>
-#include <git2/index.h>
+#include <git2.h>
 
 G_BEGIN_DECLS
 

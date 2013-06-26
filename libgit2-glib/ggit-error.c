@@ -20,7 +20,7 @@
 
 
 #include <errno.h>
-#include <git2/errors.h>
+#include <git2.h>
 
 #include "ggit-error.h"
 

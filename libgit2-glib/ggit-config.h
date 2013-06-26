@@ -23,7 +23,7 @@
 
 #include <glib-object.h>
 #include <gio/gio.h>
-#include <git2/config.h>
+#include <git2.h>
 
 #include <libgit2-glib/ggit-types.h>
 #include "ggit-native.h"

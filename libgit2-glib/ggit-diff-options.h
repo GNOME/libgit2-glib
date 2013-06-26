@@ -23,7 +23,7 @@
 #define __GGIT_DIFF_OPTIONS_H__
 
 #include <glib-object.h>
-#include <git2/diff.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

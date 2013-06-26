@@ -26,8 +26,7 @@
 #include "ggit-signature.h"
 #include "ggit-utils.h"
 
-#include <git2/branch.h>
-#include <git2/errors.h>
+#include <git2.h>
 
 /* FIXME: we should have a ref superclass and direct and symbolic subclasses */
 

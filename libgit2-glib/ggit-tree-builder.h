@@ -21,7 +21,7 @@
 #ifndef __GGIT_TREE_BUILDER_H__
 #define __GGIT_TREE_BUILDER_H__
 
-#include <git2/tree.h>
+#include <git2.h>
 #include <libgit2-glib/ggit-native.h>
 
 G_BEGIN_DECLS

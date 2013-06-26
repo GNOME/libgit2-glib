@@ -22,7 +22,7 @@
 #define __GGIT_SIGNATURE_H__
 
 #include <libgit2-glib/ggit-native.h>
-#include <git2/signature.h>
+#include <git2.h>
 #include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS

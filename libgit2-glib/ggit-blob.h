@@ -23,7 +23,7 @@
 #define __GGIT_BLOB_H__
 
 #include <glib-object.h>
-#include <git2/blob.h>
+#include <git2.h>
 
 #include "ggit-object.h"
 #include "ggit-types.h"

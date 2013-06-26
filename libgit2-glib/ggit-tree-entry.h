@@ -21,7 +21,7 @@
 #ifndef __GGIT_TREE_ENTRY_H__
 #define __GGIT_TREE_ENTRY_H__
 
-#include <git2/tree.h>
+#include <git2.h>
 #include <glib-object.h>
 #include <libgit2-glib/ggit-types.h>
 

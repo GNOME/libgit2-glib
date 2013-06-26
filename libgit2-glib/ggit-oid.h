@@ -23,7 +23,7 @@
 #define __GGIT_OID_H__
 
 #include <glib-object.h>
-#include <git2/oid.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

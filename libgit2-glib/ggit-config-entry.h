@@ -22,7 +22,7 @@
 #define __GGIT_CONFIG_ENTRY_H__
 
 #include <glib-object.h>
-#include <git2/config.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

@@ -18,7 +18,7 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <git2/threads.h>
+#include <git2.h>
 
 #include "ggit-main.h"
 

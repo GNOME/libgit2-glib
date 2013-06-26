@@ -23,7 +23,7 @@
 #include "ggit-repository.h"
 #include "ggit-error.h"
 
-#include <git2/errors.h>
+#include <git2.h>
 
 
 struct _GgitSubmodule

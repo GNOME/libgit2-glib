@@ -21,7 +21,7 @@
 #ifndef __GGIT_REF_SPEC_H__
 #define __GGIT_REF_SPEC_H__
 
-#include <git2/refspec.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

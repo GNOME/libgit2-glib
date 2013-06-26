@@ -22,7 +22,7 @@
 #define __GGIT_REMOTE_H__
 
 #include <glib-object.h>
-#include <git2/remote.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

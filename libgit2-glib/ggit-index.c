@@ -19,7 +19,7 @@
  */
 
 #include "ggit-index.h"
-#include <git2/errors.h>
+#include <git2.h>
 #include "ggit-error.h"
 
 #define GGIT_INDEX_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_INDEX, GgitIndexPrivate))

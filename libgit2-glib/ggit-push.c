@@ -19,10 +19,7 @@
  */
 
 #include <gio/gio.h>
-#include <git2/types.h>
-#include <git2/remote.h>
-#include <git2/push.h>
-#include <git2/errors.h>
+#include <git2.h>
 
 #include "ggit-push.h"
 #include "ggit-error.h"

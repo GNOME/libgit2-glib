@@ -19,7 +19,7 @@
  */
 
 #include <glib-object.h>
-#include <git2/refspec.h>
+#include <git2.h>
 
 #include "ggit-ref-spec.h"
 

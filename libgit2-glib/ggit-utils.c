@@ -18,7 +18,7 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <git2/errors.h>
+#include <git2.h>
 
 #include "ggit-blob.h"
 #include "ggit-commit.h"

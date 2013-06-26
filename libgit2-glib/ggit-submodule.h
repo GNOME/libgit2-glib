@@ -22,7 +22,7 @@
 #define __GGIT_SUBMODULE_H__
 
 #include <glib-object.h>
-#include <git2/submodule.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

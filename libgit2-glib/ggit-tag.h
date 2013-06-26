@@ -23,7 +23,7 @@
 #define __GGIT_TAG_H__
 
 #include <glib-object.h>
-#include <git2/tag.h>
+#include <git2.h>
 
 #include "ggit-object.h"
 #include "ggit-types.h"

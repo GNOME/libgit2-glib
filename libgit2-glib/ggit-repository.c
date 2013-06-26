@@ -19,20 +19,7 @@
  */
 
 #include <gio/gio.h>
-#include <git2/errors.h>
-#include <git2/repository.h>
-#include <git2/refs.h>
-#include <git2/diff.h>
-#include <git2/status.h>
-#include <git2/tag.h>
-#include <git2/branch.h>
-#include <git2/remote.h>
-#include <git2/reset.h>
-#include <git2/submodule.h>
-#include <git2/revparse.h>
-#include <git2/stash.h>
-#include <git2/graph.h>
-#include <git2/blob.h>
+#include <git2.h>
 
 #include "ggit-error.h"
 #include "ggit-oid.h"

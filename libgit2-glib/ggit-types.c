@@ -18,16 +18,7 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <git2/diff.h>
-#include <git2/errors.h>
-#include <git2/revwalk.h>
-#include <git2/status.h>
-#include <git2/submodule.h>
-#include <git2/types.h>
-#include <git2/config.h>
-#include <git2/stash.h>
-#include <git2/reset.h>
-#include <git2/remote.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 

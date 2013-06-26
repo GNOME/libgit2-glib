@@ -21,7 +21,7 @@
 #include "ggit-tree-entry.h"
 #include "ggit-oid.h"
 #include "ggit-utils.h"
-#include <git2/errors.h>
+#include <git2.h>
 
 struct _GgitTreeEntry
 {
