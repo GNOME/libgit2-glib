@@ -33,6 +33,7 @@
 #include <libgit2-glib/ggit-diff-delta.h>
 #include <libgit2-glib/ggit-diff-file.h>
 #include <libgit2-glib/ggit-diff-options.h>
+#include <libgit2-glib/ggit-diff-patch.h>
 #include <libgit2-glib/ggit-diff-range.h>
 #include <libgit2-glib/ggit-enum-types.h>
 #include <libgit2-glib/ggit-error.h>

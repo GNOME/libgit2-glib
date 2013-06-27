@@ -30,6 +30,7 @@ INST_H_FILES =				\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
 	ggit-diff-options.h		\
+	ggit-diff-patch.h		\
 	ggit-diff-range.h		\
 	ggit-error.h			\
 	ggit-index.h			\
@@ -78,6 +79,7 @@ C_FILES =				\
 	ggit-diff-delta.c		\
 	ggit-diff-file.c		\
 	ggit-diff-options.c		\
+	ggit-diff-patch.c		\
 	ggit-diff-range.c		\
 	ggit-error.c			\
 	ggit-index.c			\

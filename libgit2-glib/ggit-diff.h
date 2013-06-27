@@ -99,6 +99,11 @@ void       ggit_diff_print_patch          (GgitDiff              *diff,
                                            GgitDiffLineCallback   print_cb,
                                            gpointer              *user_data,
                                            GError               **error);
+void       ggit_diff_get_patch            (GgitDiff              *diff,
+                                           gsize                  idx,
+                                           GgitDiffPatch        **patch,
+                                           GgitDiffDelta        **delta,
+                                           GError               **error);
 
 void       ggit_diff_blobs                (GgitBlob              *old_blob,
                                            const gchar           *old_as_path,

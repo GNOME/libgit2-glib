@@ -103,6 +103,13 @@ typedef struct _GgitDiff GgitDiff;
 typedef struct _GgitDiffDelta GgitDiffDelta;
 
 /**
+ * GgitDiffPatch:
+ *
+ * Represents a patch object.
+ */
+typedef struct _GgitDiffPatch GgitDiffPatch;
+
+/**
  * GgitDiffFile:
  *
  * Represents a file in a #GgitDiff.

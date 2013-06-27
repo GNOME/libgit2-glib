@@ -21,6 +21,7 @@
 #include <git2.h>
 
 #include "ggit-diff.h"
+#include "ggit-diff-patch.h"
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
 #include "ggit-diff-range.h"
@@ -468,6 +469,64 @@ ggit_diff_print_patch (GgitDiff              *diff,
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_diff_get_patch:
+ * @diff: a #GgitDiff.
+ * @idx: index into @diff.
+ * @patch: (allow-none): a #GgitDiffPatch or %NULL.
+ * @delta: (allow-none): a #GgitDiffDelta or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the diff delta and patch for an entry in @diff.
+ *
+ * The #GgitDiffPatch is a newly created object contains the text diffs
+ * for the delta.  You have to call git_diff_patch_unref() when you are
+ * done with it.  You can use the patch object to loop over all the hunks
+ * and lines in the diff of the one delta.
+ *
+ * For an unchanged file or a binary file, no #GgitDiffPatch will be
+ * created, the output will be set to %NULL, and the `binary` flag will be
+ * set true in @delta.
+ *
+ * It is okay to pass %NULL for either of the output parameters; if you pass
+ * %NULL for @patch, then the text diff will not be calculated.
+ */
+void
+ggit_diff_get_patch (GgitDiff       *diff,
+                     gsize           idx,
+                     GgitDiffPatch **patch,
+                     GgitDiffDelta **delta,
+                     GError        **error)
+{
+	gint ret;
+	const git_diff_delta *delta_out;
+	git_diff_patch *patch_out = NULL;
+
+	g_return_if_fail (GGIT_IS_DIFF (diff));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_diff_get_patch (patch ? &patch_out : NULL,
+	                          delta ? &delta_out : NULL,
+	                          _ggit_native_get (diff),
+	                          idx);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return;
+	}
+
+	if (patch && patch_out)
+	{
+		*patch = _ggit_diff_patch_wrap (patch_out);
+	}
+
+	if (delta)
+	{
+		*delta = _ggit_diff_delta_wrap (delta_out);
 	}
 }
 
