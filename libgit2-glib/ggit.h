@@ -22,9 +22,11 @@
 #define __GGIT_H__
 
 #include <libgit2-glib/ggit-blob.h>
+#include <libgit2-glib/ggit-branch.h>
 #include <libgit2-glib/ggit-clone-options.h>
 #include <libgit2-glib/ggit-commit.h>
 #include <libgit2-glib/ggit-config.h>
+#include <libgit2-glib/ggit-config-entry.h>
 #include <libgit2-glib/ggit-cred.h>
 #include <libgit2-glib/ggit-cred-plaintext.h>
 #include <libgit2-glib/ggit-diff.h>
@@ -43,6 +45,7 @@
 #include <libgit2-glib/ggit-object-factory.h>
 #include <libgit2-glib/ggit-object-factory-base.h>
 #include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-push.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-ref-spec.h>
 #include <libgit2-glib/ggit-reflog.h>
@@ -51,9 +54,12 @@
 #include <libgit2-glib/ggit-repository.h>
 #include <libgit2-glib/ggit-revision-walker.h>
 #include <libgit2-glib/ggit-signature.h>
+#include <libgit2-glib/ggit-status-options.h>
 #include <libgit2-glib/ggit-submodule.h>
 #include <libgit2-glib/ggit-tag.h>
+#include <libgit2-glib/ggit-transfer-progress.h>
 #include <libgit2-glib/ggit-tree.h>
+#include <libgit2-glib/ggit-tree-builder.h>
 #include <libgit2-glib/ggit-tree-entry.h>
 #include <libgit2-glib/ggit-types.h>
 
