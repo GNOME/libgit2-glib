@@ -24,6 +24,7 @@ GgitBranchesCallback
 ggit_branch_delete
 ggit_branch_move
 ggit_branch_get_name
+ggit_branch_get_upstream
 ggit_branch_is_head
 <SUBSECTION Standard>
 GGIT_BRANCH
@@ -210,6 +211,7 @@ ggit_diff_merge
 ggit_diff_foreach
 ggit_diff_print_compact
 ggit_diff_print_patch
+ggit_diff_get_patch
 ggit_diff_blobs
 ggit_diff_blob_to_buffer
 <SUBSECTION Standard>
@@ -243,6 +245,7 @@ ggit_diff_delta_get_flags
 <SUBSECTION Standard>
 GGIT_DIFF_DELTA
 GGIT_TYPE_DIFF_DELTA
+GGIT_TYPE_DELTA_TYPE
 ggit_diff_delta_get_type
 ggit_delta_type_get_type
 </SECTION>
@@ -278,6 +281,19 @@ ggit_diff_options_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-diff-patch</FILE>
+<TITLE>GgitDiffPatch</TITLE>
+GgitDiffPatch
+ggit_diff_patch_ref
+ggit_diff_patch_unref
+ggit_diff_patch_to_string
+<SUBSECTION Standard>
+GGIT_DIFF_PATCH
+GGIT_TYPE_DIFF_PATCH
+ggit_diff_patch_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-diff-range</FILE>
 <TITLE>GgitDiffRange</TITLE>
 GgitDiffRange
@@ -299,6 +315,9 @@ ggit_diff_range_get_type
 GgitError
 GGIT_ERROR
 ggit_error_quark
+<SUBSECTION Standard>
+GGIT_TYPE_ERROR
+ggit_error_get_type
 </SECTION>
 
 <SECTION>
@@ -336,16 +355,29 @@ ggit_index_entries_get_by_path
 ggit_index_entries_size
 ggit_index_entry_ref
 ggit_index_entry_unref
+ggit_index_entry_new_for_file
+ggit_index_entry_new_for_path
 ggit_index_entry_get_dev
+ggit_index_entry_set_dev
 ggit_index_entry_get_ino
+ggit_index_entry_set_ino
 ggit_index_entry_get_mode
+ggit_index_entry_set_mode
 ggit_index_entry_get_uid
+ggit_index_entry_set_uid
 ggit_index_entry_get_gid
+ggit_index_entry_set_gid
 ggit_index_entry_get_file_size
+ggit_index_entry_set_file_size
 ggit_index_entry_get_id
+ggit_index_entry_set_id
 ggit_index_entry_get_flags
+ggit_index_entry_set_flags
 ggit_index_entry_get_flags_extended
+ggit_index_entry_set_flags_extended
 ggit_index_entry_get_file
+ggit_index_entry_set_file
+ggit_index_entry_stat
 <SUBSECTION Standard>
 GGIT_INDEX_ENTRIES
 GGIT_INDEX_ENTRY
@@ -387,6 +419,7 @@ ggit_get_capabilities
 ggit_init
 <SUBSECTION Standard>
 GGIT_TYPE_CAP_FLAGS
+ggit_cap_flags_get_type
 </SECTION>
 
 <SECTION>
@@ -525,7 +558,9 @@ GGIT_REF
 GGIT_REF_CLASS
 GGIT_REF_GET_CLASS
 GGIT_TYPE_REF
+GGIT_TYPE_REF_TYPE
 ggit_ref_get_type
+ggit_ref_type_get_type
 </SECTION>
 
 <SECTION>
@@ -596,6 +631,7 @@ ggit_remote_is_supported_url
 <SUBSECTION Standard>
 GGIT_REMOTE
 GGIT_TYPE_REMOTE
+GGIT_TYPE_REMOTE_DOWNLOAD_TAGS_TYPE
 ggit_remote_get_type
 ggit_remote_download_tags_type_get_type
 </SECTION>
@@ -605,7 +641,9 @@ ggit_remote_download_tags_type_get_type
 <TITLE>GgitRepository</TITLE>
 GgitRepository
 GgitRepositoryClass
-GgitReferencesCallback
+GgitReferencesNameCallback
+GgitCreateFlags
+GgitResetType
 GgitStashCallback
 GgitStashFlags
 GgitStatusCallback
@@ -617,6 +655,9 @@ ggit_repository_lookup
 ggit_repository_lookup_reference
 ggit_repository_create_reference
 ggit_repository_create_symbolic_reference
+ggit_repository_create_blob_from_buffer
+ggit_repository_create_blob_from_file
+ggit_repository_create_blob_from_path
 ggit_repository_create_tag
 ggit_repository_create_tag_from_buffer
 ggit_repository_create_tag_lightweight
@@ -638,7 +679,7 @@ ggit_repository_set_workdir
 ggit_repository_is_bare
 ggit_repository_file_status
 ggit_repository_file_status_foreach
-ggit_repository_references_foreach
+ggit_repository_references_foreach_name
 ggit_repository_get_config
 ggit_repository_get_index
 ggit_repository_lookup_submodule
@@ -656,8 +697,16 @@ GGIT_REPOSITORY
 GGIT_REPOSITORY_CLASS
 GGIT_REPOSITORY_GET_CLASS
 GGIT_TYPE_REPOSITORY
+GGIT_TYPE_CREATE_FLAGS
+GGIT_TYPE_RESET_TYPE
+GGIT_TYPE_STASH_FLAGS
+GGIT_TYPE_STATUS_FLAGS
 GgitRepositoryPrivate
 ggit_repository_get_type
+ggit_create_flags_get_type
+ggit_reset_type_get_type
+ggit_stash_flags_get_type
+ggit_status_flags_get_type
 </SECTION>
 
 <SECTION>
@@ -706,6 +755,24 @@ GGIT_SIGNATURE_GET_CLASS
 GGIT_TYPE_SIGNATURE
 GgitSignaturePrivate
 ggit_signature_get_type
+</SECTION>
+
+<SECTION>
+<FILE>ggit-status</FILE>
+<TITLE>GgitStatusOptions</TITLE>
+GgitStatusOption
+GgitStatusShow
+ggit_status_options_copy
+ggit_status_options_free
+ggit_status_options_new
+<SUBSECTION Standard>
+GGIT_TYPE_STATUS_OPTIONS
+GGIT_STATUS_OPTIONS
+GGIT_TYPE_STATUS_OPTION
+GGIT_TYPE_STATUS_SHOW
+ggit_status_options_get_type
+ggit_status_show_get_type
+ggit_status_option_get_type
 </SECTION>
 
 <SECTION>
@@ -806,7 +873,27 @@ GGIT_TREE
 GGIT_TREE_CLASS
 GGIT_TREE_GET_CLASS
 GGIT_TYPE_TREE
+GGIT_TYPE_TREE_WALK_MODE
 ggit_tree_get_type
+ggit_tree_walk_mode_get_type
+</SECTION>
+
+<SECTION>
+<FILE>ggit-tree-builder</FILE>
+<TITLE>GgitTreeBuilder</TITLE>
+GgitTreeBuilder
+GgitTreeBuilderClass
+ggit_tree_builder_get_entry
+ggit_tree_builder_remove
+ggit_tree_create_builder
+<SUBSECTION Standard>
+GGIT_IS_TREE_BUILDER
+GGIT_IS_TREE_BUILDER_CLASS
+GGIT_TREE_BUILDER
+GGIT_TREE_BUILDER_CLASS
+GGIT_TREE_BUILDER_GET_CLASS
+GGIT_TYPE_TREE_BUILDER
+ggit_tree_builder_get_type
 </SECTION>
 
 <SECTION>
@@ -823,5 +910,7 @@ ggit_tree_entry_get_object_type
 <SUBSECTION Standard>
 GGIT_TREE_ENTRY
 GGIT_TYPE_TREE_ENTRY
+GGIT_TYPE_FILE_MODE
 ggit_tree_entry_get_type
+ggit_file_mode_get_type
 </SECTION>
