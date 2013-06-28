@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libgit2-glib-1.0.la
 
-INCLUDES =								\
+AM_CPPFLAGS =								\
 	-I$(top_srcdir)							\
 	-I$(srcdir)							\
 	$(LIBGIT2_GLIB_CFLAGS)						\
