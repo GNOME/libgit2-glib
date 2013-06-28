@@ -684,6 +684,12 @@ typedef enum {
  * GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS: search untracked directories recursively (default).
  * GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH: do not match path specifications.
  * GGIT_STATUS_OPTION_RECURSE_IGNORED_DIRS: search ignored directories recursively.
+ * GGIT_STATUS_OPTION_RENAMES_HEAD_TO_INDEX: indicates that rename detection
+ * should be processed between the head and the index and enables
+ * the GIT_STATUS_INDEX_RENAMED as a possible status flag.
+ * GGIT_STATUS_OPTION_RENAMES_INDEX_TO_WORKDIR: indicates tha rename
+ * detection should be run between the index and the working directory
+ * and enabled GIT_STATUS_WT_RENAMED as a possible status flag.
  * GGIT_STATUS_OPTION_SORT_CASE_SENSITIVELY: sort case sensitive.
  * GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY: sort case insensitive.
  * GGIT_STATUS_OPTION_DEFAULT: default flags.
@@ -699,6 +705,8 @@ typedef enum {
 	GGIT_STATUS_OPTION_RECURSE_UNTRACKED_DIRS   = (1 << 4),
 	GGIT_STATUS_OPTION_DISABLE_PATHSPEC_MATCH   = (1 << 5),
 	GGIT_STATUS_OPTION_RECURSE_IGNORED_DIRS     = (1 << 6),
+	GGIT_STATUS_OPTION_RENAMES_HEAD_TO_INDEX    = (1 << 7),
+	GGIT_STATUS_OPTION_RENAMES_INDEX_TO_WORKDIR = (1 << 8),
 	GGIT_STATUS_OPTION_SORT_CASE_SENSITIVELY    = (1 << 9),
 	GGIT_STATUS_OPTION_SORT_CASE_INSENSITIVELY  = (1 << 10),
 	GGIT_STATUS_OPTION_DEFAULT                  = GGIT_STATUS_OPTION_INCLUDE_IGNORED |
