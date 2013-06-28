@@ -97,6 +97,10 @@ void              ggit_index_entry_set_flags_extended (GgitIndexEntry    *entry,
                                                        guint              flags_extended);
 
 GFile            *ggit_index_entry_get_file           (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_file           (GgitIndexEntry    *entry,
+                                                       GFile             *file);
+
+void              ggit_index_entry_stat               (GgitIndexEntry    *entry);
 
 const git_index_entry *_ggit_index_entry_get_native         (GgitIndexEntry    *entry);
 

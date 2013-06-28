@@ -641,6 +641,121 @@ ggit_index_entry_get_file (GgitIndexEntry *entry)
 	return g_file_new_for_path (entry->entry->path);
 }
 
+/**
+ * ggit_index_entry_set_file:
+ * @entry: a #GgitIndexEntry.
+ * @file: (allow-none): a #GFile.
+ *
+ * Set the file of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_file (GgitIndexEntry *entry,
+                           GFile          *file)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (file == NULL || G_IS_FILE (file));
+	g_return_if_fail (entry->owned);
+
+	if (entry->entry->path)
+	{
+		g_free (entry->entry->path);
+		entry->entry->path = NULL;
+	}
+
+	if (file)
+	{
+		entry->entry->path = g_file_get_path (file);
+	}
+}
+
+/**
+ * ggit_index_entry_stat:
+ * @entry: a #GgitIndexEntry.
+ *
+ * Fill the entry fields from statting the entry file. Note that the entry
+ * file must be set correctly and the file must exist.
+ *
+ **/
+void
+ggit_index_entry_stat (GgitIndexEntry *entry)
+{
+	GFile *f;
+	GFileInfo *info;
+
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	if (entry->entry->path == NULL)
+	{
+		return;
+	}
+
+	f = g_file_new_for_path (entry->entry->path);
+
+	info = g_file_query_info (f,
+	                          G_FILE_ATTRIBUTE_STANDARD_SIZE ","
+	                          G_FILE_ATTRIBUTE_TIME_MODIFIED ","
+	                          G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC ","
+	                          G_FILE_ATTRIBUTE_TIME_CREATED ","
+	                          G_FILE_ATTRIBUTE_TIME_CREATED_USEC ","
+	                          G_FILE_ATTRIBUTE_UNIX_DEVICE ","
+	                          G_FILE_ATTRIBUTE_UNIX_INODE ","
+	                          G_FILE_ATTRIBUTE_UNIX_MODE ","
+	                          G_FILE_ATTRIBUTE_UNIX_UID ","
+	                          G_FILE_ATTRIBUTE_UNIX_GID,
+	                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+	                          NULL,
+	                          NULL);
+
+	g_object_unref (f);
+
+	if (!info)
+	{
+		return;
+	}
+
+	entry->entry->file_size = g_file_info_get_size (info);
+
+	entry->entry->mtime.seconds =
+		g_file_info_get_attribute_uint64 (info,
+		                                  G_FILE_ATTRIBUTE_TIME_MODIFIED);
+
+	entry->entry->mtime.nanoseconds =
+		g_file_info_get_attribute_uint32 (info,
+		                                  G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC) * 1e3;
+
+	entry->entry->ctime.seconds =
+		g_file_info_get_attribute_uint64 (info,
+		                                  G_FILE_ATTRIBUTE_TIME_CREATED);
+
+	entry->entry->ctime.nanoseconds =
+		g_file_info_get_attribute_uint32 (info,
+		                                  G_FILE_ATTRIBUTE_TIME_CREATED_USEC) * 1e3;
+
+	entry->entry->dev =
+		g_file_info_get_attribute_uint32 (info,
+		                                  G_FILE_ATTRIBUTE_UNIX_DEVICE);
+
+	entry->entry->ino =
+		g_file_info_get_attribute_uint64 (info,
+		                                  G_FILE_ATTRIBUTE_UNIX_INODE);
+
+	entry->entry->mode =
+		g_file_info_get_attribute_uint32 (info,
+		                                  G_FILE_ATTRIBUTE_UNIX_MODE);
+
+	entry->entry->uid =
+		g_file_info_get_attribute_uint32 (info,
+		                                  G_FILE_ATTRIBUTE_UNIX_UID);
+
+	entry->entry->gid =
+		g_file_info_get_attribute_uint32 (info,
+		                                  G_FILE_ATTRIBUTE_UNIX_GID);
+
+	g_object_unref (info);
+}
+
 const git_index_entry *
 _ggit_index_entry_get_native (GgitIndexEntry *entry)
 {
