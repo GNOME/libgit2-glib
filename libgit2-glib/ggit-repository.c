@@ -2007,6 +2007,75 @@ ggit_repository_create_blob_from_path (GgitRepository  *repository,
 	return _ggit_oid_wrap (&oid);
 }
 
+/**
+ * ggit_repository_create_commit:
+ * @repository: a #GgitRepository.
+ * @update_ref: (allow-none): name of the reference to update.
+ * @author: author signature.
+ * @committer: committer signature (and time of commit).
+ * @message_encoding: (allow-none): message encoding.
+ * @message: commit message.
+ * @tree: the tree of objects to commit.
+ * @parents: (array length=parent_count): parent commits.
+ * @parent_count: number of parent commits in @parents.
+ * @error: a #GError.
+ *
+ * Create a new commit. If @update_ref is not %NULL, the given reference will
+ * be updated to point to the newly created commit. Use "HEAD" to update the
+ * HEAD of the current branch and make it point to this commit.
+ *
+ * If @message_encoding is set to %NULL, "UTF-8" encoding is assumed for the
+ * provided @message. Note that @message will not be cleaned up automatically.
+ * You can use #ggit_message_prettify to do this yourself if needed.
+ *
+ * Returns: the #GgitOId of the created commit object, or %NULL in case of an error.
+ *
+ */
+GgitOId *
+ggit_repository_create_commit (GgitRepository  *repository,
+                               const gchar     *update_ref,
+                               GgitSignature   *author,
+                               GgitSignature   *committer,
+                               const gchar     *message_encoding,
+                               const gchar     *message,
+                               GgitTree        *tree,
+                               GgitCommit     **parents,
+                               gint             parent_count,
+                               GError         **error)
+{
+	gint ret;
+	git_oid oid;
+	git_commit **parents_native;
+	gint i;
+
+	parents_native = g_new0 (git_commit *, parent_count);
+
+	for (i = 0; i < parent_count; ++i)
+	{
+		parents_native[i] = _ggit_native_get (parents[i]);
+	}
+
+	ret = git_commit_create (&oid,
+	                         _ggit_native_get (repository),
+	                         update_ref,
+	                         _ggit_native_get (author),
+	                         _ggit_native_get (committer),
+	                         message_encoding,
+	                         message,
+	                         _ggit_native_get (tree),
+	                         parent_count,
+	                         (const git_commit **)parents_native);
+
+	g_free (parents_native);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
 
 /**
  * ggit_repository_create_tree_builder:
