@@ -141,6 +141,14 @@ GgitOId            *ggit_repository_create_tag_lightweight (
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
+GgitTreeBuilder    *ggit_repository_create_tree_builder_from_tree (
+                                                       GgitRepository        *repository,
+                                                       GgitTree              *tree,
+                                                       GError               **error);
+
+GgitTreeBuilder    *ggit_repository_create_tree_builder (
+                                                       GgitRepository        *repository);
+
 gchar             **ggit_repository_list_tags         (GgitRepository        *repository,
                                                        GError               **error);
 

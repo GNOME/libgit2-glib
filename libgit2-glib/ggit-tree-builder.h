@@ -23,6 +23,7 @@
 
 #include <git2.h>
 #include <libgit2-glib/ggit-native.h>
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
@@ -34,14 +35,15 @@ G_BEGIN_DECLS
 #define GGIT_TREE_BUILDER_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilderClass))
 
 typedef struct _GgitTreeBuilderClass	GgitTreeBuilderClass;
+typedef struct _GgitTreeBuilderPrivate  GgitTreeBuilderPrivate;
 
 struct _GgitTreeBuilder
 {
 	/*< private >*/
 	GgitNative parent;
 
-	/* priv padding */
-	gpointer priv;
+	/* priv */
+	GgitTreeBuilderPrivate *priv;
 };
 
 /**
@@ -58,8 +60,9 @@ struct _GgitTreeBuilderClass
 
 GType            ggit_tree_builder_get_type (void) G_GNUC_CONST;
 
-GgitTreeBuilder *_ggit_tree_builder_wrap    (git_treebuilder *builder,
-                                             gboolean  owned);
+GgitTreeBuilder *_ggit_tree_builder_wrap     (git_treebuilder *builder,
+                                              GgitRepository  *repository,
+                                              gboolean         owned);
 
 void             ggit_tree_builder_remove (GgitTreeBuilder  *builder,
                                            const gchar      *path,

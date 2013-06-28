@@ -24,20 +24,52 @@
 #include "ggit-error.h"
 #include "ggit-tree-entry.h"
 
+#define GGIT_TREE_BUILDER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilderPrivate))
+
+struct _GgitTreeBuilderPrivate
+{
+	GgitRepository *repository;
+};
+
 G_DEFINE_TYPE (GgitTreeBuilder, ggit_tree_builder, GGIT_TYPE_NATIVE)
+
+static void
+ggit_tree_builder_dispose (GObject *object)
+{
+	GgitTreeBuilder *builder;
+
+	builder = GGIT_TREE_BUILDER (object);
+
+	if (builder->priv->repository)
+	{
+		g_object_unref (builder->priv->repository);
+		builder->priv->repository = NULL;
+	}
+
+	G_OBJECT_CLASS (ggit_tree_builder_parent_class)->dispose (object);
+}
 
 static void
 ggit_tree_builder_class_init (GgitTreeBuilderClass *klass)
 {
+	GObjectClass *object_class;
+
+	object_class = G_OBJECT_CLASS (klass);
+
+	object_class->dispose = ggit_tree_builder_dispose;
+
+	g_type_class_add_private (object_class, sizeof (GgitTreeBuilderPrivate));
 }
 
 static void
 ggit_tree_builder_init (GgitTreeBuilder *self)
 {
+	self->priv = GGIT_TREE_BUILDER_GET_PRIVATE (self);
 }
 
 GgitTreeBuilder *
 _ggit_tree_builder_wrap (git_treebuilder *builder,
+                         GgitRepository  *repository,
                          gboolean         owned)
 {
 	GgitTreeBuilder *gbuilder;
@@ -45,6 +77,11 @@ _ggit_tree_builder_wrap (git_treebuilder *builder,
 	gbuilder = g_object_new (GGIT_TYPE_TREE_BUILDER,
 	                         "native", builder,
 	                         NULL);
+
+	if (repository)
+	{
+		gbuilder->priv->repository = g_object_ref (repository);
+	}
 
 	if (owned)
 	{

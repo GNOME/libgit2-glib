@@ -84,9 +84,6 @@ void           ggit_tree_walk           (GgitTree              *tree,
                                          gpointer               user_data,
                                          GError               **error);
 
-GgitTreeBuilder *ggit_tree_create_builder (GgitTree  *tree,
-                                           GError   **error);
-
 G_END_DECLS
 
 #endif /* __GGIT_TREE_H__ */

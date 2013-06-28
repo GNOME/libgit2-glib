@@ -31,6 +31,7 @@
 #include "ggit-signature.h"
 #include "ggit-clone-options.h"
 #include "ggit-status-options.h"
+#include "ggit-tree-builder.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -2004,6 +2005,61 @@ ggit_repository_create_blob_from_path (GgitRepository  *repository,
 	}
 
 	return _ggit_oid_wrap (&oid);
+}
+
+
+/**
+ * ggit_repository_create_tree_builder:
+ * @repository: a #GgitRepository.
+ *
+ * Create a new tree builder.
+ *
+ * Returns: (transfer full): a #GgitTreeBuilder.
+ *
+ **/
+GgitTreeBuilder *
+ggit_repository_create_tree_builder (GgitRepository *repository)
+{
+	git_treebuilder *builder;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+
+	git_treebuilder_create (&builder, NULL);
+	return _ggit_tree_builder_wrap (builder, repository, TRUE);
+}
+
+/**
+ * ggit_repository_create_tree_builder_from_tree:
+ * @tree: a #GgitTree.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a tree builder for initialized with @tree. To create an empty
+ * tree builder, use #ggit_repository_create_tree_builder instead.
+ *
+ * Returns: (transfer full): a new #GgitTreeBuilder object, or %NULL if there was an error.
+ *
+ **/
+GgitTreeBuilder *
+ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
+                                               GgitTree        *tree,
+                                               GError         **error)
+{
+	gint ret;
+	git_treebuilder *builder;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (GGIT_IS_TREE (tree), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_treebuilder_create (&builder, _ggit_native_get (tree));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_tree_builder_wrap (builder, repository, TRUE);
 }
 
 /* ex:set ts=8 noet: */
