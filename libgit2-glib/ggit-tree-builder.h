@@ -24,6 +24,7 @@
 #include <git2.h>
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-oid.h>
 
 G_BEGIN_DECLS
 
@@ -58,17 +59,28 @@ struct _GgitTreeBuilderClass
 	GgitNativeClass parent_class;
 };
 
-GType            ggit_tree_builder_get_type (void) G_GNUC_CONST;
+GType            ggit_tree_builder_get_type  (void) G_GNUC_CONST;
 
 GgitTreeBuilder *_ggit_tree_builder_wrap     (git_treebuilder *builder,
                                               GgitRepository  *repository,
                                               gboolean         owned);
 
-void             ggit_tree_builder_remove (GgitTreeBuilder  *builder,
-                                           const gchar      *path,
-                                           GError          **error);
+void             ggit_tree_builder_remove    (GgitTreeBuilder  *builder,
+                                              const gchar      *path,
+                                              GError          **error);
 
- GgitTreeEntry  *ggit_tree_builder_get_entry (GgitTreeBuilder *builder,
+void             ggit_tree_builder_clear     (GgitTreeBuilder *builder);
+
+GgitOId         *ggit_tree_builder_write     (GgitTreeBuilder  *builder,
+                                              GError          **error);
+
+GgitTreeEntry   *ggit_tree_builder_insert    (GgitTreeBuilder  *builder,
+                                              const gchar      *filename,
+                                              GgitOId          *oid,
+                                              GgitFileMode      file_mode,
+                                              GError          **error);
+
+GgitTreeEntry   *ggit_tree_builder_get_entry (GgitTreeBuilder *builder,
                                               const gchar     *path);
 
 G_END_DECLS

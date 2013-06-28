@@ -153,5 +153,100 @@ ggit_tree_builder_get_entry (GgitTreeBuilder *builder,
 	}
 }
 
+/**
+ * ggit_tree_builder_clear:
+ * @builder: a #GgitTreeBuilder.
+ *
+ * Clear all entries in the tree builder.
+ *
+ **/
+void
+ggit_tree_builder_clear (GgitTreeBuilder *builder)
+{
+	g_return_if_fail (GGIT_IS_TREE_BUILDER (builder));
+
+	git_treebuilder_clear (_ggit_native_get (builder));
+}
+
+/**
+ * ggit_tree_builder_write:
+ * @builder: a #GgitTreeBuilder.
+ * @error: a #GError.
+ *
+ * Write the contents of the tree builder as a tree object.
+ *
+ * Returns: the #GgitOId of the created tree object.
+ *
+ **/
+GgitOId *
+ggit_tree_builder_write (GgitTreeBuilder  *builder,
+                         GError          **error)
+{
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_TREE_BUILDER (builder), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_treebuilder_write (&oid,
+	                             _ggit_native_get (builder),
+	                             _ggit_native_get (builder->priv->repository));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
+/**
+ * ggit_tree_builder_insert:
+ * @builder: a #GgitTreeBuilder.
+ * @filename: the file name.
+ * @oid: the #GgitOId of the file blob to insert.
+ * @file_mode: a #GgitFileMode.
+ * @error: a #GError.
+ *
+ * Insert a file with a given blob in the tree builder. If the tree builder
+ * already contains an entry for the given file, then this entry will be
+ * overwritten.
+ *
+ * Note that the returned #GgitTreeEntry is bound to the lifetime of the tree
+ * builder and cannot be used after the tree builder has been freed.
+ *
+ * Returns: (transfer full): a #GgitTreeEntry.
+ *
+ **/
+GgitTreeEntry *
+ggit_tree_builder_insert (GgitTreeBuilder  *builder,
+                          const gchar      *filename,
+                          GgitOId          *oid,
+                          GgitFileMode      file_mode,
+                          GError          **error)
+{
+	gint ret;
+	const git_tree_entry *entry;
+
+	g_return_val_if_fail (GGIT_IS_TREE_BUILDER (builder), NULL);
+	g_return_val_if_fail (filename != NULL, NULL);
+	g_return_val_if_fail (oid != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_treebuilder_insert (&entry,
+	                              _ggit_native_get (builder),
+	                              filename,
+	                              _ggit_oid_get_oid (oid),
+	                              file_mode);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_tree_entry_wrap ((git_tree_entry *)entry, FALSE);
+}
 
 /* ex:set ts=8 noet: */
