@@ -20,6 +20,7 @@
 
 #include "ggit-index-entry.h"
 #include "ggit-index.h"
+#include <string.h>
 
 struct _GgitIndexEntries
 {
@@ -29,8 +30,9 @@ struct _GgitIndexEntries
 
 struct _GgitIndexEntry
 {
-	const git_index_entry *entry;
+	git_index_entry *entry;
 	gint ref_count;
+	gboolean owned;
 };
 
 G_DEFINE_BOXED_TYPE (GgitIndexEntries,
@@ -44,7 +46,8 @@ G_DEFINE_BOXED_TYPE (GgitIndexEntry,
                      ggit_index_entry_unref)
 
 static GgitIndexEntry *
-ggit_index_entry_wrap (const git_index_entry *entry)
+ggit_index_entry_wrap (git_index_entry *entry,
+                       gboolean         owned)
 {
 	GgitIndexEntry *ret;
 
@@ -52,6 +55,7 @@ ggit_index_entry_wrap (const git_index_entry *entry)
 
 	ret->entry = entry;
 	ret->ref_count = 1;
+	ret->owned = owned;
 
 	return ret;
 }
@@ -64,6 +68,42 @@ _ggit_index_entries_wrap (GgitIndex *owner)
 	ret = g_slice_new (GgitIndexEntries);
 	ret->owner = g_object_ref (owner);
 	ret->ref_count = 1;
+
+	return ret;
+}
+
+GgitIndexEntry *
+ggit_index_entry_new_for_file (GFile   *file,
+                               GgitOId *id)
+{
+	git_index_entry *entry;
+	GgitIndexEntry *ret;
+
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+	entry = g_slice_new0 (git_index_entry);
+
+	ret = ggit_index_entry_wrap (entry, TRUE);
+
+	ggit_index_entry_set_file (ret, file);
+	ggit_index_entry_set_id (ret, id);
+
+	ggit_index_entry_stat (ret);
+	return ret;
+}
+
+GgitIndexEntry *
+ggit_index_entry_new_for_path (const gchar *path,
+                               GgitOId     *id)
+{
+	GFile *f;
+	GgitIndexEntry *ret;
+
+	g_return_val_if_fail (path != NULL, NULL);
+
+	f = g_file_new_for_path (path);
+	ret = ggit_index_entry_new_for_file (f, id);
+	g_object_unref (f);
 
 	return ret;
 }
@@ -101,6 +141,12 @@ ggit_index_entry_unref (GgitIndexEntry *entry)
 
 	if (g_atomic_int_dec_and_test (&entry->ref_count))
 	{
+		if (entry->owned)
+		{
+			g_free (entry->entry->path);
+			g_slice_free (git_index_entry, entry->entry);
+		}
+
 		g_slice_free (GgitIndexEntry, entry);
 	}
 }
@@ -175,7 +221,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
 
 	if (entry)
 	{
-		return ggit_index_entry_wrap (entry);
+		return ggit_index_entry_wrap ((git_index_entry *)entry, FALSE);
 	}
 	else
 	{
@@ -222,7 +268,7 @@ ggit_index_entries_get_by_path (GgitIndexEntries *entries,
 
 	if (entry)
 	{
-		return ggit_index_entry_wrap (entry);
+		return ggit_index_entry_wrap ((git_index_entry *)entry, FALSE);
 	}
 	else
 	{
@@ -269,6 +315,24 @@ ggit_index_entry_get_dev (GgitIndexEntry *entry)
 }
 
 /**
+ * ggit_index_entry_set_dev:
+ * @entry: a #GgitIndexEntry.
+ * @dev: the dev.
+ *
+ * Set the dev of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_dev (GgitIndexEntry *entry,
+                          guint           dev)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->dev = dev;
+}
+
+/**
  * ggit_index_entry_get_ino:
  * @entry: a #GgitIndexEntry.
  *
@@ -283,6 +347,24 @@ ggit_index_entry_get_ino (GgitIndexEntry *entry)
 	g_return_val_if_fail (entry != NULL, 0);
 
 	return entry->entry->ino;
+}
+
+/**
+ * ggit_index_entry_set_ino:
+ * @entry: a #GgitIndexEntry.
+ * @ino: the ino.
+ *
+ * Set the ino of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_ino (GgitIndexEntry *entry,
+                          guint           ino)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->ino = ino;
 }
 
 /**
@@ -303,6 +385,24 @@ ggit_index_entry_get_mode (GgitIndexEntry *entry)
 }
 
 /**
+ * ggit_index_entry_set_mode:
+ * @entry: a #GgitIndexEntry.
+ * @mode: the mode.
+ *
+ * Set the mode of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_mode (GgitIndexEntry *entry,
+                           guint           mode)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->mode = mode;
+}
+
+/**
  * ggit_index_entry_get_uid:
  * @entry: a #GgitIndexEntry.
  *
@@ -317,6 +417,24 @@ ggit_index_entry_get_uid (GgitIndexEntry *entry)
 	g_return_val_if_fail (entry != NULL, 0);
 
 	return entry->entry->uid;
+}
+
+/**
+ * ggit_index_entry_set_uid:
+ * @entry: a #GgitIndexEntry.
+ * @uid: the uid.
+ *
+ * Set the uid of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_uid (GgitIndexEntry *entry,
+                          guint           uid)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->uid = uid;
 }
 
 /**
@@ -337,6 +455,24 @@ ggit_index_entry_get_gid (GgitIndexEntry *entry)
 }
 
 /**
+ * ggit_index_entry_set_gid:
+ * @entry: a #GgitIndexEntry.
+ * @gid: the gid.
+ *
+ * Set the gid of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_gid (GgitIndexEntry *entry,
+                          guint           gid)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->gid = gid;
+}
+
+/**
  * ggit_index_entry_get_file_size:
  * @entry: a #GgitIndexEntry.
  *
@@ -351,6 +487,24 @@ ggit_index_entry_get_file_size (GgitIndexEntry *entry)
 	g_return_val_if_fail (entry != NULL, 0);
 
 	return entry->entry->file_size;
+}
+
+/**
+ * ggit_index_entry_set_file_size:
+ * @entry: a #GgitIndexEntry.
+ * @file_size: the file size.
+ *
+ * Set the file size of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_file_size (GgitIndexEntry *entry,
+                                goffset         file_size)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->file_size = file_size;
 }
 
 /**
@@ -371,6 +525,31 @@ ggit_index_entry_get_id (GgitIndexEntry *entry)
 }
 
 /**
+ * ggit_index_entry_set_id:
+ * @entry: a #GgitIndexEntry.
+ * @id: (allow-none): the oid.
+ *
+ * Set the oid of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_id (GgitIndexEntry *entry,
+                         GgitOId        *id)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	if (id != NULL)
+	{
+		entry->entry->oid = *_ggit_oid_get_oid (id);
+	}
+	else
+	{
+		memset (&entry->entry->oid, 0, sizeof (git_oid));
+	}
+}
+
+/**
  * ggit_index_entry_get_flags:
  * @entry: a #GgitIndexEntry.
  *
@@ -388,6 +567,24 @@ ggit_index_entry_get_flags (GgitIndexEntry *entry)
 }
 
 /**
+ * ggit_index_entry_set_flags:
+ * @entry: a #GgitIndexEntry.
+ * @flags: the flags.
+ *
+ * Set the flags of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_flags (GgitIndexEntry *entry,
+                            guint           flags)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->flags = flags;
+}
+
+/**
  * ggit_index_entry_get_flags_extended:
  * @entry: a #GgitIndexEntry.
  *
@@ -402,6 +599,24 @@ ggit_index_entry_get_flags_extended (GgitIndexEntry *entry)
 	g_return_val_if_fail (entry != NULL, 0);
 
 	return entry->entry->flags_extended;
+}
+
+/**
+ * ggit_index_entry_set_flags_extended:
+ * @entry: a #GgitIndexEntry.
+ * @flags_extended: the extended flags.
+ *
+ * Set the extended flags of the index entry.
+ *
+ **/
+void
+ggit_index_entry_set_flags_extended (GgitIndexEntry *entry,
+                                     guint           flags_extended)
+{
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (entry->owned);
+
+	entry->entry->flags_extended = flags_extended;
 }
 
 /**

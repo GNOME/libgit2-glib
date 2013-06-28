@@ -50,20 +50,51 @@ GgitIndexEntry   *ggit_index_entries_get_by_path      (GgitIndexEntries *entries
 guint             ggit_index_entries_size             (GgitIndexEntries  *entries);
 
 GType             ggit_index_entry_get_type           (void) G_GNUC_CONST;
+
+GgitIndexEntry   *ggit_index_entry_new_for_file       (GFile             *file,
+                                                       GgitOId           *id);
+
+GgitIndexEntry   *ggit_index_entry_new_for_path       (const gchar       *path,
+                                                       GgitOId           *id);
+
 GgitIndexEntry   *ggit_index_entry_ref                (GgitIndexEntry    *entry);
 void              ggit_index_entry_unref              (GgitIndexEntry    *entry);
 
 guint             ggit_index_entry_get_dev            (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_dev            (GgitIndexEntry    *entry,
+                                                       guint              dev);
+
 guint             ggit_index_entry_get_ino            (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_ino            (GgitIndexEntry    *entry,
+                                                       guint              ino);
+
 guint             ggit_index_entry_get_mode           (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_mode           (GgitIndexEntry    *entry,
+                                                       guint              mode);
+
 guint             ggit_index_entry_get_uid            (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_uid            (GgitIndexEntry    *entry,
+                                                       guint              uid);
+
 guint             ggit_index_entry_get_gid            (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_gid            (GgitIndexEntry    *entry,
+                                                       guint              gid);
+
 goffset           ggit_index_entry_get_file_size      (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_file_size      (GgitIndexEntry    *entry,
+                                                       goffset            file_size);
 
 GgitOId          *ggit_index_entry_get_id             (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_id             (GgitIndexEntry    *entry,
+                                                       GgitOId           *id);
 
 guint             ggit_index_entry_get_flags          (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_flags          (GgitIndexEntry    *entry,
+                                                       guint              flags);
+
 guint             ggit_index_entry_get_flags_extended (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_flags_extended (GgitIndexEntry    *entry,
+                                                       guint              flags_extended);
 
 GFile            *ggit_index_entry_get_file           (GgitIndexEntry    *entry);
 
