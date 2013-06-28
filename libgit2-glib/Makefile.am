@@ -37,6 +37,7 @@ INST_H_FILES =				\
 	ggit-index-entry.h		\
 	ggit-index-entry-resolve-undo.h	\
 	ggit-main.h			\
+	ggit-message.h			\
 	ggit-native.h			\
 	ggit-object.h			\
 	ggit-object-factory.h		\
@@ -86,6 +87,7 @@ C_FILES =				\
 	ggit-index-entry.c		\
 	ggit-index-entry-resolve-undo.c	\
 	ggit-main.c			\
+	ggit-message.c			\
 	ggit-native.c			\
 	ggit-object.c			\
 	ggit-object-factory.c		\
