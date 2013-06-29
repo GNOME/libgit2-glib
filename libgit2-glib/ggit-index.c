@@ -213,7 +213,7 @@ _ggit_index_get_index (GgitIndex *idx)
 /**
  * ggit_index_open:
  * @file: a #GFile.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new bare Git index object as a memory representation of the Git
  * index file in @file, without a repository to back it.
@@ -236,7 +236,7 @@ ggit_index_open (GFile   *file,
 /**
  * ggit_index_read:
  * @idx: a #GgitIndex.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Update the contents of an existing index object in memory by reading from
  * the hard disk.
@@ -268,7 +268,7 @@ ggit_index_read (GgitIndex  *idx,
 /**
  * ggit_index_write:
  * @idx: a #GgitIndex.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Write an existing index object from memory back to disk using an atomic file
  * lock.
@@ -301,7 +301,7 @@ ggit_index_write (GgitIndex  *idx,
  * @idx: a #GgitIndex.
  * @file: the file to search.
  * @stage: the stage to search.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Remove a file from the index (specified by position).
  *
@@ -342,7 +342,7 @@ ggit_index_remove (GgitIndex  *idx,
  * ggit_index_add:
  * @idx: a #GgitIndex.
  * @entry: a #GgitIndexEntry
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Add a file to the index.
  *
@@ -410,7 +410,7 @@ ggit_index_get_entries_resolve_undo (GgitIndex *idx)
  * ggit_index_add_file:
  * @idx: a #GgitIndex.
  * @file: file to add.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Add a file to the index. The specified file must be in the working directory
  * and must exist and be readable.
@@ -459,7 +459,7 @@ ggit_index_add_file (GgitIndex  *idx,
  * ggit_index_add_path:
  * @idx: a #GgitIndex.
  * @path: path to the file to add.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Add a file to the index by path. You can specify both relative paths
  * (to the working directory) and absolute paths. Absolute paths however must
@@ -529,7 +529,7 @@ ggit_index_get_owner (GgitIndex *idx)
 /**
  * ggit_index_write_tree:
  * @idx: a #GgitIndex.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Write a new tree object to disk containing a representation of the current
  * state of the index. The index must be associated to an existing repository

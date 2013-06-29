@@ -1094,7 +1094,7 @@ ggit_repository_references_foreach_name (GgitRepository             *repository,
 /**
  * ggit_repository_get_config:
  * @repository: a #GgitRepository
- * @error: a #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Get the config for a specific repository.
  *
@@ -1126,7 +1126,7 @@ ggit_repository_get_config (GgitRepository  *repository,
 /**
  * ggit_repository_get_index:
  * @repository: a #GgitRepository.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Get the index for a specific repository.
  *
@@ -1163,7 +1163,7 @@ ggit_repository_get_index (GgitRepository  *repository,
  * @tagger: a #GgitSignature.
  * @message: the tag message.
  * @flags: a #GgitCreateFlags.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new tag object.
  *
@@ -1215,7 +1215,7 @@ ggit_repository_create_tag (GgitRepository   *repository,
  * @repository: a #GgitRepository.
  * @tag: the tag buffer.
  * @flags: a #GgitCreateFlags.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new tag from a buffer describing the tag object. The buffer must
  * be correctly formatted.
@@ -1260,7 +1260,7 @@ ggit_repository_create_tag_from_buffer (GgitRepository   *repository,
  * @tag_name: the name of the tag.
  * @target: a #GgitObject.
  * @flags: a #GgitCreateFlags.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a new lightweight tag.
  *
@@ -1304,7 +1304,7 @@ ggit_repository_create_tag_lightweight (GgitRepository   *repository,
 /**
  * ggit_repository_list_tags:
  * @repository: a #GgitRepository.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Fill a list with all the tags in the @repository.
  *
@@ -1343,7 +1343,7 @@ ggit_repository_list_tags (GgitRepository  *repository,
  * @branch_name: the name of the branch.
  * @target: a #GgitObject.
  * @flags: a #GgitCreateFlags.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a new branch pointing at a target commit.
  *
@@ -1393,7 +1393,7 @@ typedef gint (* _GitBranchesCallback) (const gchar  *branch_name,
  * @branch_type: a GgitBranchType.
  * @callback: (scope call): a #GgitBranchesCallback.
  * @user_data: callback user data.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Foreach branch of type @branch_type the callback @callback is called.
  **/
@@ -1463,7 +1463,7 @@ ggit_repository_lookup_branch (GgitRepository *repository,
  * ggit_repository_get_remote:
  * @repository: a #GgitRepository.
  * @name: the remote's name.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Gets the remote called @name.
  *
@@ -1499,7 +1499,7 @@ ggit_repository_get_remote (GgitRepository  *repository,
  * @repository: a #GgitRepository.
  * @name: the name of the new remote.
  * @url: the url of the remote.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Adds a remote with the default fetch refspec to the repository's configuration.
  *
@@ -1535,7 +1535,7 @@ ggit_repository_create_remote (GgitRepository  *repository,
 /**
  * ggit_repository_list_remotes:
  * @repository: a #GgitRepository.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Fill a list with all the remotes in @repository.
  *
@@ -1572,7 +1572,7 @@ ggit_repository_list_remotes (GgitRepository  *repository,
  * ggit_repository_lookup_submodule:
  * @repository: a #GgitRepository.
  * @name: the name of the submodule.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Lookups a submodule information by name or path. If the submodule
  * does not exist, %NULL is returned and a GGIT_ERROR_NOTFOUND error set.
@@ -2018,7 +2018,7 @@ ggit_repository_create_blob_from_path (GgitRepository  *repository,
  * @tree: the tree of objects to commit.
  * @parents: (array length=parent_count): parent commits.
  * @parent_count: number of parent commits in @parents.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new commit. If @update_ref is not %NULL, the given reference will
  * be updated to point to the newly created commit. Use "HEAD" to update the

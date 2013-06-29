@@ -650,7 +650,7 @@ ggit_index_entry_set_path (GgitIndexEntry *entry,
  * ggit_index_entry_stat:
  * @entry: a #GgitIndexEntry.
  * @file: the file to stat.
- * @error: a #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Fill the entry fields from statting @file.
  *

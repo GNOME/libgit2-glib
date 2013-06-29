@@ -171,7 +171,7 @@ ggit_tree_builder_clear (GgitTreeBuilder *builder)
 /**
  * ggit_tree_builder_write:
  * @builder: a #GgitTreeBuilder.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Write the contents of the tree builder as a tree object.
  *
@@ -207,7 +207,7 @@ ggit_tree_builder_write (GgitTreeBuilder  *builder,
  * @filename: the file name.
  * @oid: the #GgitOId of the file blob to insert.
  * @file_mode: a #GgitFileMode.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Insert a file with a given blob in the tree builder. If the tree builder
  * already contains an entry for the given file, then this entry will be

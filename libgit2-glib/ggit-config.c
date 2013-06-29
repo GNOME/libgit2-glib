@@ -296,7 +296,7 @@ ggit_config_refresh (GgitConfig  *config,
  * ggit_config_get_int32:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Get a int32 configuration value.
  *
@@ -331,7 +331,7 @@ ggit_config_get_int32 (GgitConfig   *config,
  * @config: a #GgitConfig.
  * @name: the name of the configuration value
  * @value: the new value
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Set a int32 value.
  *
@@ -365,7 +365,7 @@ ggit_config_set_int32 (GgitConfig   *config,
  * ggit_config_get_int64:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Get a int64 configuration value.
  *
@@ -400,7 +400,7 @@ ggit_config_get_int64 (GgitConfig   *config,
  * @config: a #GgitConfig.
  * @name: the name of the configuration value
  * @value: the new value
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Set a int64 value.
  *
@@ -434,7 +434,7 @@ ggit_config_set_int64 (GgitConfig   *config,
  * ggit_config_get_bool:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Get a boolean configuration value.
  *
@@ -469,7 +469,7 @@ ggit_config_get_bool (GgitConfig   *config,
  * @config: a #GgitConfig.
  * @name: the name of the configuration value
  * @value: the new value
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Set a boolean value.
  *
@@ -503,7 +503,7 @@ ggit_config_set_bool (GgitConfig   *config,
  * ggit_config_get_string:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
- * @error: a #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Get the configuration value of @name as string.
  *
@@ -539,7 +539,7 @@ ggit_config_get_string (GgitConfig   *config,
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
  * @value: the new value
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Set a new string value of a configuration.
  *
@@ -581,7 +581,7 @@ ggit_config_set_string (GgitConfig   *config,
  * ggit_config_delete_entry:
  * @config: a #GgitConfig.
  * @name: the configuration value.
- * @error: A #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Delete a config variable from the config file.
  *
@@ -635,7 +635,7 @@ callback_wrapper (const git_config_entry *config_entry,
  * @config: a #GgitConfig.
  * @callback: (scope call): a #GgitConfigCallback.
  * @user_data: (allow-none): the user data for @callback
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Call @callback for each configuration value.
  *
@@ -713,7 +713,7 @@ match_foreach (const gchar *name,
  * @config: a #GgitConfig.
  * @regex: a #GRegex.
  * @match_info: (out) (allow-none): a #GMatchInfo.
- * @error: a #GError.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Matches a configuration against a regular expression. @match_info will
  * contain the match information if the return value is not %NULL, otherwise
@@ -764,7 +764,7 @@ ggit_config_match (GgitConfig  *config,
  * @regex: a #GRegex.
  * @callback: (scope call) (closure user_data): a #GgitConfigMatchCallback.
  * @user_data: (closure): the user data for @callback
- * @error: a #GError
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Call @callback for all configurations matching @regex.
  *
