@@ -21,6 +21,7 @@
 #include "ggit-index.h"
 #include <git2.h>
 #include "ggit-error.h"
+#include "ggit-repository.h"
 
 #define GGIT_INDEX_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_INDEX, GgitIndexPrivate))
 
@@ -403,6 +404,160 @@ ggit_index_get_entries_resolve_undo (GgitIndex *idx)
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
 
 	return _ggit_index_entries_resolve_undo_wrap (idx);
+}
+
+/**
+ * ggit_index_add_file:
+ * @idx: a #GgitIndex.
+ * @file: file to add.
+ * @error: a #GError.
+ *
+ * Add a file to the index. The specified file must be in the working directory
+ * and must exist and be readable.
+ *
+ * Returns: %TRUE if the file was added to the index or %FALSE if there was an error.
+ *
+ **/
+
+gboolean
+ggit_index_add_file (GgitIndex  *idx,
+                     GFile      *file,
+                     GError    **error)
+{
+	GgitRepository *repo;
+	GFile *wd;
+	gchar *path;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
+	g_return_val_if_fail (G_IS_FILE (file), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	repo = ggit_index_get_owner (idx);
+
+	wd = ggit_repository_get_workdir (repo);
+	path = g_file_get_relative_path (wd, file);
+
+	g_object_unref (wd);
+	g_object_unref (repo);
+
+	g_return_val_if_fail (path != NULL, FALSE);
+
+	ret = git_index_add_bypath (_ggit_native_get (idx), path);
+	g_free (path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_index_add_path:
+ * @idx: a #GgitIndex.
+ * @path: path to the file to add.
+ * @error: a #GError.
+ *
+ * Add a file to the index by path. You can specify both relative paths
+ * (to the working directory) and absolute paths. Absolute paths however must
+ * reside in the working directory. The specified path must exist and must be
+ * readable.
+ *
+ * Returns: %TRUE if the file was added to the index or %FALSE if there was an error.
+ *
+ **/
+gboolean
+ggit_index_add_path (GgitIndex    *idx,
+                     const gchar  *path,
+                     GError      **error)
+{
+	GFile *f;
+	gboolean ret;
+
+	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
+	g_return_val_if_fail (path != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	if (!g_path_is_absolute (path))
+	{
+		GgitRepository *repo;
+		GFile *wd;
+
+		repo = ggit_index_get_owner (idx);
+		g_return_val_if_fail (repo != NULL, FALSE);
+
+		wd = ggit_repository_get_workdir (repo);
+		f = g_file_resolve_relative_path (wd, path);
+
+		g_object_unref (wd);
+		g_object_unref (repo);
+	}
+	else
+	{
+		f = g_file_new_for_path (path);
+	}
+
+	ret = ggit_index_add_file (idx, f, error);
+	g_object_unref (f);
+
+	return ret;
+}
+
+/**
+ * ggit_index_get_owner:
+ * @idx: a #GgitIndex.
+ *
+ * Get the #GgitRepository that owns the index.
+ *
+ * Returns: (transfer full): the #GgitRepository that owns this index.
+ *
+ **/
+GgitRepository *
+ggit_index_get_owner (GgitIndex *idx)
+{
+	git_repository *owner;
+
+	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
+
+	owner = git_index_owner (_ggit_native_get (idx));
+	return _ggit_repository_wrap (owner, FALSE);
+}
+
+/**
+ * ggit_index_write_tree:
+ * @idx: a #GgitIndex.
+ * @error: a #GError.
+ *
+ * Write a new tree object to disk containing a representation of the current
+ * state of the index. The index must be associated to an existing repository
+ * and must not contain any files in conflict. You can use the resulting tree
+ * to for instance create a commit.
+ *
+ * Returns: a #GgitOId or %NULL in case of an error.
+ *
+ **/
+GgitOId *
+ggit_index_write_tree (GgitIndex  *idx,
+                       GError    **error)
+{
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_index_write_tree (&oid, _ggit_native_get (idx));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
 }
 
 /* ex:set ts=8 noet: */

@@ -75,6 +75,9 @@ gboolean                  ggit_index_read                     (GgitIndex  *idx,
 gboolean                  ggit_index_write                    (GgitIndex  *idx,
                                                                GError    **error);
 
+GgitOId                  *ggit_index_write_tree               (GgitIndex  *idx,
+                                                               GError    **error);
+
 gboolean                  ggit_index_remove                   (GgitIndex  *idx,
                                                                GFile      *file,
                                                                gint        stage,
@@ -83,6 +86,16 @@ gboolean                  ggit_index_remove                   (GgitIndex  *idx,
 gboolean                  ggit_index_add                      (GgitIndex       *idx,
                                                                GgitIndexEntry  *entry,
                                                                GError         **error);
+
+gboolean                  ggit_index_add_file                 (GgitIndex       *idx,
+                                                               GFile           *file,
+                                                               GError         **error);
+
+gboolean                  ggit_index_add_path                 (GgitIndex       *idx,
+                                                               const gchar     *path,
+                                                               GError         **error);
+
+GgitRepository           *ggit_index_get_owner                (GgitIndex  *idx);
 
 GgitIndexEntries         *ggit_index_get_entries              (GgitIndex  *idx);
 GgitIndexEntriesResolveUndo *
