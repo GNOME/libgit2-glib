@@ -1899,7 +1899,7 @@ ggit_repository_get_ahead_behind (GgitRepository  *repository,
  *
  * Write an in-memory buffer to the object database as a blob.
  *
- * @return the new #GgitOid of the written blob, or %NULL if writing the blob
+ * Returns: the new #GgitOid of the written blob, or %NULL if writing the blob
  * failed.
  */
 GgitOId *
@@ -1937,7 +1937,7 @@ ggit_repository_create_blob_from_buffer (GgitRepository  *repository,
  *
  * Write a file to the object database as a blob.
  *
- * @return the new #GgitOid of the written blob, or %NULL if writing the blob
+ * Returns: the new #GgitOid of the written blob, or %NULL if writing the blob
  * failed.
  */
 GgitOId *
@@ -1979,7 +1979,7 @@ ggit_repository_create_blob_from_file (GgitRepository  *repository,
  * Write a path relative to the repository working directory to the object
  * database as a blob.
  *
- * @return the new #GgitOid of the written blob, or %NULL if writing the blob
+ * Returns: the new #GgitOid of the written blob, or %NULL if writing the blob
  * failed.
  */
 GgitOId *
