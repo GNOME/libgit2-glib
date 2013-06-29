@@ -341,7 +341,7 @@ ggit_index_remove (GgitIndex  *idx,
 /**
  * ggit_index_add:
  * @idx: a #GgitIndex.
- * @entry: a #GgitIndexEntry
+ * @entry: a #GgitIndexEntry.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Add a file to the index.

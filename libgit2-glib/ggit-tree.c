@@ -227,8 +227,8 @@ walk_callback_wrapper (const char           *root,
 /**
  * ggit_tree_walk:
  * @tree: a #GgitTree.
- * @mode: the walking order
- * @callback: (scope call): the callback to call for each entry
+ * @mode: the walking order.
+ * @callback: (scope call): the callback to call for each entry.
  * @user_data: (closure): user data for the callback.
  * @error: a #GError for error reporting, or %NULL.
  *

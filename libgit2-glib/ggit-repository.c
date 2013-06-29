@@ -929,8 +929,8 @@ ggit_repository_get_workdir (GgitRepository *repository)
 /**
  * ggit_repository_set_workdir:
  * @repository: a #GgitRepository.
- * @workdir: the working directory
- * @update_gitlink: create/update gitlink in workdir
+ * @workdir: the working directory.
+ * @update_gitlink: create/update gitlink in workdir.
  *
  * Sets the working directory of the repository. If @update_gitlink is set to
  * %TRUE "core.worktree" will be set in the config if workdir is not the parent
@@ -1093,7 +1093,7 @@ ggit_repository_references_foreach_name (GgitRepository             *repository,
 
 /**
  * ggit_repository_get_config:
- * @repository: a #GgitRepository
+ * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Get the config for a specific repository.
@@ -1755,7 +1755,7 @@ ggit_repository_save_stash (GgitRepository  *repository,
 /**
  * ggit_repository_drop_stash:
  * @repository: a #GgitRepository.
- * @index: the position within the stash list. 0 points to the
+ * @index: the position within the stash list. 0 points to the.
  * most recent stashed state.
  * @error: a #GError for error reporting, or %NULL.
  *

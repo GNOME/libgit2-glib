@@ -239,7 +239,7 @@ ggit_index_entries_resolve_undo_get_by_file (GgitIndexEntriesResolveUndo  *entri
 /**
  * ggit_index_entry_resolve_undo_get_mode:
  * @entry: a #GgitIndexEntryResolveUndo.
- * @stage: the stage (0, 1 or 2)
+ * @stage: the stage (0, 1 or 2).
  *
  * Get the mode of the index entry. The returned mode contains the modes from
  * stage 1, 2 and 3.
@@ -260,7 +260,7 @@ ggit_index_entry_resolve_undo_get_mode (GgitIndexEntryResolveUndo *entry,
 /**
  * ggit_index_entry_resolve_undo_get_id:
  * @entry: a #GgitIndexEntryResolveUndo.
- * @stage: the stage (0, 1 or 2)
+ * @stage: the stage (0, 1 or 2).
  *
  * Get the oid of the index entry.
  *

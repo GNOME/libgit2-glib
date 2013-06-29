@@ -114,7 +114,7 @@ ggit_submodule_save (GgitSubmodule  *submodule,
 
 /**
  * ggit_submodule_get_owner:
- * @submodule: a #GgitSubmodule
+ * @submodule: a #GgitSubmodule.
  *
  * Gets the containing repository for a submodule.
  *

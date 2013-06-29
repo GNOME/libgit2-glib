@@ -163,7 +163,7 @@ ggit_oid_to_string (GgitOId *oid)
 
 /**
  * ggit_oid_hash:
- * @oid: a #GgitOId
+ * @oid: a #GgitOId.
  *
  * Computes a hash value for a git object identifier.
  *
@@ -194,8 +194,8 @@ ggit_oid_hash (GgitOId const *oid)
 
 /**
  * ggit_oid_equal:
- * @a: a #GgitOId
- * @b: a #GgitOId
+ * @a: a #GgitOId.
+ * @b: a #GgitOId.
  *
  * Compares two #GgitOId for equality.
  *

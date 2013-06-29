@@ -91,7 +91,7 @@ ggit_config_new (void)
 
 /**
  * ggit_config_new_from_file:
- * @file: the file to load
+ * @file: the file to load.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new config from a single on disk file. This is a convenience
@@ -329,8 +329,8 @@ ggit_config_get_int32 (GgitConfig   *config,
 /**
  * ggit_config_set_int32:
  * @config: a #GgitConfig.
- * @name: the name of the configuration value
- * @value: the new value
+ * @name: the name of the configuration value.
+ * @value: the new value.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Set a int32 value.
@@ -398,8 +398,8 @@ ggit_config_get_int64 (GgitConfig   *config,
 /**
  * ggit_config_set_int64:
  * @config: a #GgitConfig.
- * @name: the name of the configuration value
- * @value: the new value
+ * @name: the name of the configuration value.
+ * @value: the new value.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Set a int64 value.
@@ -467,8 +467,8 @@ ggit_config_get_bool (GgitConfig   *config,
 /**
  * ggit_config_set_bool:
  * @config: a #GgitConfig.
- * @name: the name of the configuration value
- * @value: the new value
+ * @name: the name of the configuration value.
+ * @value: the new value.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Set a boolean value.
@@ -538,7 +538,7 @@ ggit_config_get_string (GgitConfig   *config,
  * ggit_config_set_string:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
- * @value: the new value
+ * @value: the new value.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Set a new string value of a configuration.
@@ -634,7 +634,7 @@ callback_wrapper (const git_config_entry *config_entry,
  * ggit_config_foreach:
  * @config: a #GgitConfig.
  * @callback: (scope call): a #GgitConfigCallback.
- * @user_data: (allow-none): the user data for @callback
+ * @user_data: (allow-none): the user data for @callback.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Call @callback for each configuration value.
@@ -763,7 +763,7 @@ ggit_config_match (GgitConfig  *config,
  * @config: a #GgitConfig.
  * @regex: a #GRegex.
  * @callback: (scope call) (closure user_data): a #GgitConfigMatchCallback.
- * @user_data: (closure): the user data for @callback
+ * @user_data: (closure): the user data for @callback.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Call @callback for all configurations matching @regex.
