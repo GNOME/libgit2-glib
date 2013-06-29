@@ -265,7 +265,7 @@ main (int    argc,
       char **argv)
 {
 	ggit_init ();
-	g_type_init ();
+
 	g_test_init (&argc, &argv, NULL);
 
 #define TEST(path, ftest) \
