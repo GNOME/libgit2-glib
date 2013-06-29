@@ -2247,17 +2247,23 @@ ggit_repository_create_index_entry_for_path (GgitRepository  *repository,
 	GgitIndexEntry *ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
-	g_return_val_if_fail (path != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	if (!g_path_is_absolute (path))
+	if (path)
 	{
-		f = g_file_resolve_relative_path (repository->priv->workdir,
-		                                  path);
+		if (!g_path_is_absolute (path))
+		{
+			f = g_file_resolve_relative_path (repository->priv->workdir,
+				                          path);
+		}
+		else
+		{
+			f = g_file_new_for_path (path);
+		}
 	}
 	else
 	{
-		f = g_file_new_for_path (path);
+		f = NULL;
 	}
 
 	ret = ggit_repository_create_index_entry_for_file (repository,
