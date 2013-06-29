@@ -22,6 +22,7 @@
 #define __GGIT_H__
 
 #include <libgit2-glib/ggit-blob.h>
+#include <libgit2-glib/ggit-blob-output-stream.h>
 #include <libgit2-glib/ggit-branch.h>
 #include <libgit2-glib/ggit-clone-options.h>
 #include <libgit2-glib/ggit-commit.h>

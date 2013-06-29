@@ -32,6 +32,7 @@
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-tree.h>
 #include <libgit2-glib/ggit-branch.h>
+#include <libgit2-glib/ggit-blob-output-stream.h>
 
 G_BEGIN_DECLS
 
@@ -103,6 +104,10 @@ GgitRef            *ggit_repository_create_symbolic_reference
                                                        const gchar           *name,
                                                        const gchar           *target,
                                                        GError               **error);
+
+GgitBlobOutputStream *
+                    ggit_repository_create_blob       (GgitRepository        *repository);
+
 
 GgitOId            *ggit_repository_create_blob_from_buffer (
                                                        GgitRepository        *repository,

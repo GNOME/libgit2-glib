@@ -200,6 +200,66 @@ test_repository_init_bare (const gchar *git_dir)
 	do_test_init (git_dir, TRUE);
 }
 
+static void
+test_repository_blob_stream (const gchar *git_dir)
+{
+	GFile *f;
+	GgitRepository *repo;
+	GError *err = NULL;
+	GgitBlobOutputStream *stream;
+	GgitOId *oid;
+	const gchar *msg = "hello world\n";
+	gsize written;
+	gsize msglen;
+	GgitBlob *blob;
+	gsize rl;
+	const guchar *content;
+
+	f = g_file_new_for_path (git_dir);
+	repo = ggit_repository_init_repository (f, FALSE, &err);
+	g_object_unref (f);
+
+	g_assert_no_error (err);
+
+	stream = ggit_repository_create_blob (repo);
+
+	msglen = strlen (msg);
+
+	written = g_output_stream_write (G_OUTPUT_STREAM (stream),
+	                                 msg,
+	                                 msglen,
+	                                 NULL,
+	                                 &err);
+
+	g_assert_no_error (err);
+	g_assert_cmpint (written, ==, msglen);
+
+	g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, &err);
+
+	g_assert_no_error (err);
+	oid = ggit_blob_output_stream_get_id (stream, &err);
+
+	g_assert_no_error (err);
+	g_assert (oid);
+
+	blob = (GgitBlob *)ggit_repository_lookup (repo,
+	                                           oid,
+	                                           GGIT_TYPE_BLOB,
+	                                           &err);
+
+	g_assert_no_error (err);
+	g_assert (blob);
+
+	content = ggit_blob_get_raw_content (blob, &rl);
+	g_assert_cmpint (rl, ==, msglen);
+	g_assert_cmpint (memcmp (content, msg, msglen), ==, 0);
+
+	ggit_oid_free (oid);
+
+	g_object_unref (stream);
+	g_object_unref (repo);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -215,6 +275,7 @@ main (int    argc,
 
 	TEST ("init", init);
 	TEST ("init-bare", init_bare);
+	TEST ("blob-stream", blob_stream);
 
 	return g_test_run ();
 }

@@ -33,6 +33,13 @@ G_BEGIN_DECLS
 typedef struct _GgitBlob GgitBlob;
 
 /**
+ * GgitBlobOutputStream:
+ *
+ * Represents a blob stream object.
+ */
+typedef struct _GgitBlobOutputStream GgitBlobOutputStream;
+
+/**
  * GgitBranch:
  *
  * Represents a branch object.

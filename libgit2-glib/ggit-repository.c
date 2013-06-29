@@ -1897,6 +1897,25 @@ ggit_repository_get_ahead_behind (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_create_blob:
+ * @repository: a #GgitRepository.
+ *
+ * Create a new blob and return a #GOutputStream to write contents to the blob.
+ * This is an efficient way to create new blobs without copying data. The
+ * blob id can be obtained from the blob output stream using
+ * #ggit_blob_output_stream_get_id, after you close the stream.
+ *
+ * Returns: (transfer full): a #GgitBlobOutputStream.
+ *
+ **/
+GgitBlobOutputStream *
+ggit_repository_create_blob (GgitRepository *repository)
+{
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	return _ggit_blob_output_stream_new (repository);
+}
+
+/**
  * ggit_repository_create_blob_from_buffer:
  * @repository: a #GgitRepository.
  * @buffer: (array length=size) (element-type guint8): the data.

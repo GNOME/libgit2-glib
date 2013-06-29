@@ -19,6 +19,7 @@ libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 INST_H_FILES =				\
 	ggit-blob.h			\
+	ggit-blob-output-stream.h	\
 	ggit-branch.h			\
 	ggit-clone-options.h		\
 	ggit-commit.h			\
@@ -68,6 +69,7 @@ NOINST_H_FILES =			\
 
 C_FILES =				\
 	ggit-blob.c			\
+	ggit-blob-output-stream.c	\
 	ggit-branch.c			\
 	ggit-clone-options.c		\
 	ggit-commit.c			\
