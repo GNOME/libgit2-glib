@@ -23,6 +23,7 @@
 #include "ggit-tree-builder.h"
 #include "ggit-error.h"
 #include "ggit-tree-entry.h"
+#include "ggit-repository.h"
 
 #define GGIT_TREE_BUILDER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilderPrivate))
 
@@ -69,6 +70,9 @@ _ggit_tree_builder_wrap (git_treebuilder *builder,
                          gboolean         owned)
 {
 	GgitTreeBuilder *gbuilder;
+
+	g_return_val_if_fail (builder != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
 	gbuilder = g_object_new (GGIT_TYPE_TREE_BUILDER,
 	                         "native", builder,
