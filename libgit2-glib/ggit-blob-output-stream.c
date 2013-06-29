@@ -166,6 +166,8 @@ ggit_blob_output_stream_finalize (GObject *object)
 	{
 		ggit_oid_free (stream->priv->oid);
 	}
+
+	g_clear_object (&stream->priv->repository);
 }
 
 static void
