@@ -316,13 +316,20 @@ ggit_index_remove (GgitIndex  *idx,
 {
 	gint ret;
 	gchar *path;
+	GgitRepository *repo;
+	GFile *wd;
 
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
 	g_return_val_if_fail (stage >= 0 && stage <= 3, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	path = g_file_get_path (file);
+	repo = ggit_index_get_owner (idx);
+	wd = ggit_repository_get_workdir (repo);
+	g_object_unref (repo);
+
+	path = g_file_get_relative_path (wd, file);
+	g_object_unref (wd);
 
 	g_return_val_if_fail (path != NULL, FALSE);
 
