@@ -15,6 +15,23 @@ ggit_blob_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-blob-output-stream</FILE>
+<TITLE>GgitBlobOutputStream</TITLE>
+GgitBlobOutputStream
+GgitBlobOutputStreamClass
+ggit_blob_output_stream_get_id
+<SUBSECTION Standard>
+GGIT_BLOB_OUTPUT_STREAM
+GGIT_BLOB_OUTPUT_STREAM_CLASS
+GGIT_BLOB_OUTPUT_STREAM_GET_CLASS
+GGIT_IS_BLOB_OUTPUT_STREAM
+GGIT_IS_BLOB_OUTPUT_STREAM_CLASS
+GGIT_TYPE_BLOB_OUTPUT_STREAM
+GgitBlobOutputStreamPrivate
+ggit_blob_output_stream_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-branch</FILE>
 <TITLE>GgitBranch</TITLE>
 GgitBranch
@@ -287,6 +304,7 @@ GgitDiffPatch
 ggit_diff_patch_ref
 ggit_diff_patch_unref
 ggit_diff_patch_to_string
+ggit_diff_patch_to_stream
 <SUBSECTION Standard>
 GGIT_DIFF_PATCH
 GGIT_TYPE_DIFF_PATCH
@@ -328,8 +346,12 @@ GgitIndexClass
 ggit_index_open
 ggit_index_read
 ggit_index_write
+ggit_index_write_tree
 ggit_index_remove
 ggit_index_add
+ggit_index_add_file
+ggit_index_add_path
+ggit_index_get_owner
 ggit_index_get_entries
 ggit_index_get_entries_resolve_undo
 <SUBSECTION Standard>
@@ -355,8 +377,6 @@ ggit_index_entries_get_by_path
 ggit_index_entries_size
 ggit_index_entry_ref
 ggit_index_entry_unref
-ggit_index_entry_new_for_file
-ggit_index_entry_new_for_path
 ggit_index_entry_get_dev
 ggit_index_entry_set_dev
 ggit_index_entry_get_ino
@@ -375,8 +395,8 @@ ggit_index_entry_get_flags
 ggit_index_entry_set_flags
 ggit_index_entry_get_flags_extended
 ggit_index_entry_set_flags_extended
-ggit_index_entry_get_file
-ggit_index_entry_set_file
+ggit_index_entry_get_path
+ggit_index_entry_set_path
 ggit_index_entry_stat
 <SUBSECTION Standard>
 GGIT_INDEX_ENTRIES
@@ -420,6 +440,12 @@ ggit_init
 <SUBSECTION Standard>
 GGIT_TYPE_CAP_FLAGS
 ggit_cap_flags_get_type
+</SECTION>
+
+<SECTION>
+<FILE>ggit-message</FILE>
+<TITLE>GgitMessage</TITLE>
+ggit_message_prettify
 </SECTION>
 
 <SECTION>
@@ -655,12 +681,18 @@ ggit_repository_lookup
 ggit_repository_lookup_reference
 ggit_repository_create_reference
 ggit_repository_create_symbolic_reference
+ggit_repository_create_blob
 ggit_repository_create_blob_from_buffer
 ggit_repository_create_blob_from_file
 ggit_repository_create_blob_from_path
+ggit_repository_create_commit
 ggit_repository_create_tag
 ggit_repository_create_tag_from_buffer
 ggit_repository_create_tag_lightweight
+ggit_repository_create_tree_builder
+ggit_repository_create_tree_builder_from_tree
+ggit_repository_create_index_entry_for_file
+ggit_repository_create_index_entry_for_path
 ggit_repository_list_tags
 ggit_repository_create_branch
 ggit_repository_branches_foreach
@@ -883,9 +915,11 @@ ggit_tree_walk_mode_get_type
 <TITLE>GgitTreeBuilder</TITLE>
 GgitTreeBuilder
 GgitTreeBuilderClass
-ggit_tree_builder_get_entry
 ggit_tree_builder_remove
-ggit_tree_create_builder
+ggit_tree_builder_clear
+ggit_tree_builder_insert
+ggit_tree_builder_write
+ggit_tree_builder_get_entry
 <SUBSECTION Standard>
 GGIT_IS_TREE_BUILDER
 GGIT_IS_TREE_BUILDER_CLASS
@@ -893,6 +927,7 @@ GGIT_TREE_BUILDER
 GGIT_TREE_BUILDER_CLASS
 GGIT_TREE_BUILDER_GET_CLASS
 GGIT_TYPE_TREE_BUILDER
+GgitTreeBuilderPrivate
 ggit_tree_builder_get_type
 </SECTION>
 
