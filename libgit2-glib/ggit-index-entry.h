@@ -51,12 +51,6 @@ guint             ggit_index_entries_size             (GgitIndexEntries  *entrie
 
 GType             ggit_index_entry_get_type           (void) G_GNUC_CONST;
 
-GgitIndexEntry   *ggit_index_entry_new_for_file       (GFile             *file,
-                                                       GgitOId           *id);
-
-GgitIndexEntry   *ggit_index_entry_new_for_path       (const gchar       *path,
-                                                       GgitOId           *id);
-
 GgitIndexEntry   *ggit_index_entry_ref                (GgitIndexEntry    *entry);
 void              ggit_index_entry_unref              (GgitIndexEntry    *entry);
 
@@ -96,13 +90,19 @@ guint             ggit_index_entry_get_flags_extended (GgitIndexEntry    *entry)
 void              ggit_index_entry_set_flags_extended (GgitIndexEntry    *entry,
                                                        guint              flags_extended);
 
-GFile            *ggit_index_entry_get_file           (GgitIndexEntry    *entry);
-void              ggit_index_entry_set_file           (GgitIndexEntry    *entry,
-                                                       GFile             *file);
+const gchar      *ggit_index_entry_get_path           (GgitIndexEntry    *entry);
+void              ggit_index_entry_set_path           (GgitIndexEntry    *entry,
+                                                       const gchar       *path);
 
-void              ggit_index_entry_stat               (GgitIndexEntry    *entry);
+gboolean          ggit_index_entry_stat               (GgitIndexEntry    *entry,
+                                                       GFile             *file,
+                                                       GError           **error);
 
-const git_index_entry *_ggit_index_entry_get_native         (GgitIndexEntry    *entry);
+const git_index_entry
+                 *_ggit_index_entry_get_native        (GgitIndexEntry    *entry);
+
+GgitIndexEntry   *_ggit_index_entry_new               (const gchar       *path,
+                                                       GgitOId           *id);
 
 G_END_DECLS
 

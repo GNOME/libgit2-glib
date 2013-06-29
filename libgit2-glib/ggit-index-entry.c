@@ -73,37 +73,18 @@ _ggit_index_entries_wrap (GgitIndex *owner)
 }
 
 GgitIndexEntry *
-ggit_index_entry_new_for_file (GFile   *file,
-                               GgitOId *id)
+_ggit_index_entry_new (const gchar *path,
+                       GgitOId     *id)
 {
 	git_index_entry *entry;
 	GgitIndexEntry *ret;
-
-	g_return_val_if_fail (G_IS_FILE (file), NULL);
 
 	entry = g_slice_new0 (git_index_entry);
 
 	ret = ggit_index_entry_wrap (entry, TRUE);
 
-	ggit_index_entry_set_file (ret, file);
+	ggit_index_entry_set_path (ret, path);
 	ggit_index_entry_set_id (ret, id);
-
-	ggit_index_entry_stat (ret);
-	return ret;
-}
-
-GgitIndexEntry *
-ggit_index_entry_new_for_path (const gchar *path,
-                               GgitOId     *id)
-{
-	GFile *f;
-	GgitIndexEntry *ret;
-
-	g_return_val_if_fail (path != NULL, NULL);
-
-	f = g_file_new_for_path (path);
-	ret = ggit_index_entry_new_for_file (f, id);
-	g_object_unref (f);
 
 	return ret;
 }
@@ -623,38 +604,34 @@ ggit_index_entry_set_flags_extended (GgitIndexEntry *entry,
  * ggit_index_entry_get_file:
  * @entry: a #GgitIndexEntry.
  *
- * Get the file of the index entry.
+ * Get the path of the index entry. The path is relative to the working
+ * directory.
  *
- * Returns: (transfer full): a #GFile.
+ * Returns: the path.
  *
  **/
-GFile *
-ggit_index_entry_get_file (GgitIndexEntry *entry)
+const gchar *
+ggit_index_entry_get_path (GgitIndexEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, 0);
 
-	if (entry->entry->path == NULL)
-	{
-		return NULL;
-	}
-
-	return g_file_new_for_path (entry->entry->path);
+	return entry->entry->path;
 }
 
 /**
- * ggit_index_entry_set_file:
+ * ggit_index_entry_set_path:
  * @entry: a #GgitIndexEntry.
- * @file: (allow-none): a #GFile.
+ * @path: (allow-none): the path.
  *
- * Set the file of the index entry.
+ * Set the path of the index entry. The path should be relative to the working
+ * directory.
  *
  **/
 void
-ggit_index_entry_set_file (GgitIndexEntry *entry,
-                           GFile          *file)
+ggit_index_entry_set_path (GgitIndexEntry *entry,
+                           const gchar    *path)
 {
 	g_return_if_fail (entry != NULL);
-	g_return_if_fail (file == NULL || G_IS_FILE (file));
 	g_return_if_fail (entry->owned);
 
 	if (entry->entry->path)
@@ -663,37 +640,36 @@ ggit_index_entry_set_file (GgitIndexEntry *entry,
 		entry->entry->path = NULL;
 	}
 
-	if (file)
+	if (path)
 	{
-		entry->entry->path = g_file_get_path (file);
+		entry->entry->path = g_strdup (path);
 	}
 }
 
 /**
  * ggit_index_entry_stat:
  * @entry: a #GgitIndexEntry.
+ * @file: the file to stat.
+ * @error: a #GError
  *
- * Fill the entry fields from statting the entry file. Note that the entry
- * file must be set correctly and the file must exist.
+ * Fill the entry fields from statting @file.
+ *
+ * Returns: %TRUE if the entry was filled from statting @file successfully, %FALSE otherwise.
  *
  **/
-void
-ggit_index_entry_stat (GgitIndexEntry *entry)
+gboolean
+ggit_index_entry_stat (GgitIndexEntry  *entry,
+                       GFile           *file,
+                       GError         **error)
 {
-	GFile *f;
 	GFileInfo *info;
 
-	g_return_if_fail (entry != NULL);
-	g_return_if_fail (entry->owned);
+	g_return_val_if_fail (entry != NULL, FALSE);
+	g_return_val_if_fail (G_IS_FILE (file), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (entry->owned, FALSE);
 
-	if (entry->entry->path == NULL)
-	{
-		return;
-	}
-
-	f = g_file_new_for_path (entry->entry->path);
-
-	info = g_file_query_info (f,
+	info = g_file_query_info (file,
 	                          G_FILE_ATTRIBUTE_STANDARD_SIZE ","
 	                          G_FILE_ATTRIBUTE_TIME_MODIFIED ","
 	                          G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC ","
@@ -706,13 +682,11 @@ ggit_index_entry_stat (GgitIndexEntry *entry)
 	                          G_FILE_ATTRIBUTE_UNIX_GID,
 	                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
 	                          NULL,
-	                          NULL);
-
-	g_object_unref (f);
+	                          error);
 
 	if (!info)
 	{
-		return;
+		return FALSE;
 	}
 
 	entry->entry->file_size = g_file_info_get_size (info);
@@ -754,6 +728,7 @@ ggit_index_entry_stat (GgitIndexEntry *entry)
 		                                  G_FILE_ATTRIBUTE_UNIX_GID);
 
 	g_object_unref (info);
+	return TRUE;
 }
 
 const git_index_entry *

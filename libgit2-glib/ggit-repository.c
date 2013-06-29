@@ -2131,4 +2131,121 @@ ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
 	return _ggit_tree_builder_wrap (builder, repository, TRUE);
 }
 
+/**
+ * ggit_repository_create_index_entry_for_file:
+ * @repository: a #GgitRepository.
+ * @file: (allow-none): a #GFile.
+ * @id: (allow-none): a #GgitOId.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a new index entry. When @file is not %NULL, the path of the returned
+ * entry (#ggit_index_entry_get_path) is set to the path of @file relative to
+ * the working directory of @repository. The file must reside in the working
+ * directory of @repository, must exist and be readable (otherwise %NULL is
+ * returned and @error is set accordingly). The file related
+ * fields of the returned entry are also queried from this file.
+ *
+ * If @id is not %NULL, then the id of the returned entry is set to @id
+ * (see #ggit_index_entry_get_id) which could point to a blob (for a file)
+ * or a tree (for a directory).
+ *
+ * Returns: a #GgitIndexEntry or %NULL when an error occurred.
+ *
+ **/
+GgitIndexEntry *
+ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
+                                             GFile           *file,
+                                             GgitOId         *id,
+                                             GError         **error)
+{
+	gchar *path = NULL;
+	GgitIndexEntry *ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	if (file != NULL)
+	{
+		path = g_file_get_relative_path (repository->priv->workdir,
+		                                 file);
+
+		if (!path)
+		{
+			g_set_error_literal (error,
+			                     G_IO_ERROR,
+			                     G_IO_ERROR_NOT_FOUND,
+			                     "File is not in the working directory");
+
+			return NULL;
+		}
+	}
+
+	ret = _ggit_index_entry_new (path, id);
+	g_free (path);
+
+	if (file && !ggit_index_entry_stat (ret, file, error))
+	{
+		ggit_index_entry_unref (ret);
+		return NULL;
+	}
+
+	return ret;
+}
+
+/**
+ * ggit_repository_create_index_entry_for_path:
+ * @repository: a #GgitRepository.
+ * @path: (allow-none): a path.
+ * @id: (allow-none): a #GgitOId.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a new index entry. When @path is not %NULL, the path of the returned
+ * entry (#ggit_index_entry_get_path) is set @path. The specified path can be
+ * either absolute or relative, but must exist and be readable (otherwise %NULL
+ * is returned and @error is set accordingly). In the case of
+ * an absolute path, the path must reside within the working directory of
+ * @repository. The file related fields of the returned entry are also queried
+ * from this path.
+ *
+ * If @id is not %NULL, then the id of the returned entry is set to @id
+ * (see #ggit_index_entry_get_id) which could point to a blob (for a file)
+ * or a tree (for a directory).
+ *
+ * Returns: a #GgitIndexEntry or %NULL when an error occurred.
+ *
+ **/
+GgitIndexEntry *
+ggit_repository_create_index_entry_for_path (GgitRepository  *repository,
+                                             const gchar     *path,
+                                             GgitOId         *id,
+                                             GError         **error)
+{
+	GFile *f;
+	GgitIndexEntry *ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	if (!g_path_is_absolute (path))
+	{
+		f = g_file_resolve_relative_path (repository->priv->workdir,
+		                                  path);
+	}
+	else
+	{
+		f = g_file_new_for_path (path);
+	}
+
+	ret = ggit_repository_create_index_entry_for_file (repository,
+	                                                   f,
+	                                                   id,
+	                                                   error);
+
+	g_object_unref (f);
+
+	return ret;
+}
+
 /* ex:set ts=8 noet: */

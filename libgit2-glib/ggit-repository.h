@@ -160,6 +160,18 @@ GgitTreeBuilder    *ggit_repository_create_tree_builder_from_tree (
 GgitTreeBuilder    *ggit_repository_create_tree_builder (
                                                        GgitRepository        *repository);
 
+GgitIndexEntry     *ggit_repository_create_index_entry_for_file (
+                                                       GgitRepository        *repository,
+                                                       GFile                 *file,
+                                                       GgitOId               *id,
+                                                       GError               **error);
+
+GgitIndexEntry     *ggit_repository_create_index_entry_for_path (
+                                                       GgitRepository        *repository,
+                                                       const gchar           *path,
+                                                       GgitOId               *id,
+                                                       GError               **error);
+
 gchar             **ggit_repository_list_tags         (GgitRepository        *repository,
                                                        GError               **error);
 
