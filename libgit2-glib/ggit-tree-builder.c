@@ -40,11 +40,7 @@ ggit_tree_builder_dispose (GObject *object)
 
 	builder = GGIT_TREE_BUILDER (object);
 
-	if (builder->priv->repository)
-	{
-		g_object_unref (builder->priv->repository);
-		builder->priv->repository = NULL;
-	}
+	g_clear_object (&builder->priv->repository);
 
 	G_OBJECT_CLASS (ggit_tree_builder_parent_class)->dispose (object);
 }
