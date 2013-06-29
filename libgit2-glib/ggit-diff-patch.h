@@ -22,6 +22,7 @@
 #define __GGIT_DIFF_PATCH_H__
 
 #include <glib-object.h>
+#include <gio/gio.h>
 #include <git2.h>
 #include "ggit-types.h"
 
@@ -39,6 +40,10 @@ GgitDiffPatch   *ggit_diff_patch_ref            (GgitDiffPatch    *diff_patch);
 void             ggit_diff_patch_unref          (GgitDiffPatch    *diff_patch);
 
 gchar           *ggit_diff_patch_to_string      (GgitDiffPatch    *diff_patch,
+                                                 GError          **error);
+
+gboolean         ggit_diff_patch_to_stream      (GgitDiffPatch    *diff_patch,
+                                                 GOutputStream    *stream,
                                                  GError          **error);
 
 G_END_DECLS

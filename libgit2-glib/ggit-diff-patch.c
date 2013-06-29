@@ -19,6 +19,7 @@
  */
 
 #include "ggit-diff-patch.h"
+#include "ggit-error.h"
 
 struct _GgitDiffPatch
 {
@@ -97,6 +98,7 @@ ggit_diff_patch_to_string (GgitDiffPatch  *diff_patch,
 	gchar *gstr;
 
 	g_return_val_if_fail (diff_patch != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_diff_patch_to_str (&str, diff_patch->diff_patch);
 
@@ -109,6 +111,84 @@ ggit_diff_patch_to_string (GgitDiffPatch  *diff_patch,
 	free (str);
 
 	return gstr;
+}
+
+typedef struct
+{
+	GOutputStream  *stream;
+	GError        **error;
+} PatchToStream;
+
+static int
+patch_to_stream (const git_diff_delta *delta,
+                 const git_diff_range *range,
+                 char                  line_origin,
+                 const char           *content,
+                 size_t                content_len,
+                 void                 *payload)
+{
+	PatchToStream *info = payload;
+	gboolean ret;
+	gsize written;
+
+	ret = g_output_stream_write_all (info->stream,
+	                                 content,
+	                                 content_len,
+	                                 &written,
+	                                 NULL,
+	                                 info->error);
+
+	if (!ret)
+	{
+		return -1;
+	}
+	else
+	{
+		return written;
+	}
+}
+
+/**
+ * ggit_diff_patch_to_stream:
+ * @diff_patch: a #GgitDiffPatch.
+ * @stream: a #GOutputStream.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Write the contents of a patch to the provided stream.
+ *
+ * Returns: %TRUE if the patch was written successfully, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_diff_patch_to_stream (GgitDiffPatch  *diff_patch,
+                           GOutputStream  *stream,
+                           GError        **error)
+{
+	PatchToStream info;
+	gint ret;
+
+	g_return_val_if_fail (diff_patch != NULL, FALSE);
+	g_return_val_if_fail (G_IS_OUTPUT_STREAM (stream), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	info.stream = stream;
+	info.error = error;
+
+	ret = git_diff_patch_print (diff_patch->diff_patch,
+	                            patch_to_stream,
+	                            &info);
+
+	if (ret != GIT_OK)
+	{
+		if (error != NULL && *error == NULL)
+		{
+			_ggit_error_set (error, ret);
+		}
+
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* ex:set ts=8 noet: */
