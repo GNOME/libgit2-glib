@@ -2166,9 +2166,8 @@ ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
  * Create a new index entry. When @file is not %NULL, the path of the returned
  * entry (#ggit_index_entry_get_path) is set to the path of @file relative to
  * the working directory of @repository. The file must reside in the working
- * directory of @repository, must exist and be readable (otherwise %NULL is
- * returned and @error is set accordingly). The file related
- * fields of the returned entry are also queried from this file.
+ * directory of @repository. The file related
+ * fields of the returned entry are also queried from this file (if the file exists).
  *
  * If @id is not %NULL, then the id of the returned entry is set to @id
  * (see #ggit_index_entry_get_id) which could point to a blob (for a file)
@@ -2209,10 +2208,9 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
 	ret = _ggit_index_entry_new (path, id);
 	g_free (path);
 
-	if (file && !ggit_index_entry_stat (ret, file, error))
+	if (file)
 	{
-		ggit_index_entry_unref (ret);
-		return NULL;
+		ggit_index_entry_stat (ret, file, NULL);
 	}
 
 	return ret;
@@ -2227,11 +2225,10 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
  *
  * Create a new index entry. When @path is not %NULL, the path of the returned
  * entry (#ggit_index_entry_get_path) is set @path. The specified path can be
- * either absolute or relative, but must exist and be readable (otherwise %NULL
- * is returned and @error is set accordingly). In the case of
+ * either absolute or relative. In the case of
  * an absolute path, the path must reside within the working directory of
  * @repository. The file related fields of the returned entry are also queried
- * from this path.
+ * from this path (if the file exists).
  *
  * If @id is not %NULL, then the id of the returned entry is set to @id
  * (see #ggit_index_entry_get_id) which could point to a blob (for a file)
