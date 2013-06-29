@@ -149,6 +149,7 @@ set_workdir (GgitRepository *repository,
 
 			git_repository_set_workdir (_ggit_native_get (repository),
 			                            path, update_gitlink);
+
 			g_free (path);
 		}
 	}
@@ -361,6 +362,11 @@ ggit_repository_initable_init (GInitable    *initable,
 	_ggit_native_set (GGIT_REPOSITORY (initable),
 	                  repo,
 	                  (GDestroyNotify)git_repository_free);
+
+	if (!priv->workdir && !priv->is_bare)
+	{
+		priv->workdir = ggit_repository_get_workdir (GGIT_REPOSITORY (initable));
+	}
 
 	return success;
 }
