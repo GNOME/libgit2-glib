@@ -189,8 +189,8 @@ ggit_tree_builder_write (GgitTreeBuilder  *builder,
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_treebuilder_write (&oid,
-	                             _ggit_native_get (builder),
-	                             _ggit_native_get (builder->priv->repository));
+	                             _ggit_native_get (builder->priv->repository),
+	                             _ggit_native_get (builder));
 
 	if (ret != GIT_OK)
 	{
