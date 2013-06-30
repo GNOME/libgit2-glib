@@ -35,7 +35,6 @@ main (int argc, char *argv[])
 	gchar *path;
 
 	ggit_init ();
-	g_type_init ();
 
 	if (argc < 2)
 	{

@@ -70,7 +70,6 @@ main (int   argc,
 	GError *err = NULL;
 
 	ggit_init ();
-	g_type_init ();
 
 	if (argc < 2 || argc > 3)
 	{
