@@ -173,6 +173,13 @@ typedef struct _GgitIndexEntriesResolveUndo GgitIndexEntriesResolveUndo;
 typedef struct _GgitIndexEntryResolveUndo GgitIndexEntryResolveUndo;
 
 /**
+ * GgitMergeTreeOptions:
+ *
+ * Represents the options used when merging.
+ */
+typedef struct _GgitMergeTreeOptions GgitMergeTreeOptions;
+
+/**
  * GgitNative:
  *
  * Represents a generic native object.
