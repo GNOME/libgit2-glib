@@ -992,7 +992,7 @@ ggit_repository_file_status (GgitRepository  *repository,
 	g_return_val_if_fail (G_IS_FILE (location), GGIT_STATUS_IGNORED);
 	g_return_val_if_fail (error == NULL || *error == NULL, GGIT_STATUS_IGNORED);
 
-	path = g_file_get_path (location);
+	path = g_file_get_relative_path (repository->priv->workdir, location);
 
 	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
 
