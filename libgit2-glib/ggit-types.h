@@ -506,6 +506,29 @@ typedef enum {
 	GGIT_FILE_MODE_COMMIT          = 0160000
 } GgitFileMode;
 
+/* NOTE: keep in sync with git2/merge.h */
+/**
+ * GgitMergeAutomergeMode:
+ * @GGIT_MERGE_AUTOMERGE_MODE_NORMAL:
+ * @GGIT_MERGE_AUTOMERGE_MODE_NONE:
+ * @GGIT_MERGE_AUTOMERGE_MODE_FAVOR_OURS:
+ * @GGIT_MERGE_AUTOMERGE_MODE_FAVOR_THEIRS:
+ */
+typedef enum {
+	GGIT_MERGE_AUTOMERGE_MODE_NORMAL       = 0,
+	GGIT_MERGE_AUTOMERGE_MODE_NONE         = 1,
+	GGIT_MERGE_AUTOMERGE_MODE_FAVOR_OURS   = 2,
+	GGIT_MERGE_AUTOMERGE_MODE_FAVOR_THEIRS = 3
+} GgitMergeAutomergeMode;
+
+/**
+ * GgitMergeTreeFlags:
+ * @GIT_MERGE_TREE_FIND_RENAMES: detect renames.
+ */
+typedef enum {
+	GGIT_MERGE_TREE_FIND_RENAMES = (1 << 0)
+} GgitMergeTreeFlags;
+
 /* NOTE: keep in sync with git2/refs.h */
 /**
  * GgitRemoteDownloadTagsType:
