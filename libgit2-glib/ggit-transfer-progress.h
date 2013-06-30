@@ -22,6 +22,7 @@
 #define __GGIT_TRANSFER_PROGRESS_H__
 
 #include <glib-object.h>
+#include <git2.h>
 
 #include "ggit-types.h"
 
@@ -31,6 +32,8 @@ G_BEGIN_DECLS
 #define GGIT_TRANSFER_PROGRESS(obj)       ((GgitTransferProgress *)obj)
 
 GType                   ggit_transfer_progress_get_type             (void) G_GNUC_CONST;
+
+GgitTransferProgress  *_ggit_transfer_progress_wrap                 (const git_transfer_progress *progress);
 
 GgitTransferProgress   *ggit_transfer_progress_copy                 (GgitTransferProgress     *progress);
 void                    ggit_transfer_progress_free                 (GgitTransferProgress     *progress);

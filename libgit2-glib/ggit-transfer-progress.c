@@ -19,18 +19,30 @@
  */
 
 #include "ggit-transfer-progress.h"
+#include <git2.h>
+#include <string.h>
 
 struct _GgitTransferProgress
 {
-	guint total_objects;
-	guint indexed_objects;
-	guint received_objects;
-	gsize received_bytes;
+	git_transfer_progress progress;
 };
 
 G_DEFINE_BOXED_TYPE (GgitTransferProgress, ggit_transfer_progress,
                      ggit_transfer_progress_copy,
                      ggit_transfer_progress_free)
+
+GgitTransferProgress *
+_ggit_transfer_progress_wrap (const git_transfer_progress *progress)
+{
+	GgitTransferProgress *gprogress;
+
+	g_return_val_if_fail (progress != NULL, NULL);
+
+	gprogress = g_slice_new (GgitTransferProgress);
+	memcpy (&gprogress->progress, progress, sizeof (git_transfer_progress));
+
+	return gprogress;
+}
 
 /**
  * ggit_transfer_progress_copy:
@@ -43,17 +55,9 @@ G_DEFINE_BOXED_TYPE (GgitTransferProgress, ggit_transfer_progress,
 GgitTransferProgress *
 ggit_transfer_progress_copy (GgitTransferProgress *progress)
 {
-	GgitTransferProgress *copy;
-
 	g_return_val_if_fail (progress != NULL, NULL);
 
-	copy = g_slice_new (GgitTransferProgress);
-	copy->total_objects = progress->total_objects;
-	copy->indexed_objects = progress->indexed_objects;
-	copy->received_objects = progress->received_objects;
-	copy->received_bytes = progress->received_bytes;
-
-	return copy;
+	return _ggit_transfer_progress_wrap (&progress->progress);
 }
 
 /**
@@ -83,7 +87,7 @@ ggit_transfer_progress_get_total_objects (GgitTransferProgress *progress)
 {
 	g_return_val_if_fail (progress != NULL, 0);
 
-	return progress->total_objects;
+	return progress->progress.total_objects;
 }
 
 /**
@@ -99,7 +103,7 @@ ggit_transfer_progress_get_indexed_objects (GgitTransferProgress *progress)
 {
 	g_return_val_if_fail (progress != NULL, 0);
 
-	return progress->indexed_objects;
+	return progress->progress.indexed_objects;
 }
 
 /**
@@ -115,7 +119,7 @@ ggit_transfer_progress_get_received_objects (GgitTransferProgress *progress)
 {
 	g_return_val_if_fail (progress != NULL, 0);
 
-	return progress->received_objects;
+	return progress->progress.received_objects;
 }
 
 /**
@@ -131,7 +135,7 @@ ggit_transfer_progress_get_received_bytes (GgitTransferProgress *progress)
 {
 	g_return_val_if_fail (progress != NULL, 0);
 
-	return progress->received_bytes;
+	return progress->progress.received_bytes;
 }
 
 /* ex:set ts=8 noet: */

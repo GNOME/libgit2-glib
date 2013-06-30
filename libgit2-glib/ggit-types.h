@@ -953,8 +953,8 @@ typedef gint (* GgitSubmoduleCallback) (GgitSubmodule *submodule,
  *
  * Returns: a value less than zero to cancel the transfer.
  */
-typedef gint (* GgitTransferProgressCallback) (const GgitTransferProgress *stats,
-                                               gpointer                    user_data);
+typedef gint (* GgitTransferProgressCallback) (GgitTransferProgress *stats,
+                                               gpointer              user_data);
 
 /**
  * GgitTreeWalkCallback:

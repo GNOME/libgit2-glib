@@ -21,6 +21,7 @@
 #include <git2.h>
 
 #include "ggit-clone-options.h"
+#include "ggit-transfer-progress.h"
 #include "ggit-native.h"
 
 struct _GgitCloneOptions
@@ -28,6 +29,8 @@ struct _GgitCloneOptions
 	git_clone_options clone_options;
 	GgitCredAcquireCallback cred_callback;
 	gpointer cred_user_data;
+	GgitTransferProgressCallback fetch_progress_callback;
+	gpointer fetch_progress_user_data;
 };
 
 G_DEFINE_BOXED_TYPE (GgitCloneOptions, ggit_clone_options,
@@ -188,6 +191,22 @@ ggit_clone_options_set_is_bare (GgitCloneOptions *options,
 	options->clone_options.bare = bare;
 }
 
+static int
+wrap_fetch_progress (const git_transfer_progress *stats,
+                     gpointer                     data)
+{
+	GgitCloneOptions *options = (GgitCloneOptions *)data;
+	GgitTransferProgress *gstats;
+	gint ret;
+
+	gstats = _ggit_transfer_progress_wrap (stats);
+
+	ret = options->fetch_progress_callback (gstats, options->fetch_progress_user_data);
+	ggit_transfer_progress_free (gstats);
+
+	return ret;
+}
+
 /**
  * ggit_clone_options_set_fetch_progress_callback:
  * @options: a #GgitCloneOptions.
@@ -204,8 +223,11 @@ ggit_clone_options_set_fetch_progress_callback (GgitCloneOptions             *op
 {
 	g_return_if_fail (options != NULL);
 
-	options->clone_options.fetch_progress_cb = (git_transfer_progress_callback)callback;
-	options->clone_options.fetch_progress_payload = user_data;
+	options->fetch_progress_callback = callback;
+	options->fetch_progress_user_data = user_data;
+
+	options->clone_options.fetch_progress_cb = wrap_fetch_progress;
+	options->clone_options.fetch_progress_payload = options;
 }
 
 /**

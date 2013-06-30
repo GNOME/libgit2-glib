@@ -3,8 +3,8 @@
 #include "ggit.h"
 
 static int
-fetch_progress (const GgitTransferProgress *stats,
-                gpointer                    useless)
+fetch_progress (GgitTransferProgress *stats,
+                gpointer              useless)
 {
 	gint network_percent = (100 * ggit_transfer_progress_get_received_objects (stats)) / ggit_transfer_progress_get_total_objects (stats);
 	gint index_percent = (100 * ggit_transfer_progress_get_indexed_objects (stats)) / ggit_transfer_progress_get_total_objects (stats);
