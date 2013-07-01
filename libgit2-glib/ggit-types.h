@@ -530,7 +530,7 @@ typedef enum {
 
 /**
  * GgitMergeTreeFlags:
- * @GIT_MERGE_TREE_FIND_RENAMES: detect renames.
+ * @GGIT_MERGE_TREE_FIND_RENAMES: detect renames.
  */
 typedef enum {
 	GGIT_MERGE_TREE_FIND_RENAMES = (1 << 0)

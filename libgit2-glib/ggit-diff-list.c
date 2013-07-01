@@ -1,5 +1,5 @@
 /*
- * ggit-diff.c
+ * ggit-diff-list.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Garrett Regier

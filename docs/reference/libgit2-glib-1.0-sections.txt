@@ -210,38 +210,38 @@ ggit_cred_plaintext_get_type
 </SECTION>
 
 <SECTION>
-<FILE>ggit-diff</FILE>
-<TITLE>GgitDiff</TITLE>
-GgitDiff
-GgitDiffClass
+<FILE>ggit-diff-list</FILE>
+<TITLE>GgitDiffList</TITLE>
+GgitDiffList
+GgitDiffListClass
 GgitDiffFileCallback
 GgitDiffFlag
 GgitDiffHunkCallback
 GgitDiffLineCallback
 GgitDiffLineType
 GgitDiffOption
-ggit_diff_new_tree_to_tree
-ggit_diff_new_tree_to_index
-ggit_diff_new_index_to_workdir
-ggit_diff_new_tree_to_workdir
-ggit_diff_merge
-ggit_diff_foreach
-ggit_diff_print_compact
-ggit_diff_print_patch
-ggit_diff_get_patch
-ggit_diff_blobs
-ggit_diff_blob_to_buffer
+ggit_diff_list_new_tree_to_tree
+ggit_diff_list_new_tree_to_index
+ggit_diff_list_new_index_to_workdir
+ggit_diff_list_new_tree_to_workdir
+ggit_diff_list_merge
+ggit_diff_list_foreach
+ggit_diff_list_print_compact
+ggit_diff_list_print_patch
+ggit_diff_list_get_patch
+ggit_diff_list_blobs
+ggit_diff_list_blob_to_buffer
 <SUBSECTION Standard>
-GGIT_DIFF
-GGIT_DIFF_CLASS
-GGIT_DIFF_GET_CLASS
-GGIT_IS_DIFF
-GGIT_IS_DIFF_CLASS
-GGIT_TYPE_DIFF
+GGIT_DIFF_LIST
+GGIT_DIFF_LIST_CLASS
+GGIT_DIFF_LIST_GET_CLASS
+GGIT_IS_DIFF_LIST
+GGIT_IS_DIFF_LIST_CLASS
+GGIT_TYPE_DIFF_LIST
 GGIT_TYPE_DIFF_FLAG
 GGIT_TYPE_DIFF_LINE_TYPE
 GGIT_TYPE_DIFF_OPTION
-ggit_diff_get_type
+ggit_diff_list_get_type
 ggit_diff_flag_get_type
 ggit_diff_line_type_get_type
 ggit_diff_option_get_type
@@ -440,6 +440,25 @@ ggit_init
 <SUBSECTION Standard>
 GGIT_TYPE_CAP_FLAGS
 ggit_cap_flags_get_type
+</SECTION>
+
+<SECTION>
+<FILE>ggit-merge-tree-options</FILE>
+<TITLE>GgitMergeTreeOptions</TITLE>
+GgitMergeAutomergeMode
+GgitMergeTreeFlags
+GgitMergeTreeOptions
+ggit_merge_tree_options_copy
+ggit_merge_tree_options_free
+ggit_merge_tree_options_new
+<SUBSECTION Standard>
+GGIT_MERGE_TREE_OPTIONS
+GGIT_TYPE_MERGE_AUTOMERGE_MODE
+GGIT_TYPE_MERGE_TREE_FLAGS
+GGIT_TYPE_MERGE_TREE_OPTIONS
+ggit_merge_tree_options_get_type
+ggit_merge_tree_flags_get_type
+ggit_merge_automerge_mode_get_type
 </SECTION>
 
 <SECTION>
@@ -790,7 +809,7 @@ ggit_signature_get_type
 </SECTION>
 
 <SECTION>
-<FILE>ggit-status</FILE>
+<FILE>ggit-status-options</FILE>
 <TITLE>GgitStatusOptions</TITLE>
 GgitStatusOption
 GgitStatusShow
