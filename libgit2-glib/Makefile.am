@@ -27,7 +27,7 @@ INST_H_FILES =				\
 	ggit-config-entry.h		\
 	ggit-cred.h			\
 	ggit-cred-plaintext.h		\
-	ggit-diff.h			\
+	ggit-diff-list.h		\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
 	ggit-diff-options.h		\
@@ -79,7 +79,7 @@ C_FILES =				\
 	ggit-convert.c			\
 	ggit-cred.c			\
 	ggit-cred-plaintext.c		\
-	ggit-diff.c			\
+	ggit-diff-list.c		\
 	ggit-diff-delta.c		\
 	ggit-diff-file.c		\
 	ggit-diff-options.c		\

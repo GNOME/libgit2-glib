@@ -30,7 +30,7 @@
 #include <libgit2-glib/ggit-config-entry.h>
 #include <libgit2-glib/ggit-cred.h>
 #include <libgit2-glib/ggit-cred-plaintext.h>
-#include <libgit2-glib/ggit-diff.h>
+#include <libgit2-glib/ggit-diff-list.h>
 #include <libgit2-glib/ggit-diff-delta.h>
 #include <libgit2-glib/ggit-diff-file.h>
 #include <libgit2-glib/ggit-diff-options.h>

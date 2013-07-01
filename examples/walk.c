@@ -163,19 +163,19 @@ main (int   argc,
 			GgitCommit *parent_commit;
 			GgitTree *commit_tree;
 			GgitTree *parent_tree;
-			GgitDiff *diff;
+			GgitDiffList *diff;
 
 			parent_commit = ggit_commit_parents_get (commit_parents, 0);
 			commit_tree = ggit_commit_get_tree (commit);
 			parent_tree = ggit_commit_get_tree (parent_commit);
 
-			diff = ggit_diff_new_tree_to_tree (repo,
-			                                   parent_tree,
-			                                   commit_tree,
-			                                   NULL, &err);
+			diff = ggit_diff_list_new_tree_to_tree (repo,
+			                                        parent_tree,
+			                                        commit_tree,
+			                                        NULL, &err);
 			g_assert_no_error (err);
 
-			ggit_diff_print_patch (diff, diff_print_cb, NULL, &err);
+			ggit_diff_list_print_patch (diff, diff_print_cb, NULL, &err);
 			g_assert_no_error (err);
 
 			g_object_unref (diff);
