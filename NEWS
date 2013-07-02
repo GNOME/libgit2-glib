@@ -1,3 +1,20 @@
+News in 0.0.6
+-------------
+* Rename GgitDiff to GgitDiffList
+* Bind GgitMergeTreeOptions
+* Added ggit_diff_patch_to_stream
+* Added writing blob using output stream
+* Bind more index API (write_tree, add_bypath, owner)
+* Rename FILEMODE constants to FILE_MODE
+* Bind create_commit
+* Bind ggit_message_prettify
+* Bind get_patch and patch_to_string
+* Added new status options
+* Added ggit_index_entry_stat
+* Added _set API for GgitIndexEntry
+* Bind tree builder API
+* Misc bugfixing
+
 News in 0.0.4
 -------------
 * Update bindings to the latest libgit2 API changes 0.19.0
