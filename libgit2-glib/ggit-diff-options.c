@@ -121,19 +121,20 @@ ggit_diff_options_new (GgitDiffOption  flags,
                        const gchar   **pathspec)
 {
 	GgitDiffOptions *diff_options;
-	git_diff_options *gdiff_options;
+	git_diff_options gdiff_options = GIT_DIFF_OPTIONS_INIT;
 
 	diff_options = g_slice_new (GgitDiffOptions);
-	gdiff_options = &diff_options->diff_options;
 
-	gdiff_options->flags = flags;
-	gdiff_options->context_lines = n_context_lines;
-	gdiff_options->interhunk_lines = n_interhunk_lines;
-	gdiff_options->old_prefix = old_prefix == NULL ? NULL : g_strdup (old_prefix);
-	gdiff_options->new_prefix = new_prefix == NULL ? NULL : g_strdup (new_prefix);
+	gdiff_options.flags = flags;
+	gdiff_options.context_lines = n_context_lines;
+	gdiff_options.interhunk_lines = n_interhunk_lines;
+	gdiff_options.old_prefix = old_prefix == NULL ? NULL : g_strdup (old_prefix);
+	gdiff_options.new_prefix = new_prefix == NULL ? NULL : g_strdup (new_prefix);
+
 	ggit_utils_get_git_strarray_from_str_array (pathspec,
-	                                            &gdiff_options->pathspec);
+	                                            &gdiff_options.pathspec);
 
+	diff_options->diff_options = gdiff_options;
 	return diff_options;
 }
 
