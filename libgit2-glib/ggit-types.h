@@ -418,22 +418,44 @@ typedef enum {
  * @GGIT_DIFF_INCLUDE_UNTRACKED: include untracked files.
  * @GGIT_DIFF_INCLUDE_UNMODIFIED: include unmodified files.
  * @GGIT_DIFF_RECURSE_UNTRACKED_DIRS: recurse to untracked directories.
+ * @GGIT_DIFF_DISABLE_PATHSPEC_MATCH: use exact path matching.
+ * @GGIT_DIFF_DELTAS_ARE_ICASE: use case insensitive filename comparisons.
+ * @GGIT_DIFF_INCLUDE_UNTRACKED_CONTENT: include content of untracked files.
+ * this implies GGIT_DIFF_INCLUDE_UNTRACKED but not GGIT_DIFF_RECURSE_UNTRACKED_DIRS.
+ * @GGIT_DIFF_SKIP_BINARY_CHECK: disable updating the binary flag in delta records.
+ * @GGIT_DIFF_INCLUDE_TYPECHANGE: enable generation of typechange detal records.
+ * @GGIT_DIFF_INCLUDE_TYPECHANGE_TREES:
+ * @GGIT_DIFF_IGNORE_FILE_MODE: ignore file mode changes.
+ * @GGIT_DIFF_RECURSE_IGNORED_DIRS:
+ * @GGIT_DIFF_FAST_UNTRACKED_DIRS: immediately label untracked directories as
+ * untracked, without checking inside.
+ * @GGIT_DIFF_FORCE_BINARY: treat all files as binary, disabling text diffs.
  *
  * How the diff should be generated.
  */
 typedef enum {
-	GGIT_DIFF_NORMAL                   = 0,
-	GGIT_DIFF_REVERSE                  = 1 << 0,
-	GGIT_DIFF_FORCE_TEXT               = 1 << 1,
-	GGIT_DIFF_IGNORE_WHITESPACE        = 1 << 2,
-	GGIT_DIFF_IGNORE_WHITESPACE_CHANGE = 1 << 3,
-	GGIT_DIFF_IGNORE_WHITESPACE_EOL    = 1 << 4,
-	GGIT_DIFF_IGNORE_SUBMODULES        = 1 << 5,
-	GGIT_DIFF_PATIENCE                 = 1 << 6,
-	GGIT_DIFF_INCLUDE_IGNORED          = 1 << 7,
-	GGIT_DIFF_INCLUDE_UNTRACKED        = 1 << 8,
-	GGIT_DIFF_INCLUDE_UNMODIFIED       = 1 << 9,
-	GGIT_DIFF_RECURSE_UNTRACKED_DIRS   = 1 << 10
+	GGIT_DIFF_NORMAL                    = 0,
+	GGIT_DIFF_REVERSE                   = 1 << 0,
+	GGIT_DIFF_FORCE_TEXT                = 1 << 1,
+	GGIT_DIFF_IGNORE_WHITESPACE         = 1 << 2,
+	GGIT_DIFF_IGNORE_WHITESPACE_CHANGE  = 1 << 3,
+	GGIT_DIFF_IGNORE_WHITESPACE_EOL     = 1 << 4,
+	GGIT_DIFF_IGNORE_SUBMODULES         = 1 << 5,
+	GGIT_DIFF_PATIENCE                  = 1 << 6,
+	GGIT_DIFF_INCLUDE_IGNORED           = 1 << 7,
+	GGIT_DIFF_INCLUDE_UNTRACKED         = 1 << 8,
+	GGIT_DIFF_INCLUDE_UNMODIFIED        = 1 << 9,
+	GGIT_DIFF_RECURSE_UNTRACKED_DIRS    = 1 << 10,
+	GGIT_DIFF_DISABLE_PATHSPEC_MATCH    = 1 << 11,
+	GGIT_DIFF_DELTAS_ARE_ICASE          = 1 << 12,
+	GGIT_DIFF_INCLUDE_UNTRACKED_CONTENT = 1 << 13,
+	GGIT_DIFF_SKIP_BINARY_CHECK         = 1 << 14,
+	GGIT_DIFF_INCLUDE_TYPECHANGE        = 1 << 15,
+	GGIT_DIFF_INCLUDE_TYPECHANGE_TREES  = 1 << 16,
+	GGIT_DIFF_IGNORE_FILE_MODE          = 1 << 17,
+	GGIT_DIFF_RECURSE_IGNORED_DIRS      = 1 << 18,
+	GGIT_DIFF_FAST_UNTRACKED_DIRS       = 1 << 19,
+	GGIT_DIFF_FORCE_BINARY              = 1 << 20,
 } GgitDiffOption;
 
 /**
