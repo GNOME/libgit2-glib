@@ -106,7 +106,7 @@ ggit_diff_options_free (GgitDiffOptions *diff_options)
  * @n_interhunk_lines: the number of interhunk lines, default is 3.
  * @old_prefix: (allow-none): the old prefix, defaults to "a".
  * @new_prefix: (allow-none): the new prefix, defaults to "b".
- * @pathspec: (allow-none): which paths to show, defaults to showing all paths.
+ * @pathspec: (allow-none) (array zero-terminated=1): which paths to show, defaults to showing all paths.
  *
  * Creates a new #GgitDiffOptions for use in creating a #GgitDiff.
  *

@@ -92,7 +92,7 @@ ggit_status_options_free (GgitStatusOptions *status_options)
  * ggit_status_options_new:
  * @options: status options.
  * @show: status show options.
- * @pathspec: (allow-none): which paths to show, defaults to showing all paths.
+ * @pathspec: (allow-none) (array zero-terminated=1): which paths to show, defaults to showing all paths.
  *
  * Creates a new #GgitStatusOptions for use in #ggit_repository_stash_foreach.
  *
