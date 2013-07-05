@@ -480,7 +480,7 @@ ggit_ref_create_reflog (GgitRef        *ref,
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_reflog_append (_ggit_native_get (ref),
-	                         _ggit_native_get (oid),
+	                         _ggit_oid_get_oid (oid),
 	                         _ggit_native_get (committer),
 	                         message);
 
