@@ -136,6 +136,18 @@ GgitOId            *ggit_repository_create_commit     (GgitRepository        *re
                                                        gint                   parent_count,
                                                        GError               **error);
 
+GgitOId            *ggit_repository_create_commit_from_oids (
+                                                       GgitRepository        *repository,
+                                                       const gchar           *update_ref,
+                                                       GgitSignature         *author,
+                                                       GgitSignature         *committer,
+                                                       const gchar           *message_encoding,
+                                                       const gchar           *message,
+                                                       GgitOId               *tree,
+                                                       GgitOId              **parents,
+                                                       gint                   parent_count,
+                                                       GError               **error);
+
 GgitOId            *ggit_repository_create_tag        (GgitRepository        *repository,
                                                        const gchar           *tag_name,
                                                        GgitObject            *target,
