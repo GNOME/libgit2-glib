@@ -21,9 +21,14 @@
 #include "ggit-reflog.h"
 
 #include "ggit-reflog-entry.h"
+#include "ggit-native.h"
+#include "ggit-error.h"
+#include "ggit-signature.h"
+#include "ggit-oid.h"
 
 struct _GgitReflog
 {
+	GgitRef *ref;
 	git_reflog *reflog;
 	gint ref_count;
 };
@@ -31,12 +36,14 @@ struct _GgitReflog
 G_DEFINE_BOXED_TYPE (GgitReflog, ggit_reflog, ggit_reflog_ref, ggit_reflog_unref)
 
 GgitReflog *
-_ggit_reflog_wrap (git_reflog *reflog)
+_ggit_reflog_wrap (GgitRef    *ref,
+                   git_reflog *reflog)
 {
 	GgitReflog *greflog;
 
 	greflog = g_slice_new (GgitReflog);
 	greflog->reflog = reflog;
+	greflog->ref = g_object_ref (ref);
 	greflog->ref_count = 1;
 
 	return greflog;
@@ -75,9 +82,41 @@ ggit_reflog_unref (GgitReflog *reflog)
 
 	if (g_atomic_int_dec_and_test (&reflog->ref_count))
 	{
+		g_object_unref (reflog->ref);
+
 		git_reflog_free (reflog->reflog);
 		g_slice_free (GgitReflog, reflog);
 	}
+}
+
+/**
+ * ggit_reflog_write:
+ * @reflog: a #GgitReflog.
+ * @error: a #GError.
+ *
+ * Write the reflog to disk.
+ *
+ * Returns: %TRUE if the reflog was successfully written, or %FALSE on error.
+ *
+ **/
+gboolean
+ggit_reflog_write (GgitReflog  *reflog,
+                   GError     **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (reflog != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_reflog_write (reflog->reflog);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /**
@@ -121,6 +160,78 @@ ggit_reflog_get_entry_from_index (GgitReflog *reflog,
 	}
 
 	return _ggit_reflog_entry_wrap (reflog_entry);
+}
+
+
+/**
+ * ggit_reflog_rename:
+ * @reflog: a #GgitReflog.
+ * @new_name: the new name of the reference.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Renames the reflog for to @new_name, on error @error is set.
+ */
+gboolean
+ggit_reflog_rename (GgitReflog  *reflog,
+                    const gchar *new_name,
+                    GError      **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (reflog != NULL, FALSE);
+	g_return_val_if_fail (new_name != NULL && *new_name != '\0', FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_reflog_rename (_ggit_native_get (reflog->ref), new_name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_reflog_append:
+ * @reflog: a #GgitReflog.
+ * @oid: a #GgitOId.
+ * @committer: a #GgitSignature.
+ * @message: the message.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a reflog entry.
+ *
+ * Returns: %TRUE if the reflog was successfully created, or %FALSE if error is set.
+ */
+gboolean
+ggit_reflog_append (GgitReflog     *reflog,
+                    GgitOId        *oid,
+                    GgitSignature  *committer,
+                    const gchar    *message,
+                    GError        **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (reflog != NULL, FALSE);
+	g_return_val_if_fail (oid != NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), FALSE);
+	g_return_val_if_fail (message != NULL && *message != '\0', FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_reflog_append (reflog->reflog,
+	                         _ggit_oid_get_oid (oid),
+	                         _ggit_native_get (committer),
+	                         message);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* ex:set ts=8 noet: */

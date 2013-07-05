@@ -427,7 +427,8 @@ ggit_ref_has_reflog (GgitRef *ref)
  * @ref: a #GgitRef.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Gets the #GgitReflog for @ref.
+ * Gets the #GgitReflog for @ref. The reflog will be created if it doesn't exist
+ * yet.
  *
  * Returns: (transfer full): the reflog.
  */
@@ -449,75 +450,7 @@ ggit_ref_get_reflog (GgitRef  *ref,
 		return NULL;
 	}
 
-	return _ggit_reflog_wrap (reflog);
-}
-
-/**
- * ggit_ref_create_reflog:
- * @ref: a #GgitRef.
- * @oid: a #GgitOId.
- * @committer: a #GgitSignature.
- * @message: the message.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Creates a #GgitReflog with the given properties.
- *
- * Returns: (transfer full): the created reflog, or %NULL if error is set.
- */
-GgitReflog *
-ggit_ref_create_reflog (GgitRef        *ref,
-                        GgitOId        *oid,
-                        GgitSignature  *committer,
-                        const gchar    *message,
-                        GError        **error)
-{
-	gint ret;
-
-	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
-	g_return_val_if_fail (oid != NULL, NULL);
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), NULL);
-	g_return_val_if_fail (message != NULL && *message != '\0', NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-	ret = git_reflog_append (_ggit_native_get (ref),
-	                         _ggit_oid_get_oid (oid),
-	                         _ggit_native_get (committer),
-	                         message);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-		return NULL;
-	}
-
-	return ggit_ref_get_reflog (ref, error);
-}
-
-/**
- * ggit_ref_rename_reflog:
- * @ref: a #GgitRef.
- * @new_name: the new name of the reference.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Renames the reflog for @ref to @new_name, on error @error is set.
- */
-void
-ggit_ref_rename_reflog (GgitRef      *ref,
-                        const gchar  *new_name,
-                        GError      **error)
-{
-	gint ret;
-
-	g_return_if_fail (GGIT_IS_REF (ref));
-	g_return_if_fail (new_name != NULL && *new_name != '\0');
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_reflog_rename (_ggit_native_get (ref), new_name);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
+	return _ggit_reflog_wrap (ref, reflog);
 }
 
 /**

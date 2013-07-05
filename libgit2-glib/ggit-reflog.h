@@ -32,14 +32,28 @@ G_BEGIN_DECLS
 
 GType             ggit_reflog_get_type             (void) G_GNUC_CONST;
 
-GgitReflog       *_ggit_reflog_wrap                (git_reflog *reflog);
+GgitReflog       *_ggit_reflog_wrap                (GgitRef      *ref,
+                                                    git_reflog   *reflog);
 
-GgitReflog       *ggit_reflog_ref                  (GgitReflog *reflog);
-void              ggit_reflog_unref                (GgitReflog *reflog);
+GgitReflog       *ggit_reflog_ref                  (GgitReflog   *reflog);
+void              ggit_reflog_unref                (GgitReflog   *reflog);
 
-guint             ggit_reflog_get_entry_count      (GgitReflog *reflog);
-GgitReflogEntry  *ggit_reflog_get_entry_from_index (GgitReflog *reflog,
-                                                    guint       idx);
+guint             ggit_reflog_get_entry_count      (GgitReflog   *reflog);
+GgitReflogEntry  *ggit_reflog_get_entry_from_index (GgitReflog   *reflog,
+                                                    guint         idx);
+
+gboolean          ggit_reflog_write                (GgitReflog    *reflog,
+                                                    GError       **error);
+
+gboolean          ggit_reflog_rename               (GgitReflog    *reflog,
+                                                    const gchar   *new_name,
+                                                    GError        **error);
+
+gboolean          ggit_reflog_append               (GgitReflog     *reflog,
+                                                    GgitOId        *oid,
+                                                    GgitSignature  *committer,
+                                                    const gchar    *message,
+                                                    GError        **error);
 
 G_END_DECLS
 
