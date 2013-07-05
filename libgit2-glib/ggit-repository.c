@@ -723,7 +723,10 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Get the current HEAD reference of the repository.
+ * Get and resolves the current HEAD reference of the repository. Note that the
+ * returned ref is already resolved (if HEAD is symbolic). If you want to
+ * retrieve the symbolic ref called HEAD, then use #ggit_repository_lookup_reference
+ * instead.
  *
  * Returns: (transfer full): a #GgitRef
  *
