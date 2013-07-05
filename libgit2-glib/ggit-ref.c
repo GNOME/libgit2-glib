@@ -406,6 +406,23 @@ ggit_ref_lookup (GgitRef  *ref,
 }
 
 /**
+ * ggit_ref_has_reflog:
+ * @ref: a #GgitRef.
+ *
+ * Get whether @ref has an existing reflog.
+ *
+ * Returns: %TRUE if @ref has a reflog, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_ref_has_reflog (GgitRef *ref)
+{
+	g_return_val_if_fail (GGIT_IS_REF (ref), FALSE);
+
+	return git_reference_has_log (_ggit_native_get (ref)) == 1;
+}
+
+/**
  * ggit_ref_get_reflog:
  * @ref: a #GgitRef.
  * @error: a #GError for error reporting, or %NULL.
