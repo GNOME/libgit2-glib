@@ -138,6 +138,13 @@ typedef struct _GgitDiffOptions GgitDiffOptions;
 typedef struct _GgitDiffRange GgitDiffRange;
 
 /**
+ * GgitDiffSimilarityMetric:
+ *
+ * Represents a similarity metric.
+ */
+typedef struct _GgitDiffSimilarityMetric GgitDiffSimilarityMetric;
+
+/**
  * GgitIndex:
  *
  * Represents an index object.
@@ -915,6 +922,29 @@ typedef gint (* GgitDiffLineCallback) (GgitDiffDelta    *delta,
                                        const gchar      *content,
                                        gsize             content_len,
                                        gpointer          user_data);
+
+/*
+ * FIXME: request docs for this to libgit2
+ */
+typedef gint (* GgitDiffSimilarityMetricFileSignatureCallback) (GgitDiffFile *file,
+                                                                const gchar  *fullpath,
+                                                                gpointer     *out,
+                                                                gpointer      user_data);
+
+
+typedef gint (* GgitDiffSimilarityMetricBufferSignatureCallback) (GgitDiffFile *file,
+                                                                  const gchar  *buf,
+                                                                  gsize         buflen,
+                                                                  gpointer     *out,
+                                                                  gpointer      user_data);
+
+typedef void (* GgitDiffSimilarityMetricFreeSignatureCallback) (gpointer signature,
+                                                                gpointer user_data);
+
+typedef gint (* GgitDiffSimilarityMetricSimilarityCallback) (gint     *score,
+                                                             gpointer  signature_a,
+                                                             gpointer  signature_b,
+                                                             gpointer  user_data);
 
 /**
  * GgitReferencesNameCallback:
