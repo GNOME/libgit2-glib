@@ -151,7 +151,6 @@ _ggit_signature_wrap (const git_signature *signature,
  * @name: the name of the person.
  * @email: the email of the person.
  * @signature_time: the time when the action happened.
- * @signature_time_zone: the timezone for the time.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a new #GgitSignature. Name and e-mail are assumed to be in UTF-8.
@@ -162,29 +161,27 @@ GgitSignature *
 ggit_signature_new (const gchar  *name,
                     const gchar  *email,
                     GDateTime    *signature_time,
-                    GTimeZone    *signature_time_zone,
                     GError      **error)
 {
 	GgitSignature *signature = NULL;
 	gint64 sig_time;
-	gint time_zone_interval;
 	gint32 sig_offset;
 	git_signature *sig;
 	gint ret;
+	GDateTime *utc;
+	GTimeSpan offset_us;
 
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (signature_time != NULL, NULL);
-	g_return_val_if_fail (signature_time_zone != NULL, NULL);
 	g_return_val_if_fail (email != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	sig_time = g_date_time_to_unix (signature_time);
+	utc = g_date_time_to_utc (signature_time);
+	sig_time = g_date_time_to_unix (utc);
+	g_date_time_unref (utc);
 
-	time_zone_interval = g_time_zone_find_interval (signature_time_zone,
-	                                                G_TIME_TYPE_UNIVERSAL,
-	                                                sig_time);
-	sig_offset = g_time_zone_get_offset (signature_time_zone,
-	                                     time_zone_interval);
+	offset_us = g_date_time_get_utc_offset (signature_time);
+	sig_offset = offset_us / G_TIME_SPAN_MINUTE;
 
 	ret = git_signature_new (&sig, name, email, sig_time, sig_offset);
 
@@ -303,20 +300,29 @@ ggit_signature_get_email (GgitSignature *signature)
  * ggit_signature_get_time:
  * @signature: a #GgitSignature.
  *
- * Gets the time in UTC when the action happened.
+ * Gets the time when the action happened. Note that the time is returned in
+ * the timezone of the commit (see #ggit_signature_get_time_zone).
  *
- * Returns: (transfer full): the time in UTC when the action happened.
+ * Returns: (transfer full): the time when the action happened.
  */
 GDateTime *
 ggit_signature_get_time (GgitSignature *signature)
 {
 	git_signature *s;
+	GDateTime *utc;
+	GTimeZone *tz;
+	GDateTime *ret;
 
 	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
 
 	s = _ggit_native_get (signature);
 
-	return g_date_time_new_from_unix_utc (s->when.time);
+	utc = g_date_time_new_from_unix_utc (s->when.time);
+	tz = ggit_signature_get_time_zone (signature);
+	ret = g_date_time_to_timezone (utc, tz);
+	g_date_time_unref (utc);
+
+	return ret;
 }
 
 /**

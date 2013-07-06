@@ -67,7 +67,6 @@ GgitSignature        *_ggit_signature_wrap             (const git_signature *sig
 GgitSignature        *ggit_signature_new               (const gchar         *name,
                                                         const gchar         *email,
                                                         GDateTime           *signature_time,
-                                                        GTimeZone           *signature_time_zone,
                                                         GError             **error);
 
 GgitSignature        *ggit_signature_new_now           (const gchar         *name,
