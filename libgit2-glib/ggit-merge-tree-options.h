@@ -40,10 +40,11 @@ const git_merge_tree_opts *
 GgitMergeTreeOptions  *ggit_merge_tree_options_copy                    (GgitMergeTreeOptions   *merge_options);
 void                   ggit_merge_tree_options_free                    (GgitMergeTreeOptions   *merge_options);
 
-GgitMergeTreeOptions  *ggit_merge_tree_options_new                     (GgitMergeTreeFlags      flags,
-                                                                        guint                   rename_threshold,
-                                                                        guint                   target_limit,
-                                                                        GgitMergeAutomergeMode  automerge_mode);
+GgitMergeTreeOptions  *ggit_merge_tree_options_new                     (GgitMergeTreeFlags        flags,
+                                                                        guint                     rename_threshold,
+                                                                        guint                     target_limit,
+                                                                        GgitDiffSimilarityMetric *metric,
+                                                                        GgitMergeAutomergeMode    automerge_mode);
 
 G_END_DECLS
 

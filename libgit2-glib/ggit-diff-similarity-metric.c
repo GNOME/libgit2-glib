@@ -36,7 +36,7 @@ struct _GgitDiffSimilarityMetric
 G_DEFINE_BOXED_TYPE (GgitDiffSimilarityMetric, ggit_diff_similarity_metric,
                      ggit_diff_similarity_metric_copy, ggit_diff_similarity_metric_free)
 
-const git_diff_similarity_metric *
+git_diff_similarity_metric *
 _ggit_diff_similarity_metric_get_similarity_metric (GgitDiffSimilarityMetric *metric)
 {
 	if (metric == NULL)
@@ -44,7 +44,7 @@ _ggit_diff_similarity_metric_get_similarity_metric (GgitDiffSimilarityMetric *me
 		return NULL;
 	}
 
-	return (const git_diff_similarity_metric *)&metric->metric;
+	return &metric->metric;
 }
 
 /**

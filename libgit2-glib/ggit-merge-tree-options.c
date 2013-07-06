@@ -19,6 +19,7 @@
  */
 
 #include "ggit-merge-tree-options.h"
+#include "ggit-diff-similarity-metric.h"
 
 struct _GgitMergeTreeOptions
 {
@@ -78,14 +79,13 @@ ggit_merge_tree_options_free (GgitMergeTreeOptions *merge_options)
 	g_slice_free (GgitMergeTreeOptions, merge_options);
 }
 
-/* FIXME: MISSING git_diff_similarity_metric bind */
-
 /**
  * ggit_merge_tree_options_new:
  * @flags: flags to consider when merging.
  * @rename_threshold: similarity to consider a file renamed (default 50).
  * @target_limit: maximum similarity sources to examine
  *                (overrides the `merge_tree.renameLimit` config) (default 200).
+ * @metric: (allow-none): a #GgitDiffSimilarityMetric or %NULL to use internal metric.
  * @automerge_mode: mode for automerging.
  *
  * Creates a new #GgitMergeTreeOptions.
@@ -93,10 +93,11 @@ ggit_merge_tree_options_free (GgitMergeTreeOptions *merge_options)
  * Returns: a newly allocated #GgitMergeTreeOptions.
  */
 GgitMergeTreeOptions *
-ggit_merge_tree_options_new (GgitMergeTreeFlags     flags,
-                             guint                  rename_threshold,
-                             guint                  target_limit,
-                             GgitMergeAutomergeMode automerge_mode)
+ggit_merge_tree_options_new (GgitMergeTreeFlags        flags,
+                             guint                     rename_threshold,
+                             guint                     target_limit,
+                             GgitDiffSimilarityMetric *metric,
+                             GgitMergeAutomergeMode    automerge_mode)
 {
 	GgitMergeTreeOptions *merge_options;
 	git_merge_tree_opts gmerge_options = GIT_MERGE_TREE_OPTS_INIT;
@@ -106,6 +107,7 @@ ggit_merge_tree_options_new (GgitMergeTreeFlags     flags,
 	gmerge_options.flags = flags;
 	gmerge_options.rename_threshold = rename_threshold;
 	gmerge_options.target_limit = target_limit;
+	gmerge_options.metric = _ggit_diff_similarity_metric_get_similarity_metric (metric);
 	gmerge_options.automerge_flags = automerge_mode;
 
 	merge_options->merge_options = gmerge_options;

@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 GType                      ggit_diff_similarity_metric_get_type                (void) G_GNUC_CONST;
 
-const git_diff_similarity_metric *
+git_diff_similarity_metric *
                           _ggit_diff_similarity_metric_get_similarity_metric   (GgitDiffSimilarityMetric   *metric);
 
 GgitDiffSimilarityMetric  *ggit_diff_similarity_metric_copy                    (GgitDiffSimilarityMetric   *metric);
