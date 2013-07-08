@@ -126,7 +126,7 @@ ggit_convert_utf8 (const gchar *str,
 	}
 
 	if (from_charset != NULL &&
-	    g_ascii_strcasecmp (from_charset, "UTF-8"))
+	    g_ascii_strcasecmp (from_charset, "UTF-8") == 0)
 	{
 		gchar *ret = g_strndup (str, size);
 		utf8_validate_fallback (ret, size);
