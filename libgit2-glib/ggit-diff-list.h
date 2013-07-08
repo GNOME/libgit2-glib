@@ -81,25 +81,25 @@ GgitDiffList  *ggit_diff_list_new_tree_to_workdir  (GgitRepository        *repos
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
 
-void           ggit_diff_list_merge                (GgitDiffList              *onto,
-                                                    GgitDiffList              *from,
+void           ggit_diff_list_merge                (GgitDiffList          *onto,
+                                                    GgitDiffList          *from,
                                                     GError               **error);
 
-void           ggit_diff_list_foreach              (GgitDiffList              *diff,
+void           ggit_diff_list_foreach              (GgitDiffList          *diff,
                                                     GgitDiffFileCallback   file_cb,
                                                     GgitDiffHunkCallback   hunk_cb,
                                                     GgitDiffLineCallback   line_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
-void           ggit_diff_list_print_compact        (GgitDiffList              *diff,
+void           ggit_diff_list_print_compact        (GgitDiffList          *diff,
                                                     GgitDiffLineCallback   print_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
-void           ggit_diff_list_print_patch          (GgitDiffList              *diff,
+void           ggit_diff_list_print_patch          (GgitDiffList          *diff,
                                                     GgitDiffLineCallback   print_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
-void           ggit_diff_list_get_patch            (GgitDiffList              *diff,
+void           ggit_diff_list_get_patch            (GgitDiffList          *diff,
                                                     gsize                  idx,
                                                     GgitDiffPatch        **patch,
                                                     GgitDiffDelta        **delta,
