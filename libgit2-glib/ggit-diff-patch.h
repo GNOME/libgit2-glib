@@ -46,6 +46,18 @@ gboolean         ggit_diff_patch_to_stream      (GgitDiffPatch    *diff_patch,
                                                  GOutputStream    *stream,
                                                  GError          **error);
 
+gboolean         ggit_diff_patch_get_line_stats (GgitDiffPatch    *diff_patch,
+                                                 gsize            *total_context,
+                                                 gsize            *total_additions,
+                                                 gsize            *total_deletions,
+                                                 GError          **error);
+
+gsize            ggit_diff_patch_get_num_hunks  (GgitDiffPatch    *diff_patch);
+
+gint             ggit_diff_patch_get_num_lines_in_hunk (
+                                                 GgitDiffPatch    *diff_patch,
+                                                 gsize             hunk);
+
 G_END_DECLS
 
 #endif /* __GGIT_DIFF_PATCH_H__ */

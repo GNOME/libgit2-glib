@@ -206,4 +206,94 @@ ggit_diff_patch_to_stream (GgitDiffPatch  *diff_patch,
 	return TRUE;
 }
 
+/**
+ * ggit_diff_patch_get_line_stats:
+ * @diff_patch: a #GgitDiffPatch.
+ * @total_context: (allow-none) (out): return value for the number of context lines.
+ * @total_additions: (allow-none) (out): return value for the number of added lines.
+ * @total_deletions: (allow-none) (out): return value for the number of deleted lines.
+ * @error: a #GError.
+ *
+ * Get the line statistics of the patch.
+ *
+ * Returns: %TRUE if successfull, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_diff_patch_get_line_stats (GgitDiffPatch  *diff_patch,
+                                gsize          *total_context,
+                                gsize          *total_additions,
+                                gsize          *total_deletions,
+                                GError        **error)
+{
+	size_t tc;
+	size_t ta;
+	size_t td;
+	gint ret;
+
+	g_return_val_if_fail (diff_patch != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_diff_patch_line_stats (&tc, &ta, &td, diff_patch->diff_patch);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	if (total_context)
+	{
+		*total_context = tc;
+	}
+
+	if (total_additions)
+	{
+		*total_additions = ta;
+	}
+
+	if (total_deletions)
+	{
+		*total_deletions = td;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_diff_patch_get_num_hunks:
+ * @diff_patch: a #GgitDiffPatch.
+ *
+ * Get the number of hunks in the patch.
+ *
+ * Returns: the number of hunks.
+ *
+ **/
+gsize
+ggit_diff_patch_get_num_hunks (GgitDiffPatch *diff_patch)
+{
+	g_return_val_if_fail (diff_patch != NULL, FALSE);
+
+	return git_diff_patch_num_hunks (diff_patch->diff_patch);
+}
+
+/**
+ * ggit_diff_patch_get_num_lines_in_hunk:
+ * @diff_patch: a #GgitDiffPatch.
+ * @hunk: the hunk index.
+ *
+ * Get the number of lines in @hunk.
+ *
+ * Returns: the number of lines.
+ *
+ **/
+gint
+ggit_diff_patch_get_num_lines_in_hunk (GgitDiffPatch *diff_patch,
+                                       gsize          hunk)
+{
+	g_return_val_if_fail (diff_patch != NULL, FALSE);
+
+	return git_diff_patch_num_lines_in_hunk (diff_patch->diff_patch, hunk);
+}
+
 /* ex:set ts=8 noet: */
