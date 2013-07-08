@@ -493,8 +493,8 @@ ggit_diff_list_get_num_deltas (GgitDiffList *diff)
  * ggit_diff_list_get_patch:
  * @diff: a #GgitDiffList.
  * @idx: index into @diff.
- * @patch: (allow-none): a #GgitDiffPatch or %NULL.
- * @delta: (allow-none): a #GgitDiffDelta or %NULL.
+ * @patch: (allow-none) (out): a #GgitDiffPatch or %NULL.
+ * @delta: (allow-none) (out): a #GgitDiffDelta or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Gets the diff delta and patch for an entry in @diff.
