@@ -473,6 +473,23 @@ ggit_diff_list_print_patch (GgitDiffList          *diff,
 }
 
 /**
+ * ggit_diff_list_get_num_deltas:
+ * @diff: a #GgitDiffList.
+ *
+ * Get the number of deltas in the diff list.
+ *
+ * Returns: the number of deltas.
+ *
+ **/
+gint
+ggit_diff_list_get_num_deltas (GgitDiffList *diff)
+{
+	g_return_val_if_fail (GGIT_IS_DIFF_LIST (diff), 0);
+
+	return git_diff_num_deltas (_ggit_native_get (diff));
+}
+
+/**
  * ggit_diff_list_get_patch:
  * @diff: a #GgitDiffList.
  * @idx: index into @diff.

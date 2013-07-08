@@ -99,6 +99,9 @@ void           ggit_diff_list_print_patch          (GgitDiffList          *diff,
                                                     GgitDiffLineCallback   print_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
+
+gint           ggit_diff_list_get_num_deltas       (GgitDiffList          *diff);
+
 void           ggit_diff_list_get_patch            (GgitDiffList          *diff,
                                                     gsize                  idx,
                                                     GgitDiffPatch        **patch,
