@@ -80,20 +80,6 @@ ggit_diff_patch_unref (GgitDiffPatch *diff_patch)
 	}
 }
 
-static int
-patch_to_string (const git_diff_delta *delta,
-                 const git_diff_range *range,
-                 char                  line_origin,
-                 const char           *content,
-                 size_t                content_len,
-                 void                 *payload)
-{
-	GString *s = payload;
-
-	g_string_append_len (s, content, content_len);
-	return content_len;
-}
-
 /**
  * ggit_diff_patch_to_string:
  * @diff_patch: a #GgitDiffPatch.
@@ -107,25 +93,25 @@ gchar *
 ggit_diff_patch_to_string (GgitDiffPatch  *diff_patch,
                            GError        **error)
 {
+	const gchar *retval;
+	const gchar *result;
 	gint ret;
-	GString *s;
 
 	g_return_val_if_fail (diff_patch != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	s = g_string_new ("");
 
-	ret = git_diff_patch_print (diff_patch->diff_patch,
-	                            patch_to_string,
-	                            s);
+	ret = git_diff_patch_to_str (&retval, diff_patch->diff_patch);
 
 	if (ret != GIT_OK)
 	{
-		g_string_free (s, TRUE);
 		return NULL;
 	}
 
-	return g_string_free (s, FALSE);
+	result = g_strdup (retval);
+	g_free (retval);
+
+	return result;
 }
 
 typedef struct
