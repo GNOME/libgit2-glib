@@ -93,23 +93,19 @@ gchar *
 ggit_diff_patch_to_string (GgitDiffPatch  *diff_patch,
                            GError        **error)
 {
-	const gchar *retval;
-	const gchar *result;
+	char *retval;
+	gchar *result = NULL;
 	gint ret;
 
 	g_return_val_if_fail (diff_patch != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-
 	ret = git_diff_patch_to_str (&retval, diff_patch->diff_patch);
-
-	if (ret != GIT_OK)
+	if (ret == GIT_OK)
 	{
-		return NULL;
+		result = g_strdup (retval);
+		g_free (retval);
 	}
-
-	result = g_strdup (retval);
-	g_free (retval);
 
 	return result;
 }
