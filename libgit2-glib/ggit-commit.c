@@ -433,7 +433,7 @@ ggit_commit_get_tree (GgitCommit *commit)
  * than getting the tree object with ggit_commit_get_tree() because no additional
  * files need to be read from disk.
  *
- * Returns: (transfer full) a #GgitOId.
+ * Returns: (transfer full): a #GgitOId.
  *
  **/
 GgitOId *

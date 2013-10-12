@@ -209,7 +209,7 @@ convert_to_gparameter (GObjectConstructParam *params,
  * @parent_class: a #GObjectClass.
  * @basetype: a #GType.
  * @n_construct_properties: number of construct properties.
- * @construct_properties: (array length=n_construct_properties) a list of #GObjectConstructParam.
+ * @construct_properties: (array length=n_construct_properties): a list of #GObjectConstructParam.
  *
  * Construct a new object.
  *
