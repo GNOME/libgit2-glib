@@ -58,23 +58,20 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 
 static gint
 ggit_diff_hunk_callback_wrapper (const git_diff_delta *delta,
-                                 const git_diff_range *range,
-                                 const gchar          *header,
-                                 gsize                 header_len,
+                                 const git_diff_hunk  *hunk,
                                  gpointer              user_data)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
-	GgitDiffRange *grange;
+	GgitDiffHunk *ghunk;
 	gint ret;
 
 	gdelta = _ggit_diff_delta_wrap (delta);
-	grange = _ggit_diff_range_wrap (range);
+	ghunk = _ggit_diff_hunk_wrap (hunk);
 
-	ret = data->hunk_cb (gdelta, grange, header, header_len,
-	                     data->user_data);
+	ret = data->hunk_cb (gdelta, ghunk, data->user_data);
 
-	ggit_diff_range_unref (grange);
+	ggit_diff_hunk_unref (ghunk);
 	ggit_diff_delta_unref (gdelta);
 
 	return ret;
@@ -82,26 +79,30 @@ ggit_diff_hunk_callback_wrapper (const git_diff_delta *delta,
 
 static gint
 ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
-                                 const git_diff_range *range,
-                                 gchar                 line_type,
-                                 const gchar          *content,
-                                 gsize                 content_len,
+                                 const git_diff_hunk  *hunk,
+                                 const git_diff_line  *line,
                                  gpointer              user_data)
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
-	GgitDiffRange *grange;
+	GgitDiffHunk *ghunk;
+	GgitDiffLine *gline;
 	gint ret;
 
 	gdelta = _ggit_diff_delta_wrap (delta);
-	grange = range == NULL ? NULL : _ggit_diff_range_wrap (range);
+	ghunk = hunk == NULL ? NULL : _ggit_diff_hunk_wrap (hunk);
+	gline = line == NULL ? NULL : _ggit_diff_line_wrap (line);
 
-	ret = data->line_cb (gdelta, grange, (GgitDiffLineType) line_type,
-	                     content, content_len, data->user_data);
+	ret = data->line_cb (gdelta, ghunk, gline, data->user_data);
 
-	if (grange != NULL)
+	if (gline != NULL)
 	{
-		ggit_diff_range_unref (grange);
+		ggit_diff_line_unref (gline);
+	}
+
+	if (ghunk != NULL)
+	{
+		ggit_diff_hunk_unref (ghunk);
 	}
 
 	ggit_diff_delta_unref (gdelta);
