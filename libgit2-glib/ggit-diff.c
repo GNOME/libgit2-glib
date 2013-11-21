@@ -24,6 +24,7 @@
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
 #include "ggit-diff-line.h"
+#include "ggit-diff-hunk.h"
 #include "ggit-patch.h"
 #include "ggit-error.h"
 #include "ggit-repository.h"
