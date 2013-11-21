@@ -91,10 +91,6 @@ void           ggit_diff_foreach                   (GgitDiff              *diff,
                                                     GgitDiffLineCallback   line_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
-void           ggit_diff_print_compact             (GgitDiff          *diff,
-                                                    GgitDiffLineCallback   print_cb,
-                                                    gpointer              *user_data,
-                                                    GError               **error);
 void           ggit_diff_print_patch               (GgitDiff              *diff,
                                                     GgitDiffLineCallback   print_cb,
                                                     gpointer              *user_data,

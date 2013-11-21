@@ -368,7 +368,7 @@ ggit_diff_foreach (GgitDiff              *diff,
 	CallbackWrapperData wrapper_data;
 	git_diff_file_cb real_file_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
-	git_diff_data_cb real_line_cb = NULL;
+	git_diff_line_cb real_line_cb = NULL;
 
 	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
@@ -397,41 +397,6 @@ ggit_diff_foreach (GgitDiff              *diff,
 	ret = git_diff_foreach (_ggit_native_get (diff),
 	                        real_file_cb, real_hunk_cb, real_line_cb,
 	                        &wrapper_data);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
- * ggit_diff_print_compact:
- * @diff: a #GgitDiff.
- * @print_cb: (scope call) (closure user_data): a #GgitDiffLineCallback.
- * @user_data: callback user data.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Iterates over @diff generating text output like "git diff --name-status".
- */
-void
-ggit_diff_print_compact (GgitDiff              *diff,
-                         GgitDiffLineCallback   print_cb,
-                         gpointer              *user_data,
-                         GError               **error)
-{
-	gint ret;
-	CallbackWrapperData wrapper_data;
-
-	g_return_if_fail (GGIT_IS_DIFF (diff));
-	g_return_if_fail (print_cb != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	wrapper_data.user_data = user_data;
-	wrapper_data.line_cb = print_cb;
-
-	ret = git_diff_print_compact (_ggit_native_get (diff),
-	                              ggit_diff_line_callback_wrapper,
-	                              &wrapper_data);
 
 	if (ret != GIT_OK)
 	{
