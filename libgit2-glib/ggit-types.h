@@ -264,6 +264,13 @@ typedef struct _GgitReflogEntry GgitReflogEntry;
 typedef struct _GgitRemote GgitRemote;
 
 /**
+ * GgitRemoteCbs:
+ *
+ * Represents a git remote callbacks.
+ */
+typedef struct _GgitRemoteCbs GgitRemoteCbs;
+
+/**
  * GgitRepository:
  *
  * Represents an existing git repository including all of it's

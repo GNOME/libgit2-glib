@@ -52,6 +52,7 @@ INST_H_FILES =				\
 	ggit-reflog.h			\
 	ggit-reflog-entry.h		\
 	ggit-remote.h			\
+	ggit-remote-callbacks.h		\
 	ggit-repository.h		\
 	ggit-revision-walker.h		\
 	ggit-signature.h		\
@@ -105,6 +106,7 @@ C_FILES =				\
 	ggit-reflog.c			\
 	ggit-reflog-entry.c		\
 	ggit-remote.c			\
+	ggit-remote-callbacks.c		\
 	ggit-repository.c		\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
