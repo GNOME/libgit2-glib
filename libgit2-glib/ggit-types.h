@@ -96,11 +96,11 @@ typedef struct _GgitCred GgitCred;
 typedef struct _GgitCredPlaintext GgitCredPlaintext;
 
 /**
- * GgitDiffList:
+ * GgitDiff:
  *
  * Represents a diff list.
  */
-typedef struct _GgitDiffList GgitDiffList;
+typedef struct _GgitDiff GgitDiff;
 
 /**
  * GgitDiffDelta:

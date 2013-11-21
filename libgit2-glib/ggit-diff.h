@@ -1,5 +1,5 @@
 /*
- * ggit-diff-list.h
+ * ggit-list.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Garrett Regier
@@ -18,8 +18,8 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GGIT_DIFF_LIST_H__
-#define __GGIT_DIFF_LIST_H__
+#ifndef __GGIT_DIFF_H__
+#define __GGIT_DIFF_H__
 
 #include <git2.h>
 #include "ggit-native.h"
@@ -27,16 +27,16 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_DIFF_LIST		(ggit_diff_list_get_type ())
-#define GGIT_DIFF_LIST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_LIST, GgitDiffList))
-#define GGIT_DIFF_LIST_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF_LIST, GgitDiffListClass))
-#define GGIT_IS_DIFF_LIST(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF_LIST))
-#define GGIT_IS_DIFF_LIST_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF_LIST))
-#define GGIT_DIFF_LIST_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF_LIST, GgitDiffListClass))
+#define GGIT_TYPE_DIFF			(ggit_diff_get_type ())
+#define GGIT_DIFF(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF, GgitDiff))
+#define GGIT_DIFF_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF, GgitDiffClass))
+#define GGIT_IS_DIFF(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF))
+#define GGIT_IS_DIFF_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF))
+#define GGIT_DIFF_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF, GgitDiffClass))
 
-typedef struct _GgitDiffListClass	GgitDiffListClass;
+typedef struct _GgitDiffClass	GgitDiffClass;
 
-struct _GgitDiffList
+struct _GgitDiff
 {
 	/*< private >*/
 	GgitNative parent;
@@ -46,69 +46,69 @@ struct _GgitDiffList
 };
 
 /**
- * GgitDiffListClass:
+ * GgitDiffClass:
  * @parent_class: The parent class.
  *
- * The class structure for #GgitDiffListClass.
+ * The class structure for #GgitDiffClass.
  */
-struct _GgitDiffListClass
+struct _GgitDiffClass
 {
 	/*< private >*/
 	GgitNativeClass parent_class;
 };
 
-GType          ggit_diff_list_get_type             (void) G_GNUC_CONST;
+GType          ggit_diff_get_type                  (void) G_GNUC_CONST;
 
-GgitDiffList  *_ggit_diff_list_wrap                (git_diff_list         *diff,
+GgitDiff      *_ggit_diff_wrap                     (git_diff              *diff,
                                                     gboolean               owned);
 
-GgitDiffList  *ggit_diff_list_new_tree_to_tree     (GgitRepository        *repository,
+GgitDiff      *ggit_diff_new_tree_to_tree          (GgitRepository        *repository,
                                                     GgitTree              *old_tree,
                                                     GgitTree              *new_tree,
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
-GgitDiffList  *ggit_diff_list_new_tree_to_index    (GgitRepository        *repository,
+GgitDiff      *ggit_diff_new_tree_to_index         (GgitRepository        *repository,
                                                     GgitTree              *old_tree,
                                                     GgitIndex             *index,
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
-GgitDiffList  *ggit_diff_list_new_index_to_workdir (GgitRepository        *repository,
+GgitDiff      *ggit_diff_new_index_to_workdir      (GgitRepository        *repository,
                                                     GgitIndex             *index,
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
-GgitDiffList  *ggit_diff_list_new_tree_to_workdir  (GgitRepository        *repository,
+GgitDiff      *ggit_diff_new_tree_to_workdir       (GgitRepository        *repository,
                                                     GgitTree              *old_tree,
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
 
-void           ggit_diff_list_merge                (GgitDiffList          *onto,
-                                                    GgitDiffList          *from,
+void           ggit_diff_merge                     (GgitDiff              *onto,
+                                                    GgitDiff              *from,
                                                     GError               **error);
 
-void           ggit_diff_list_foreach              (GgitDiffList          *diff,
+void           ggit_diff_foreach                   (GgitDiff              *diff,
                                                     GgitDiffFileCallback   file_cb,
                                                     GgitDiffHunkCallback   hunk_cb,
                                                     GgitDiffLineCallback   line_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
-void           ggit_diff_list_print_compact        (GgitDiffList          *diff,
+void           ggit_diff_print_compact             (GgitDiff          *diff,
                                                     GgitDiffLineCallback   print_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
-void           ggit_diff_list_print_patch          (GgitDiffList          *diff,
+void           ggit_diff_print_patch               (GgitDiff              *diff,
                                                     GgitDiffLineCallback   print_cb,
                                                     gpointer              *user_data,
                                                     GError               **error);
 
-gint           ggit_diff_list_get_num_deltas       (GgitDiffList          *diff);
+gint           ggit_diff_get_num_deltas            (GgitDiff              *diff);
 
-void           ggit_diff_list_get_patch            (GgitDiffList          *diff,
+void           ggit_diff_get_patch                 (GgitDiff              *diff,
                                                     gsize                  idx,
                                                     GgitPatch            **patch,
                                                     GgitDiffDelta        **delta,
                                                     GError               **error);
 
-void           ggit_diff_list_blobs                (GgitBlob              *old_blob,
+void           ggit_diff_blobs                     (GgitBlob              *old_blob,
                                                     const gchar           *old_as_path,
                                                     GgitBlob              *new_blob,
                                                     const gchar           *new_as_path,
@@ -119,7 +119,7 @@ void           ggit_diff_list_blobs                (GgitBlob              *old_b
                                                     gpointer              *user_data,
                                                     GError               **error);
 
-void           ggit_diff_list_blob_to_buffer       (GgitBlob              *old_blob,
+void           ggit_diff_blob_to_buffer            (GgitBlob              *old_blob,
                                                     const gchar           *old_as_path,
                                                     const gchar           *buffer,
                                                     gsize                  buffer_len,
@@ -133,6 +133,6 @@ void           ggit_diff_list_blob_to_buffer       (GgitBlob              *old_b
 
 G_END_DECLS
 
-#endif /* __GGIT_DIFF_LIST_H__ */
+#endif /* __GGIT_DIFF_H__ */
 
 /* ex:set ts=8 noet: */

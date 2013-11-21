@@ -1,5 +1,5 @@
 /*
- * ggit-diff-list.c
+ * ggit-list.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Garrett Regier
@@ -20,7 +20,7 @@
 
 #include <git2.h>
 
-#include "ggit-diff-list.h"
+#include "ggit-list.h"
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
 #include "ggit-diff-range.h"
@@ -36,7 +36,7 @@ typedef struct {
 	GgitDiffLineCallback line_cb;
 } CallbackWrapperData;
 
-G_DEFINE_TYPE (GgitDiffList, ggit_diff_list, GGIT_TYPE_NATIVE)
+G_DEFINE_TYPE (GgitDiff, ggit_diff, GGIT_TYPE_NATIVE)
 
 static gint
 ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
@@ -110,56 +110,56 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 }
 
 static void
-ggit_diff_list_class_init (GgitDiffListClass *klass)
+ggit_diff_class_init (GgitDiffClass *klass)
 {
 }
 
 static void
-ggit_diff_list_init (GgitDiffList *self)
+ggit_diff_init (GgitDiff *self)
 {
 }
 
-GgitDiffList *
-_ggit_diff_list_wrap (git_diff_list *diff,
-                      gboolean       owned)
+GgitDiff *
+_ggit_diff_wrap (git_diff *diff,
+                 gboolean  owned)
 {
-	GgitDiffList *gdiff;
+	GgitDiff *gdiff;
 
-	gdiff = g_object_new (GGIT_TYPE_DIFF_LIST, NULL);
+	gdiff = g_object_new (GGIT_TYPE_DIFF, NULL);
 	_ggit_native_set (gdiff, diff, NULL);
 
 	if (owned)
 	{
 		_ggit_native_set_destroy_func (gdiff,
-		                               (GDestroyNotify)git_diff_list_free);
+		                               (GDestroyNotify)git_diff_free);
 	}
 
 	return gdiff;
 }
 
 /**
- * ggit_diff_list_new_tree_to_tree:
+ * ggit_diff_new_tree_to_tree:
  * @repository: a #GgitRepository.
  * @old_tree: (allow-none): a #GgitTree to diff from.
  * @new_tree: (allow-none): a #GgitTree to diff to.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a #GgitDiffList which compares @old_tree and @new_tree.
+ * Creates a #GgitDiff which compares @old_tree and @new_tree.
  *
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiffList if there was no error, %NULL otherwise.
+ * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
-GgitDiffList *
-ggit_diff_list_new_tree_to_tree (GgitRepository   *repository,
-                                 GgitTree         *old_tree,
-                                 GgitTree         *new_tree,
-                                 GgitDiffOptions  *diff_options,
-                                 GError          **error)
+GgitDiff *
+ggit_diff_new_tree_to_tree (GgitRepository   *repository,
+                            GgitTree         *old_tree,
+                            GgitTree         *new_tree,
+                            GgitDiffOptions  *diff_options,
+                            GError          **error)
 {
-	git_diff_list *diff;
+	git_diff *diff;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
@@ -180,33 +180,33 @@ ggit_diff_list_new_tree_to_tree (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_list_wrap (diff, TRUE);
+	return _ggit_diff_wrap (diff, TRUE);
 }
 
 /**
- * ggit_diff_list_new_tree_to_index:
+ * ggit_diff_new_tree_to_index:
  * @repository: a #GgitRepository.
  * @old_tree: (allow-none): a #GgitTree to diff from.
  * @index: (allow-none): a #GgitIndex, or %NULL.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a #GgitDiffList which compares @old_tree and the index.
+ * Creates a #GgitDiff which compares @old_tree and the index.
  *
  * If @index is %NULL then @repository index is used.
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiffList if there was no error, %NULL otherwise.
+ * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
-GgitDiffList *
-ggit_diff_list_new_tree_to_index (GgitRepository   *repository,
-                                  GgitTree         *old_tree,
-                                  GgitIndex        *index,
-                                  GgitDiffOptions  *diff_options,
-                                  GError          **error)
+GgitDiff *
+ggit_diff_new_tree_to_index (GgitRepository   *repository,
+                             GgitTree         *old_tree,
+                             GgitIndex        *index,
+                             GgitDiffOptions  *diff_options,
+                             GError          **error)
 {
-	git_diff_list *diff;
+	git_diff *diff;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
@@ -226,31 +226,31 @@ ggit_diff_list_new_tree_to_index (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_list_wrap (diff, TRUE);
+	return _ggit_diff_wrap (diff, TRUE);
 }
 
 /**
- * ggit_diff_list_new_index_to_workdir:
+ * ggit_diff_new_index_to_workdir:
  * @repository: a #GgitRepository.
  * @index: (allow-none): a #GgitIndex, or %NULL.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a #GgitDiffList which compares the working directory and the index.
+ * Creates a #GgitDiff which compares the working directory and the index.
  *
  * If @index is %NULL then @repository index is used.
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiffList if there was no error, %NULL otherwise.
+ * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
-GgitDiffList *
-ggit_diff_list_new_index_to_workdir (GgitRepository   *repository,
-                                     GgitIndex        *index,
-                                     GgitDiffOptions  *diff_options,
-                                     GError          **error)
+GgitDiff *
+ggit_diff_new_index_to_workdir (GgitRepository   *repository,
+                                GgitIndex        *index,
+                                GgitDiffOptions  *diff_options,
+                                GError          **error)
 {
-	git_diff_list *diff;
+	git_diff *diff;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
@@ -268,30 +268,30 @@ ggit_diff_list_new_index_to_workdir (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_list_wrap (diff, TRUE);
+	return _ggit_diff_wrap (diff, TRUE);
 }
 
 /**
- * ggit_diff_list_new_tree_to_workdir:
+ * ggit_diff_new_tree_to_workdir:
  * @repository: a #GgitRepository.
  * @old_tree: (allow-none): a #GgitTree to diff from.
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Creates a #GgitDiffList which compares the working directory and @old_tree.
+ * Creates a #GgitDiff which compares the working directory and @old_tree.
  *
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiffList if there was no error, %NULL otherwise.
+ * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
  */
-GgitDiffList *
-ggit_diff_list_new_tree_to_workdir (GgitRepository   *repository,
-                                    GgitTree         *old_tree,
-                                    GgitDiffOptions  *diff_options,
-                                    GError          **error)
+GgitDiff *
+ggit_diff_new_tree_to_workdir (GgitRepository   *repository,
+                               GgitTree         *old_tree,
+                               GgitDiffOptions  *diff_options,
+                               GError          **error)
 {
-	git_diff_list *diff;
+	git_diff *diff;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
@@ -309,26 +309,26 @@ ggit_diff_list_new_tree_to_workdir (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_list_wrap (diff, TRUE);
+	return _ggit_diff_wrap (diff, TRUE);
 }
 
 /**
- * ggit_diff_list_merge:
- * @onto: the #GgitDiffList to merge into.
- * @from: the #GgitDiffList to merge.
+ * ggit_diff_merge:
+ * @onto: the #GgitDiff to merge into.
+ * @from: the #GgitDiff to merge.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Merges @from into @onto unless @error is set.
  */
 void
-ggit_diff_list_merge (GgitDiffList  *onto,
-                      GgitDiffList  *from,
-                      GError       **error)
+ggit_diff_merge (GgitDiff  *onto,
+                 GgitDiff  *from,
+                 GError   **error)
 {
 	gint ret;
 
-	g_return_if_fail (GGIT_IS_DIFF_LIST (onto));
-	g_return_if_fail (GGIT_IS_DIFF_LIST (from));
+	g_return_if_fail (GGIT_IS_DIFF (onto));
+	g_return_if_fail (GGIT_IS_DIFF (from));
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_diff_merge (_ggit_native_get (onto),
@@ -341,8 +341,8 @@ ggit_diff_list_merge (GgitDiffList  *onto,
 }
 
 /**
- * ggit_diff_list_foreach:
- * @diff: a #GgitDiffList.
+ * ggit_diff_foreach:
+ * @diff: a #GgitDiff.
  * @file_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffFileCallback.
  * @hunk_cb: (allow-none) (scope call) (closure user_data):
@@ -355,12 +355,12 @@ ggit_diff_list_merge (GgitDiffList  *onto,
  * Iterates over the diff calling @file_cb, @hunk_cb and @line_cb.
  */
 void
-ggit_diff_list_foreach (GgitDiffList          *diff,
-                        GgitDiffFileCallback   file_cb,
-                        GgitDiffHunkCallback   hunk_cb,
-                        GgitDiffLineCallback   line_cb,
-                        gpointer              *user_data,
-                        GError               **error)
+ggit_diff_foreach (GgitDiff              *diff,
+                   GgitDiffFileCallback   file_cb,
+                   GgitDiffHunkCallback   hunk_cb,
+                   GgitDiffLineCallback   line_cb,
+                   gpointer              *user_data,
+                   GError               **error)
 {
 	gint ret;
 	CallbackWrapperData wrapper_data;
@@ -368,7 +368,7 @@ ggit_diff_list_foreach (GgitDiffList          *diff,
 	git_diff_hunk_cb real_hunk_cb = NULL;
 	git_diff_data_cb real_line_cb = NULL;
 
-	g_return_if_fail (GGIT_IS_DIFF_LIST (diff));
+	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
@@ -403,8 +403,8 @@ ggit_diff_list_foreach (GgitDiffList          *diff,
 }
 
 /**
- * ggit_diff_list_print_compact:
- * @diff: a #GgitDiffList.
+ * ggit_diff_print_compact:
+ * @diff: a #GgitDiff.
  * @print_cb: (scope call) (closure user_data): a #GgitDiffLineCallback.
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
@@ -412,15 +412,15 @@ ggit_diff_list_foreach (GgitDiffList          *diff,
  * Iterates over @diff generating text output like "git diff --name-status".
  */
 void
-ggit_diff_list_print_compact (GgitDiffList          *diff,
-                              GgitDiffLineCallback   print_cb,
-                              gpointer              *user_data,
-                              GError               **error)
+ggit_diff_print_compact (GgitDiff              *diff,
+                         GgitDiffLineCallback   print_cb,
+                         gpointer              *user_data,
+                         GError               **error)
 {
 	gint ret;
 	CallbackWrapperData wrapper_data;
 
-	g_return_if_fail (GGIT_IS_DIFF_LIST (diff));
+	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (print_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
@@ -438,8 +438,8 @@ ggit_diff_list_print_compact (GgitDiffList          *diff,
 }
 
 /**
- * ggit_diff_list_print_patch:
- * @diff: a #GgitDiffList.
+ * ggit_diff_print_patch:
+ * @diff: a #GgitDiff.
  * @print_cb: (scope call) (closure user_data): a #GgitDiffLineCallback.
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
@@ -447,15 +447,15 @@ ggit_diff_list_print_compact (GgitDiffList          *diff,
  * Iterates over @diff generating text output like "git diff".
  */
 void
-ggit_diff_list_print_patch (GgitDiffList          *diff,
-                            GgitDiffLineCallback   print_cb,
-                            gpointer              *user_data,
-                            GError               **error)
+ggit_diff_print_patch (GgitDiff              *diff,
+                       GgitDiffLineCallback   print_cb,
+                       gpointer              *user_data,
+                       GError               **error)
 {
 	gint ret;
 	CallbackWrapperData wrapper_data;
 
-	g_return_if_fail (GGIT_IS_DIFF_LIST (diff));
+	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (print_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
@@ -473,8 +473,8 @@ ggit_diff_list_print_patch (GgitDiffList          *diff,
 }
 
 /**
- * ggit_diff_list_get_num_deltas:
- * @diff: a #GgitDiffList.
+ * ggit_diff_get_num_deltas:
+ * @diff: a #GgitDiff.
  *
  * Get the number of deltas in the diff list.
  *
@@ -482,16 +482,16 @@ ggit_diff_list_print_patch (GgitDiffList          *diff,
  *
  **/
 gint
-ggit_diff_list_get_num_deltas (GgitDiffList *diff)
+ggit_diff_get_num_deltas (GgitDiff *diff)
 {
-	g_return_val_if_fail (GGIT_IS_DIFF_LIST (diff), 0);
+	g_return_val_if_fail (GGIT_IS_DIFF (diff), 0);
 
 	return git_diff_num_deltas (_ggit_native_get (diff));
 }
 
 /**
- * ggit_diff_list_get_patch:
- * @diff: a #GgitDiffList.
+ * ggit_diff_get_patch:
+ * @diff: a #GgitDiff.
  * @idx: index into @diff.
  * @patch: (allow-none) (out): a #GgitPatch or %NULL.
  * @delta: (allow-none) (out): a #GgitDiffDelta or %NULL.
@@ -512,17 +512,17 @@ ggit_diff_list_get_num_deltas (GgitDiffList *diff)
  * %NULL for @patch, then the text diff will not be calculated.
  */
 void
-ggit_diff_list_get_patch (GgitDiffList   *diff,
-                          gsize           idx,
-                          GgitPatch     **patch,
-                          GgitDiffDelta **delta,
-                          GError        **error)
+ggit_diff_get_patch (GgitDiff       *diff,
+                     gsize           idx,
+                     GgitPatch     **patch,
+                     GgitDiffDelta **delta,
+                     GError        **error)
 {
 	gint ret;
 	const git_diff_delta *delta_out;
 	git_diff_patch *patch_out = NULL;
 
-	g_return_if_fail (GGIT_IS_DIFF_LIST (diff));
+	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_diff_get_patch (patch ? &patch_out : NULL,
@@ -548,7 +548,7 @@ ggit_diff_list_get_patch (GgitDiffList   *diff,
 }
 
 /**
- * ggit_diff_list_blobs:
+ * ggit_diff_blobs:
  * @old_blob: (allow-none): a #GgitBlob to diff from.
  * @old_as_path: (allow-none): treat @old_blob as if it had this filename, or %NULL,
  * @new_blob: (allow-none): a #GgitBlob to diff to.
@@ -572,16 +572,16 @@ ggit_diff_list_get_patch (GgitDiffList   *diff,
  * ggit_diff_options_new() are used.
  */
 void
-ggit_diff_list_blobs (GgitBlob              *old_blob,
-                      const gchar           *old_as_path,
-                      GgitBlob              *new_blob,
-                      const gchar           *new_as_path,
-                      GgitDiffOptions       *diff_options,
-                      GgitDiffFileCallback   file_cb,
-                      GgitDiffHunkCallback   hunk_cb,
-                      GgitDiffLineCallback   line_cb,
-                      gpointer              *user_data,
-                      GError               **error)
+ggit_diff_blobs (GgitBlob              *old_blob,
+                 const gchar           *old_as_path,
+                 GgitBlob              *new_blob,
+                 const gchar           *new_as_path,
+                 GgitDiffOptions       *diff_options,
+                 GgitDiffFileCallback   file_cb,
+                 GgitDiffHunkCallback   hunk_cb,
+                 GgitDiffLineCallback   line_cb,
+                 gpointer              *user_data,
+                 GError               **error)
 {
 	gint ret;
 	const git_diff_options *gdiff_options;
@@ -629,7 +629,7 @@ ggit_diff_list_blobs (GgitBlob              *old_blob,
 }
 
 /**
- * ggit_diff_list_blob_to_buffer:
+ * ggit_diff_blob_to_buffer:
  * @old_blob: (allow-none): a #GgitBlob to diff from.
  * @old_as_path: (allow-none): treat @old_blob as if it had this filename, or %NULL,
  * @buffer: (allow-none) (array length=buffer_len): a buffer to diff to.
@@ -645,20 +645,20 @@ ggit_diff_list_blobs (GgitBlob              *old_blob,
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Same as ggit_diff_list_blobs() but using a buffer.
+ * Same as ggit_diff_blobs() but using a buffer.
  */
 void
-ggit_diff_list_blob_to_buffer (GgitBlob              *old_blob,
-                               const gchar           *old_as_path,
-                               const gchar           *buffer,
-                               gsize                  buffer_len,
-                               const gchar           *buffer_as_path,
-                               GgitDiffOptions       *diff_options,
-                               GgitDiffFileCallback   file_cb,
-                               GgitDiffHunkCallback   hunk_cb,
-                               GgitDiffLineCallback   line_cb,
-                               gpointer              *user_data,
-                               GError               **error)
+ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
+                          const gchar           *old_as_path,
+                          const gchar           *buffer,
+                          gsize                  buffer_len,
+                          const gchar           *buffer_as_path,
+                          GgitDiffOptions       *diff_options,
+                          GgitDiffFileCallback   file_cb,
+                          GgitDiffHunkCallback   hunk_cb,
+                          GgitDiffLineCallback   line_cb,
+                          gpointer              *user_data,
+                          GError               **error)
 {
 	gint ret;
 	const git_diff_options *gdiff_options;
