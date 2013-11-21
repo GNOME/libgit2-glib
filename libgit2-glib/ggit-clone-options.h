@@ -46,38 +46,10 @@ gboolean                   ggit_clone_options_get_is_bare         (GgitCloneOpti
 void                       ggit_clone_options_set_is_bare         (GgitCloneOptions        *options,
                                                                    gboolean                 bare);
 
-void                       ggit_clone_options_set_fetch_progress_callback (GgitCloneOptions             *options,
-                                                                           GgitTransferProgressCallback  callback,
-                                                                           gpointer                      user_data);
-
 const gchar               *ggit_clone_options_get_remote_name     (GgitCloneOptions        *options);
 
 void                       ggit_clone_options_set_remote_name     (GgitCloneOptions        *options,
                                                                    const gchar             *remote_name);
-
-const gchar               *ggit_clone_options_get_push_url        (GgitCloneOptions        *options);
-
-void                       ggit_clone_options_set_push_url        (GgitCloneOptions        *options,
-                                                                   const gchar             *push_url);
-
-const gchar               *ggit_clone_options_get_fetch_spec      (GgitCloneOptions        *options);
-
-void                       ggit_clone_options_set_fetch_spec      (GgitCloneOptions        *options,
-                                                                   const gchar             *fetch_spec);
-
-const gchar               *ggit_clone_options_get_push_spec       (GgitCloneOptions        *options);
-
-void                       ggit_clone_options_set_push_spec       (GgitCloneOptions        *options,
-                                                                   const gchar             *push_spec);
-
-void                       ggit_clone_options_set_cred_acquire_callback (GgitCloneOptions        *options,
-                                                                         GgitCredAcquireCallback  callback,
-                                                                         gpointer                 user_data);
-
-GgitRemoteDownloadTagsType ggit_clone_options_get_remote_auto_tag (GgitCloneOptions        *options);
-
-void                       ggit_clone_options_set_remote_auto_tag (GgitCloneOptions           *options,
-                                                                   GgitRemoteDownloadTagsType  remote_auto_tag);
 
 const gchar               *ggit_clone_options_get_checkout_branch (GgitCloneOptions        *options);
 
