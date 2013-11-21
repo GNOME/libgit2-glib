@@ -117,18 +117,25 @@ typedef struct _GgitDiffDelta GgitDiffDelta;
 typedef struct _GgitDiffFile GgitDiffFile;
 
 /**
+ * GgitDiffHunk:
+ *
+ * Represents the hunk of a diff.
+ */
+typedef struct _GgitDiffHunk GgitDiffHunk;
+
+/**
+ * GgitDiffLine:
+ *
+ * Represents the line of a diff.
+ */
+typedef struct _GgitDiffLine GgitDiffLine;
+
+/**
  * GgitDiffOptions:
  *
  * Represents the options used when creating a #GgitDiff.
  */
 typedef struct _GgitDiffOptions GgitDiffOptions;
-
-/**
- * GgitDiffRange:
- *
- * Represents the hunk of a diff.
- */
-typedef struct _GgitDiffRange GgitDiffRange;
 
 /**
  * GgitDiffSimilarityMetric:
@@ -895,9 +902,7 @@ typedef gint (* GgitDiffFileCallback) (GgitDiffDelta *delta,
 /**
  * GgitDiffHunkCallback:
  * @delta: a #GgitDiffDelta.
- * @range: a #GgitDiffRange.
- * @header: (array length=header_len) (element-type guint8): the header.
- * @header_len: the header length.
+ * @hunk: a #GgitDiffHunk.
  * @user_data: (closure): user-supplied data.
  *
  * Called for each hunk.
@@ -905,18 +910,14 @@ typedef gint (* GgitDiffFileCallback) (GgitDiffDelta *delta,
  * Returns: 0 to go continue or a #GgitError in case there was an error.
  */
 typedef gint (* GgitDiffHunkCallback) (GgitDiffDelta *delta,
-                                       GgitDiffRange *range,
-                                       const gchar   *header,
-                                       gsize          header_len,
+                                       GgitDiffHunk  *hunk,
                                        gpointer       user_data);
 
 /**
  * GgitDiffLineCallback:
  * @delta: a #GgitDiffDelta.
- * @range: a #GgitDiffRange.
- * @line_type: a #GgitDiffLineType.
- * @content: (array length=content_len) (element-type guint8): the content.
- * @content_len: the content length.
+ * @hunk: a #GgitDiffHunk.
+ * @line: a #GgitDiffLine.
  * @user_data: (closure): user-supplied data.
  *
  * Called for each line.
@@ -924,10 +925,8 @@ typedef gint (* GgitDiffHunkCallback) (GgitDiffDelta *delta,
  * Returns: 0 to go continue or a #GgitError in case there was an error.
  */
 typedef gint (* GgitDiffLineCallback) (GgitDiffDelta    *delta,
-                                       GgitDiffRange    *range,
-                                       GgitDiffLineType  line_type,
-                                       const gchar      *content,
-                                       gsize             content_len,
+                                       GgitDiffHunk     *hunk,
+                                       GgitDiffLine     *line,
                                        gpointer          user_data);
 
 /*
