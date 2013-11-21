@@ -34,7 +34,6 @@
 #include <libgit2-glib/ggit-diff-delta.h>
 #include <libgit2-glib/ggit-diff-file.h>
 #include <libgit2-glib/ggit-diff-options.h>
-#include <libgit2-glib/ggit-diff-patch.h>
 #include <libgit2-glib/ggit-diff-range.h>
 #include <libgit2-glib/ggit-enum-types.h>
 #include <libgit2-glib/ggit-error.h>
@@ -48,6 +47,7 @@
 #include <libgit2-glib/ggit-object-factory.h>
 #include <libgit2-glib/ggit-object-factory-base.h>
 #include <libgit2-glib/ggit-oid.h>
+#include <libgit2-glib/ggit-patch.h>
 #include <libgit2-glib/ggit-push.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-ref-spec.h>

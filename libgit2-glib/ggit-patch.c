@@ -1,5 +1,5 @@
 /*
- * ggit-diff-patch.c
+ * ggit-patch.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2013 - Sindhu S
@@ -18,71 +18,71 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ggit-diff-patch.h"
+#include "ggit-patch.h"
 #include "ggit-error.h"
 
-struct _GgitDiffPatch
+struct _GgitPatch
 {
-	git_diff_patch *diff_patch;
+	git_patch *patch;
 	gint ref_count;
 };
 
-G_DEFINE_BOXED_TYPE (GgitDiffPatch, ggit_diff_patch,
-                     ggit_diff_patch_ref, ggit_diff_patch_unref)
+G_DEFINE_BOXED_TYPE (GgitPatch, ggit_patch,
+                     ggit_patch_ref, ggit_patch_unref)
 
-GgitDiffPatch *
-_ggit_diff_patch_wrap (git_diff_patch *diff_patch)
+GgitPatch *
+_ggit_patch_wrap (git_patch *patch)
 {
-	GgitDiffPatch *gdiff_patch;
+	GgitPatch *gpatch;
 
-	gdiff_patch = g_slice_new (GgitDiffPatch);
-	gdiff_patch->diff_patch = diff_patch;
-	gdiff_patch->ref_count = 1;
+	gpatch = g_slice_new (GgitPatch);
+	gpatch->patch = patch;
+	gpatch->ref_count = 1;
 
-	return gdiff_patch;
+	return gpatch;
 }
 
 /**
- * ggit_diff_patch_ref:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_ref:
+ * @patch: a #GgitPatch.
  *
  * Atomically increments the reference count of @entry by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitDiffPatch.
+ * Returns: (transfer none): a #GgitPatch.
  */
-GgitDiffPatch *
-ggit_diff_patch_ref (GgitDiffPatch *diff_patch)
+GgitPatch *
+ggit_patch_ref (GgitPatch *patch)
 {
-	g_return_val_if_fail (diff_patch != NULL, NULL);
+	g_return_val_if_fail (patch != NULL, NULL);
 
-	g_atomic_int_inc (&diff_patch->ref_count);
+	g_atomic_int_inc (&patch->ref_count);
 
-	return diff_patch;
+	return patch;
 }
 
 /**
- * ggit_diff_patch_unref:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_unref:
+ * @patch: a #GgitPatch.
  *
  * Atomically decrements the reference count of @entry by one.
  * If the reference count drops to 0, @entry is freed.
  */
 void
-ggit_diff_patch_unref (GgitDiffPatch *diff_patch)
+ggit_patch_unref (GgitPatch *patch)
 {
-	g_return_if_fail (diff_patch != NULL);
+	g_return_if_fail (patch != NULL);
 
-	if (g_atomic_int_dec_and_test (&diff_patch->ref_count))
+	if (g_atomic_int_dec_and_test (&patch->ref_count))
 	{
-		git_diff_patch_free (diff_patch->diff_patch);
-		g_slice_free (GgitDiffPatch, diff_patch);
+		git_patch_free (patch->patch);
+		g_slice_free (GgitPatch, patch);
 	}
 }
 
 /**
- * ggit_diff_patch_to_string:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_to_string:
+ * @patch: a #GgitPatch.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Gets the content of a patch as a single diff text.
@@ -90,17 +90,17 @@ ggit_diff_patch_unref (GgitDiffPatch *diff_patch)
  * Returns: the content of a patch as a single diff text.
  */
 gchar *
-ggit_diff_patch_to_string (GgitDiffPatch  *diff_patch,
-                           GError        **error)
+ggit_patch_to_string (GgitPatch  *patch,
+                      GError    **error)
 {
 	char *retval;
 	gchar *result = NULL;
 	gint ret;
 
-	g_return_val_if_fail (diff_patch != NULL, NULL);
+	g_return_val_if_fail (patch != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_diff_patch_to_str (&retval, diff_patch->diff_patch);
+	ret = git_patch_to_str (&retval, diff_patch->diff_patch);
 	if (ret == GIT_OK)
 	{
 		result = g_strdup (retval);
@@ -146,8 +146,8 @@ patch_to_stream (const git_diff_delta *delta,
 }
 
 /**
- * ggit_diff_patch_to_stream:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_to_stream:
+ * @patch: a #GgitPatch.
  * @stream: a #GOutputStream.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -157,23 +157,23 @@ patch_to_stream (const git_diff_delta *delta,
  *
  **/
 gboolean
-ggit_diff_patch_to_stream (GgitDiffPatch  *diff_patch,
-                           GOutputStream  *stream,
-                           GError        **error)
+ggit_patch_to_stream (GgitPatch      *patch,
+                      GOutputStream  *stream,
+                      GError        **error)
 {
 	PatchToStream info;
 	gint ret;
 
-	g_return_val_if_fail (diff_patch != NULL, FALSE);
+	g_return_val_if_fail (patch != NULL, FALSE);
 	g_return_val_if_fail (G_IS_OUTPUT_STREAM (stream), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	info.stream = stream;
 	info.error = error;
 
-	ret = git_diff_patch_print (diff_patch->diff_patch,
-	                            patch_to_stream,
-	                            &info);
+	ret = git_patch_print (patch->patch,
+	                       patch_to_stream,
+	                       &info);
 
 	if (ret != GIT_OK)
 	{
@@ -189,8 +189,8 @@ ggit_diff_patch_to_stream (GgitDiffPatch  *diff_patch,
 }
 
 /**
- * ggit_diff_patch_get_line_stats:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_get_line_stats:
+ * @patch: a #GgitPatch.
  * @total_context: (allow-none) (out): return value for the number of context lines.
  * @total_additions: (allow-none) (out): return value for the number of added lines.
  * @total_deletions: (allow-none) (out): return value for the number of deleted lines.
@@ -202,21 +202,21 @@ ggit_diff_patch_to_stream (GgitDiffPatch  *diff_patch,
  *
  **/
 gboolean
-ggit_diff_patch_get_line_stats (GgitDiffPatch  *diff_patch,
-                                gsize          *total_context,
-                                gsize          *total_additions,
-                                gsize          *total_deletions,
-                                GError        **error)
+ggit_patch_get_line_stats (GgitPatch      *patch,
+                           gsize          *total_context,
+                           gsize          *total_additions,
+                           gsize          *total_deletions,
+                           GError        **error)
 {
 	size_t tc;
 	size_t ta;
 	size_t td;
 	gint ret;
 
-	g_return_val_if_fail (diff_patch != NULL, FALSE);
+	g_return_val_if_fail (patch != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_diff_patch_line_stats (&tc, &ta, &td, diff_patch->diff_patch);
+	ret = git_patch_line_stats (&tc, &ta, &td, patch->patch);
 
 	if (ret != GIT_OK)
 	{
@@ -243,8 +243,8 @@ ggit_diff_patch_get_line_stats (GgitDiffPatch  *diff_patch,
 }
 
 /**
- * ggit_diff_patch_get_num_hunks:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_get_num_hunks:
+ * @patch: a #GgitPatch.
  *
  * Get the number of hunks in the patch.
  *
@@ -252,16 +252,16 @@ ggit_diff_patch_get_line_stats (GgitDiffPatch  *diff_patch,
  *
  **/
 gsize
-ggit_diff_patch_get_num_hunks (GgitDiffPatch *diff_patch)
+ggit_patch_get_num_hunks (GgitPatch *patch)
 {
-	g_return_val_if_fail (diff_patch != NULL, FALSE);
+	g_return_val_if_fail (patch != NULL, FALSE);
 
-	return git_diff_patch_num_hunks (diff_patch->diff_patch);
+	return git_patch_num_hunks (patch->patch);
 }
 
 /**
- * ggit_diff_patch_get_num_lines_in_hunk:
- * @diff_patch: a #GgitDiffPatch.
+ * ggit_patch_get_num_lines_in_hunk:
+ * @patch: a #GgitPatch.
  * @hunk: the hunk index.
  *
  * Get the number of lines in @hunk.
@@ -270,12 +270,12 @@ ggit_diff_patch_get_num_hunks (GgitDiffPatch *diff_patch)
  *
  **/
 gint
-ggit_diff_patch_get_num_lines_in_hunk (GgitDiffPatch *diff_patch,
-                                       gsize          hunk)
+ggit_patch_get_num_lines_in_hunk (GgitPatch *patch,
+                                  gsize      hunk)
 {
-	g_return_val_if_fail (diff_patch != NULL, FALSE);
+	g_return_val_if_fail (patch != NULL, FALSE);
 
-	return git_diff_patch_num_lines_in_hunk (diff_patch->diff_patch, hunk);
+	return git_patch_num_lines_in_hunk (patch->patch, hunk);
 }
 
 /* ex:set ts=8 noet: */

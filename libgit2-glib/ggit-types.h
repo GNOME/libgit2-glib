@@ -110,13 +110,6 @@ typedef struct _GgitDiffList GgitDiffList;
 typedef struct _GgitDiffDelta GgitDiffDelta;
 
 /**
- * GgitDiffPatch:
- *
- * Represents a patch object.
- */
-typedef struct _GgitDiffPatch GgitDiffPatch;
-
-/**
  * GgitDiffFile:
  *
  * Represents a file in a #GgitDiff.
@@ -220,6 +213,13 @@ typedef struct _GgitObjectFactoryBase GgitObjectFactoryBase;
  * Represents a unique ID of any object.
  */
 typedef struct _GgitOId GgitOId;
+
+/**
+ * GgitPatch:
+ *
+ * Represents a patch object.
+ */
+typedef struct _GgitPatch GgitPatch;
 
 /**
  * GgitPush:

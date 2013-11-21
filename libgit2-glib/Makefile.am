@@ -31,7 +31,6 @@ INST_H_FILES =				\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
 	ggit-diff-options.h		\
-	ggit-diff-patch.h		\
 	ggit-diff-range.h		\
 	ggit-diff-similarity-metric.h	\
 	ggit-error.h			\
@@ -46,6 +45,7 @@ INST_H_FILES =				\
 	ggit-object-factory.h		\
 	ggit-object-factory-base.h	\
 	ggit-oid.h			\
+	ggit-patch.h			\
 	ggit-push.h			\
 	ggit-ref.h			\
 	ggit-ref-spec.h			\
@@ -84,7 +84,6 @@ C_FILES =				\
 	ggit-diff-delta.c		\
 	ggit-diff-file.c		\
 	ggit-diff-options.c		\
-	ggit-diff-patch.c		\
 	ggit-diff-range.c		\
 	ggit-diff-similarity-metric.c	\
 	ggit-error.c			\
@@ -99,6 +98,7 @@ C_FILES =				\
 	ggit-object-factory.c		\
 	ggit-object-factory-base.c	\
 	ggit-oid.c			\
+	ggit-patch.c			\
 	ggit-push.c			\
 	ggit-ref.c			\
 	ggit-ref-spec.c			\

@@ -21,10 +21,10 @@
 #include <git2.h>
 
 #include "ggit-diff-list.h"
-#include "ggit-diff-patch.h"
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
 #include "ggit-diff-range.h"
+#include "ggit-patch.h"
 #include "ggit-error.h"
 #include "ggit-repository.h"
 
@@ -493,18 +493,18 @@ ggit_diff_list_get_num_deltas (GgitDiffList *diff)
  * ggit_diff_list_get_patch:
  * @diff: a #GgitDiffList.
  * @idx: index into @diff.
- * @patch: (allow-none) (out): a #GgitDiffPatch or %NULL.
+ * @patch: (allow-none) (out): a #GgitPatch or %NULL.
  * @delta: (allow-none) (out): a #GgitDiffDelta or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Gets the diff delta and patch for an entry in @diff.
  *
- * The #GgitDiffPatch is a newly created object contains the text diffs
+ * The #GgitPatch is a newly created object contains the text diffs
  * for the delta.  You have to call git_diff_patch_unref() when you are
  * done with it.  You can use the patch object to loop over all the hunks
  * and lines in the diff of the one delta.
  *
- * For an unchanged file or a binary file, no #GgitDiffPatch will be
+ * For an unchanged file or a binary file, no #GgitPatch will be
  * created, the output will be set to %NULL, and the `binary` flag will be
  * set true in @delta.
  *
@@ -514,7 +514,7 @@ ggit_diff_list_get_num_deltas (GgitDiffList *diff)
 void
 ggit_diff_list_get_patch (GgitDiffList   *diff,
                           gsize           idx,
-                          GgitDiffPatch **patch,
+                          GgitPatch     **patch,
                           GgitDiffDelta **delta,
                           GError        **error)
 {
@@ -538,7 +538,7 @@ ggit_diff_list_get_patch (GgitDiffList   *diff,
 
 	if (patch && patch_out)
 	{
-		*patch = _ggit_diff_patch_wrap (patch_out);
+		*patch = _ggit_patch_wrap (patch_out);
 	}
 
 	if (delta)

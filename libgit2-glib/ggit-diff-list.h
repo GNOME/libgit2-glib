@@ -104,7 +104,7 @@ gint           ggit_diff_list_get_num_deltas       (GgitDiffList          *diff)
 
 void           ggit_diff_list_get_patch            (GgitDiffList          *diff,
                                                     gsize                  idx,
-                                                    GgitDiffPatch        **patch,
+                                                    GgitPatch            **patch,
                                                     GgitDiffDelta        **delta,
                                                     GError               **error);
 
