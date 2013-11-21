@@ -20,7 +20,7 @@
 
 #include <git2.h>
 
-#include "ggit-list.h"
+#include "ggit-diff.h"
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
 #include "ggit-diff-range.h"
