@@ -30,8 +30,8 @@ INST_H_FILES =				\
 	ggit-diff.h			\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
+	ggit-diff-line.h		\
 	ggit-diff-options.h		\
-	ggit-diff-range.h		\
 	ggit-diff-similarity-metric.h	\
 	ggit-error.h			\
 	ggit-index.h			\
@@ -84,8 +84,8 @@ C_FILES =				\
 	ggit-diff.c			\
 	ggit-diff-delta.c		\
 	ggit-diff-file.c		\
+	ggit-diff-line.c		\
 	ggit-diff-options.c		\
-	ggit-diff-range.c		\
 	ggit-diff-similarity-metric.c	\
 	ggit-error.c			\
 	ggit-index.c			\

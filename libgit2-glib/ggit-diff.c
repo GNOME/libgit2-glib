@@ -23,7 +23,7 @@
 #include "ggit-diff.h"
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
-#include "ggit-diff-range.h"
+#include "ggit-diff-line.h"
 #include "ggit-patch.h"
 #include "ggit-error.h"
 #include "ggit-repository.h"
