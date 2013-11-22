@@ -185,7 +185,8 @@ ggit_patch_to_string (GgitPatch  *patch,
 	g_return_val_if_fail (patch != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_patch_to_str (&retval, diff_patch->diff_patch);
+	ret = git_patch_to_str (&retval, patch->patch);
+
 	if (ret == GIT_OK)
 	{
 		result = g_strdup (retval);
