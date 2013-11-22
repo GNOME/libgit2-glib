@@ -460,55 +460,63 @@ typedef enum {
 /**
  * GgitDiffOption:
  * @GGIT_DIFF_NORMAL: normal.
- * @GGIT_DIFF_REVERSE: reverse.
+ * @GGIT_DIFF_REVERSE: reverse the sides of the diff.
+ * @GGIT_DIFF_INCLUDE_IGNORED: include ignored files.
+ * @GGIT_DIFF_RECURSE_IGNORED_DIRS: also add all files under ignored dirs.
+ * @GGIT_DIFF_INCLUDE_UNTRACKED: include untracked files.
+ * @GGIT_DIFF_RECURSE_UNTRACKED_DIRS: recurse to untracked directories.
+ * @GGIT_DIFF_INCLUDE_UNMODIFIED: include unmodified files.
+ * @GGIT_DIFF_INCLUDE_TYPECHANGE: enable generation of typechange detal records.
+ * @GGIT_DIFF_INCLUDE_TYPECHANGE_TREES: try to label tree transitions as type changes.
+ * @GGIT_DIFF_IGNORE_FILE_MODE: ignore file mode changes.
+ * @GGIT_DIFF_IGNORE_SUBMODULES: ignore submodules.
+ * @GGIT_DIFF_IGNORE_CASE: use case insensitive filename comparison.
+ * @GGIT_DIFF_DISABLE_PATHSPEC_MATCH: use exact path matching.
+ * @GGIT_DIFF_SKIP_BINARY_CHECK: disable updating the binary flag in delta records.
+ * @GGIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS: immediately label untracked directories as
+ * untracked, without checking inside.
  * @GGIT_DIFF_FORCE_TEXT: force text.
+ * @GGIT_DIFF_FORCE_BINARY: treat all files as binary, disabling text diffs.
  * @GGIT_DIFF_IGNORE_WHITESPACE: ignore whitespace.
  * @GGIT_DIFF_IGNORE_WHITESPACE_CHANGE: ignore whitespace change.
  * @GGIT_DIFF_IGNORE_WHITESPACE_EOL: ignore whitespace at end-of-line.
- * @GGIT_DIFF_IGNORE_SUBMODULES: ignore submodules.
- * @GGIT_DIFF_PATIENCE: generate using the "patience diff" algorithm.
- * @GGIT_DIFF_INCLUDE_IGNORED: include ignored files.
- * @GGIT_DIFF_INCLUDE_UNTRACKED: include untracked files.
- * @GGIT_DIFF_INCLUDE_UNMODIFIED: include unmodified files.
- * @GGIT_DIFF_RECURSE_UNTRACKED_DIRS: recurse to untracked directories.
- * @GGIT_DIFF_DISABLE_PATHSPEC_MATCH: use exact path matching.
- * @GGIT_DIFF_DELTAS_ARE_ICASE: use case insensitive filename comparisons.
- * @GGIT_DIFF_INCLUDE_UNTRACKED_CONTENT: include content of untracked files.
+ * @GGIT_DIFF_SHOW_UNTRACKED_CONTENT: include content of untracked files.
  * this implies GGIT_DIFF_INCLUDE_UNTRACKED but not GGIT_DIFF_RECURSE_UNTRACKED_DIRS.
- * @GGIT_DIFF_SKIP_BINARY_CHECK: disable updating the binary flag in delta records.
- * @GGIT_DIFF_INCLUDE_TYPECHANGE: enable generation of typechange detal records.
- * @GGIT_DIFF_INCLUDE_TYPECHANGE_TREES:
- * @GGIT_DIFF_IGNORE_FILE_MODE: ignore file mode changes.
- * @GGIT_DIFF_RECURSE_IGNORED_DIRS:
- * @GGIT_DIFF_FAST_UNTRACKED_DIRS: immediately label untracked directories as
- * untracked, without checking inside.
- * @GGIT_DIFF_FORCE_BINARY: treat all files as binary, disabling text diffs.
+ * @GGIT_DIFF_SHOW_UNMODIFIED: show unmodified files.
+ * @GGIT_DIFF_PATIENCE: generate using the "patience diff" algorithm.
+ * @GGIT_DIFF_MINIMAL: take extra time to find minimal diff.
  *
  * How the diff should be generated.
  */
 typedef enum {
-	GGIT_DIFF_NORMAL                    = 0,
-	GGIT_DIFF_REVERSE                   = 1 << 0,
-	GGIT_DIFF_FORCE_TEXT                = 1 << 1,
-	GGIT_DIFF_IGNORE_WHITESPACE         = 1 << 2,
-	GGIT_DIFF_IGNORE_WHITESPACE_CHANGE  = 1 << 3,
-	GGIT_DIFF_IGNORE_WHITESPACE_EOL     = 1 << 4,
-	GGIT_DIFF_IGNORE_SUBMODULES         = 1 << 5,
-	GGIT_DIFF_PATIENCE                  = 1 << 6,
-	GGIT_DIFF_INCLUDE_IGNORED           = 1 << 7,
-	GGIT_DIFF_INCLUDE_UNTRACKED         = 1 << 8,
-	GGIT_DIFF_INCLUDE_UNMODIFIED        = 1 << 9,
-	GGIT_DIFF_RECURSE_UNTRACKED_DIRS    = 1 << 10,
-	GGIT_DIFF_DISABLE_PATHSPEC_MATCH    = 1 << 11,
-	GGIT_DIFF_DELTAS_ARE_ICASE          = 1 << 12,
-	GGIT_DIFF_INCLUDE_UNTRACKED_CONTENT = 1 << 13,
-	GGIT_DIFF_SKIP_BINARY_CHECK         = 1 << 14,
-	GGIT_DIFF_INCLUDE_TYPECHANGE        = 1 << 15,
-	GGIT_DIFF_INCLUDE_TYPECHANGE_TREES  = 1 << 16,
-	GGIT_DIFF_IGNORE_FILE_MODE          = 1 << 17,
-	GGIT_DIFF_RECURSE_IGNORED_DIRS      = 1 << 18,
-	GGIT_DIFF_FAST_UNTRACKED_DIRS       = 1 << 19,
-	GGIT_DIFF_FORCE_BINARY              = 1 << 20,
+	GGIT_DIFF_NORMAL                     = 0,
+	GGIT_DIFF_REVERSE                    = 1u << 0,
+	GGIT_DIFF_INCLUDE_IGNORED            = 1u << 1,
+	GGIT_DIFF_RECURSE_IGNORED_DIRS       = 1u << 2,
+	GGIT_DIFF_INCLUDE_UNTRACKED          = 1u << 3,
+	GGIT_DIFF_RECURSE_UNTRACKED_DIRS     = 1u << 4,
+	GGIT_DIFF_INCLUDE_UNMODIFIED         = 1u << 5,
+	GGIT_DIFF_INCLUDE_TYPECHANGE         = 1u << 6,
+	GGIT_DIFF_INCLUDE_TYPECHANGE_TREES   = 1u << 7,
+	GGIT_DIFF_IGNORE_FILE_MODE           = 1u << 8,
+	GGIT_DIFF_IGNORE_SUBMODULES          = 1u << 9,
+	GGIT_DIFF_IGNORE_CASE                = 1u << 10,
+
+	GGIT_DIFF_DISABLE_PATHSPEC_MATCH     = 1u << 12,
+	GGIT_DIFF_SKIP_BINARY_CHECK          = 1u << 13,
+	GGIT_DIFF_ENABLE_FAST_UNTRACKED_DIRS = 1u << 14,
+
+	GGIT_DIFF_FORCE_TEXT                 = 1u << 20,
+	GGIT_DIFF_FORCE_BINARY               = 1u << 21,
+	GGIT_DIFF_IGNORE_WHITESPACE          = 1u << 22,
+	GGIT_DIFF_IGNORE_WHITESPACE_CHANGE   = 1u << 23,
+	GGIT_DIFF_IGNORE_WHITESPACE_EOL      = 1u << 24,
+
+	GGIT_DIFF_SHOW_UNTRACKED_CONTENT     = 1u << 25,
+	GGIT_DIFF_SHOW_UNMODIFIED            = 1u << 26,
+
+	GGIT_DIFF_PATIENCE                   = 1u << 28,
+	GGIT_DIFF_MINIMAL                    = 1u << 29
 } GgitDiffOption;
 
 /**
@@ -729,20 +737,21 @@ typedef enum {
 
 /**
  * GgitSubmoduleIgnore:
- * @GGIT_SUBMODULE_IGNORE_DEFAULT: reset to default.
- * @GGIT_SUBMODULE_IGNORE_NONE: any change or untracked == dirty.
- * @GGIT_SUBMODULE_IGNORE_UNTRACKED: dirty if tracked files change.
- * @GGIT_SUBMODULE_IGNORE_DIRTY: only dirty if HEAD moved.
- * @GGIT_SUBMODULE_IGNORE_ALL: never dirty
+ * @GGIT_SUBMODULE_IGNORE_RESET: reset to on-disk value.
+ * @GGIT_SUBMODULE_IGNORE_NONE: don't ignore any change.
+ * @GGIT_SUBMODULE_IGNORE_UNTRACKED: ignore untracked files.
+ * @GGIT_SUBMODULE_IGNORE_DIRTY: ignore changes in the working directory.
+ * @GGIT_SUBMODULE_IGNORE_ALL: never check if the submodule is dirty.
  *
  * Describes which submodules should be ignored.
  */
 typedef enum {
-	GGIT_SUBMODULE_IGNORE_DEFAULT   = -1,
-	GGIT_SUBMODULE_IGNORE_NONE      = 0,
-	GGIT_SUBMODULE_IGNORE_UNTRACKED = 1,
-	GGIT_SUBMODULE_IGNORE_DIRTY     = 2,
-	GGIT_SUBMODULE_IGNORE_ALL       = 3
+	GGIT_SUBMODULE_IGNORE_RESET     = -1,
+
+	GGIT_SUBMODULE_IGNORE_NONE      = 1,
+	GGIT_SUBMODULE_IGNORE_UNTRACKED = 2,
+	GGIT_SUBMODULE_IGNORE_DIRTY     = 3,
+	GGIT_SUBMODULE_IGNORE_ALL       = 4,
 } GgitSubmoduleIgnore;
 
 /**
@@ -768,18 +777,22 @@ typedef enum {
 
 /**
  * GgitSubmoduleUpdate:
+ * @GGIT_SUBMODULE_UPDATE_RESET: reset to on-disk value.
  * @GGIT_SUBMODULE_UPDATE_CHECKOUT: checkout the submodule.
  * @GGIT_SUBMODULE_UPDATE_REBASE: rebase the current branch onto the
  *                                commit recorded in the superproject.
  * @GGIT_SUBMODULE_UPDATE_MERGE: merge the commit recorded in the
  *                               superproject into the current branch.
+ * @GGIT_SUBMODULE_UPDATE_NONE: do not update this submodule.
  *
  * Describes how a submodule should be updated.
  */
 typedef enum {
-	GGIT_SUBMODULE_UPDATE_CHECKOUT = 0,
-	GGIT_SUBMODULE_UPDATE_REBASE   = 1,
-	GGIT_SUBMODULE_UPDATE_MERGE    = 2
+	GGIT_SUBMODULE_UPDATE_RESET    = -1,
+	GGIT_SUBMODULE_UPDATE_CHECKOUT = 1,
+	GGIT_SUBMODULE_UPDATE_REBASE   = 2,
+	GGIT_SUBMODULE_UPDATE_MERGE    = 3,
+	GGIT_SUBMODULE_UPDATE_NONE     = 4,
 } GgitSubmoduleUpdate;
 
 /**
@@ -839,9 +852,6 @@ typedef enum {
  * even if the file is in both the index and the workdir (combining #GgitStatusFlags).
  * @GGIT_STATUS_SHOW_INDEX_ONLY: only receive callbacks for files in the index.
  * @GGIT_STATUS_SHOW_WORKDIR_ONLY: only receive callbacks for files in the workdir.
- * @GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR: receive callbacks first for files in
- * the index, and then in the workdir. This is equivalent to first specifying
- * #GGIT_STATUS_SHOW_INDEX_ONLY and then #GGIT_STATUS_SHOW_WORKDIR_ONLY.
  *
  * Show options for #ggit_repository_file_status_foreach. Determines which
  * files are included in the status.
@@ -850,8 +860,7 @@ typedef enum {
 typedef enum {
 	GGIT_STATUS_SHOW_INDEX_AND_WORKDIR = 0,
 	GGIT_STATUS_SHOW_INDEX_ONLY = 1,
-	GGIT_STATUS_SHOW_WORKDIR_ONLY = 2,
-	GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR = 3,
+	GGIT_STATUS_SHOW_WORKDIR_ONLY = 2
 } GgitStatusShow;
 
 /**
