@@ -1456,7 +1456,7 @@ ggit_repository_lookup_branch (GgitRepository *repository,
 	ret = git_branch_lookup (&branch,
 	                         _ggit_native_get (repository),
 	                         branch_name,
-	                         branch_type);
+	                         (git_branch_t)branch_type);
 
 	if (ret != GIT_OK)
 	{
@@ -1709,7 +1709,7 @@ ggit_repository_reset (GgitRepository  *repository,
 
 	ret = git_reset (_ggit_native_get (repository),
 	                 _ggit_native_get (target),
-	                 reset_type);
+	                 (git_reset_t)reset_type);
 
 	if (ret != GIT_OK)
 	{
