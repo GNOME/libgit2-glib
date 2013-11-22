@@ -499,7 +499,7 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 	CallbackWrapperData wrapper_data;
 	git_diff_file_cb real_file_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
-	git_diff_data_cb real_line_cb = NULL;
+	git_diff_line_cb real_line_cb = NULL;
 
 	g_return_if_fail (error == NULL || *error == NULL);
 
@@ -576,7 +576,7 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 	CallbackWrapperData wrapper_data;
 	git_diff_file_cb real_file_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
-	git_diff_data_cb real_line_cb = NULL;
+	git_diff_line_cb real_line_cb = NULL;
 
 	g_return_if_fail (error == NULL || *error == NULL);
 
