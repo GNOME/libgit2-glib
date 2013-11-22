@@ -236,10 +236,20 @@ ggit_index_open (GFile   *file,
 /**
  * ggit_index_read:
  * @idx: a #GgitIndex.
+ * @force: force read even if there are in-memory changes.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Update the contents of an existing index object in memory by reading from
  * the hard disk.
+ *
+ * If @force is true, this performs a "hard" read that discards in-memory
+ * changes and always reloads the on-disk index data. If there is no on-disk
+ * version, the index will be cleared.
+ *
+ * If @force is false, this does a "soft" read that reloads the index data from
+ * disk only if it has changed since the last time it was loaded. Purely
+ * in-memory index data will be untouched. Be aware: if there are changes on
+ * disk, unwritten in-memory changes are discarded.
  *
  * Returns: %TRUE if the index could be read from the file associated with the
  *          index, %FALSE otherwise.
@@ -247,6 +257,7 @@ ggit_index_open (GFile   *file,
  **/
 gboolean
 ggit_index_read (GgitIndex  *idx,
+                 gboolean    force,
                  GError    **error)
 {
 	gint ret;
@@ -254,7 +265,7 @@ ggit_index_read (GgitIndex  *idx,
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_index_read (_ggit_native_get (idx));
+	ret = git_index_read (_ggit_native_get (idx), (int)force);
 
 	if (ret != GIT_OK)
 	{

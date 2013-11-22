@@ -70,6 +70,7 @@ GgitIndex                *ggit_index_open                     (GFile      *file,
                                                                GError    **error);
 
 gboolean                  ggit_index_read                     (GgitIndex  *idx,
+                                                               gboolean    force,
                                                                GError    **error);
 
 gboolean                  ggit_index_write                    (GgitIndex  *idx,
