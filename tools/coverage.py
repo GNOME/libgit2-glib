@@ -202,7 +202,7 @@ for filename in keys:
     print('\n  File {0}, coverage {1}% ({2} out of {3}):'.format(b, perc, n_perfile - n_nperfile, n_perfile))
 
     cp = list(f)
-    cp.sort(key=lambda x: x.ident)
+    cp.sort(key=lambda x: "{0} {1}".format(not x.ident in calls, x.ident))
 
     for d in cp:
         if d.ident in calls:
