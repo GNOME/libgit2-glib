@@ -431,7 +431,7 @@ ggit_diff_print (GgitDiff              *diff,
 	wrapper_data.user_data = user_data;
 	wrapper_data.line_cb = print_cb;
 
-	ret = git_diff_print (_ggit_native_get (diff), type,
+	ret = git_diff_print (_ggit_native_get (diff), (git_diff_format_t)type,
 	                      ggit_diff_line_callback_wrapper,
 	                      &wrapper_data);
 
