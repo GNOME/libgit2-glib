@@ -43,6 +43,13 @@ GgitPatch       *ggit_patch_new_from_diff   (GgitDiff       *diff,
                                              gsize           idx,
                                              GError        **error);
 
+GgitPatch       *ggit_patch_new_from_blobs  (GgitBlob         *old_blob,
+                                             const gchar      *old_as_path,
+                                             GgitBlob         *new_blob,
+                                             const gchar      *new_as_path,
+                                             GgitDiffOptions  *diff_options,
+                                             GError          **error);
+
 gchar           *ggit_patch_to_string       (GgitPatch      *patch,
                                              GError        **error);
 

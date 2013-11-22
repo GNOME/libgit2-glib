@@ -20,6 +20,7 @@
 
 #include "ggit-patch.h"
 #include "ggit-error.h"
+#include "ggit-diff-options.h"
 
 struct _GgitPatch
 {
@@ -105,6 +106,54 @@ ggit_patch_new_from_diff (GgitDiff  *diff,
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_patch_from_diff (&patch, _ggit_native_get (diff), idx);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_patch_wrap (patch);
+}
+
+/**
+ * ggit_patch_new_from_blobs:
+ * @old_blob: (allow-none): a #GgitBlob to diff from.
+ * @old_as_path: (allow-none): treat @old_blob as if it had this filename, or %NULL,
+ * @new_blob: (allow-none): a #GgitBlob to diff to.
+ * @new_as_path: (allow-none): treat @new_blob as if it had this filename, or %NULL,
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Directly generate a patch from the difference between two blobs.
+ *
+ * This is just like ggit_diff_blobs() except it generates a patch object
+ * for the difference instead of directly making callbacks.  You can use the
+ * standard ggit_patch accessor functions to read the patch data, and
+ * you must call ggit_patch_unref on the patch when done.
+ */
+GgitPatch *
+ggit_patch_new_from_blobs (GgitBlob         *old_blob,
+                           const gchar      *old_as_path,
+                           GgitBlob         *new_blob,
+                           const gchar      *new_as_path,
+                           GgitDiffOptions  *diff_options,
+                           GError          **error)
+{
+	gint ret;
+	const git_diff_options *gdiff_options;
+	git_patch *patch;
+
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
+
+	ret = git_patch_from_blobs (&patch,
+	                            old_blob ? _ggit_native_get (old_blob) : NULL,
+	                            old_as_path,
+	                            new_blob ? _ggit_native_get (new_blob) : NULL,
+	                            new_as_path,
+	                            (git_diff_options *) gdiff_options);
 
 	if (ret != GIT_OK)
 	{
