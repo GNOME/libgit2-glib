@@ -198,11 +198,9 @@ GgitBranch         *ggit_repository_create_branch     (GgitRepository        *re
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
-void                ggit_repository_branches_foreach  (GgitRepository        *repository,
-                                                       GgitBranchType         branch_type,
-                                                       GgitBranchesCallback   callback,
-                                                       gpointer               user_data,
-                                                       GError               **error);
+GgitBranchEnumerator *ggit_repository_enumerate_branches (GgitRepository        *repository,
+                                                          GgitBranchType         list_flags,
+                                                          GError               **error);
 
 GgitBranch         *ggit_repository_lookup_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,

@@ -33,6 +33,7 @@
 #include "ggit-clone-options.h"
 #include "ggit-status-options.h"
 #include "ggit-tree-builder.h"
+#include "ggit-branch-enumerator.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -1393,42 +1394,39 @@ ggit_repository_create_branch (GgitRepository   *repository,
 	return _ggit_branch_wrap (reference);
 }
 
-typedef gint (* _GitBranchesCallback) (const gchar  *branch_name,
-                                       git_branch_t  branch_type,
-                                       gpointer      payload);
-
 /**
  * ggit_repository_branches_foreach:
  * @repository: a #GgitRepository.
- * @branch_type: a GgitBranchType.
- * @callback: (scope call): a #GgitBranchesCallback.
- * @user_data: callback user data.
+ * @list_type: a GgitBranchType.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Foreach branch of type @branch_type the callback @callback is called.
+ * Get a branch enumerator to enumerate over all branches of the specified
+ * @list_type in @repository.
+ *
+ * Returns: (transfer full): a branch enumerator.
  **/
-void
-ggit_repository_branches_foreach (GgitRepository        *repository,
-                                  GgitBranchType         branch_type,
-                                  GgitBranchesCallback   callback,
-                                  gpointer               user_data,
-                                  GError               **error)
+GgitBranchEnumerator *
+ggit_repository_enumerate_branches (GgitRepository  *repository,
+                                    GgitBranchType   list_type,
+                                    GError         **error)
 {
+	git_branch_iterator *iter;
 	gint ret;
 
-	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
-	g_return_if_fail (callback != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_branch_foreach (_ggit_native_get (repository),
-	                          branch_type,
-	                          (_GitBranchesCallback) callback,
-	                          user_data);
+	ret = git_branch_iterator_new (&iter,
+	                               _ggit_native_get (repository),
+	                               (git_branch_t)list_type);
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+		return NULL;
 	}
+
+	return _ggit_branch_enumerator_wrap (iter);
 }
 
 /**

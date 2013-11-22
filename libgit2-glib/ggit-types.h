@@ -47,6 +47,13 @@ typedef struct _GgitBlobOutputStream GgitBlobOutputStream;
 typedef struct _GgitBranch GgitBranch;
 
 /**
+ * GgitBranchEnumerator:
+ *
+ * Represents a branch enumerator.
+ */
+typedef struct _GgitBranchEnumerator GgitBranchEnumerator;
+
+/**
  * GgitCloneOptions:
  *
  * Represents the options used when cloning.
@@ -846,22 +853,6 @@ typedef enum {
 	GGIT_STATUS_SHOW_WORKDIR_ONLY = 2,
 	GGIT_STATUS_SHOW_INDEX_THEN_WORKDIR = 3,
 } GgitStatusShow;
-
-/**
- * GgitBranchesCallback:
- * @branch_name: the branch name.
- * @branch_type: a #GgitBranchType.
- * @user_data: (closure): user-supplied data.
- *
- * The type of the callback functions for retrieving the branches
- * in a #GgitRepository. See ggit_repository_branches_foreach().
- *
- * Returns: 0 to go for the next branch or a #GgitError in case there was an error.
- *
- */
-typedef gint (* GgitBranchesCallback) (const gchar    *branch_name,
-                                       GgitBranchType  branch_type,
-                                       gpointer        user_data);
 
 /**
  * GgitConfigCallback:

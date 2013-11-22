@@ -21,6 +21,7 @@ INST_H_FILES =				\
 	ggit-blob.h			\
 	ggit-blob-output-stream.h	\
 	ggit-branch.h			\
+	ggit-branch-enumerator.h	\
 	ggit-clone-options.h		\
 	ggit-commit.h			\
 	ggit-config.h			\
@@ -75,6 +76,7 @@ C_FILES =				\
 	ggit-blob.c			\
 	ggit-blob-output-stream.c	\
 	ggit-branch.c			\
+	ggit-branch-enumerator.c	\
 	ggit-clone-options.c		\
 	ggit-commit.c			\
 	ggit-config.c			\
