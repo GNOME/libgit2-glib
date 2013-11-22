@@ -34,10 +34,10 @@ G_BEGIN_DECLS
 
 GType                      ggit_remote_cbs_get_type            (void) G_GNUC_CONST;
 
-const git_remote_callbacks *_ggit_remote_cbs_get_remote_callbacks  (GgitRemoteCbs        *cbs);
+const git_remote_callbacks *_ggit_remote_cbs_get_remote_callbacks  (GgitRemoteCbs        *remote_cbs);
 
-GgitRemoteCbs             *ggit_remote_cbs_ref                 (GgitRemoteCbs        *cbs);
-void                       ggit_remote_cbs_unref               (GgitRemoteCbs        *cbs);
+GgitRemoteCbs             *ggit_remote_cbs_ref                 (GgitRemoteCbs        *remote_cbs);
+void                       ggit_remote_cbs_unref               (GgitRemoteCbs        *remote_cbs);
 
 GgitRemoteCbs             *ggit_remote_cbs_new                 (void);
 
