@@ -1,5 +1,5 @@
 /*
- * ggit-branc-enumeratir.h
+ * ggit-branch-enumerator.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2013 - Jesse van den Kieboom
