@@ -144,7 +144,7 @@ ggit_patch_new_from_blobs (GgitBlob         *old_blob,
 	const git_diff_options *gdiff_options;
 	git_patch *patch;
 
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
