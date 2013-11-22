@@ -176,13 +176,18 @@ ggit_reflog_rename (GgitReflog  *reflog,
                     const gchar *new_name,
                     GError      **error)
 {
+	git_reference *nref;
 	gint ret;
 
 	g_return_val_if_fail (reflog != NULL, FALSE);
 	g_return_val_if_fail (new_name != NULL && *new_name != '\0', FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_reflog_rename (_ggit_native_get (reflog->ref), new_name);
+	nref = _ggit_native_get (reflog->ref);
+
+	ret = git_reflog_rename (git_reference_owner (nref),
+	                         git_reference_name (nref),
+	                         new_name);
 
 	if (ret != GIT_OK)
 	{

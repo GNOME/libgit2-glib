@@ -437,12 +437,17 @@ ggit_ref_get_reflog (GgitRef  *ref,
                      GError  **error)
 {
 	git_reflog *reflog;
+	git_reference *nref;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_reflog_read (&reflog, _ggit_native_get (ref));
+	nref = _ggit_native_get (ref);
+
+	ret = git_reflog_read (&reflog,
+	                       git_reference_owner (nref),
+	                       git_reference_name (nref));
 
 	if (ret != GIT_OK)
 	{
@@ -464,12 +469,16 @@ void
 ggit_ref_delete_reflog (GgitRef  *ref,
                         GError  **error)
 {
+	git_reference *nref;
 	gint ret;
 
 	g_return_if_fail (GGIT_IS_REF (ref));
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_reflog_delete (_ggit_native_get (ref));
+	nref = _ggit_native_get (ref);
+
+	ret = git_reflog_delete (git_reference_owner (nref),
+	                         git_reference_name (nref));
 
 	if (ret != GIT_OK)
 	{
