@@ -19,6 +19,7 @@
  */
 
 #include "ggit-patch.h"
+#include "ggit-diff.h"
 #include "ggit-error.h"
 #include "ggit-diff-options.h"
 
