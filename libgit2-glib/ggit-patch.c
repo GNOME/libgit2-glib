@@ -104,7 +104,7 @@ ggit_patch_to_string (GgitPatch  *patch,
 	if (ret == GIT_OK)
 	{
 		result = g_strdup (retval);
-		g_free (retval);
+		free (retval);
 	}
 
 	return result;
