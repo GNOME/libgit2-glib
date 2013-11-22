@@ -20,6 +20,7 @@
 
 #include <glib-object.h>
 #include <git2.h>
+#include <string.h>
 
 #include "ggit-diff-hunk.h"
 
@@ -52,6 +53,7 @@ _ggit_diff_hunk_wrap (const git_diff_hunk *hunk)
 	ghunk->new_start = hunk->new_start;
 	ghunk->new_lines = hunk->new_lines;
 	ghunk->header_len = hunk->header_len;
+
 	strncpy(ghunk->header, hunk->header, hunk->header_len);
 
 	return ghunk;
