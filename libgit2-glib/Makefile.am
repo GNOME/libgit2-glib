@@ -190,4 +190,9 @@ if HAVE_INTROSPECTION
 	$(typelib_DATA)
 endif
 
+coverage:
+	$(AM_V_GEN) LIBGIT2_INCLUDE_DIR=$(shell $(PKG_CONFIG) --variable=includedir libgit2)/git2 $(top_srcdir)/tools/coverage.py $(AM_CPPFLAGS) -- $(C_FILES)
+
+.PHONY: coverage
+
 # ex:set ts=8 noet:
