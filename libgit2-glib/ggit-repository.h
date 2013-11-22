@@ -228,7 +228,7 @@ GFile              *ggit_repository_discover          (GFile                 *lo
 gboolean            ggit_repository_is_head_detached  (GgitRepository        *repository,
                                                        GError               **error);
 
-gboolean            ggit_repository_is_head_orphan    (GgitRepository        *repository,
+gboolean            ggit_repository_is_head_unborn    (GgitRepository        *repository,
                                                        GError               **error);
 
 gboolean            ggit_repository_is_empty          (GgitRepository        *repository,

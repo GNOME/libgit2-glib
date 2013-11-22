@@ -836,7 +836,7 @@ ggit_repository_is_head_detached (GgitRepository  *repository,
 }
 
 /**
- * ggit_repository_is_head_orphan:
+ * ggit_repository_is_head_unborn:
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -848,7 +848,7 @@ ggit_repository_is_head_detached (GgitRepository  *repository,
  * Returns: %TRUE if the current branch is an orphan.
  */
 gboolean
-ggit_repository_is_head_orphan (GgitRepository  *repository,
+ggit_repository_is_head_unborn (GgitRepository  *repository,
                                 GError         **error)
 {
 	gint ret;
@@ -856,7 +856,7 @@ ggit_repository_is_head_orphan (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_repository_head_orphan (_ggit_native_get (repository));
+	ret = git_repository_head_unborn (_ggit_native_get (repository));
 
 	if (ret < 0)
 	{
