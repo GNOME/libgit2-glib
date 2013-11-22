@@ -405,8 +405,9 @@ ggit_diff_foreach (GgitDiff              *diff,
 }
 
 /**
- * ggit_diff_print_patch:
+ * ggit_diff_print:
  * @diff: a #GgitDiff.
+ * @type: a #GgitDiffFormatType.
  * @print_cb: (scope call) (closure user_data): a #GgitDiffLineCallback.
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
@@ -414,10 +415,11 @@ ggit_diff_foreach (GgitDiff              *diff,
  * Iterates over @diff generating text output like "git diff".
  */
 void
-ggit_diff_print_patch (GgitDiff              *diff,
-                       GgitDiffLineCallback   print_cb,
-                       gpointer              *user_data,
-                       GError               **error)
+ggit_diff_print (GgitDiff              *diff,
+                 GgitDiffFormatType     type,
+                 GgitDiffLineCallback   print_cb,
+                 gpointer              *user_data,
+                 GError               **error)
 {
 	gint ret;
 	CallbackWrapperData wrapper_data;
@@ -429,9 +431,9 @@ ggit_diff_print_patch (GgitDiff              *diff,
 	wrapper_data.user_data = user_data;
 	wrapper_data.line_cb = print_cb;
 
-	ret = git_diff_print_patch (_ggit_native_get (diff),
-	                            ggit_diff_line_callback_wrapper,
-	                            &wrapper_data);
+	ret = git_diff_print (_ggit_native_get (diff), type,
+	                      ggit_diff_line_callback_wrapper,
+	                      &wrapper_data);
 
 	if (ret != GIT_OK)
 	{

@@ -426,6 +426,24 @@ typedef enum {
 } GgitDeltaType;
 
 /**
+ * GgitDiffFormatType:
+ * @GGIT_DIFF_FORMAT_PATCH: full git diff.
+ * @GGIT_DIFF_FORMAT_PATCH_HEADER: just the file headers of patch.
+ * @GGIT_DIFF_FORMAT_RAW: like git diff --raw.
+ * @GGIT_DIFF_FORMAT_NAME_ONLY: like git diff --name-only.
+ * @GGIT_DIFF_FORMAT_NAME_STATUS: like git diff --name-status.
+ *
+ * Possible output formats for diff data.
+ */
+typedef enum {
+	GGIT_DIFF_FORMAT_PATCH        = 1u,
+	GGIT_DIFF_FORMAT_PATCH_HEADER = 2u,
+	GGIT_DIFF_FORMAT_RAW          = 3u,
+	GGIT_DIFF_FORMAT_NAME_ONLY    = 4u,
+	GGIT_DIFF_FORMAT_NAME_STATUS  = 5u
+} GgitDiffFormatType;
+
+/**
  * GgitDiffOption:
  * @GGIT_DIFF_NORMAL: normal.
  * @GGIT_DIFF_REVERSE: reverse.
