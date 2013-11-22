@@ -99,12 +99,6 @@ void           ggit_diff_print                     (GgitDiff              *diff,
 
 gint           ggit_diff_get_num_deltas            (GgitDiff              *diff);
 
-void           ggit_diff_get_patch                 (GgitDiff              *diff,
-                                                    gsize                  idx,
-                                                    GgitPatch            **patch,
-                                                    GgitDiffDelta        **delta,
-                                                    GError               **error);
-
 void           ggit_diff_blobs                     (GgitBlob              *old_blob,
                                                     const gchar           *old_as_path,
                                                     GgitBlob              *new_blob,

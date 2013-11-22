@@ -81,6 +81,41 @@ ggit_patch_unref (GgitPatch *patch)
 }
 
 /**
+ * ggit_patch_new_from_diff:
+ * @diff: a #GgitDiff.
+ * @idx: index into diff list.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * The #GgitPatch is a newly created object contains the text diffs
+ * for the delta.  You have to call ggit_patch_unref() when you are
+ * done with it.  You can use the patch object to loop over all the hunks
+ * and lines in the diff of the one delta.
+ *
+ * Returns: (transfer full): a newly created #GgitPatch.
+ */
+GgitPatch *
+ggit_patch_new_from_diff (GgitDiff  *diff,
+                          gsize      idx,
+                          GError   **error)
+{
+	git_patch *patch;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_DIFF (diff), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_patch_from_diff (&patch, _ggit_native_get (diff), idx);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_patch_wrap (patch);
+}
+
+/**
  * ggit_patch_to_string:
  * @patch: a #GgitPatch.
  * @error: a #GError for error reporting, or %NULL.

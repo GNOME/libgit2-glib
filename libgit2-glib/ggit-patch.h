@@ -39,6 +39,10 @@ GgitPatch       *ggit_patch_ref             (GgitPatch      *patch);
 
 void             ggit_patch_unref           (GgitPatch      *patch);
 
+GgitPatch       *ggit_patch_new_from_diff   (GgitDiff       *diff,
+                                             gsize           idx,
+                                             GError        **error);
+
 gchar           *ggit_patch_to_string       (GgitPatch      *patch,
                                              GError        **error);
 
