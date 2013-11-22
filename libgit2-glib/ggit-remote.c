@@ -398,64 +398,44 @@ ggit_remote_add_push_spec (GgitRemote   *remote,
 	}
 }
 
-typedef struct {
-	GgitRemoteListCallback callback;
-	gpointer user_data;
-} RemoteListData;
-
-static gint
-remote_list_callback_wrapper (git_remote_head *head,
-                              gpointer         user_data)
-{
-	RemoteListData *data = user_data;
-	GgitOId *oid;
-	GgitOId *loid;
-	gint ret;
-
-	oid = _ggit_oid_wrap (&head->oid);
-	loid = _ggit_oid_wrap (&head->loid);
-
-	ret = data->callback (head->name, oid, loid,
-	                      head->local, data->user_data);
-
-	ggit_oid_free (loid);
-	ggit_oid_free (oid);
-
-	return ret;
-}
-
 /**
  * ggit_remote_list:
  * @remote: a #GgitRemote.
- * @callback: (scope call) (closure user_data): a #GgitRemoteListCallback.
- * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Calls @callback for each ref at @remote.
+ * Get a list of refs at the remote.
+ *
+ * Returns: (array zero-terminated=1): the remote heads.
  */
-void
+GgitRemoteHead **
 ggit_remote_list (GgitRemote              *remote,
-                  GgitRemoteListCallback   callback,
-                  gpointer                 user_data,
                   GError                 **error)
 {
-	RemoteListData data;
+	const git_remote_head **head;
+	size_t size;
+	size_t i;
+	GgitRemoteHead **retval;
 	gint ret;
 
-	g_return_if_fail (remote != NULL);
-	g_return_if_fail (callback != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (remote != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	data.callback = callback;
-	data.user_data = user_data;
-
-	ret = git_remote_ls (remote->remote,
-	                     remote_list_callback_wrapper, &data);
+	ret = git_remote_ls (&head, &size, remote->remote);
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
+		return NULL;
 	}
+
+	retval = g_new0 (GgitRemoteHead *, size);
+
+	for (i = 0; i < size; i++)
+	{
+		retval[i] = _ggit_remote_head_wrap (head[i]);
+	}
+
+	return retval;
 }
 
 /**
