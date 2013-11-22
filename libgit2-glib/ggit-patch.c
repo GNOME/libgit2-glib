@@ -204,10 +204,8 @@ typedef struct
 
 static int
 patch_to_stream (const git_diff_delta *delta,
-                 const git_diff_range *range,
-                 char                  line_origin,
-                 const char           *content,
-                 size_t                content_len,
+                 const git_diff_hunk  *hunk,
+                 const git_diff_line  *line,
                  void                 *payload)
 {
 	PatchToStream *info = payload;
@@ -215,8 +213,8 @@ patch_to_stream (const git_diff_delta *delta,
 	gsize written;
 
 	ret = g_output_stream_write_all (info->stream,
-	                                 content,
-	                                 content_len,
+	                                 line->content,
+	                                 line->content_len,
 	                                 &written,
 	                                 NULL,
 	                                 info->error);
