@@ -177,8 +177,6 @@ for d in defs:
     else:
         perfile[o.filename].append(o)
 
-perc = int(((len(defs) - len(notused)) / len(defs)) * 100)
-
 ss = [notused[f] for f in notused]
 ss.sort(key=lambda x: '{0} {1}'.format(os.path.basename(x.filename), x.ident))
 
@@ -210,7 +208,7 @@ for filename in keys:
         else:
             print('      \033[31m✗ {0}\033[0m'.format(d.display))
 
-#    print('      {0}'.format(f.display))
+perc = int(((len(defs) - len(notused)) / len(defs)) * 100)
 
 print('\nTotal coverage: {0}% ({1} functions out of {2} are being called)\n'.format(perc, len(defs) - len(notused), len(defs)))
 
