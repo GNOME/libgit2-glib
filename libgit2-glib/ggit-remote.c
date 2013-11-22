@@ -428,7 +428,7 @@ ggit_remote_list (GgitRemote              *remote,
 		return NULL;
 	}
 
-	retval = g_new0 (GgitRemoteHead *, size);
+	retval = g_new0 (GgitRemoteHead *, size + 1);
 
 	for (i = 0; i < size; i++)
 	{
