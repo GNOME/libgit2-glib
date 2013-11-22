@@ -33,7 +33,113 @@ struct _GgitRemote
 	gint ref_count;
 };
 
+struct _GgitRemoteHead
+{
+	gboolean is_local;
+	GgitOId *oid;
+	GgitOId *local_oid;
+	gchar *name;
+
+	gint ref_count;
+};
+
 G_DEFINE_BOXED_TYPE (GgitRemote, ggit_remote, ggit_remote_ref, ggit_remote_unref)
+G_DEFINE_BOXED_TYPE (GgitRemoteHead, ggit_remote_head, ggit_remote_head_ref, ggit_remote_head_unref)
+
+static GgitRemoteHead *
+_ggit_remote_head_wrap (const git_remote_head *remote_head)
+{
+	GgitRemoteHead *ret;
+
+	ret = g_slice_new (GgitRemoteHead);
+	ret->ref_count = 1;
+	ret->is_local = remote_head->local;
+	ret->oid = _ggit_oid_wrap (&remote_head->oid);
+	ret->local_oid = _ggit_oid_wrap (&remote_head->loid);
+	ret->name = g_strdup (remote_head->name);
+
+	return ret;
+}
+
+GgitRemoteHead *
+ggit_remote_head_ref (GgitRemoteHead *remote_head)
+{
+	g_atomic_int_inc (&remote_head->ref_count);
+	return remote_head;
+}
+
+void
+ggit_remote_head_unref (GgitRemoteHead *remote_head)
+{
+	if (g_atomic_int_dec_and_test (&remote_head->ref_count))
+	{
+		ggit_oid_free (remote_head->oid);
+		ggit_oid_free (remote_head->local_oid);
+		g_free (remote_head->name);
+
+		g_slice_free (GgitRemoteHead, remote_head);
+	}
+}
+
+/**
+ * ggit_remote_head_get_oid:
+ * @remote_head: a #GgitRemoteHead.
+ *
+ * Get the remote oid of the remote head.
+ *
+ * Returns: (transfer none): the remote oid.
+ */
+GgitOId *
+ggit_remote_head_get_oid (GgitRemoteHead *remote_head)
+{
+	g_return_val_if_fail (remote_head != NULL, NULL);
+	return remote_head->oid;
+}
+
+/**
+ * ggit_remote_head_get_local_oid:
+ * @remote_head: a #GgitRemoteHead.
+ *
+ * Get the local oid of the remote head.
+ *
+ * Returns: (transfer none): the local oid.
+ */
+GgitOId *
+ggit_remote_head_get_local_oid (GgitRemoteHead *remote_head)
+{
+	g_return_val_if_fail (remote_head != NULL, NULL);
+	return remote_head->local_oid;
+}
+
+/**
+ * ggit_remote_head_is_local:
+ * @remote_head: a #GgitRemoteHead.
+ *
+ * Get whether the remote head is local.
+ *
+ * Returns: whether the remote head is local.
+ */
+gboolean
+ggit_remote_head_is_local (GgitRemoteHead *remote_head)
+{
+	g_return_val_if_fail (remote_head != NULL, FALSE);
+	return remote_head->is_local;
+}
+
+/**
+ * ggit_remote_head_get_name:
+ * @remote_head: a #GgitRemoteHead.
+ *
+ * Get the remote head name.
+ *
+ * Returns: the remote head name.
+ */
+const gchar *
+ggit_remote_head_get_name (GgitRemoteHead *remote_head)
+{
+	g_return_val_if_fail (remote_head != NULL, NULL);
+	return remote_head->name;
+}
 
 GgitRemote *
 _ggit_remote_wrap (const git_remote *remote)

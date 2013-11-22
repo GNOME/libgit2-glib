@@ -31,7 +31,19 @@ G_BEGIN_DECLS
 #define GGIT_TYPE_REMOTE        (ggit_remote_get_type ())
 #define GGIT_REMOTE(obj)        ((GgitRemote *)obj)
 
+#define GGIT_TYPE_REMOTE_HEAD   (ggit_remote_head_get_type ())
+#define GGIT_REMOTE_HEAD(obj)        ((GgitRemoteHead *)obj)
+
 GType              ggit_remote_get_type                 (void) G_GNUC_CONST;
+GType              ggit_remote_head_get_type            (void) G_GNUC_CONST;
+
+GgitRemoteHead    *ggit_remote_head_ref                 (GgitRemoteHead *remote_head);
+void               ggit_remote_head_unref               (GgitRemoteHead *remote_head);
+
+GgitOId           *ggit_remote_head_get_oid             (GgitRemoteHead *remote_head);
+GgitOId           *ggit_remote_head_get_local_oid       (GgitRemoteHead *remote_head);
+gboolean           ggit_remote_head_is_local            (GgitRemoteHead *remote_head);
+const gchar       *ggit_remote_head_get_name            (GgitRemoteHead *remote_head);
 
 GgitRemote       *_ggit_remote_wrap                     (const git_remote *remote);
 
@@ -66,9 +78,7 @@ void               ggit_remote_add_push_spec            (GgitRemote       *remot
                                                          const gchar      *push_spec,
                                                          GError          **error);
 
-void               ggit_remote_list                     (GgitRemote       *remote,
-                                                         GgitRemoteListCallback callback,
-                                                         gpointer          user_data,
+GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);
 
 gboolean           ggit_remote_is_valid_url             (const gchar      *url);
