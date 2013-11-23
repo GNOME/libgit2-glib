@@ -19,27 +19,64 @@
  */
 
 
-#ifndef __GGIT_REMOTE_CBS_H__
-#define __GGIT_REMOTE_CBS_H__
+#ifndef __GGIT_REMOTE_CALLBACKS_H__
+#define __GGIT_REMOTE_CALLBACKS_H__
 
 #include <glib-object.h>
 #include <git2.h>
-
-#include "ggit-types.h"
+#include <libgit2-glib/ggit-types.h>
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REMOTE_CBS       (ggit_remote_cbs_get_type ())
-#define GGIT_REMOTE_CBS(obj)       ((GgitRemoteCbs *)obj)
+#define GGIT_TYPE_REMOTE_CALLBACKS		(ggit_remote_callbacks_get_type ())
+#define GGIT_REMOTE_CALLBACKS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacks))
+#define GGIT_REMOTE_CALLBACKS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacks const))
+#define GGIT_REMOTE_CALLBACKS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksClass))
+#define GGIT_IS_REMOTE_CALLBACKS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REMOTE_CALLBACKS))
+#define GGIT_IS_REMOTE_CALLBACKS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REMOTE_CALLBACKS))
+#define GGIT_REMOTE_CALLBACKS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksClass))
 
-GType                      ggit_remote_cbs_get_type            (void) G_GNUC_CONST;
+typedef struct _GgitRemoteCallbacks		GgitRemoteCallbacks;
+typedef struct _GgitRemoteCallbacksClass	GgitRemoteCallbacksClass;
+typedef struct _GgitRemoteCallbacksPrivate	GgitRemoteCallbacksPrivate;
 
-const git_remote_callbacks *_ggit_remote_cbs_get_remote_callbacks  (GgitRemoteCbs        *remote_cbs);
+struct _GgitRemoteCallbacks
+{
+	GObject parent;
 
-GgitRemoteCbs             *ggit_remote_cbs_ref                 (GgitRemoteCbs        *remote_cbs);
-void                       ggit_remote_cbs_unref               (GgitRemoteCbs        *remote_cbs);
+	GgitRemoteCallbacksPrivate *priv;
+};
 
-GgitRemoteCbs             *ggit_remote_cbs_new                 (void);
+struct _GgitRemoteCallbacksClass
+{
+	GObjectClass parent_class;
+
+	/* virtual methods */
+	gint (*progress)          (GgitRemoteCallbacks        *callbacks,
+	                           const gchar                *str,
+	                           gint                        len);
+
+	gint (*completion)        (GgitRemoteCallbacks        *callbacks,
+	                           GgitRemoteCompletionType    type);
+
+	gint (*credentials)       (GgitRemoteCallbacks        *callbacks,
+	                           GgitCred                  **cred,
+	                           const gchar                *url,
+	                           const gchar                *username_from_url,
+	                           guint                       allowed_types);
+
+	gint (*transfer_progress) (GgitRemoteCallbacks        *callbacks,
+	                           GgitTransferProgress       *stats);
+
+	gint (*update_tips)       (GgitRemoteCallbacks        *callbacks,
+	                           const gchar                *refname,
+	                           const GgitOId              *a,
+	                           const GgitOId              *b);
+};
+
+GType                      ggit_remote_callbacks_get_type     (void) G_GNUC_CONST;
+
+const git_remote_callbacks *_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *remote_cbs);
 
 G_END_DECLS
 

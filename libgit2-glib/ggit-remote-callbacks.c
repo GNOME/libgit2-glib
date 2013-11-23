@@ -18,85 +18,167 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <git2.h>
-
 #include "ggit-remote-callbacks.h"
+#include "ggit-cred.h"
+#include "ggit-transfer-progress.h"
+#include "ggit-oid.h"
 
-struct _GgitRemoteCbs
+#define GGIT_REMOTE_CALLBACKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksPrivate))
+
+struct _GgitRemoteCallbacksPrivate
 {
-	git_remote_callbacks remote_cbs;
-	gint ref_count;
+	git_remote_callbacks native;
 };
 
-G_DEFINE_BOXED_TYPE (GgitRemoteCbs, ggit_remote_cbs,
-                     ggit_remote_cbs_ref, ggit_remote_cbs_unref)
+G_DEFINE_TYPE (GgitRemoteCallbacks, ggit_remote_callbacks, G_TYPE_OBJECT)
+
+static void
+ggit_remote_callbacks_finalize (GObject *object)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (object);
+
+	self->priv->native.payload = NULL;
+
+	G_OBJECT_CLASS (ggit_remote_callbacks_parent_class)->finalize (object);
+}
+
+static void
+ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = ggit_remote_callbacks_finalize;
+
+	g_type_class_add_private (object_class, sizeof (GgitRemoteCallbacksPrivate));
+}
+
+static int
+progress_wrap (const char *str, int len, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+
+	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress != NULL)
+	{
+		return GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress (self, str, len);
+	}
+	else
+	{
+		return GIT_OK;
+	}
+}
+
+static int
+completion_wrap (git_remote_completion_type type, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+
+	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion != NULL)
+	{
+		return GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion (self, (GgitRemoteCompletionType)type);
+	}
+	else
+	{
+		return GIT_OK;
+	}
+}
+
+static int
+credentials_wrap (git_cred **cred, const char *url, const char *username_from_url, unsigned int allowed_types, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+
+	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials != NULL)
+	{
+		GgitCred *mcred = NULL;
+		gint ret;
+
+		ret = GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials (self, &mcred, url, username_from_url, allowed_types);
+
+		if (mcred != NULL)
+		{
+			*cred = _ggit_native_get (mcred);
+		}
+		else
+		{
+			*cred = NULL;
+		}
+
+		return ret;
+	}
+	else
+	{
+		return GIT_OK;
+	}
+}
+
+static int
+transfer_progress_wrap (const git_transfer_progress *stats, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+
+	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress != NULL)
+	{
+		GgitTransferProgress *p;
+		gint ret;
+
+		p = _ggit_transfer_progress_wrap (stats);
+
+		ret = GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress (self, p);
+		ggit_transfer_progress_free (p);
+
+		return ret;
+	}
+	else
+	{
+		return GIT_OK;
+	}
+}
+
+static int
+update_tips_wrap (const char *refname, const git_oid *a, const git_oid *b, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+
+	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips != NULL)
+	{
+		GgitOId *na;
+		GgitOId *nb;
+		gint ret;
+
+		na = _ggit_oid_wrap (a);
+		nb = _ggit_oid_wrap (b);
+
+		ret = GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips (self, refname, na, nb);
+
+		ggit_oid_free (na);
+		ggit_oid_free (nb);
+
+		return ret;
+	}
+	else
+	{
+		return GIT_OK;
+	}
+}
+
+static void
+ggit_remote_callbacks_init (GgitRemoteCallbacks *self)
+{
+	self->priv = GGIT_REMOTE_CALLBACKS_GET_PRIVATE (self);
+
+	self->priv->native.progress = progress_wrap;
+	self->priv->native.completion = completion_wrap;
+	self->priv->native.credentials = credentials_wrap;
+	self->priv->native.transfer_progress = transfer_progress_wrap;
+	self->priv->native.update_tips = update_tips_wrap;
+
+	self->priv->native.payload = self;
+}
 
 const git_remote_callbacks *
-_ggit_remote_cbs_get_remote_callbacks (GgitRemoteCbs *remote_cbs)
+_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *self)
 {
-	/* NULL is common for remote_cbs as it specifies to use the default
-	 * so handle a NULL remote_cbs here instead of in every caller.
-	 */
-	if (remote_cbs == NULL)
-	{
-		return NULL;
-	}
-
-	return (const git_remote_callbacks *)&remote_cbs->remote_cbs;
-}
-
-/**
- * ggit_remote_cbs_ref:
- * @remote_cbs: a #GgitRemoteCbs.
- *
- * Copies @remote_cbs into a newly allocated #GgitRemoteCbs.
- *
- * Returns: (transfer full): a newly allocated #GgitRemoteCbs.
- */
-GgitRemoteCbs *
-ggit_remote_cbs_ref (GgitRemoteCbs *remote_cbs)
-{
-	g_return_val_if_fail (remote_cbs != NULL, NULL);
-
-	g_atomic_int_inc (&remote_cbs->ref_count);
-
-	return remote_cbs;
-}
-
-/**
- * ggit_remote_cbs_unref:
- * @remote_cbs: a #GgitRemoteCbs.
- *
- * Frees @remote_cbs.
- */
-void
-ggit_remote_cbs_unref (GgitRemoteCbs *remote_cbs)
-{
-	g_return_if_fail (remote_cbs != NULL);
-
-	if (g_atomic_int_dec_and_test (&remote_cbs->ref_count))
-	{
-		g_slice_free (GgitRemoteCbs, remote_cbs);
-	}
-}
-
-/**
- * ggit_remote_cbs_new:
- *
- * Creates a new #GgitRemoteCbs.
- *
- * Returns: a newly allocated #GgitRemoteCbs.
- */
-GgitRemoteCbs *
-ggit_remote_cbs_new (void)
-{
-	GgitRemoteCbs *remote_cbs;
-	git_remote_callbacks gremote_cbs = GIT_REMOTE_CALLBACKS_INIT;
-
-	remote_cbs = g_slice_new (GgitRemoteCbs);
-	remote_cbs->remote_cbs = gremote_cbs;
-
-	return remote_cbs;
+	return &self->priv->native;
 }
 
 /* ex:set ts=8 noet: */

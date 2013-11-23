@@ -632,6 +632,21 @@ typedef enum {
 	GGIT_REMOTE_DOWNLOAD_TAGS_ALL  = 2
 } GgitRemoteDownloadTagsType;
 
+/* NOTE: keep in sync with git2/remote.h */
+/**
+ * GgitRemoteCompletionType:
+ * @GGIT_REMOTE_COMPLETION_DOWNLOAD: download.
+ * @GGIT_REMOTE_COMPLETION_INDEXING: indexing.
+ * @GGIT_REMOTE_COMPLETION_ERROR: error.
+ *
+ * Argument to the completion callback which tells it which operation finished.
+ */
+typedef enum {
+	GGIT_REMOTE_COMPLETION_DOWNLOAD = 0,
+	GGIT_REMOTE_COMPLETION_INDEXING = 1,
+	GGIT_REMOTE_COMPLETION_ERROR = 2
+} GgitRemoteCompletionType;
+
 /* NOTE: keep in sync with git2/refs.h */
 /**
  * GgitRefType:
