@@ -30,6 +30,18 @@ struct _GgitRemoteCallbacksPrivate
 	git_remote_callbacks native;
 };
 
+/**
+ * GgitRemoteCallbacksClass::credentials:
+ * @callbacks:
+ * @cred: (out):
+ * @url:
+ * @username_from_url:
+ * @allowed_types:
+ * @error:
+ *
+ * Returns:
+ */
+
 G_DEFINE_TYPE (GgitRemoteCallbacks, ggit_remote_callbacks, G_TYPE_OBJECT)
 
 static void
