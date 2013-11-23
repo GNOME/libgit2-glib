@@ -62,10 +62,10 @@ struct _GgitRemoteCallbacksClass
 	                               GError                    **error);
 
 	gboolean (*credentials)       (GgitRemoteCallbacks        *callbacks,
-	                               GgitCred                  **cred,
 	                               const gchar                *url,
 	                               const gchar                *username_from_url,
 	                               guint                       allowed_types,
+	                               GgitCred                  **cred,
 	                               GError                    **error);
 
 	gboolean (*transfer_progress) (GgitRemoteCallbacks        *callbacks,

@@ -33,10 +33,10 @@ struct _GgitRemoteCallbacksPrivate
 /**
  * GgitRemoteCallbacksClass::credentials:
  * @callbacks:
- * @cred: (out):
  * @url:
  * @username_from_url:
  * @allowed_types:
+ * @cred: (out):
  * @error:
  *
  * Returns:
@@ -145,10 +145,10 @@ credentials_wrap (git_cred     **cred,
 		GError *error = NULL;
 
 		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials (self,
-		                                                         &mcred,
 		                                                         url,
 		                                                         username_from_url,
 		                                                         allowed_types,
+		                                                         &mcred,
 		                                                         &error))
 		{
 			if (mcred != NULL)
