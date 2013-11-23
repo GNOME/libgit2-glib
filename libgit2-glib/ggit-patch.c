@@ -21,6 +21,7 @@
 #include "ggit-patch.h"
 #include "ggit-diff.h"
 #include "ggit-diff-delta.h"
+#include "ggit-diff-hunk.h"
 #include "ggit-error.h"
 #include "ggit-diff-options.h"
 
@@ -377,6 +378,38 @@ ggit_patch_get_delta (GgitPatch *patch)
 	g_return_val_if_fail (patch != NULL, NULL);
 
 	return _ggit_diff_delta_wrap (git_patch_get_delta (patch->patch));
+}
+
+/**
+ * ggit_patch_get_hunk:
+ * @patch: a #GgitPatch
+ * @idx: the hunk index.
+ * @error: a #GError
+ *
+ * Get the @idx'th hunk in the patch.
+ *
+ * Returns: (transfer full): a new #GgitDiffHunk or %NULL on error.
+ */
+GgitDiffHunk *
+ggit_patch_get_hunk (GgitPatch  *patch,
+                     gsize       idx,
+                     GError    **error)
+{
+	const git_diff_hunk *hunk;
+	size_t tlines;
+	gint ret;
+
+	g_return_val_if_fail (patch != NULL, NULL);
+
+	ret = git_patch_get_hunk (&hunk, &tlines, patch->patch, idx);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_diff_hunk_wrap (hunk);
 }
 
 /* ex:set ts=8 noet: */
