@@ -1,21 +1,29 @@
 #!/usr/bin/env python3
 
-import os, sys, glob, pickle
+import os, sys, glob, pickle, subprocess
 
 sys.path.insert(0, os.path.dirname(__file__))
 from clang import cindex
 sys.path = sys.path[1:]
 
 def configure_libclang():
-    llvm_libdir = '/usr/lib/llvm-3.2/lib'
+    llvm_libdirs = ['/usr/lib/llvm-3.2/lib']
 
-    libdir = llvm_libdir
-    cindex.Config.set_library_path(libdir)
+    try:
+        libdir = subprocess.check_output(['llvm-config', '--libdir']).decode('utf-8')
+        llvm_libdirs.insert(0, libdir)
+    except:
+        pass
 
-    files = glob.glob(os.path.join(libdir, 'libclang.so*'))
+    for d in llvm_libdirs:
+        if not os.path.exists(d):
+            continue
 
-    if len(files) != 0:
-        cindex.Config.set_library_file(files[0])
+        files = glob.glob(os.path.join(d, 'libclang.so*'))
+
+        if len(files) != 0:
+            cindex.Config.set_library_file(files[0])
+            return
 
 class Call:
     def __init__(self, cursor, decl):
