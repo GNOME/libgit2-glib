@@ -20,6 +20,7 @@
 
 #include "ggit-patch.h"
 #include "ggit-diff.h"
+#include "ggit-diff-delta.h"
 #include "ggit-error.h"
 #include "ggit-diff-options.h"
 
@@ -360,6 +361,22 @@ ggit_patch_get_num_lines_in_hunk (GgitPatch *patch,
 	g_return_val_if_fail (patch != NULL, FALSE);
 
 	return git_patch_num_lines_in_hunk (patch->patch, hunk);
+}
+
+/**
+ * ggit_patch_get_delta:
+ * @patch: a #GgitPatch.
+ *
+ * Get the diff delta corresponding to the patch.
+ *
+ * Returns: (transfer full): the #GgitDiffDelta of the patch.
+ */
+GgitDiffDelta *
+ggit_patch_get_delta (GgitPatch *patch)
+{
+	g_return_val_if_fail (patch != NULL, NULL);
+
+	return _ggit_diff_delta_wrap (git_patch_get_delta (patch->patch));
 }
 
 /* ex:set ts=8 noet: */

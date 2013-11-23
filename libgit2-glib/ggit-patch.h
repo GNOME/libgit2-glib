@@ -69,6 +69,8 @@ gint             ggit_patch_get_num_lines_in_hunk (
                                              GgitPatch      *patch,
                                              gsize           hunk);
 
+GgitDiffDelta   *ggit_patch_get_delta        (GgitPatch     *patch);
+
 G_END_DECLS
 
 #endif /* __GGIT_PATCH_H__ */
