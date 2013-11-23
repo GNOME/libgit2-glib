@@ -7,12 +7,12 @@ from clang import cindex
 sys.path = sys.path[1:]
 
 def configure_libclang():
-    llvm_libdirs = ['/usr/lib/llvm-3.2/lib']
+    llvm_libdirs = ['/usr/lib/llvm-3.2/lib', '/usr/lib64/llvm']
 
     try:
-        libdir = subprocess.check_output(['llvm-config', '--libdir']).decode('utf-8')
+        libdir = subprocess.check_output(['llvm-config', '--libdir']).decode('utf-8').strip()
         llvm_libdirs.insert(0, libdir)
-    except:
+    except OSError:
         pass
 
     for d in llvm_libdirs:
