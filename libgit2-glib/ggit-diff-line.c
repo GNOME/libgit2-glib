@@ -26,7 +26,7 @@
 struct _GgitDiffLine {
 	gint ref_count;
 
-	gchar origin;
+	GgitDiffLineType origin;
 	gint old_lineno;
 	gint new_lineno;
 	gint num_lines;
@@ -48,7 +48,7 @@ _ggit_diff_line_wrap (const git_diff_line *line)
 
 	gline = g_slice_new (GgitDiffLine);
 	gline->ref_count = 1;
-	gline->origin = line->origin;
+	gline->origin = (GgitDiffLineType)line->origin;
 	gline->old_lineno = line->old_lineno;
 	gline->new_lineno = line->new_lineno;
 	gline->content_len = line->content_len;
@@ -103,7 +103,7 @@ ggit_diff_line_unref (GgitDiffLine *line)
  *
  * Returns: the #GgitDiffLineType value.
  */
-gchar
+GgitDiffLineType
 ggit_diff_line_get_origin (GgitDiffLine *line)
 {
 	g_return_val_if_fail (line != NULL, 0);

@@ -28,19 +28,20 @@ G_BEGIN_DECLS
 #define GGIT_TYPE_DIFF_LINE       (ggit_diff_line_get_type ())
 #define GGIT_DIFF_LINE(obj)       ((GgitDiffLine *)obj)
 
-GType           ggit_diff_line_get_type           (void) G_GNUC_CONST;
+GType             ggit_diff_line_get_type           (void) G_GNUC_CONST;
 
-GgitDiffLine  *_ggit_diff_line_wrap               (const git_diff_line *line);
+GgitDiffLine     *_ggit_diff_line_wrap              (const git_diff_line *line);
 
-GgitDiffLine   *ggit_diff_line_ref                (GgitDiffLine        *line);
-void            ggit_diff_line_unref              (GgitDiffLine        *line);
+GgitDiffLine     *ggit_diff_line_ref                (GgitDiffLine        *line);
+void              ggit_diff_line_unref              (GgitDiffLine        *line);
 
-gchar           ggit_diff_line_get_origin         (GgitDiffLine        *line);
-gint            ggit_diff_line_get_old_lineno     (GgitDiffLine        *line);
-gint            ggit_diff_line_get_new_lineno     (GgitDiffLine        *line);
-gsize           ggit_diff_line_get_content_len    (GgitDiffLine        *line);
-gint64          ggit_diff_line_get_content_offset (GgitDiffLine        *line);
-const gchar    *ggit_diff_line_get_content        (GgitDiffLine        *line);
+GgitDiffLineType  ggit_diff_line_get_origin         (GgitDiffLine        *line);
+gint              ggit_diff_line_get_old_lineno     (GgitDiffLine        *line);
+gint              ggit_diff_line_get_new_lineno     (GgitDiffLine        *line);
+gint64            ggit_diff_line_get_content_offset (GgitDiffLine        *line);
+
+const guint8     *ggit_diff_line_get_content        (GgitDiffLine        *line,
+                                                     gsize               *length);
 
 G_END_DECLS
 
