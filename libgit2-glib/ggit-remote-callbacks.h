@@ -52,26 +52,31 @@ struct _GgitRemoteCallbacksClass
 	GObjectClass parent_class;
 
 	/* virtual methods */
-	gint (*progress)          (GgitRemoteCallbacks        *callbacks,
-	                           const gchar                *str,
-	                           gint                        len);
+	gboolean (*progress)          (GgitRemoteCallbacks        *callbacks,
+	                               const gchar                *str,
+	                               gint                        len,
+	                               GError                    **error);
 
-	gint (*completion)        (GgitRemoteCallbacks        *callbacks,
-	                           GgitRemoteCompletionType    type);
+	gboolean (*completion)        (GgitRemoteCallbacks        *callbacks,
+	                               GgitRemoteCompletionType    type,
+	                               GError                    **error);
 
-	gint (*credentials)       (GgitRemoteCallbacks        *callbacks,
-	                           GgitCred                  **cred,
-	                           const gchar                *url,
-	                           const gchar                *username_from_url,
-	                           guint                       allowed_types);
+	gboolean (*credentials)       (GgitRemoteCallbacks        *callbacks,
+	                               GgitCred                  **cred,
+	                               const gchar                *url,
+	                               const gchar                *username_from_url,
+	                               guint                       allowed_types,
+	                               GError                    **error);
 
-	gint (*transfer_progress) (GgitRemoteCallbacks        *callbacks,
-	                           GgitTransferProgress       *stats);
+	gboolean (*transfer_progress) (GgitRemoteCallbacks        *callbacks,
+	                               GgitTransferProgress       *stats,
+	                               GError                    **error);
 
-	gint (*update_tips)       (GgitRemoteCallbacks        *callbacks,
-	                           const gchar                *refname,
-	                           const GgitOId              *a,
-	                           const GgitOId              *b);
+	gboolean (*update_tips)       (GgitRemoteCallbacks        *callbacks,
+	                               const gchar                *refname,
+	                               const GgitOId              *a,
+	                               const GgitOId              *b,
+	                               GError                    **error);
 };
 
 GType                 ggit_remote_callbacks_get_type   (void) G_GNUC_CONST;

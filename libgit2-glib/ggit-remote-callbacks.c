@@ -59,7 +59,25 @@ progress_wrap (const char *str, int len, void *data)
 
 	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress != NULL)
 	{
-		return GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress (self, str, len);
+		GError *error = NULL;
+
+		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress (self,
+		                                                      str,
+		                                                      len,
+		                                                      &error))
+		{
+			return GIT_OK;
+		}
+		else
+		{
+			if (error)
+			{
+				giterr_set_str (GIT_ERROR, error->message);
+				g_error_free (error);
+			}
+
+			return GIT_ERROR;
+		}
 	}
 	else
 	{
@@ -74,7 +92,25 @@ completion_wrap (git_remote_completion_type type, void *data)
 
 	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion != NULL)
 	{
-		return GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion (self, (GgitRemoteCompletionType)type);
+		GError *error = NULL;
+		GgitRemoteCompletionType rt = (GgitRemoteCompletionType)type;
+
+		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion (self,
+		                                                        rt,
+		                                                        &error))
+		{
+			return GIT_OK;
+		}
+		else
+		{
+			if (error)
+			{
+				giterr_set_str (GIT_ERROR, error->message);
+				g_error_free (error);
+			}
+
+			return GIT_ERROR;
+		}
 	}
 	else
 	{
@@ -83,28 +119,48 @@ completion_wrap (git_remote_completion_type type, void *data)
 }
 
 static int
-credentials_wrap (git_cred **cred, const char *url, const char *username_from_url, unsigned int allowed_types, void *data)
+credentials_wrap (git_cred     **cred,
+                  const char    *url,
+                  const char    *username_from_url,
+                  unsigned int   allowed_types,
+                  void          *data)
 {
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
 
 	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials != NULL)
 	{
 		GgitCred *mcred = NULL;
-		gint ret;
+		GError *error = NULL;
 
-		ret = GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials (self, &mcred, url, username_from_url, allowed_types);
-
-		if (mcred != NULL)
+		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials (self,
+		                                                         &mcred,
+		                                                         url,
+		                                                         username_from_url,
+		                                                         allowed_types,
+		                                                         &error))
 		{
-			*cred = _ggit_native_release (mcred);
-			g_object_unref (mcred);
+			if (mcred != NULL)
+			{
+				*cred = _ggit_native_release (mcred);
+				g_object_unref (mcred);
+			}
+			else
+			{
+				*cred = NULL;
+			}
+
+			return GIT_OK;
 		}
 		else
 		{
-			*cred = NULL;
-		}
+			if (error)
+			{
+				giterr_set_str (GIT_ERROR, error->message);
+				g_error_free (error);
+			}
 
-		return ret;
+			return GIT_ERROR;
+		}
 	}
 	else
 	{
@@ -120,13 +176,29 @@ transfer_progress_wrap (const git_transfer_progress *stats, void *data)
 	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress != NULL)
 	{
 		GgitTransferProgress *p;
+		GError *error = NULL;
 		gint ret;
 
 		p = _ggit_transfer_progress_wrap (stats);
 
-		ret = GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress (self, p);
-		ggit_transfer_progress_free (p);
+		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress (self,
+		                                                               p,
+		                                                               &error))
+		{
+			ret = GIT_OK;
+		}
+		else
+		{
+			if (error)
+			{
+				giterr_set_str (GIT_ERROR, error->message);
+				g_error_free (error);
+			}
 
+			ret = GIT_ERROR;
+		}
+
+		ggit_transfer_progress_free (p);
 		return ret;
 	}
 	else
@@ -136,7 +208,10 @@ transfer_progress_wrap (const git_transfer_progress *stats, void *data)
 }
 
 static int
-update_tips_wrap (const char *refname, const git_oid *a, const git_oid *b, void *data)
+update_tips_wrap (const char    *refname,
+                  const git_oid *a,
+                  const git_oid *b,
+                  void          *data)
 {
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
 
@@ -145,11 +220,29 @@ update_tips_wrap (const char *refname, const git_oid *a, const git_oid *b, void 
 		GgitOId *na;
 		GgitOId *nb;
 		gint ret;
+		GError *error = NULL;
 
 		na = _ggit_oid_wrap (a);
 		nb = _ggit_oid_wrap (b);
 
-		ret = GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips (self, refname, na, nb);
+		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips (self,
+		                                                         refname,
+		                                                         na,
+		                                                         nb,
+		                                                         &error))
+		{
+			ret = GIT_OK;
+		}
+		else
+		{
+			if (error)
+			{
+				giterr_set_str (GIT_ERROR, error->message);
+				g_error_free (error);
+			}
+
+			ret = GIT_ERROR;
+		}
 
 		ggit_oid_free (na);
 		ggit_oid_free (nb);
