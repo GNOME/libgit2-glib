@@ -365,7 +365,7 @@ ggit_repository_initable_init (GInitable    *initable,
 	                  repo,
 	                  (GDestroyNotify)git_repository_free);
 
-	if (!priv->workdir && !priv->is_bare)
+	if (success && !priv->workdir && !priv->is_bare)
 	{
 		priv->workdir = ggit_repository_get_workdir (GGIT_REPOSITORY (initable));
 	}
