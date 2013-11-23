@@ -31,8 +31,7 @@ struct _GgitDiffHunk {
 	gint old_lines;
 	gint new_start;
 	gint new_lines;
-	gsize header_len;
-	gchar header[128];
+	gchar *header;
 };
 
 G_DEFINE_BOXED_TYPE (GgitDiffHunk, ggit_diff_hunk,
@@ -52,10 +51,8 @@ _ggit_diff_hunk_wrap (const git_diff_hunk *hunk)
 	ghunk->old_lines = hunk->old_lines;
 	ghunk->new_start = hunk->new_start;
 	ghunk->new_lines = hunk->new_lines;
-	ghunk->header_len = hunk->header_len;
 
-	strncpy(ghunk->header, hunk->header, hunk->header_len);
-
+	ghunk->header = g_strndup (hunk->header, hunk->header_len);
 	return ghunk;
 }
 
@@ -92,6 +89,7 @@ ggit_diff_hunk_unref (GgitDiffHunk *hunk)
 
 	if (g_atomic_int_dec_and_test (&hunk->ref_count))
 	{
+		g_free (hunk->header);
 		g_slice_free (GgitDiffHunk, hunk);
 	}
 }
@@ -158,22 +156,6 @@ ggit_diff_hunk_get_new_lines (GgitDiffHunk *hunk)
 	g_return_val_if_fail (hunk != NULL, 0);
 
 	return hunk->new_lines;
-}
-
-/**
- * ggit_diff_hunk_get_header_len:
- * @hunk: a #GgitDiffHunk.
- *
- * Gets the header length.
- *
- * Returns: the header length.
- */
-gsize
-ggit_diff_hunk_get_header_len (GgitDiffHunk *hunk)
-{
-	g_return_val_if_fail (hunk != NULL, 0);
-
-	return hunk->header_len;
 }
 
 /**

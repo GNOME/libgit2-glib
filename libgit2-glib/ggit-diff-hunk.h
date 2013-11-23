@@ -39,7 +39,6 @@ gchar           ggit_diff_hunk_get_old_start      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_old_lines      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_new_start      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_new_lines      (GgitDiffHunk        *hunk);
-gsize           ggit_diff_hunk_get_header_len     (GgitDiffHunk        *hunk);
 const gchar    *ggit_diff_hunk_get_header         (GgitDiffHunk        *hunk);
 
 G_END_DECLS
