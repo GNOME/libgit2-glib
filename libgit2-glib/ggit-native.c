@@ -125,6 +125,23 @@ _ggit_native_set (gpointer self,
 	priv->destroy_notify = destroy_notify;
 }
 
+gpointer
+_ggit_native_release (gpointer self)
+{
+	GgitNativePrivate *priv;
+	gpointer ret;
+
+	g_return_val_if_fail (GGIT_IS_NATIVE (self), NULL);
+
+	priv = GGIT_NATIVE (self)->priv;
+
+	ret = priv->native;
+	priv->native = NULL;
+	priv->destroy_notify = NULL;
+
+	return ret;
+}
+
 void
 _ggit_native_set_destroy_func (gpointer       self,
                                GDestroyNotify destroy_notify)

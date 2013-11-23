@@ -64,6 +64,8 @@ void     _ggit_native_set              (gpointer       self,
                                         gpointer       native,
                                         GDestroyNotify destroy_notify);
 
+gpointer _ggit_native_release          (gpointer       self);
+
 void     _ggit_native_set_destroy_func (gpointer       self,
                                         GDestroyNotify destroy_notify);
 
