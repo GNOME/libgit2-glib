@@ -51,7 +51,16 @@ diff_print_cb (GgitDiffDelta    *delta,
                GgitDiffLine     *line,
                gpointer          user_data)
 {
-	g_print ("%s", ggit_diff_line_get_content (line));
+	const guint8 *content;
+	gsize len;
+	gchar *s;
+
+	content = ggit_diff_line_get_content (line, &len);
+	s = g_strndup (content, len);
+
+	g_print ("%s", s);
+	g_free (s);
+
 	return 0;
 }
 
