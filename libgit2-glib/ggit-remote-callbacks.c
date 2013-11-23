@@ -96,7 +96,8 @@ credentials_wrap (git_cred **cred, const char *url, const char *username_from_ur
 
 		if (mcred != NULL)
 		{
-			*cred = _ggit_native_get (mcred);
+			*cred = _ggit_native_release (mcred);
+			g_object_unref (mcred);
 		}
 		else
 		{
