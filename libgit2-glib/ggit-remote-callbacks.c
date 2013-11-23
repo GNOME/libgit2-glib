@@ -270,7 +270,11 @@ update_tips_wrap (const char    *refname,
 static void
 ggit_remote_callbacks_init (GgitRemoteCallbacks *self)
 {
+	git_remote_callbacks gcallbacks = GIT_REMOTE_CALLBACKS_INIT;
+
 	self->priv = GGIT_REMOTE_CALLBACKS_GET_PRIVATE (self);
+
+	self->priv->native = gcallbacks;
 
 	self->priv->native.progress = progress_wrap;
 	self->priv->native.completion = completion_wrap;
