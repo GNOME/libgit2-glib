@@ -144,22 +144,6 @@ ggit_diff_line_get_new_lineno (GgitDiffLine *line)
 }
 
 /**
- * ggit_diff_line_get_content_len:
- * @line: a #GgitDiffLine.
- *
- * Gets the content length.
- *
- * Returns: the content length.
- */
-gsize
-ggit_diff_line_get_content_len (GgitDiffLine *line)
-{
-	g_return_val_if_fail (line != NULL, 0);
-
-	return line->content_len;
-}
-
-/**
  * ggit_diff_line_get_content_offset:
  * @line: a #GgitDiffLine.
  *
@@ -178,17 +162,24 @@ ggit_diff_line_get_content_offset (GgitDiffLine *line)
 /**
  * ggit_diff_line_get_content:
  * @line: a #GgitDiffLine.
+ * @length: (out): the number of returned bytes.
  *
- * Gets the content.
+ * Gets the content in bytes.
  *
- * Returns: the content.
+ * Returns: (array length=length): the content in bytes.
  */
-const gchar *
-ggit_diff_line_get_content (GgitDiffLine *line)
+const guint8 *
+ggit_diff_line_get_content (GgitDiffLine *line,
+                            gsize        *length)
 {
 	g_return_val_if_fail (line != NULL, 0);
 
-	return line->content;
+	if (length)
+	{
+		*length = line->content_len;
+	}
+
+	return (const guint8 *)line->content;
 }
 
 /* ex:set ts=8 noet: */
