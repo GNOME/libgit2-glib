@@ -238,7 +238,7 @@ ggit_tree_builder_insert (GgitTreeBuilder  *builder,
 	                              _ggit_native_get (builder),
 	                              filename,
 	                              _ggit_oid_get_oid (oid),
-	                              file_mode);
+	                              (git_filemode_t)file_mode);
 
 	if (ret != GIT_OK)
 	{

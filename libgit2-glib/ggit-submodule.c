@@ -300,7 +300,7 @@ ggit_submodule_get_ignore (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return git_submodule_ignore (submodule->submodule);
+	return (GgitSubmoduleIgnore)git_submodule_ignore (submodule->submodule);
 }
 
 /**
@@ -325,7 +325,8 @@ ggit_submodule_set_ignore (GgitSubmodule       *submodule,
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return git_submodule_set_ignore (submodule->submodule, ignore);
+	return (GgitSubmoduleIgnore)git_submodule_set_ignore (submodule->submodule,
+	                                                      (git_submodule_ignore_t)ignore);
 }
 
 /**
@@ -341,7 +342,7 @@ ggit_submodule_get_update (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return git_submodule_update (submodule->submodule);
+	return (GgitSubmoduleUpdate)git_submodule_update (submodule->submodule);
 }
 
 /**
@@ -364,7 +365,8 @@ ggit_submodule_set_update (GgitSubmodule       *submodule,
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return git_submodule_set_update (submodule->submodule, update);
+	return (GgitSubmoduleUpdate)git_submodule_set_update (submodule->submodule,
+	                                                      (git_submodule_update_t)update);
 }
 
 /**

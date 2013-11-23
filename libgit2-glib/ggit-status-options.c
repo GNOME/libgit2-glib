@@ -109,7 +109,7 @@ ggit_status_options_new (GgitStatusOption   options,
 	status_options = g_slice_new (GgitStatusOptions);
 
 	gstatus_options.flags = options;
-	gstatus_options.show = show;
+	gstatus_options.show = (git_status_show_t)show;
 
 	ggit_utils_get_git_strarray_from_str_array (pathspec,
 	                                            &gstatus_options.pathspec);

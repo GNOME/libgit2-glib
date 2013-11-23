@@ -253,7 +253,7 @@ ggit_config_add_file (GgitConfig      *config,
 	path = g_file_get_path (file);
 	ret = git_config_add_file_ondisk (_ggit_native_get (config),
 	                                  path,
-	                                  level,
+	                                  (git_config_level_t)level,
 	                                  force);
 	g_free (path);
 

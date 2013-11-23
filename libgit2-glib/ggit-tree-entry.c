@@ -104,7 +104,7 @@ ggit_tree_entry_get_file_mode (GgitTreeEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, 0);
 
-	return git_tree_entry_filemode (entry->entry);
+	return (GgitFileMode)git_tree_entry_filemode (entry->entry);
 }
 
 /**

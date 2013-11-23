@@ -255,7 +255,7 @@ ggit_tree_walk (GgitTree              *tree,
 	info.user_data = user_data;
 
 	ret = git_tree_walk (_ggit_native_get (tree),
-	                     mode,
+	                     (git_treewalk_mode)mode,
 	                     (git_treewalk_cb)walk_callback_wrapper,
 	                     &info);
 

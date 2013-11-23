@@ -104,11 +104,11 @@ ggit_merge_tree_options_new (GgitMergeTreeFlags        flags,
 
 	merge_options = g_slice_new (GgitMergeTreeOptions);
 
-	gmerge_options.flags = flags;
+	gmerge_options.flags = (git_merge_tree_flag_t)flags;
 	gmerge_options.rename_threshold = rename_threshold;
 	gmerge_options.target_limit = target_limit;
 	gmerge_options.metric = _ggit_diff_similarity_metric_get_similarity_metric (metric);
-	gmerge_options.automerge_flags = automerge_mode;
+	gmerge_options.automerge_flags = (git_merge_automerge_flags)automerge_mode;
 
 	merge_options->merge_options = gmerge_options;
 

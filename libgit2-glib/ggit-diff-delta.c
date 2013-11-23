@@ -49,7 +49,7 @@ _ggit_diff_delta_wrap (const git_diff_delta *delta)
 	gdelta->ref_count = 1;
 	gdelta->old_file = _ggit_diff_file_wrap (&delta->old_file);
 	gdelta->new_file = _ggit_diff_file_wrap (&delta->new_file);
-	gdelta->status = delta->status;
+	gdelta->status = (GgitDeltaType)delta->status;
 	gdelta->similarity = delta->similarity;
 	gdelta->flags = delta->flags;
 

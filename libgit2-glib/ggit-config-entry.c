@@ -125,7 +125,7 @@ ggit_config_entry_get_level (GgitConfigEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, 0);
 
-	return entry->entry->level;
+	return (GgitConfigLevel)entry->entry->level;
 }
 
 /* ex:set ts=8 noet: */
