@@ -176,10 +176,10 @@ ggit_remote_callbacks_init (GgitRemoteCallbacks *self)
 	self->priv->native.payload = self;
 }
 
-const git_remote_callbacks *
+git_remote_callbacks
 _ggit_remote_callbacks_get_native (GgitRemoteCallbacks *self)
 {
-	return &self->priv->native;
+	return self->priv->native;
 }
 
 /* ex:set ts=8 noet: */

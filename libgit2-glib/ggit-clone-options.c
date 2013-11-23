@@ -27,6 +27,7 @@
 struct _GgitCloneOptions
 {
 	git_clone_options clone_options;
+	GgitRemoteCallbacks *remote_callbacks;
 };
 
 G_DEFINE_BOXED_TYPE (GgitCloneOptions, ggit_clone_options,
@@ -65,11 +66,17 @@ ggit_clone_options_copy (GgitCloneOptions *clone_options)
 
 	gclone_options = &clone_options->clone_options;
 
-	new_clone_options = g_slice_new (GgitCloneOptions);
+	new_clone_options = g_slice_new0 (GgitCloneOptions);
 
 	gnew_clone_options.bare = gclone_options->bare;
 	gnew_clone_options.remote_name = g_strdup (gclone_options->remote_name);
 	gnew_clone_options.checkout_branch = g_strdup (gclone_options->checkout_branch);
+
+	if (clone_options->remote_callbacks)
+	{
+		new_clone_options->remote_callbacks = g_object_ref (clone_options->remote_callbacks);
+		gnew_clone_options.remote_callbacks = _ggit_remote_callbacks_get_native (new_clone_options->remote_callbacks);
+	}
 
 	new_clone_options->clone_options = gnew_clone_options;
 
@@ -92,6 +99,8 @@ ggit_clone_options_free (GgitCloneOptions *clone_options)
 	gclone_options = &clone_options->clone_options;
 	g_free ((gchar *)gclone_options->remote_name);
 	g_free ((gchar *)gclone_options->checkout_branch);
+
+	g_clear_object (&clone_options->remote_callbacks);
 
 	g_slice_free (GgitCloneOptions, clone_options);
 }
@@ -210,6 +219,48 @@ ggit_clone_options_set_checkout_branch (GgitCloneOptions *options,
 	g_return_if_fail (options != NULL);
 
 	options->clone_options.checkout_branch = g_strdup (checkout_branch);
+}
+
+/**
+ * ggit_clone_options_get_remote_callbacks:
+ * @options: a #GgitCloneOptions.
+ *
+ * Get the remote callbacks object or %NULL if not set.
+ *
+ * Returns: (transfer none): the remote callbacks or %NULL.
+ */
+GgitRemoteCallbacks *
+ggit_clone_options_get_remote_callbacks (GgitCloneOptions *options)
+{
+	g_return_val_if_fail (options != NULL, NULL);
+	return options->remote_callbacks;
+}
+
+/**
+ * ggit_clone_options_set_remote_callbacks:
+ * @options: a #GgitCloneOptions.
+ * @callbacks: (allow-none): a #GgitRemoteCallbacks or %NULL.
+ *
+ * Set the remote callbacks object.
+ */
+void
+ggit_clone_options_set_remote_callbacks (GgitCloneOptions    *options,
+                                         GgitRemoteCallbacks *callbacks)
+{
+	g_return_if_fail (options != NULL);
+
+	g_clear_object (&options->remote_callbacks);
+
+	if (callbacks != NULL)
+	{
+		options->remote_callbacks = g_object_ref (callbacks);
+		options->clone_options.remote_callbacks = _ggit_remote_callbacks_get_native (callbacks);
+	}
+	else
+	{
+		git_remote_callbacks i = GIT_REMOTE_CALLBACKS_INIT;
+		options->clone_options.remote_callbacks = i;
+	}
 }
 
 /* ex:set ts=8 noet: */
