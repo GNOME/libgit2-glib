@@ -285,11 +285,11 @@ typedef struct _GgitRemote GgitRemote;
 typedef struct _GgitRemoteHead GgitRemoteHead;
 
 /**
- * GgitRemoteCbs:
+ * GgitRemoteCallbacks:
  *
  * Represents a git remote callbacks.
  */
-typedef struct _GgitRemoteCbs GgitRemoteCbs;
+typedef struct _GgitRemoteCallbacks GgitRemoteCallbacks;
 
 /**
  * GgitRepository:

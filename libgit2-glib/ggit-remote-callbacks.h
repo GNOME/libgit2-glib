@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_REMOTE_CALLBACKS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REMOTE_CALLBACKS))
 #define GGIT_REMOTE_CALLBACKS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksClass))
 
-typedef struct _GgitRemoteCallbacks		GgitRemoteCallbacks;
 typedef struct _GgitRemoteCallbacksClass	GgitRemoteCallbacksClass;
 typedef struct _GgitRemoteCallbacksPrivate	GgitRemoteCallbacksPrivate;
 
@@ -85,6 +84,6 @@ git_remote_callbacks _ggit_remote_callbacks_get_native (GgitRemoteCallbacks *rem
 
 G_END_DECLS
 
-#endif /* __GGIT_REMOTE_CBS_H__ */
+#endif /* __GGIT_REMOTE_CALLBACKS_H__ */
 
 /* ex:set ts=8 noet: */
