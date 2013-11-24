@@ -20,12 +20,12 @@
     <xi:include href="xml/ggit-config-entry.xml"/>
     <xi:include href="xml/ggit-cred.xml"/>
     <xi:include href="xml/ggit-cred-plaintext.xml"/>
-    <xi:include href="xml/ggit-diff-list.xml"/>
+    <xi:include href="xml/ggit-diff.xml"/>
     <xi:include href="xml/ggit-diff-delta.xml"/>
     <xi:include href="xml/ggit-diff-file.xml"/>
+    <xi:include href="xml/ggit-diff-hunk.xml"/>
+    <xi:include href="xml/ggit-diff-line.xml"/>
     <xi:include href="xml/ggit-diff-options.xml"/>
-    <xi:include href="xml/ggit-diff-patch.xml"/>
-    <xi:include href="xml/ggit-diff-range.xml"/>
     <xi:include href="xml/ggit-error.xml"/>
     <xi:include href="xml/ggit-index.xml"/>
     <xi:include href="xml/ggit-index-entry.xml"/>
@@ -38,6 +38,7 @@
     <xi:include href="xml/ggit-object-factory.xml"/>
     <xi:include href="xml/ggit-object-factory-base.xml"/>
     <xi:include href="xml/ggit-oid.xml"/>
+    <xi:include href="xml/ggit-patch.xml"/>
     <xi:include href="xml/ggit-push.xml"/>
     <xi:include href="xml/ggit-ref.xml"/>
     <xi:include href="xml/ggit-reflog.xml"/>
