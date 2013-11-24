@@ -1,3 +1,20 @@
+News in 0.0.8
+-------------
+* Add ggit_patch_get_hunk
+* Added ggit_patch_get_delta
+* Add API to set remote callbacks in clone options
+* Add _ggit_native_release
+* Implement GgitRemoteCallbacks
+* Added coverage tool
+* Update enums
+* Rename _head_orphan to _head_unborn
+* Implemented branch enumerator
+* Added GgitRemoteHead
+* Add GgitDiffHunk
+* Add GgitDiffLine
+* Update to libgit2 0.20.0 api
+* Misc bugfixing
+
 News in 0.0.6
 -------------
 * Rename GgitDiff to GgitDiffList
