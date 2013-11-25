@@ -305,6 +305,11 @@ void                ggit_repository_get_ahead_behind  (GgitRepository        *re
                                                        gsize                 *behind,
                                                        GError               **error);
 
+GgitBlame          *ggit_repository_blame_file        (GgitRepository        *repository,
+                                                       GFile                 *file,
+                                                       GgitBlameOptions      *blame_options,
+                                                       GError               **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

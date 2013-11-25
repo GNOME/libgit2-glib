@@ -34,6 +34,8 @@
 #include "ggit-status-options.h"
 #include "ggit-tree-builder.h"
 #include "ggit-branch-enumerator.h"
+#include "ggit-blame.h"
+#include "ggit-blame-options.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -2346,6 +2348,50 @@ ggit_repository_create_index_entry_for_path (GgitRepository  *repository,
 	g_object_unref (f);
 
 	return ret;
+}
+
+/**
+ * ggit_repository_blame_file:
+ * @repository: a #GgitRepository.
+ * @file: the file to blame.
+ * @blame_options: (allow-none): blame options.
+ * @error: a #GError.
+ *
+ * Get a blame for a single file.
+ *
+ * Returns: (transfer full): a #GgitBlame.
+ *
+ **/
+GgitBlame *
+ggit_repository_blame_file (GgitRepository    *repository,
+                            GFile             *file,
+                            GgitBlameOptions  *blame_options,
+                            GError           **error)
+{
+	git_blame *blame;
+	gchar *path;
+	int ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (G_IS_FILE (file), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	path = g_file_get_relative_path (repository->priv->workdir, file);
+
+	ret = git_blame_file (&blame,
+	                      _ggit_native_get (repository),
+	                      path,
+	                      _ggit_blame_options_get_blame_options (blame_options));
+
+	g_free (path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_blame_wrap (blame);
 }
 
 /* ex:set ts=8 noet: */
