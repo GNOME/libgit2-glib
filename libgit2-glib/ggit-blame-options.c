@@ -150,10 +150,8 @@ ggit_blame_options_get_newest_commit (GgitBlameOptions *blame_options)
 	{
 		return NULL;
 	}
-	else
-	{
-		return _ggit_oid_wrap (&blame_options->blame_options.newest_commit);
-	}
+
+	return _ggit_oid_wrap (&blame_options->blame_options.newest_commit);
 }
 
 /**
@@ -177,10 +175,8 @@ ggit_blame_options_set_newest_commit (GgitBlameOptions *blame_options,
 	{
 		blame_options->blame_options.newest_commit = zero;
 	}
-	else
-	{
-		blame_options->blame_options.newest_commit = *_ggit_oid_get_oid (oid);
-	}
+
+	blame_options->blame_options.newest_commit = *_ggit_oid_get_oid (oid);
 }
 
 /**
@@ -202,10 +198,8 @@ ggit_blame_options_get_oldest_commit (GgitBlameOptions *blame_options)
 	{
 		return NULL;
 	}
-	else
-	{
-		return _ggit_oid_wrap (&blame_options->blame_options.oldest_commit);
-	}
+
+	return _ggit_oid_wrap (&blame_options->blame_options.oldest_commit);
 }
 
 /**
@@ -230,10 +224,8 @@ ggit_blame_options_set_oldest_commit (GgitBlameOptions *blame_options,
 	{
 		blame_options->blame_options.oldest_commit = zero;
 	}
-	else
-	{
-		blame_options->blame_options.oldest_commit = *_ggit_oid_get_oid (oid);
-	}
+
+	blame_options->blame_options.oldest_commit = *_ggit_oid_get_oid (oid);
 }
 
 /**
@@ -254,10 +246,8 @@ ggit_blame_options_get_minimum_line (GgitBlameOptions *blame_options)
 	{
 		return 1;
 	}
-	else
-	{
-		return blame_options->blame_options.min_line;
-	}
+
+	return blame_options->blame_options.min_line;
 }
 
 /**
@@ -295,10 +285,8 @@ ggit_blame_options_get_maximum_line (GgitBlameOptions *blame_options)
 	{
 		return 1;
 	}
-	else
-	{
-		return blame_options->blame_options.max_line;
-	}
+
+	return blame_options->blame_options.max_line;
 }
 
 /**
@@ -340,10 +328,8 @@ ggit_blame_options_get_minimum_match_characters (GgitBlameOptions *blame_options
 	{
 		return 20;
 	}
-	else
-	{
-		return blame_options->blame_options.min_match_characters;
-	}
+
+	return blame_options->blame_options.min_match_characters;
 }
 
 /**
