@@ -21,6 +21,7 @@
 #include "ggit-blame.h"
 #include "ggit-oid.h"
 #include "ggit-signature.h"
+#include "ggit-error.h"
 
 struct _GgitBlameHunk
 {
@@ -338,4 +339,49 @@ ggit_blame_get_hunk_by_index (GgitBlame *blame,
 
 	return ggit_blame_hunk_wrap (git_blame_get_hunk_byindex (_ggit_native_get (blame),
 	                                                         idx));
-} 
+}
+
+/**
+ * ggit_blame_from_buffer:
+ * @blame: a #GgitBlame.
+ * @buffer: (array length=buffer_length): the contents of the file.
+ * @buffer_length: the length of the buffer.
+ * @error: a #GError.
+ *
+ * Get blame data for a file that has been modified in memory. @blame is a
+ * pre-calculated blame for the in-odb history of the file. This means that once
+ * a file blame is completed (which can be expensitve), updating the buffer
+ * blame is very fast.
+ *
+ * Lines that differ between the buffer and the committed version are marked as
+ * having a zero id for their #ggit_blame_hunk_get_final_commit_id.
+ *
+ * Returns: (transfer full): a #GgitBlame.
+ *
+ **/
+GgitBlame *
+ggit_blame_from_buffer (GgitBlame       *blame,
+                        guint8 const    *buffer,
+                        gsize            buffer_length,
+                        GError         **error)
+{
+	git_blame *gblame;
+	int ret;
+
+	g_return_val_if_fail (GGIT_IS_BLAME (blame), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_blame_buffer (&gblame,
+	                        _ggit_native_get (blame),
+	                        (const char *)buffer,
+	                        buffer_length);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_blame_wrap (gblame);
+}
+

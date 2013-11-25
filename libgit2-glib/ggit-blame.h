@@ -82,6 +82,11 @@ GgitBlameHunk *ggit_blame_get_hunk_by_line  (GgitBlame *blame,
 GgitBlameHunk *ggit_blame_get_hunk_by_index (GgitBlame *blame,
                                              guint32    idx);
 
+GgitBlame     *ggit_blame_from_buffer (GgitBlame       *blame,
+                                       const guint8    *buffer,
+                                       gsize            buffer_length,
+                                       GError         **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_BLAME_H__ */
