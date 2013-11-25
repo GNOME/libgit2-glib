@@ -363,6 +363,13 @@ typedef struct _GgitTreeEntry GgitTreeEntry;
 typedef struct _GgitTreeBuilder GgitTreeBuilder;
 
 /**
+ * GgitBlameOptions:
+ *
+ * Represents blame options.
+ */
+typedef struct _GgitBlameOptions GgitBlameOptions;
+
+/**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
  * @GGIT_BRANCH_REMOTE: specifies a remote branch.
@@ -380,6 +387,19 @@ typedef enum
 	GGIT_CAP_THREADS = 1 << 0,
 	GGIT_CAP_HTTPS   = 1 << 1
 } GgitCapFlags;
+
+
+/**
+ * GgitBlameFlags:
+ * @GGIT_BLAME_NORMAL: Normal blame, the default.
+ * @GGIT_BLAME_TRACK_COPIES_SAME_FILE: Track lines that have moved within a file
+ *                                     (like git blame -M)
+ */
+typedef enum
+{
+	GGIT_BLAME_NORMAL                 = 0,
+	GGIT_BLAME_TRACK_COPIES_SAME_FILE = 1 << 0,
+} GgitBlameFlags;
 
 /**
  * GgitConfigLevel:

@@ -18,6 +18,7 @@ libgit2_glib_1_0_la_LDFLAGS =				\
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 INST_H_FILES =				\
+	ggit-blame-options.h		\
 	ggit-blob.h			\
 	ggit-blob-output-stream.h	\
 	ggit-branch.h			\
@@ -73,6 +74,7 @@ NOINST_H_FILES =			\
 	ggit-utils.h
 
 C_FILES =				\
+	ggit-blame-options.c		\
 	ggit-blob.c			\
 	ggit-blob-output-stream.c	\
 	ggit-branch.c			\
