@@ -50,7 +50,7 @@ _ggit_patch_wrap (git_patch *patch)
  * ggit_patch_ref:
  * @patch: a #GgitPatch.
  *
- * Atomically increments the reference count of @entry by one.
+ * Atomically increments the reference count of @patch by one.
  * This function is MT-safe and may be called from any thread.
  *
  * Returns: (transfer none): a #GgitPatch.
@@ -69,8 +69,8 @@ ggit_patch_ref (GgitPatch *patch)
  * ggit_patch_unref:
  * @patch: a #GgitPatch.
  *
- * Atomically decrements the reference count of @entry by one.
- * If the reference count drops to 0, @entry is freed.
+ * Atomically decrements the reference count of @patch by one.
+ * If the reference count drops to 0, @patch is freed.
  */
 void
 ggit_patch_unref (GgitPatch *patch)

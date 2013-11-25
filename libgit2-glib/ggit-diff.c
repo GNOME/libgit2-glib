@@ -1,5 +1,5 @@
 /*
- * ggit-list.c
+ * ggit-diff.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2012 - Garrett Regier
@@ -445,7 +445,7 @@ ggit_diff_print (GgitDiff              *diff,
  * ggit_diff_get_num_deltas:
  * @diff: a #GgitDiff.
  *
- * Get the number of deltas in the diff list.
+ * Get the number of deltas in the diff.
  *
  * Returns: the number of deltas.
  *
