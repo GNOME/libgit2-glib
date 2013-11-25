@@ -29,7 +29,7 @@ struct _GgitBlameOptions
 G_DEFINE_BOXED_TYPE (GgitBlameOptions, ggit_blame_options,
                      ggit_blame_options_copy, ggit_blame_options_free);
 
-const git_blame_options *
+git_blame_options *
 _ggit_blame_options_get_blame_options (GgitBlameOptions *blame_options)
 {
 	/* NULL is common for blame_options as it specifies to use the default
@@ -40,7 +40,7 @@ _ggit_blame_options_get_blame_options (GgitBlameOptions *blame_options)
 		return NULL;
 	}
 
-	return (const git_blame_options *)&blame_options->blame_options;
+	return &blame_options->blame_options;
 }
 
 /**
