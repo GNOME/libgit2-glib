@@ -315,6 +315,31 @@ ggit_diff_new_tree_to_workdir (GgitRepository   *repository,
 }
 
 /**
+ * ggit_diff_find_similar:
+ * @diff: the #GgitDiff to work on.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Transform a @diff marking file renames, copies, etc.
+ */
+void
+ggit_diff_find_similar (GgitDiff  *diff,
+                        GError   **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_DIFF (diff));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_diff_find_similar (_ggit_native_get (diff),
+	                             NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_diff_merge:
  * @onto: the #GgitDiff to merge into.
  * @from: the #GgitDiff to merge.

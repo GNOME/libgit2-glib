@@ -81,6 +81,9 @@ GgitDiff      *ggit_diff_new_tree_to_workdir       (GgitRepository        *repos
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
 
+void           ggit_diff_find_similar              (GgitDiff              *diff,
+                                                    GError               **error);
+
 void           ggit_diff_merge                     (GgitDiff              *onto,
                                                     GgitDiff              *from,
                                                     GError               **error);
