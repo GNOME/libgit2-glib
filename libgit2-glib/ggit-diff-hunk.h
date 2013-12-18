@@ -35,7 +35,7 @@ GgitDiffHunk  *_ggit_diff_hunk_wrap               (const git_diff_hunk *hunk);
 GgitDiffHunk   *ggit_diff_hunk_ref                (GgitDiffHunk        *hunk);
 void            ggit_diff_hunk_unref              (GgitDiffHunk        *hunk);
 
-gchar           ggit_diff_hunk_get_old_start      (GgitDiffHunk        *hunk);
+gint            ggit_diff_hunk_get_old_start      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_old_lines      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_new_start      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_new_lines      (GgitDiffHunk        *hunk);

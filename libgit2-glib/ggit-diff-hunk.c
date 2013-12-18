@@ -102,7 +102,7 @@ ggit_diff_hunk_unref (GgitDiffHunk *hunk)
  *
  * Returns: the starting line number in the old file.
  */
-gchar
+gint
 ggit_diff_hunk_get_old_start (GgitDiffHunk *hunk)
 {
 	g_return_val_if_fail (hunk != NULL, 0);
