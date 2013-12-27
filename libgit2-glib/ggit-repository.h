@@ -310,6 +310,12 @@ GgitBlame          *ggit_repository_blame_file        (GgitRepository        *re
                                                        GgitBlameOptions      *blame_options,
                                                        GError               **error);
 
+const gchar        *ggit_repository_get_attribute     (GgitRepository           *repository,
+                                                       const gchar              *path,
+                                                       const gchar              *name,
+                                                       GgitAttributeCheckFlags   flags,
+                                                       GError                  **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

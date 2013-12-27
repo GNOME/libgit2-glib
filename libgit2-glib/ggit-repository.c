@@ -2394,4 +2394,47 @@ ggit_repository_blame_file (GgitRepository    *repository,
 	return _ggit_blame_wrap (blame);
 }
 
+/**
+ * ggit_repository_get_attribute:
+ * @repository: a #GgitRepository.
+ * @path: the relative path to the file.
+ * @name: the name of the attribute.
+ * @flags: a #GgitAttributeCheckFlags.
+ * @error: a #GError.
+ *
+ * Get the attribute value of the specified attribute for the given file.
+ *
+ * Returns: the attribute value, or %NULL.
+ *
+ **/
+const gchar *
+ggit_repository_get_attribute (GgitRepository           *repository,
+                               const gchar              *path,
+                               const gchar              *name,
+                               GgitAttributeCheckFlags   flags,
+                               GError                  **error)
+{
+	const char *value;
+	int ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (path != NULL, NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_attr_get (&value,
+	                    _ggit_native_get (repository),
+	                    flags,
+	                    path,
+	                    name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return value;
+}
+
 /* ex:set ts=8 noet: */

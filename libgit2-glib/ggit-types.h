@@ -913,6 +913,26 @@ typedef enum {
 } GgitStatusShow;
 
 /**
+ * GgitAttributeCheckFlags:
+ * @GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX: check working directory, then index.
+ * @GGIT_ATTRIBUTE_CHECK_INDEX_THEN_FILE: check index, then working directory.
+ * @GGIT_ATTRIBUTE_CHECK_INDEX_ONLY: check only index.
+ * @GGIT_ATTRIBUTE_CHECK_NO_SYSTEM: ignore system wide attributes.
+ *
+ * Attribute check flags indicate the order in which to check for gitattributes.
+ * git core uses @GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX for all operations,
+ * except on checkout, where it uses @GGIT_ATTRIBUTE_CHECK_INDEX_THEN_FILE.
+ *
+ */
+typedef enum
+{
+	GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX = 0,
+	GGIT_ATTRIBUTE_CHECK_INDEX_THEN_FILE = 1 << 0,
+	GGIT_ATTRIBUTE_CHECK_INDEX_ONLY      = 1 << 1,
+	GGIT_ATTRIBUTE_CHECK_NO_SYSTEM       = 1 << 2,
+} GgitAttributeCheckFlags;
+
+/**
  * GgitConfigCallback:
  * @entry: a #GgitConfigEntry.
  * @user_data: (closure): user-supplied data.
