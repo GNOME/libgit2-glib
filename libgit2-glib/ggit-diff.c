@@ -189,12 +189,12 @@ ggit_diff_set_property (GObject      *object,
 
 	switch (prop_id)
 	{
-	case PROP_REPOSITORY:
-		self->priv->repository = g_value_dup_object (value);
-		break;
-	default:
+		case PROP_REPOSITORY:
+			self->priv->repository = g_value_dup_object (value);
+			break;
+		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+			break;
 	}
 }
 
@@ -208,12 +208,12 @@ ggit_diff_get_property (GObject    *object,
 
 	switch (prop_id)
 	{
-	case PROP_REPOSITORY:
-		g_value_set_object (value, self->priv->repository);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		break;
+		case PROP_REPOSITORY:
+			g_value_set_object (value, self->priv->repository);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
 	}
 }
 
