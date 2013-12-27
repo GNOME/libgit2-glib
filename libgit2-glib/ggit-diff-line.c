@@ -22,6 +22,7 @@
 #include <git2.h>
 
 #include "ggit-diff-line.h"
+#include "ggit-convert.h"
 
 struct _GgitDiffLine {
 	gint ref_count;
@@ -33,6 +34,9 @@ struct _GgitDiffLine {
 	gsize content_len;
 	gint64 content_offset;
 	const gchar *content;
+
+	gchar *text;
+	const gchar *encoding;
 };
 
 G_DEFINE_BOXED_TYPE (GgitDiffLine, ggit_diff_line,
@@ -40,7 +44,8 @@ G_DEFINE_BOXED_TYPE (GgitDiffLine, ggit_diff_line,
 
 
 GgitDiffLine *
-_ggit_diff_line_wrap (const git_diff_line *line)
+_ggit_diff_line_wrap (const git_diff_line *line,
+                      const gchar         *encoding)
 {
 	GgitDiffLine *gline;
 
@@ -54,6 +59,8 @@ _ggit_diff_line_wrap (const git_diff_line *line)
 	gline->content_len = line->content_len;
 	gline->content_offset = line->content_offset;
 	gline->content = line->content;
+	gline->encoding = encoding;
+	gline->text = NULL;
 
 	return gline;
 }
@@ -91,6 +98,7 @@ ggit_diff_line_unref (GgitDiffLine *line)
 
 	if (g_atomic_int_dec_and_test (&line->ref_count))
 	{
+		g_free (line->text);
 		g_slice_free (GgitDiffLine, line);
 	}
 }
@@ -180,6 +188,30 @@ ggit_diff_line_get_content (GgitDiffLine *line,
 	}
 
 	return (const guint8 *)line->content;
+}
+
+/**
+ * ggit_diff_line_get_text:
+ * @line: a #GgitDiffLine.
+ *
+ * Get the content of the diff line as UTF-8 encoded text.
+ *
+ * Returns: the content in utf-8 encoding.
+ *
+ **/
+const gchar *
+ggit_diff_line_get_text (GgitDiffLine *line)
+{
+	g_return_val_if_fail (line != NULL, NULL);
+
+	if (line->text == NULL)
+	{
+		line->text = ggit_convert_utf8 (line->content,
+		                                line->content_len,
+		                                line->encoding);
+	}
+
+	return line->text;
 }
 
 /* ex:set ts=8 noet: */

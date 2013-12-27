@@ -35,14 +35,14 @@ G_BEGIN_DECLS
 #define GGIT_DIFF_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF, GgitDiffClass))
 
 typedef struct _GgitDiffClass	GgitDiffClass;
+typedef struct _GgitDiffPrivate GgitDiffPrivate;
 
 struct _GgitDiff
 {
 	/*< private >*/
 	GgitNative parent;
 
-	/* priv padding */
-	gpointer priv;
+	GgitDiffPrivate *priv;
 };
 
 /**
@@ -58,9 +58,6 @@ struct _GgitDiffClass
 };
 
 GType          ggit_diff_get_type                  (void) G_GNUC_CONST;
-
-GgitDiff      *_ggit_diff_wrap                     (git_diff              *diff,
-                                                    gboolean               owned);
 
 GgitDiff      *ggit_diff_new_tree_to_tree          (GgitRepository        *repository,
                                                     GgitTree              *old_tree,

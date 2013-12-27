@@ -30,7 +30,8 @@ G_BEGIN_DECLS
 
 GType             ggit_diff_line_get_type           (void) G_GNUC_CONST;
 
-GgitDiffLine     *_ggit_diff_line_wrap              (const git_diff_line *line);
+GgitDiffLine     *_ggit_diff_line_wrap              (const git_diff_line *line,
+                                                     const gchar         *encoding);
 
 GgitDiffLine     *ggit_diff_line_ref                (GgitDiffLine        *line);
 void              ggit_diff_line_unref              (GgitDiffLine        *line);
@@ -42,6 +43,8 @@ gint64            ggit_diff_line_get_content_offset (GgitDiffLine        *line);
 
 const guint8     *ggit_diff_line_get_content        (GgitDiffLine        *line,
                                                      gsize               *length);
+
+const gchar      *ggit_diff_line_get_text           (GgitDiffLine        *line);
 
 G_END_DECLS
 

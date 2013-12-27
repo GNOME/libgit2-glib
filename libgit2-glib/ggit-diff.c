@@ -28,8 +28,20 @@
 #include "ggit-patch.h"
 #include "ggit-error.h"
 #include "ggit-repository.h"
+#include "ggit-diff-file.h"
+
+#define GGIT_DIFF_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_DIFF, GgitDiffPrivate))
+
+struct _GgitDiffPrivate
+{
+	GgitRepository *repository;
+	gchar *encoding;
+};
 
 typedef struct {
+	GgitDiff *diff;
+	const gchar *encoding;
+
 	gpointer user_data;
 
 	GgitDiffFileCallback file_cb;
@@ -38,6 +50,12 @@ typedef struct {
 } CallbackWrapperData;
 
 G_DEFINE_TYPE (GgitDiff, ggit_diff, GGIT_TYPE_NATIVE)
+
+enum
+{
+	PROP_0,
+	PROP_REPOSITORY
+};
 
 static gint
 ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
@@ -49,6 +67,36 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 	gint ret;
 
 	gdelta = _ggit_diff_delta_wrap (delta);
+
+	data->encoding = NULL;
+
+	if (data->diff != NULL)
+	{
+		GgitDiffFile *file;
+
+		if (ggit_diff_delta_get_status (gdelta) == GGIT_DELTA_DELETED)
+		{
+			file = ggit_diff_delta_get_old_file (gdelta);
+		}
+		else
+		{
+			file = ggit_diff_delta_get_new_file (gdelta);
+		}
+
+		if (file != NULL)
+		{
+			const gchar *path;
+
+			path = ggit_diff_file_get_path (file);
+
+			data->encoding =
+				ggit_repository_get_attribute (data->diff->priv->repository,
+			                                       path,
+			                                       "encoding",
+			                                       GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX,
+			                                       NULL);
+		}
+	}
 
 	ret = data->file_cb (gdelta, progress, data->user_data);
 
@@ -89,10 +137,20 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 	GgitDiffHunk *ghunk;
 	GgitDiffLine *gline;
 	gint ret;
+	const gchar *encoding = NULL;
+
+	if (data->encoding != NULL)
+	{
+		encoding = data->encoding;
+	}
+	else if (data->diff != NULL)
+	{
+		encoding = data->diff->priv->encoding;
+	}
 
 	gdelta = _ggit_diff_delta_wrap (delta);
 	ghunk = hunk == NULL ? NULL : _ggit_diff_hunk_wrap (hunk);
-	gline = line == NULL ? NULL : _ggit_diff_line_wrap (line);
+	gline = line == NULL ? NULL : _ggit_diff_line_wrap (line, encoding);
 
 	ret = data->line_cb (gdelta, ghunk, gline, data->user_data);
 
@@ -112,29 +170,117 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 }
 
 static void
+ggit_diff_finalize (GObject *object)
+{
+	GgitDiffPrivate *priv = GGIT_DIFF (object)->priv;
+
+	g_free (priv->encoding);
+
+	G_OBJECT_CLASS (ggit_diff_parent_class)->finalize (object);
+}
+
+static void
+ggit_diff_set_property (GObject      *object,
+                        guint         prop_id,
+                        const GValue *value,
+                        GParamSpec   *pspec)
+{
+	GgitDiff *self = GGIT_DIFF (object);
+
+	switch (prop_id)
+	{
+	case PROP_REPOSITORY:
+		self->priv->repository = g_value_dup_object (value);
+		break;
+	default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+ggit_diff_get_property (GObject    *object,
+                        guint       prop_id,
+                        GValue     *value,
+                        GParamSpec *pspec)
+{
+	GgitDiff *self = GGIT_DIFF (object);
+
+	switch (prop_id)
+	{
+	case PROP_REPOSITORY:
+		g_value_set_object (value, self->priv->repository);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		break;
+	}
+}
+
+static void
+ggit_diff_constructed (GObject *object)
+{
+	GgitDiffPrivate *priv = GGIT_DIFF (object)->priv;
+	GgitConfig *config = NULL;
+
+	if (priv->repository != NULL)
+	{
+		config = ggit_repository_get_config (priv->repository, NULL);
+	}
+
+	if (config != NULL)
+	{
+		const gchar *enc;
+
+		enc = ggit_config_get_string (config, "gui.encoding", NULL);
+
+		if (enc != NULL)
+		{
+			priv->encoding = g_strdup (enc);
+		}
+
+		g_object_unref (config);
+	}
+}
+
+static void
 ggit_diff_class_init (GgitDiffClass *klass)
 {
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = ggit_diff_finalize;
+	object_class->constructed = ggit_diff_constructed;
+
+	object_class->get_property = ggit_diff_get_property;
+	object_class->set_property = ggit_diff_set_property;
+
+	g_object_class_install_property (object_class,
+	                                 PROP_REPOSITORY,
+	                                 g_param_spec_object ("repository",
+	                                                      "Repository",
+	                                                      "Repository",
+	                                                      GGIT_TYPE_REPOSITORY,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY |
+	                                                      G_PARAM_STATIC_STRINGS));
+
+	g_type_class_add_private (object_class, sizeof (GgitDiffPrivate));
 }
 
 static void
 ggit_diff_init (GgitDiff *self)
 {
+	self->priv = GGIT_DIFF_GET_PRIVATE (self);
 }
 
-GgitDiff *
-_ggit_diff_wrap (git_diff *diff,
-                 gboolean  owned)
+static GgitDiff *
+_ggit_diff_wrap (GgitRepository *repository,
+                 git_diff       *diff)
 {
 	GgitDiff *gdiff;
 
-	gdiff = g_object_new (GGIT_TYPE_DIFF, NULL);
-	_ggit_native_set (gdiff, diff, NULL);
-
-	if (owned)
-	{
-		_ggit_native_set_destroy_func (gdiff,
-		                               (GDestroyNotify)git_diff_free);
-	}
+	gdiff = g_object_new (GGIT_TYPE_DIFF, "repository", repository, NULL);
+	_ggit_native_set (gdiff, diff, (GDestroyNotify)git_diff_free);
 
 	return gdiff;
 }
@@ -182,7 +328,7 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_wrap (diff, TRUE);
+	return _ggit_diff_wrap (repository, diff);
 }
 
 /**
@@ -228,7 +374,7 @@ ggit_diff_new_tree_to_index (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_wrap (diff, TRUE);
+	return _ggit_diff_wrap (repository, diff);
 }
 
 /**
@@ -270,7 +416,7 @@ ggit_diff_new_index_to_workdir (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_wrap (diff, TRUE);
+	return _ggit_diff_wrap (repository, diff);
 }
 
 /**
@@ -311,7 +457,7 @@ ggit_diff_new_tree_to_workdir (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return _ggit_diff_wrap (diff, TRUE);
+	return _ggit_diff_wrap (repository, diff);
 }
 
 /**
@@ -375,6 +521,8 @@ ggit_diff_foreach (GgitDiff              *diff,
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	wrapper_data.user_data = user_data;
+	wrapper_data.diff = diff;
+	wrapper_data.encoding = NULL;
 
 	if (file_cb != NULL)
 	{
@@ -429,6 +577,9 @@ ggit_diff_print (GgitDiff              *diff,
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	wrapper_data.user_data = user_data;
+	wrapper_data.diff = diff;
+	wrapper_data.encoding = NULL;
+
 	wrapper_data.line_cb = print_cb;
 
 	ret = git_diff_print (_ggit_native_get (diff), (git_diff_format_t)type,
@@ -506,6 +657,8 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
 	wrapper_data.user_data = user_data;
+	wrapper_data.diff = NULL;
+	wrapper_data.encoding = NULL;
 
 	if (file_cb != NULL)
 	{
@@ -583,6 +736,8 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
 	wrapper_data.user_data = user_data;
+	wrapper_data.diff = NULL;
+	wrapper_data.encoding = NULL;
 
 	if (file_cb != NULL)
 	{
