@@ -226,6 +226,13 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
  * Changes to the #GgitIndexEntry will be reflected in the index once written
  * back to disk using ggit_index_write().
  *
+ * @stage indicates the stage to search the file for. Stages are used in the
+ * index when merge conflicts occur, such that multiple versions of the same
+ * file can be represented in the index. Stage 0 is associated with the working
+ * tree, while stages 1 to 3 are associated with the various versions of the
+ * file in a merge conflict. The special value -1 can be used to match the first
+ * file encountered in any stage.
+ *
  * Returns: (transfer full): a #GgitIndexEntry or %NULL if it was not found.
  *
  **/
