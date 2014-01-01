@@ -232,7 +232,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
 GgitIndexEntry *
 ggit_index_entries_get_by_path (GgitIndexEntries *entries,
                                 GFile            *file,
-                                gboolean          stage)
+                                gint              stage)
 {
 	git_index *gidx;
 	const git_index_entry *entry;

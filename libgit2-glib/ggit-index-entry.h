@@ -45,7 +45,7 @@ GgitIndexEntry   *ggit_index_entries_get_by_index     (GgitIndexEntries  *entrie
 
 GgitIndexEntry   *ggit_index_entries_get_by_path      (GgitIndexEntries *entries,
                                                        GFile            *file,
-                                                       gboolean          stage);
+                                                       gint              stage);
 
 guint             ggit_index_entries_size             (GgitIndexEntries  *entries);
 
