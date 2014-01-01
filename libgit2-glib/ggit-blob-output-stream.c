@@ -39,7 +39,7 @@ struct _GgitBlobOutputStreamPrivate
 	GMutex reply_mutex;
 	GCond reply_cond;
 
-	gint written;
+	gssize written;
 
 	const gchar *writebuf;
 	gsize bufsize;
@@ -111,32 +111,24 @@ ggit_blob_output_stream_write (GOutputStream  *object,
 		return 0;
 	}
 
-	while (TRUE)
+	g_mutex_lock (&stream->priv->mutex);
+
+	if (g_cancellable_is_cancelled (cancellable))
 	{
-		g_mutex_lock (&stream->priv->mutex);
-
-		if (g_cancellable_is_cancelled (cancellable))
-		{
-			stream->priv->cancelled = TRUE;
-		}
-
-		stream->priv->writebuf = buffer;
-		stream->priv->bufsize = count;
-		stream->priv->written = 0;
-
-		g_cond_signal (&stream->priv->cond);
-		g_mutex_lock (&stream->priv->reply_mutex);
-		g_mutex_unlock (&stream->priv->mutex);
-		g_cond_wait (&stream->priv->reply_cond, &stream->priv->reply_mutex);
-
-		if (stream->priv->written == count || stream->priv->cancelled)
-		{
-			g_mutex_unlock (&stream->priv->reply_mutex);
-			break;
-		}
-
-		g_mutex_unlock (&stream->priv->reply_mutex);
+		stream->priv->cancelled = TRUE;
 	}
+
+	stream->priv->writebuf = buffer;
+	stream->priv->bufsize = count;
+	stream->priv->written = 0;
+
+	g_cond_signal (&stream->priv->cond);
+
+	g_mutex_lock (&stream->priv->reply_mutex);
+	g_mutex_unlock (&stream->priv->mutex);
+
+	g_cond_wait (&stream->priv->reply_cond, &stream->priv->reply_mutex);
+	g_mutex_unlock (&stream->priv->reply_mutex);
 
 	if (stream->priv->cancelled)
 	{
@@ -239,43 +231,38 @@ blob_chunk_cb (char   *content,
                void   *payload)
 {
 	GgitBlobOutputStream *stream = payload;
-	gint written = 0;
+	int written = 0;
 
-	// block until we got something to write
-	while (written == 0)
+	g_cond_wait (&stream->priv->cond, &stream->priv->mutex);
+
+	if (stream->priv->closing)
 	{
-		g_cond_wait (&stream->priv->cond, &stream->priv->mutex);
-
-		if (stream->priv->closing)
-		{
-			return 0;
-		}
-
-		if (stream->priv->cancelled)
-		{
-			return -1;
-		}
-
-		if (stream->priv->bufsize > maxlen)
-		{
-			stream->priv->written = maxlen;
-		}
-		else
-		{
-			stream->priv->written = stream->priv->bufsize;
-		}
-
-		if (stream->priv->written > 0)
-		{
-			memcpy (content, stream->priv->writebuf, stream->priv->written);
-			written = stream->priv->written;
-		}
-
-		g_mutex_lock (&stream->priv->reply_mutex);
-		g_cond_signal (&stream->priv->reply_cond);
-		g_mutex_unlock (&stream->priv->mutex);
-		g_mutex_unlock (&stream->priv->reply_mutex);
+		return 0;
 	}
+
+	if (stream->priv->cancelled)
+	{
+		return -1;
+	}
+
+	if (stream->priv->bufsize > maxlen)
+	{
+		stream->priv->written = maxlen;
+	}
+	else
+	{
+		stream->priv->written = stream->priv->bufsize;
+	}
+
+	if (stream->priv->written > 0)
+	{
+		memcpy (content, stream->priv->writebuf, stream->priv->written);
+		written = stream->priv->written;
+	}
+
+	g_mutex_lock (&stream->priv->reply_mutex);
+	g_cond_signal (&stream->priv->reply_cond);
+	g_mutex_unlock (&stream->priv->reply_mutex);
 
 	return written;
 }
