@@ -219,7 +219,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
  * Get a #GgitIndexEntry by index. Note that the returned #GgitIndexEntry is
  * _only_ valid as long as:
  *
- * 1) The associated index has been closed
+ * 1) The associated index has not been closed
  * 2) The entry has not been removed (see ggit_index_remove())
  * 3) The index has not been refreshed (see ggit_index_read())
  *
