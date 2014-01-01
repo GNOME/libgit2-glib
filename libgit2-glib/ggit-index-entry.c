@@ -20,6 +20,8 @@
 
 #include "ggit-index-entry.h"
 #include "ggit-index.h"
+#include "ggit-repository.h"
+
 #include <string.h>
 
 struct _GgitIndexEntries
@@ -244,13 +246,24 @@ ggit_index_entries_get_by_path (GgitIndexEntries *entries,
 	git_index *gidx;
 	const git_index_entry *entry;
 	gchar *path;
+	GgitRepository *repo;
+	GFile *wd;
 
 	g_return_val_if_fail (entries != NULL, NULL);
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
 	g_return_val_if_fail (stage >= 0 && stage <= 3, NULL);
 
+	repo = ggit_index_get_owner (entries->owner);
+
+	wd = ggit_repository_get_workdir (repo);
+	path = g_file_get_relative_path (wd, file);
+
+	g_object_unref (wd);
+	g_object_unref (repo);
+
+	g_return_val_if_fail (path != NULL, NULL);
+
 	gidx = _ggit_index_get_index (entries->owner);
-	path = g_file_get_path (file);
 	entry = git_index_get_bypath (gidx, path, stage);
 	g_free (path);
 
