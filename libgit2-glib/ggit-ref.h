@@ -62,6 +62,8 @@ GType           ggit_ref_get_type           (void) G_GNUC_CONST;
 
 GgitRef        *_ggit_ref_wrap              (git_reference  *ref);
 
+gboolean        ggit_ref_is_valid_name      (const gchar    *name);
+
 GgitOId        *ggit_ref_get_target         (GgitRef        *ref);
 
 const gchar    *ggit_ref_get_symbolic_target(GgitRef        *ref);

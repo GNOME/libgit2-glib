@@ -51,6 +51,30 @@ _ggit_ref_wrap (git_reference *ref)
 }
 
 /**
+ * ggit_ref_is_valid_name:
+ * @name: the name to validate.
+ *
+ * Check if the given @name is a valid name for a reference. Note that @name
+ * should be the full ref name (including prefixes).
+ *
+ * Valid toplevel names can contain only capital letters and underscores
+ * and must start and end with a letter (e.g. HEAD, ORIG_HEAD).
+ *
+ * Valid refs/ names may contain any characters, except '~', '^', ':', '\', '?',
+ * '[', '*', ".." and "@{", because they are interpreted by revparse.
+ *
+ * Returns: %TRUE if @name is valid, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_ref_is_valid_name (const gchar *name)
+{
+	g_return_val_if_fail (name != NULL, FALSE);
+
+	return git_reference_is_valid_name (name) == 1;
+}
+
+/**
  * ggit_ref_get_target:
  * @ref: a #GgitRef.
  *
