@@ -153,6 +153,22 @@ ggit_ref_get_name (GgitRef *ref)
 }
 
 /**
+ * ggit_ref_get_shorthand:
+ * @ref: a #GgitRef
+ *
+ * Gets the shorthand name of @ref.
+ *
+ * Returns: the shorthand name of a reference.
+ */
+const gchar *
+ggit_ref_get_shorthand (GgitRef *ref)
+{
+	g_return_val_if_fail (ref != NULL, NULL);
+
+	return git_reference_shorthand (_ggit_native_get (ref));
+}
+
+/**
  * ggit_ref_to_string:
  * @ref: a #GgitRef.
  *

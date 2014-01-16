@@ -71,6 +71,7 @@ const gchar    *ggit_ref_get_symbolic_target(GgitRef        *ref);
 GgitRefType     ggit_ref_get_reference_type (GgitRef        *ref);
 
 const gchar    *ggit_ref_get_name           (GgitRef        *ref);
+const gchar    *ggit_ref_get_shorthand      (GgitRef        *ref);
 const gchar    *ggit_ref_to_string          (GgitRef        *ref);
 
 GgitRef        *ggit_ref_resolve            (GgitRef        *ref,
