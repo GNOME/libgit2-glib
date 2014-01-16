@@ -106,6 +106,10 @@ GgitReflog     *ggit_ref_get_reflog         (GgitRef        *ref,
 void            ggit_ref_delete_reflog      (GgitRef        *ref,
                                              GError        **error);
 
+gboolean        ggit_ref_is_tag             (GgitRef        *ref);
+gboolean        ggit_ref_is_remote          (GgitRef        *ref);
+gboolean        ggit_ref_is_branch          (GgitRef        *ref);
+
 G_END_DECLS
 
 #endif /* __GGIT_REF_H__ */

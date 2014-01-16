@@ -526,4 +526,55 @@ ggit_ref_delete_reflog (GgitRef  *ref,
 	}
 }
 
+/**
+ * ggit_ref_is_tag:
+ * @ref: a #GgitRef.
+ *
+ * Check whether the reference is a tag.
+ *
+ * Returns: %TRUE if the reference is a tag, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_ref_is_tag (GgitRef *ref)
+{
+	g_return_val_if_fail (ref != NULL, FALSE);
+
+	return git_reference_is_tag (_ggit_native_get (ref));
+}
+
+/**
+ * ggit_ref_is_remote:
+ * @ref: a #GgitRef.
+ *
+ * Check whether the reference is a remote.
+ *
+ * Returns: %TRUE if the reference is a remote, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_ref_is_remote (GgitRef *ref)
+{
+	g_return_val_if_fail (ref != NULL, FALSE);
+
+	return git_reference_is_remote (_ggit_native_get (ref));
+}
+
+/**
+ * ggit_ref_is_branch:
+ * @ref: a #GgitRef.
+ *
+ * Check whether the reference is a branch.
+ *
+ * Returns: %TRUE if the reference is a branch, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_ref_is_branch (GgitRef *ref)
+{
+	g_return_val_if_fail (ref != NULL, FALSE);
+
+	return git_reference_is_branch (_ggit_native_get (ref));
+}
+
 /* ex:set ts=8 noet: */
