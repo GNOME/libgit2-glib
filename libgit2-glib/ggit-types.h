@@ -933,6 +933,19 @@ typedef enum
 } GgitAttributeCheckFlags;
 
 /**
+ * GgitPackbuilderStage:
+ * @GGIT_PACKBUILDER_STAGE_ADDING_OBJECTS: adding objects.
+ * @GGIT_PACKBUILDER_STAGE_DELTAFICATION: deltafication.
+ *
+ * Valid stages for pack building.
+ */
+typedef enum
+{
+	GGIT_PACKBUILDER_STAGE_ADDING_OBJECTS = 0,
+	GGIT_PACKBUILDER_STAGE_DELTAFICATION  = 1
+} GgitPackbuilderStage;
+
+/**
  * GgitConfigCallback:
  * @entry: a #GgitConfigEntry.
  * @user_data: (closure): user-supplied data.

@@ -204,28 +204,108 @@ ggit_push_add_refspec (GgitPush     *push,
 	}
 }
 
+typedef struct
+{
+	GgitPushProgress  *progress;
+	GError           **error;
+} PushProgressInfo;
+
+static gint
+packbuilder_progress_wrapper (gint     stage,
+                              guint    current,
+                              guint    total,
+                              gpointer payload)
+{
+	PushProgressInfo *info;
+	info = payload;
+
+	if (!ggit_push_progress_packbuilder_progress (info->progress,
+	                                              stage,
+	                                              current,
+	                                              total,
+	                                              info->error))
+	{
+		return GIT_ERROR;
+	}
+
+	return GIT_OK;
+}
+
+static gint
+transfer_progress_wrapper (guint    current,
+                           guint    total,
+                           gsize    bytes,
+                           gpointer payload)
+{
+	PushProgressInfo *info;
+	info = payload;
+
+	if (!ggit_push_progress_transfer_progress (info->progress,
+	                                           current,
+	                                           total,
+	                                           bytes,
+	                                           info->error))
+	{
+		return GIT_ERROR;
+	}
+
+	return GIT_OK;
+}
+
 /**
  * ggit_push_finish:
  * @push: a #GgitPush.
+ * @progress: (allow-none): a #GgitPushProgress, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Actually push all given refspecs.
  */
-void
-ggit_push_finish (GgitPush  *push,
-                  GError   **error)
+gboolean
+ggit_push_finish (GgitPush          *push,
+                  GgitPushProgress  *progress,
+                  GError           **error)
 {
 	gint ret;
+
+	PushProgressInfo info = {0,};
 
 	g_return_if_fail (GGIT_IS_PUSH (push));
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	info.progress = progress;
+	info.error = error;
+
+	if (progress != NULL)
+	{
+		git_push_set_callbacks (_ggit_native_get (push),
+		                        packbuilder_progress_wrapper,
+		                        &info,
+		                        transfer_progress_wrapper,
+		                        &info);
+	}
+
 	ret = git_push_finish (_ggit_native_get (push));
+
+	if (progress != NULL)
+	{
+		git_push_set_callbacks (_ggit_native_get (push),
+		                        NULL,
+		                        NULL,
+		                        NULL,
+		                        NULL);
+	}
 
 	if (ret != GIT_OK)
 	{
-		_ggit_error_set (error, ret);
+		if (error && *error == NULL)
+		{
+			_ggit_error_set (error, ret);
+		}
+
+		return FALSE;
 	}
+
+	return TRUE;
 }
 
 /**
