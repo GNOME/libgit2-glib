@@ -674,7 +674,7 @@ typedef struct
 	GRegex *regex;
 	GMatchInfo *ret;
 
-	const gchar *value;
+	gchar *value;
 
 	GgitConfigMatchCallback callback;
 	gpointer user_data;
@@ -698,7 +698,8 @@ match_foreach (const gchar *name,
 		}
 		else
 		{
-			info->value = value;
+			g_free (info->value);
+			info->value = g_strdup (value);
 
 			/* Semi arbitrary error */
 			return GGIT_ERROR_EXISTS;
@@ -719,10 +720,10 @@ match_foreach (const gchar *name,
  * contain the match information if the return value is not %NULL, otherwise
  * @error will be set.
  *
- * Returns: (allow-none): the value of that matched configuration
+ * Returns: (allow-none) (transfer full): the value of that matched configuration
  *
  **/
-const gchar *
+gchar *
 ggit_config_match (GgitConfig  *config,
                    GRegex      *regex,
                    GMatchInfo **match_info,

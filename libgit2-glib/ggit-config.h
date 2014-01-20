@@ -126,7 +126,7 @@ gboolean     ggit_config_foreach       (GgitConfig               *config,
                                         gpointer                  user_data,
                                         GError                  **error);
 
-const gchar *ggit_config_match         (GgitConfig               *config,
+gchar       *ggit_config_match         (GgitConfig               *config,
                                         GRegex                   *regex,
                                         GMatchInfo              **match_info,
                                         GError                  **error);
