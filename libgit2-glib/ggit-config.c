@@ -681,12 +681,19 @@ typedef struct
 } MatchInfo;
 
 static gint
-match_foreach (const gchar *name,
-               const gchar *value,
-               MatchInfo   *info)
+match_foreach (GgitConfigEntry *entry,
+               MatchInfo       *info)
 {
+	const gchar *name;
+
+	name = ggit_config_entry_get_name (entry);
+
 	if (g_regex_match (info->regex, name, (GRegexMatchFlags)0, &info->ret))
 	{
+		const gchar *value;
+
+		value = ggit_config_entry_get_value (entry);
+
 		if (info->callback)
 		{
 			gint ret;
