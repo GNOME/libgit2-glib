@@ -69,7 +69,11 @@ ggit_push_progress_transfer_progress (GgitPushProgress  *push_progress,
 
 	if (iface->transfer_progress != NULL)
 	{
-		return iface->transfer_progress (push_progress, current, total, bytes, error);
+		return iface->transfer_progress (push_progress,
+		                                 current,
+		                                 total,
+		                                 bytes,
+		                                 error);
 	}
 
 	return TRUE;
