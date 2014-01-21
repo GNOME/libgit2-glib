@@ -269,8 +269,8 @@ ggit_push_finish (GgitPush          *push,
 
 	PushProgressInfo info = {0,};
 
-	g_return_if_fail (GGIT_IS_PUSH (push));
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (GGIT_IS_PUSH (push), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	info.progress = progress;
 	info.error = error;
