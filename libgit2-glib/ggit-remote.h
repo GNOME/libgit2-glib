@@ -25,11 +25,34 @@
 #include <git2.h>
 
 #include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-native.h>
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REMOTE        (ggit_remote_get_type ())
-#define GGIT_REMOTE(obj)        ((GgitRemote *)obj)
+#define GGIT_TYPE_REMOTE		(ggit_remote_get_type ())
+#define GGIT_REMOTE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE, GgitRemote))
+#define GGIT_REMOTE_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE, GgitRemote const))
+#define GGIT_REMOTE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REMOTE, GgitRemoteClass))
+#define GGIT_IS_REMOTE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REMOTE))
+#define GGIT_IS_REMOTE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REMOTE))
+#define GGIT_REMOTE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REMOTE, GgitRemoteClass))
+
+typedef struct _GgitRemoteClass		GgitRemoteClass;
+
+struct _GgitRemote
+{
+	/*< private >*/
+	GgitNative parent;
+
+	/*< priv padding >*/
+	gpointer priv;
+};
+
+struct _GgitRemoteClass
+{
+	/*< private >*/
+	GgitNativeClass parent_class;
+};
 
 #define GGIT_TYPE_REMOTE_HEAD   (ggit_remote_head_get_type ())
 #define GGIT_REMOTE_HEAD(obj)        ((GgitRemoteHead *)obj)
@@ -45,15 +68,12 @@ GgitOId           *ggit_remote_head_get_local_oid       (GgitRemoteHead *remote_
 gboolean           ggit_remote_head_is_local            (GgitRemoteHead *remote_head);
 const gchar       *ggit_remote_head_get_name            (GgitRemoteHead *remote_head);
 
-GgitRemote       *_ggit_remote_wrap                     (const git_remote *remote);
+GgitRemote       *_ggit_remote_wrap                     (git_remote     *remote);
 
 GgitRemote        *ggit_remote_new                      (GgitRepository   *repository,
                                                          const gchar      *url,
                                                          const gchar      *fetch_spec,
                                                          GError          **error);
-
-GgitRemote        *ggit_remote_ref                      (GgitRemote       *remote);
-void               ggit_remote_unref                    (GgitRemote       *remote);
 
 void               ggit_remote_save                     (GgitRemote       *remote,
                                                          GError          **error);

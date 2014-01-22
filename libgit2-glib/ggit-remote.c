@@ -26,13 +26,6 @@
 #include "ggit-ref-spec.h"
 #include "ggit-repository.h"
 
-
-struct _GgitRemote
-{
-	git_remote *remote;
-	gint ref_count;
-};
-
 struct _GgitRemoteHead
 {
 	gboolean is_local;
@@ -43,7 +36,7 @@ struct _GgitRemoteHead
 	gint ref_count;
 };
 
-G_DEFINE_BOXED_TYPE (GgitRemote, ggit_remote, ggit_remote_ref, ggit_remote_unref)
+G_DEFINE_TYPE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
 G_DEFINE_BOXED_TYPE (GgitRemoteHead, ggit_remote_head, ggit_remote_head_ref, ggit_remote_head_unref)
 
 static GgitRemoteHead *
@@ -142,15 +135,36 @@ ggit_remote_head_get_name (GgitRemoteHead *remote_head)
 }
 
 GgitRemote *
-_ggit_remote_wrap (const git_remote *remote)
+_ggit_remote_wrap (git_remote *remote)
 {
-	GgitRemote *glib_remote;
+	return g_object_new (GGIT_TYPE_REMOTE, "native", remote, NULL);
+}
 
-	glib_remote = g_slice_new (GgitRemote);
-	glib_remote->remote = (git_remote *)remote;
-	glib_remote->ref_count = 1;
+static void
+ggit_remote_dispose (GObject *object)
+{
+	git_remote *native = _ggit_native_get (object);
 
-	return glib_remote;
+	if (native != NULL)
+	{
+		git_remote_free (native);
+		_ggit_native_set (object, NULL, NULL);
+	}
+
+	G_OBJECT_CLASS (ggit_remote_parent_class)->dispose (object);
+}
+
+static void
+ggit_remote_class_init (GgitRemoteClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->dispose = ggit_remote_dispose;
+}
+
+static void
+ggit_remote_init (GgitRemote *self)
+{
 }
 
 /**
@@ -191,44 +205,6 @@ ggit_remote_new (GgitRepository   *repository,
 }
 
 /**
- * ggit_remote_ref:
- * @remote: a #GgitRemote.
- *
- * Atomically increments the reference count of @remote by one.
- * This function is MT-safe and may be called from any thread.
- *
- * Returns: (transfer none): the passed in #GgitRemote.
- */
-GgitRemote *
-ggit_remote_ref (GgitRemote *remote)
-{
-	g_return_val_if_fail (remote != NULL, NULL);
-
-	g_atomic_int_inc (&remote->ref_count);
-
-	return remote;
-}
-
-/**
- * ggit_remote_unref:
- * @remote: a #GgitRemote.
- *
- * Atomically decrements the reference count of @remote by one.
- * If the reference count drops to 0, @remote is freed.
- */
-void
-ggit_remote_unref (GgitRemote *remote)
-{
-	g_return_if_fail (remote != NULL);
-
-	if (g_atomic_int_dec_and_test (&remote->ref_count))
-	{
-		git_remote_free (remote->remote);
-		g_slice_free (GgitRemote, remote);
-	}
-}
-
-/**
  * ggit_remote_save:
  * @remote: a #GgitRemote.
  * @error: a #GError or %NULL.
@@ -241,10 +217,10 @@ ggit_remote_save (GgitRemote  *remote,
 {
 	gint ret;
 
-	g_return_if_fail (remote != NULL);
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_remote_save (remote->remote);
+	ret = git_remote_save (_ggit_native_get (remote));
 
 	if (ret != GIT_OK)
 	{
@@ -263,9 +239,9 @@ ggit_remote_save (GgitRemote  *remote,
 const gchar *
 ggit_remote_get_name (GgitRemote *remote)
 {
-	g_return_val_if_fail (remote != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
 
-	return git_remote_name (remote->remote);
+	return git_remote_name (_ggit_native_get (remote));
 }
 
 /**
@@ -279,9 +255,9 @@ ggit_remote_get_name (GgitRemote *remote)
 const gchar *
 ggit_remote_get_url (GgitRemote *remote)
 {
-	g_return_val_if_fail (remote != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
 
-	return git_remote_url (remote->remote);
+	return git_remote_url (_ggit_native_get (remote));
 }
 
 /**
@@ -302,10 +278,10 @@ ggit_remote_connect (GgitRemote  *remote,
 {
 	gint ret;
 
-	g_return_if_fail (remote != NULL);
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_remote_connect (remote->remote, direction);
+	ret = git_remote_connect (_ggit_native_get (remote), direction);
 
 	if (ret != GIT_OK)
 	{
@@ -324,9 +300,9 @@ ggit_remote_connect (GgitRemote  *remote,
 gboolean
 ggit_remote_get_connected (GgitRemote *remote)
 {
-	g_return_val_if_fail (remote != NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
 
-	return git_remote_connected (remote->remote);
+	return git_remote_connected (_ggit_native_get (remote));
 }
 
 /**
@@ -339,9 +315,9 @@ ggit_remote_get_connected (GgitRemote *remote)
 void
 ggit_remote_disconnect (GgitRemote *remote)
 {
-	g_return_if_fail (remote != NULL);
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
 
-	git_remote_disconnect (remote->remote);
+	git_remote_disconnect (_ggit_native_get (remote));
 }
 
 /**
@@ -359,11 +335,11 @@ ggit_remote_add_fetch_spec (GgitRemote   *remote,
 {
 	gint ret;
 
-	g_return_if_fail (remote != NULL);
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (fetch_spec != NULL && fetch_spec[0] != '\0');
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_remote_add_fetch (remote->remote, fetch_spec);
+	ret = git_remote_add_fetch (_ggit_native_get (remote), fetch_spec);
 
 	if (ret != GIT_OK)
 	{
@@ -386,11 +362,11 @@ ggit_remote_add_push_spec (GgitRemote   *remote,
 {
 	gint ret;
 
-	g_return_if_fail (remote != NULL);
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (push_spec != NULL && push_spec[0] != '\0');
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_remote_add_push (remote->remote, push_spec);
+	ret = git_remote_add_push (_ggit_native_get (remote), push_spec);
 
 	if (ret != GIT_OK)
 	{
@@ -417,10 +393,10 @@ ggit_remote_list (GgitRemote              *remote,
 	GgitRemoteHead **retval;
 	gint ret;
 
-	g_return_val_if_fail (remote != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_remote_ls (&head, &size, remote->remote);
+	ret = git_remote_ls (&head, &size, _ggit_native_get (remote));
 
 	if (ret != GIT_OK)
 	{

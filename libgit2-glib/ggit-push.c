@@ -47,9 +47,14 @@ G_DEFINE_TYPE_EXTENDED (GgitPush, ggit_push, GGIT_TYPE_NATIVE,
 
 
 static void
-ggit_push_finalize (GObject *object)
+ggit_push_dispose (GObject *object)
 {
-	G_OBJECT_CLASS (ggit_push_parent_class)->finalize (object);
+	GgitPushPrivate *priv;
+
+	priv = GGIT_PUSH (object)->priv;
+	g_clear_object (&priv->remote);
+
+	G_OBJECT_CLASS (ggit_push_parent_class)->dispose (object);
 }
 
 static void
@@ -63,7 +68,7 @@ ggit_push_get_property (GObject    *object,
 	switch (prop_id)
 	{
 		case PROP_REMOTE:
-			g_value_set_boxed (value, priv->remote);
+			g_value_set_object (value, priv->remote);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -82,7 +87,7 @@ ggit_push_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_REMOTE:
-			priv->remote = g_value_get_boxed (value);
+			priv->remote = g_value_dup_object (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -95,18 +100,18 @@ ggit_push_class_init (GgitPushClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = ggit_push_finalize;
+	object_class->dispose = ggit_push_dispose;
 	object_class->get_property = ggit_push_get_property;
 	object_class->set_property = ggit_push_set_property;
 
 	g_object_class_install_property (object_class,
 	                                 PROP_REMOTE,
-	                                 g_param_spec_boxed ("remote",
-	                                                       "Remote",
-	                                                       "The remote associated with this push",
-	                                                       GGIT_TYPE_REMOTE,
-	                                                       G_PARAM_READWRITE |
-	                                                       G_PARAM_CONSTRUCT_ONLY));
+	                                 g_param_spec_object ("remote",
+	                                                      "Remote",
+	                                                      "The remote associated with this push",
+	                                                      GGIT_TYPE_REMOTE,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY));
 
 	g_type_class_add_private (object_class, sizeof (GgitPushPrivate));
 }
