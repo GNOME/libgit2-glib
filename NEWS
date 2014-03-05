@@ -1,3 +1,10 @@
+News in 0.0.12
+--------------
+* Add push progress API
+* Fix install of pygobject overrides
+* Bump libgit2 requirement to 0.20.0
+* Misc bugfixing
+
 News in 0.0.10
 --------------
 * Bind blaming API
