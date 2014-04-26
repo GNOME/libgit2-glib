@@ -180,19 +180,19 @@ gchar *
 ggit_patch_to_string (GgitPatch  *patch,
                       GError    **error)
 {
-	char *retval;
+	git_buf buf;
 	gchar *result = NULL;
 	gint ret;
 
 	g_return_val_if_fail (patch != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_patch_to_str (&retval, patch->patch);
+	ret = git_patch_to_buf (&buf, patch->patch);
 
 	if (ret == GIT_OK)
 	{
-		result = g_strdup (retval);
-		free (retval);
+		result = g_strdup (buf.ptr);
+		git_buf_free (&buf);
 	}
 
 	return result;
