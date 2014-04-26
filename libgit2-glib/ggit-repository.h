@@ -200,6 +200,8 @@ GgitBranch         *ggit_repository_create_branch     (GgitRepository        *re
                                                        const gchar           *branch_name,
                                                        GgitObject            *target,
                                                        GgitCreateFlags        flags,
+                                                       GgitSignature         *signature,
+                                                       const gchar           *log_message,
                                                        GError               **error);
 
 GgitBranchEnumerator *ggit_repository_enumerate_branches (GgitRepository        *repository,

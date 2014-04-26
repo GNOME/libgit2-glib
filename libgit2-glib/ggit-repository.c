@@ -1372,6 +1372,8 @@ ggit_repository_list_tags (GgitRepository  *repository,
  * @branch_name: the name of the branch.
  * @target: a #GgitObject.
  * @flags: a #GgitCreateFlags.
+ * @signature: a #GgitSignature that will used to populate the reflog entry.
+ * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a new branch pointing at a target commit.
@@ -1384,6 +1386,8 @@ ggit_repository_create_branch (GgitRepository   *repository,
                                const gchar      *branch_name,
                                GgitObject       *target,
                                GgitCreateFlags   flags,
+                               GgitSignature    *signature,
+                               const gchar      *log_message,
                                GError          **error)
 {
 	gboolean force;
@@ -1393,6 +1397,8 @@ ggit_repository_create_branch (GgitRepository   *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (branch_name != NULL, FALSE);
 	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
+	g_return_val_if_fail (log_message != NULL, FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	force = flags & GGIT_CREATE_FORCE;
@@ -1401,7 +1407,9 @@ ggit_repository_create_branch (GgitRepository   *repository,
 	                         _ggit_native_get (repository),
 	                         branch_name,
 	                         _ggit_native_get (target),
-	                         force ? 1 : 0);
+	                         force ? 1 : 0,
+	                         _ggit_native_get (signature),
+	                         log_message);
 
 	if (ret != GIT_OK)
 	{
