@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 GType                  ggit_merge_tree_options_get_type                (void) G_GNUC_CONST;
 
-const git_merge_tree_opts *
+const git_merge_options *
                       _ggit_merge_tree_options_get_merge_tree_options  (GgitMergeTreeOptions   *merge_options);
 
 GgitMergeTreeOptions  *ggit_merge_tree_options_copy                    (GgitMergeTreeOptions   *merge_options);
@@ -44,7 +44,7 @@ GgitMergeTreeOptions  *ggit_merge_tree_options_new                     (GgitMerg
                                                                         guint                     rename_threshold,
                                                                         guint                     target_limit,
                                                                         GgitDiffSimilarityMetric *metric,
-                                                                        GgitMergeAutomergeMode    automerge_mode);
+                                                                        GgitMergeFileFavor       file_favor);
 
 G_END_DECLS
 

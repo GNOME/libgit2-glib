@@ -23,13 +23,13 @@
 
 struct _GgitMergeTreeOptions
 {
-	git_merge_tree_opts merge_options;
+	git_merge_options merge_options;
 };
 
 G_DEFINE_BOXED_TYPE (GgitMergeTreeOptions, ggit_merge_tree_options,
                      ggit_merge_tree_options_copy, ggit_merge_tree_options_free)
 
-const git_merge_tree_opts *
+const git_merge_options *
 _ggit_merge_tree_options_get_merge_tree_options (GgitMergeTreeOptions *merge_options)
 {
 	/* NULL is common for merge_tree_options as it specifies to use the default
@@ -40,7 +40,7 @@ _ggit_merge_tree_options_get_merge_tree_options (GgitMergeTreeOptions *merge_opt
 		return NULL;
 	}
 
-	return (const git_merge_tree_opts *)&merge_options->merge_options;
+	return (const git_merge_options *)&merge_options->merge_options;
 }
 
 /**
@@ -86,7 +86,7 @@ ggit_merge_tree_options_free (GgitMergeTreeOptions *merge_options)
  * @target_limit: maximum similarity sources to examine
  *                (overrides the `merge_tree.renameLimit` config) (default 200).
  * @metric: (allow-none): a #GgitDiffSimilarityMetric or %NULL to use internal metric.
- * @automerge_mode: mode for automerging.
+ * @file_favor: a #GgitMergeFileFavor.
  *
  * Creates a new #GgitMergeTreeOptions.
  *
@@ -97,10 +97,10 @@ ggit_merge_tree_options_new (GgitMergeTreeFlags        flags,
                              guint                     rename_threshold,
                              guint                     target_limit,
                              GgitDiffSimilarityMetric *metric,
-                             GgitMergeAutomergeMode    automerge_mode)
+                             GgitMergeFileFavor        file_favor)
 {
 	GgitMergeTreeOptions *merge_options;
-	git_merge_tree_opts gmerge_options = GIT_MERGE_TREE_OPTS_INIT;
+	git_merge_options gmerge_options = GIT_MERGE_OPTIONS_INIT;
 
 	merge_options = g_slice_new (GgitMergeTreeOptions);
 
@@ -108,7 +108,7 @@ ggit_merge_tree_options_new (GgitMergeTreeFlags        flags,
 	gmerge_options.rename_threshold = rename_threshold;
 	gmerge_options.target_limit = target_limit;
 	gmerge_options.metric = _ggit_diff_similarity_metric_get_similarity_metric (metric);
-	gmerge_options.automerge_flags = (git_merge_automerge_flags)automerge_mode;
+	gmerge_options.file_favor = (git_merge_file_favor_t)file_favor;
 
 	merge_options->merge_options = gmerge_options;
 

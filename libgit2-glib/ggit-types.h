@@ -634,17 +634,26 @@ typedef enum {
 /* NOTE: keep in sync with git2/merge.h */
 /**
  * GgitMergeAutomergeMode:
- * @GGIT_MERGE_AUTOMERGE_MODE_NORMAL:
- * @GGIT_MERGE_AUTOMERGE_MODE_NONE:
- * @GGIT_MERGE_AUTOMERGE_MODE_FAVOR_OURS:
- * @GGIT_MERGE_AUTOMERGE_MODE_FAVOR_THEIRS:
+ * @GGIT_MERGE_FILE_FAVOR_NORMAL: When a region of a file is changed in both branches,
+ * a conflict will be recorded in the index so that `git_checkout` can produce
+ * a merge file with conflict markers in the working directory. This is the default.
+ * @GGIT_MERGE_FILE_FAVOR_OURS: When a region of a file is changed in both branches, the file
+ * created in the index will contain the "ours" side of any conflicting
+ * region. The index will not record a conflict.
+ * @GGIT_MERGE_FILE_FAVOR_THEIRS: When a region of a file is changed in both branches, the file
+ * created in the index will contain the "theirs" side of any conflicting
+ * region. The index will not record a conflict.
+ * @GGIT_MERGE_FILE_FAVOR_UNION: When a region of a file is changed in both branches, the file
+ * created in the index will contain each unique line from each side,
+ * which has the result of combining both files.  The index will not
+ * record a conflict.
  */
 typedef enum {
-	GGIT_MERGE_AUTOMERGE_MODE_NORMAL       = 0,
-	GGIT_MERGE_AUTOMERGE_MODE_NONE         = 1,
-	GGIT_MERGE_AUTOMERGE_MODE_FAVOR_OURS   = 2,
-	GGIT_MERGE_AUTOMERGE_MODE_FAVOR_THEIRS = 3
-} GgitMergeAutomergeMode;
+	GGIT_MERGE_FILE_FAVOR_NORMAL = 0,
+	GGIT_MERGE_FILE_FAVOR_OURS   = 1,
+	GGIT_MERGE_FILE_FAVOR_THEIRS = 2,
+	GGIT_MERGE_FILE_FAVOR_UNION  = 3
+} GgitMergeFileFavor;
 
 /**
  * GgitMergeTreeFlags:
