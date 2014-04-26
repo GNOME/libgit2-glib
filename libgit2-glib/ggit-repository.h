@@ -283,6 +283,8 @@ gboolean            ggit_repository_submodule_foreach  (GgitRepository          
 void                ggit_repository_reset              (GgitRepository          *repository,
                                                         GgitObject              *target,
                                                         GgitResetType            reset_type,
+                                                        GgitSignature           *signature,
+                                                        const gchar             *log_message,
                                                         GError                 **error);
 
 GgitObject         *ggit_repository_revparse          (GgitRepository        *repository,

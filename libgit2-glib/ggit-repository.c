@@ -1716,6 +1716,8 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
  * @repository: a #GgitRepository.
  * @target: the target #GgitObject which is a commit or a tag.
  * @reset_type: the #GgitResetType to perform.
+ * @signature: a #GgitSignature that will used to populate the reflog entry.
+ * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Performs a reset of type @reset_type on @repository to @target,
@@ -1725,17 +1727,23 @@ void
 ggit_repository_reset (GgitRepository  *repository,
                        GgitObject      *target,
                        GgitResetType    reset_type,
+                       GgitSignature   *signature,
+                       const gchar     *log_message,
                        GError         **error)
 {
 	gint ret;
 
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
 	g_return_if_fail (GGIT_IS_OBJECT (target));
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
+	g_return_val_if_fail (log_message != NULL, FALSE);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_reset (_ggit_native_get (repository),
 	                 _ggit_native_get (target),
-	                 (git_reset_t)reset_type);
+	                 (git_reset_t)reset_type,
+	                 _ggit_native_get (signature),
+	                 log_message);
 
 	if (ret != GIT_OK)
 	{
