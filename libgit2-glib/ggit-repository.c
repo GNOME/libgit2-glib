@@ -2139,7 +2139,7 @@ ggit_repository_create_commit (GgitRepository  *repository,
 }
 
 /**
- * ggit_repository_create_commit_from_oids:
+ * ggit_repository_create_commit_from_ids:
  * @repository: a #GgitRepository.
  * @update_ref: (allow-none): name of the reference to update.
  * @author: author signature.
@@ -2163,19 +2163,19 @@ ggit_repository_create_commit (GgitRepository  *repository,
  *
  */
 GgitOId *
-ggit_repository_create_commit_from_oids (GgitRepository  *repository,
-                                         const gchar     *update_ref,
-                                         GgitSignature   *author,
-                                         GgitSignature   *committer,
-                                         const gchar     *message_encoding,
-                                         const gchar     *message,
-                                         GgitOId         *tree,
-                                         GgitOId        **parents,
-                                         gint             parent_count,
-                                         GError         **error)
+ggit_repository_create_commit_from_ids (GgitRepository  *repository,
+                                        const gchar     *update_ref,
+                                        GgitSignature   *author,
+                                        GgitSignature   *committer,
+                                        const gchar     *message_encoding,
+                                        const gchar     *message,
+                                        GgitOId         *tree,
+                                        GgitOId        **parents,
+                                        gint             parent_count,
+                                        GError         **error)
 {
 	gint ret;
-	git_oid oid;
+	git_oid id;
 	git_oid **parents_native;
 	gint i;
 
@@ -2186,16 +2186,16 @@ ggit_repository_create_commit_from_oids (GgitRepository  *repository,
 		parents_native[i] = (git_oid *)_ggit_oid_get_oid (parents[i]);
 	}
 
-	ret = git_commit_create_from_oids (&oid,
-	                                   _ggit_native_get (repository),
-	                                   update_ref,
-	                                   _ggit_native_get (author),
-	                                   _ggit_native_get (committer),
-	                                   message_encoding,
-	                                   message,
-	                                   _ggit_oid_get_oid (tree),
-	                                   parent_count,
-	                                   (git_oid const **)parents_native);
+	ret = git_commit_create_from_ids (&id,
+	                                  _ggit_native_get (repository),
+	                                  update_ref,
+	                                  _ggit_native_get (author),
+	                                  _ggit_native_get (committer),
+	                                  message_encoding,
+	                                  message,
+	                                  _ggit_oid_get_oid (tree),
+	                                  parent_count,
+	                                  (git_oid const **)parents_native);
 
 	g_free (parents_native);
 
@@ -2205,7 +2205,7 @@ ggit_repository_create_commit_from_oids (GgitRepository  *repository,
 		return NULL;
 	}
 
-	return _ggit_oid_wrap (&oid);
+	return _ggit_oid_wrap (&id);
 }
 
 /**

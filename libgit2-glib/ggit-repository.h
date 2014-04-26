@@ -140,7 +140,7 @@ GgitOId            *ggit_repository_create_commit     (GgitRepository        *re
                                                        gint                   parent_count,
                                                        GError               **error);
 
-GgitOId            *ggit_repository_create_commit_from_oids (
+GgitOId            *ggit_repository_create_commit_from_ids (
                                                        GgitRepository        *repository,
                                                        const gchar           *update_ref,
                                                        GgitSignature         *author,
