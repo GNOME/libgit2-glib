@@ -170,8 +170,8 @@ ggit_remote_init (GgitRemote *self)
 /**
  * ggit_remote_new:
  * @repository: a #GgitRepository.
+ * @name: the remote's name.
  * @url: the remote repository's URL.
- * @fetch_spec: the fetch refspec to use for this remote.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a remote with the default refspecs in memory. You can use
@@ -181,19 +181,19 @@ ggit_remote_init (GgitRemote *self)
  */
 GgitRemote *
 ggit_remote_new (GgitRepository   *repository,
+                 const gchar      *name,
                  const gchar      *url,
-                 const gchar      *fetch_spec,
                  GError          **error)
 {
 	gint ret;
 	git_remote *remote;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (url != NULL, NULL);
-	g_return_val_if_fail (fetch_spec != NULL, NULL);
 
-	ret = git_remote_create_inmemory (&remote, _ggit_native_get (repository),
-	                                  url, fetch_spec);
+	ret = git_remote_create (&remote, _ggit_native_get (repository),
+	                         name, url);
 
 	if (ret != GIT_OK)
 	{

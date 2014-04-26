@@ -71,8 +71,8 @@ const gchar       *ggit_remote_head_get_name            (GgitRemoteHead *remote_
 GgitRemote       *_ggit_remote_wrap                     (git_remote     *remote);
 
 GgitRemote        *ggit_remote_new                      (GgitRepository   *repository,
+                                                         const gchar      *name,
                                                          const gchar      *url,
-                                                         const gchar      *fetch_spec,
                                                          GError          **error);
 
 void               ggit_remote_save                     (GgitRemote       *remote,
