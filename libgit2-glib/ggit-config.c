@@ -177,16 +177,16 @@ ggit_config_new_default (GError **error)
 GFile *
 ggit_config_find_global (void)
 {
-	gchar path[GIT_PATH_MAX];
+	git_buf buf;
+	GFile *path = NULL;
 
-	if (git_config_find_global (path, GIT_PATH_MAX) != GIT_OK)
+	if (git_config_find_global (&buf) == GIT_OK)
 	{
-		return NULL;
+		path = g_file_new_for_path (buf.ptr);
+		git_buf_free (&buf);
 	}
-	else
-	{
-		return g_file_new_for_path (path);
-	}
+
+	return path;
 }
 
 /**
@@ -206,16 +206,16 @@ ggit_config_find_global (void)
 GFile *
 ggit_config_find_system (void)
 {
-	gchar path[GIT_PATH_MAX];
+	git_buf buf;
+	GFile *path = NULL;
 
-	if (git_config_find_system (path, GIT_PATH_MAX) != GIT_OK)
+	if (git_config_find_system (&buf) == GIT_OK)
 	{
-		return NULL;
+		path = g_file_new_for_path (buf.ptr);
+		git_buf_free (&buf);
 	}
-	else
-	{
-		return g_file_new_for_path (path);
-	}
+
+	return path;
 }
 
 /**
