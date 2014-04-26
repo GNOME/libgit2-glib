@@ -1,5 +1,5 @@
 /*
- * ggit-merge_tree-options.c
+ * ggit-merge-options.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2013 - Ignacio Casal Quinteiro
@@ -18,22 +18,22 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ggit-merge-tree-options.h"
+#include "ggit-merge-options.h"
 #include "ggit-diff-similarity-metric.h"
 
-struct _GgitMergeTreeOptions
+struct _GgitMergeOptions
 {
 	git_merge_options merge_options;
 };
 
-G_DEFINE_BOXED_TYPE (GgitMergeTreeOptions, ggit_merge_tree_options,
-                     ggit_merge_tree_options_copy, ggit_merge_tree_options_free)
+G_DEFINE_BOXED_TYPE (GgitMergeOptions, ggit_merge_options,
+                     ggit_merge_options_copy, ggit_merge_options_free)
 
 const git_merge_options *
-_ggit_merge_tree_options_get_merge_tree_options (GgitMergeTreeOptions *merge_options)
+_ggit_merge_options_get_merge_options (GgitMergeOptions *merge_options)
 {
-	/* NULL is common for merge_tree_options as it specifies to use the default
-	 * so handle a NULL merge_tree_options here instead of in every caller.
+	/* NULL is common for merge_options as it specifies to use the default
+	 * so handle a NULL merge_options here instead of in every caller.
 	 */
 	if (merge_options == NULL)
 	{
@@ -44,21 +44,21 @@ _ggit_merge_tree_options_get_merge_tree_options (GgitMergeTreeOptions *merge_opt
 }
 
 /**
- * ggit_merge_tree_options_copy:
- * @merge_options: a #GgitMergeTreeOptions.
+ * ggit_merge_options_copy:
+ * @merge_options: a #GgitMergeOptions.
  *
- * Copies @merge_options into a newly allocated #GgitMergeTreeOptions.
+ * Copies @merge_options into a newly allocated #GgitMergeOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitMergeTreeOptions.
+ * Returns: (transfer full): a newly allocated #GgitMergeOptions.
  */
-GgitMergeTreeOptions *
-ggit_merge_tree_options_copy (GgitMergeTreeOptions *merge_options)
+GgitMergeOptions *
+ggit_merge_options_copy (GgitMergeOptions *merge_options)
 {
-	GgitMergeTreeOptions *new_merge_options;
+	GgitMergeOptions *new_merge_options;
 
 	g_return_val_if_fail (merge_options != NULL, NULL);
 
-	new_merge_options = g_slice_new (GgitMergeTreeOptions);
+	new_merge_options = g_slice_new (GgitMergeOptions);
 
 	new_merge_options->merge_options = merge_options->merge_options;
 
@@ -66,43 +66,43 @@ ggit_merge_tree_options_copy (GgitMergeTreeOptions *merge_options)
 }
 
 /**
- * ggit_merge_tree_options_free:
- * @merge_options: a #GgitMergeTreeOptions.
+ * ggit_merge_options_free:
+ * @merge_options: a #GgitMergeOptions.
  *
  * Frees @merge_options.
  */
 void
-ggit_merge_tree_options_free (GgitMergeTreeOptions *merge_options)
+ggit_merge_options_free (GgitMergeOptions *merge_options)
 {
 	g_return_if_fail (merge_options != NULL);
 
-	g_slice_free (GgitMergeTreeOptions, merge_options);
+	g_slice_free (GgitMergeOptions, merge_options);
 }
 
 /**
- * ggit_merge_tree_options_new:
+ * ggit_merge_options_new:
  * @flags: flags to consider when merging.
  * @rename_threshold: similarity to consider a file renamed (default 50).
  * @target_limit: maximum similarity sources to examine
- *                (overrides the `merge_tree.renameLimit` config) (default 200).
+ *                (overrides the `merge.renameLimit` config) (default 200).
  * @metric: (allow-none): a #GgitDiffSimilarityMetric or %NULL to use internal metric.
  * @file_favor: a #GgitMergeFileFavor.
  *
- * Creates a new #GgitMergeTreeOptions.
+ * Creates a new #GgitMergeOptions.
  *
- * Returns: a newly allocated #GgitMergeTreeOptions.
+ * Returns: a newly allocated #GgitMergeOptions.
  */
-GgitMergeTreeOptions *
-ggit_merge_tree_options_new (GgitMergeTreeFlags        flags,
-                             guint                     rename_threshold,
-                             guint                     target_limit,
-                             GgitDiffSimilarityMetric *metric,
-                             GgitMergeFileFavor        file_favor)
+GgitMergeOptions *
+ggit_merge_options_new (GgitMergeTreeFlags        flags,
+                        guint                     rename_threshold,
+                        guint                     target_limit,
+                        GgitDiffSimilarityMetric *metric,
+                        GgitMergeFileFavor        file_favor)
 {
-	GgitMergeTreeOptions *merge_options;
+	GgitMergeOptions *merge_options;
 	git_merge_options gmerge_options = GIT_MERGE_OPTIONS_INIT;
 
-	merge_options = g_slice_new (GgitMergeTreeOptions);
+	merge_options = g_slice_new (GgitMergeOptions);
 
 	gmerge_options.flags = (git_merge_tree_flag_t)flags;
 	gmerge_options.rename_threshold = rename_threshold;

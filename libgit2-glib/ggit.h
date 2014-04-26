@@ -44,7 +44,7 @@
 #include <libgit2-glib/ggit-index-entry-resolve-undo.h>
 #include <libgit2-glib/ggit-index.h>
 #include <libgit2-glib/ggit-main.h>
-#include <libgit2-glib/ggit-merge-tree-options.h>
+#include <libgit2-glib/ggit-merge-options.h>
 #include <libgit2-glib/ggit-message.h>
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-object-factory-base.h>
