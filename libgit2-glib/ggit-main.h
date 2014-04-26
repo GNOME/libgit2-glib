@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-GgitCapFlags ggit_get_capabilities (void);
+GgitFeatureFlags ggit_get_features (void);
 
 void ggit_init (void);
 

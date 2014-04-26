@@ -398,9 +398,10 @@ typedef enum
 
 typedef enum
 {
-	GGIT_CAP_THREADS = 1 << 0,
-	GGIT_CAP_HTTPS   = 1 << 1
-} GgitCapFlags;
+	GGIT_FEATURE_THREADS = 1 << 0,
+	GGIT_FEATURE_HTTPS   = 1 << 1,
+	GGIT_FEATURE_SSH     = (1 << 2)
+} GgitFeatureFlags;
 
 
 /**

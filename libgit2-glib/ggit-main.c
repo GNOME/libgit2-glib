@@ -23,16 +23,16 @@
 #include "ggit-main.h"
 
 /**
- * ggit_get_capabilities:
+ * ggit_get_features:
  *
- * Gets the capabilities of the library.
+ * Gets the features of the library.
  *
- * Returns: a #GgitCapFlags.
+ * Returns: a #GgitFeatureFlags.
  */
-GgitCapFlags
-ggit_get_capabilities (void)
+GgitFeatureFlags
+ggit_get_features (void)
 {
-	return git_libgit2_capabilities ();
+	return git_libgit2_features ();
 }
 
 /**
