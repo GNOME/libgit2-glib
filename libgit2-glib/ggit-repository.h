@@ -105,6 +105,8 @@ GgitRef            *ggit_repository_create_symbolic_reference
                                                       (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        const gchar           *target,
+                                                       GgitSignature         *signature,
+                                                       const gchar           *log_message,
                                                        GError               **error);
 
 GgitBlobOutputStream *
