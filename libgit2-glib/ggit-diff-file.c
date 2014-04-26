@@ -46,7 +46,7 @@ _ggit_diff_file_wrap (const git_diff_file *file)
 
 	gfile = g_slice_new (GgitDiffFile);
 	gfile->ref_count = 1;
-	gfile->oid = _ggit_oid_wrap (&file->oid);
+	gfile->oid = _ggit_oid_wrap (&file->id);
 	gfile->path = file->path == NULL ? NULL : g_strdup (file->path);
 	gfile->mode = file->mode;
 	gfile->size = file->size;

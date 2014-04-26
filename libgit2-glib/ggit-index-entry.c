@@ -522,7 +522,7 @@ ggit_index_entry_get_id (GgitIndexEntry *entry)
 {
 	g_return_val_if_fail (entry != NULL, NULL);
 
-	return _ggit_oid_wrap (&entry->entry->oid);
+	return _ggit_oid_wrap (&entry->entry->id);
 }
 
 /**
@@ -542,11 +542,11 @@ ggit_index_entry_set_id (GgitIndexEntry *entry,
 
 	if (id != NULL)
 	{
-		entry->entry->oid = *_ggit_oid_get_oid (id);
+		entry->entry->id = *_ggit_oid_get_oid (id);
 	}
 	else
 	{
-		memset (&entry->entry->oid, 0, sizeof (git_oid));
+		memset (&entry->entry->id, 0, sizeof (git_oid));
 	}
 }
 
