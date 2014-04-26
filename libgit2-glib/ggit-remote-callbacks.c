@@ -276,7 +276,7 @@ ggit_remote_callbacks_init (GgitRemoteCallbacks *self)
 
 	self->priv->native = gcallbacks;
 
-	self->priv->native.progress = progress_wrap;
+	self->priv->native.sideband_progress = progress_wrap;
 	self->priv->native.completion = completion_wrap;
 	self->priv->native.credentials = credentials_wrap;
 	self->priv->native.transfer_progress = transfer_progress_wrap;
