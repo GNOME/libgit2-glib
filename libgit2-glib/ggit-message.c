@@ -38,17 +38,15 @@ gchar *
 ggit_message_prettify (const gchar *message,
                        gboolean     strip_comments)
 {
-	gchar *ret;
-	gint len;
+	git_buf buf;
 	gchar *d;
 
-	len = strlen (message) * 2;
-	ret = g_new0 (gchar, len);
+	git_buf_set(&buf, message, strlen (message));
 
-	git_message_prettify (ret, len, message, strip_comments);
+	git_message_prettify (&buf, message, strip_comments);
 
-	d = g_strdup (ret);
-	g_free (ret);
+	d = g_strdup (buf.ptr);
+	git_buf_free (&buf);
 
 	return d;
 }
