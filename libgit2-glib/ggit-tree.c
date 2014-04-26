@@ -214,12 +214,17 @@ walk_callback_wrapper (const char           *root,
 	gint ret;
 	GgitTreeEntry *wentry;
 	WalkInfo *info = (WalkInfo *)payload;
+	git_tree_entry *dest;
 
-	wentry = _ggit_tree_entry_wrap (git_tree_entry_dup(entry), TRUE);
+	ret = git_tree_entry_dup (&dest, entry);
+	if (ret == GIT_OK)
+	{
+		wentry = _ggit_tree_entry_wrap (dest, TRUE);
 
-	ret = info->callback(root, wentry, info->user_data);
+		ret = info->callback(root, wentry, info->user_data);
 
-	ggit_tree_entry_unref (wentry);
+		ggit_tree_entry_unref (wentry);
+	}
 
 	return ret;
 }
