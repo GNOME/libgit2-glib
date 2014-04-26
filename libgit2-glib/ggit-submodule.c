@@ -464,6 +464,7 @@ ggit_submodule_sync (GgitSubmodule  *submodule,
 /**
  * ggit_submodule_reload:
  * @submodule: a #GgitSubmodule.
+ * @force: reload even if the data doesn't seem out of date.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Rereads submodule info from config, index, and HEAD.
@@ -471,6 +472,7 @@ ggit_submodule_sync (GgitSubmodule  *submodule,
  */
 void
 ggit_submodule_reload (GgitSubmodule  *submodule,
+                       gboolean        force,
                        GError        **error)
 {
 	gint ret;
@@ -478,7 +480,7 @@ ggit_submodule_reload (GgitSubmodule  *submodule,
 	g_return_if_fail (submodule != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_submodule_reload (submodule->submodule);
+	ret = git_submodule_reload (submodule->submodule, force ? 1 : 0);
 
 	if (ret != GIT_OK)
 	{

@@ -82,6 +82,7 @@ void                    ggit_submodule_sync                  (GgitSubmodule     
                                                               GError             **error);
 
 void                    ggit_submodule_reload                (GgitSubmodule       *submodule,
+                                                              gboolean             force,
                                                               GError             **error);
 
 GgitSubmoduleStatus     ggit_submodule_get_status            (GgitSubmodule       *submodule,
