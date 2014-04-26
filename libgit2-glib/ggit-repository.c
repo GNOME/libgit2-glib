@@ -790,10 +790,10 @@ GFile *
 ggit_repository_discover (GFile   *location,
                           GError **error)
 {
-	gchar found_path[GIT_PATH_MAX];
-	GFile *rep = NULL;
+	git_buf buf;
 	gchar *path;
 	gint ret;
+	GFile *rep = NULL;
 
 	g_return_val_if_fail (G_IS_FILE (location), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -802,8 +802,7 @@ ggit_repository_discover (GFile   *location,
 
 	g_return_val_if_fail (path != NULL, NULL);
 
-	ret = git_repository_discover (found_path,
-	                               sizeof (found_path),
+	ret = git_repository_discover (&buf,
 	                               path,
 	                               0,
 	                               "");
@@ -812,7 +811,8 @@ ggit_repository_discover (GFile   *location,
 
 	if (ret == GIT_OK)
 	{
-		rep = g_file_new_for_path (found_path);
+		rep = g_file_new_for_path (buf.ptr);
+		git_buf_free (&buf);
 	}
 	else
 	{
