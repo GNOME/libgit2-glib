@@ -26,24 +26,26 @@
  * ggit_message_prettify:
  * @message: the message.
  * @strip_comments: whether to strip comments.
+ * @comment_char: comment character.
  *
  * Prettify a commit message by removing excess whitespace and making sure the
  * last line ends with a newline. If @strip_comments is %TRUE, then lines
- * starting with a '#' will be removed.
+ * starting with a @comment_char will be removed.
  *
  * Returns: the prettified message.
  *
  */
 gchar *
 ggit_message_prettify (const gchar *message,
-                       gboolean     strip_comments)
+                       gboolean     strip_comments,
+                       gchar        comment_char)
 {
 	git_buf buf;
 	gchar *d;
 
 	git_buf_set(&buf, message, strlen (message));
 
-	git_message_prettify (&buf, message, strip_comments);
+	git_message_prettify (&buf, message, strip_comments, comment_char);
 
 	d = g_strdup (buf.ptr);
 	git_buf_free (&buf);

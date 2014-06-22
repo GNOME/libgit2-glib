@@ -26,7 +26,8 @@
 G_BEGIN_DECLS
 
 gchar *ggit_message_prettify (const gchar *message,
-                              gboolean     strip_comments);
+                              gboolean     strip_comments,
+                              gchar        comment_char);
 
 G_END_DECLS
 
