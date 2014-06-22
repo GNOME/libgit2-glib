@@ -1,3 +1,7 @@
+News in 0.0.16
+--------------
+* Fix important crash
+
 News in 0.0.14
 --------------
 * Bump libgit2 requirement to 0.21.0
