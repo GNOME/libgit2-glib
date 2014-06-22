@@ -40,7 +40,7 @@ ggit_message_prettify (const gchar *message,
                        gboolean     strip_comments,
                        gchar        comment_char)
 {
-	git_buf buf;
+	git_buf buf = {0,};
 	gchar *d;
 
 	git_buf_set(&buf, message, strlen (message));

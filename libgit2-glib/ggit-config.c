@@ -177,7 +177,7 @@ ggit_config_new_default (GError **error)
 GFile *
 ggit_config_find_global (void)
 {
-	git_buf buf;
+	git_buf buf = {0,};
 	GFile *path = NULL;
 
 	if (git_config_find_global (&buf) == GIT_OK)
@@ -206,7 +206,7 @@ ggit_config_find_global (void)
 GFile *
 ggit_config_find_system (void)
 {
-	git_buf buf;
+	git_buf buf = {0,};
 	GFile *path = NULL;
 
 	if (git_config_find_system (&buf) == GIT_OK)

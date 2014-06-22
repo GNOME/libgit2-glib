@@ -790,9 +790,9 @@ GFile *
 ggit_repository_discover (GFile   *location,
                           GError **error)
 {
-	git_buf buf;
 	gchar *path;
 	gint ret;
+	git_buf buf = {0,};
 	GFile *rep = NULL;
 
 	g_return_val_if_fail (G_IS_FILE (location), NULL);

@@ -180,7 +180,7 @@ gchar *
 ggit_patch_to_string (GgitPatch  *patch,
                       GError    **error)
 {
-	git_buf buf;
+	git_buf buf = {0,};
 	gchar *result = NULL;
 	gint ret;
 
