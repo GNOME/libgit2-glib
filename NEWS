@@ -1,3 +1,9 @@
+News in 0.0.14
+--------------
+* Bump libgit2 requirement to 0.21.0
+* API changes to match libgit2 0.21.0 API
+* Misc bugfixing
+
 News in 0.0.12
 --------------
 * Add push progress API
