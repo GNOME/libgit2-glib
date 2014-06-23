@@ -104,6 +104,8 @@ void            ggit_ref_delete             (GgitRef        *ref,
 GgitObject     *ggit_ref_lookup             (GgitRef        *ref,
                                              GError        **error);
 
+gboolean        ggit_ref_has_log            (GgitRef        *ref);
+
 GgitReflog     *ggit_ref_get_log            (GgitRef        *ref,
                                              GError        **error);
 
