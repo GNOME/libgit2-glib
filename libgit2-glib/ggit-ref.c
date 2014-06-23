@@ -464,7 +464,7 @@ ggit_ref_lookup (GgitRef  *ref,
 }
 
 /**
- * ggit_ref_get_reflog:
+ * ggit_ref_get_log:
  * @ref: a #GgitRef.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -474,8 +474,8 @@ ggit_ref_lookup (GgitRef  *ref,
  * Returns: (transfer full): the reflog.
  */
 GgitReflog *
-ggit_ref_get_reflog (GgitRef  *ref,
-                     GError  **error)
+ggit_ref_get_log (GgitRef  *ref,
+                  GError  **error)
 {
 	git_reflog *reflog;
 	git_reference *nref;
@@ -500,15 +500,15 @@ ggit_ref_get_reflog (GgitRef  *ref,
 }
 
 /**
- * ggit_ref_delete_reflog:
+ * ggit_ref_delete_log:
  * @ref: a #GgitRef.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Deletes the reflog for @ref, on error @error is set.
+ * Deletes the log for @ref, on error @error is set.
  */
 void
-ggit_ref_delete_reflog (GgitRef  *ref,
-                        GError  **error)
+ggit_ref_delete_log (GgitRef  *ref,
+                     GError  **error)
 {
 	git_reference *nref;
 	gint ret;

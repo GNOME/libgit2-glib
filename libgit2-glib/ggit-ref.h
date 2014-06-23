@@ -104,10 +104,10 @@ void            ggit_ref_delete             (GgitRef        *ref,
 GgitObject     *ggit_ref_lookup             (GgitRef        *ref,
                                              GError        **error);
 
-GgitReflog     *ggit_ref_get_reflog         (GgitRef        *ref,
+GgitReflog     *ggit_ref_get_log            (GgitRef        *ref,
                                              GError        **error);
 
-void            ggit_ref_delete_reflog      (GgitRef        *ref,
+void            ggit_ref_delete_log         (GgitRef        *ref,
                                              GError        **error);
 
 gboolean        ggit_ref_is_tag             (GgitRef        *ref);
