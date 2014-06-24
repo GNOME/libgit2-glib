@@ -151,10 +151,21 @@ def scan_libgit2(cflags, git2dir):
 
     defs = {}
 
+    objapi = ['lookup', 'lookup_prefix', 'free', 'id', 'owner']
+    objderiv = ['commit', 'tree', 'tag', 'blob']
+
+    ignore = set()
+
+    for deriv in objderiv:
+        for api in objapi:
+            ignore.add('git_' + deriv + '_' + api)
+
     for cursor in walk_cursors(tu, headers):
         if cursor.kind == cindex.CursorKind.FUNCTION_DECL:
             deff = Definition(cursor)
-            defs[deff.ident] = deff
+
+            if not deff.ident in ignore:
+                defs[deff.ident] = deff
 
     return defs
 
