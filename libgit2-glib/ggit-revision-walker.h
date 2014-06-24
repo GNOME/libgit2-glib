@@ -69,8 +69,34 @@ void                    ggit_revision_walker_push           (GgitRevisionWalker 
                                                              GgitOId             *oid,
                                                              GError             **error);
 
+void                    ggit_revision_walker_push_glob      (GgitRevisionWalker  *walker,
+                                                             const gchar         *item,
+                                                             GError             **error);
+
+void                    ggit_revision_walker_push_ref       (GgitRevisionWalker  *walker,
+                                                             const gchar         *item,
+                                                             GError             **error);
+
+void                    ggit_revision_walker_push_head      (GgitRevisionWalker  *walker,
+                                                             GError             **error);
+
+void                    ggit_revision_walker_push_range     (GgitRevisionWalker  *walker,
+                                                             const gchar         *range,
+                                                             GError             **error);
+
 void                    ggit_revision_walker_hide           (GgitRevisionWalker  *walker,
                                                              GgitOId             *oid,
+                                                             GError             **error);
+
+void                    ggit_revision_walker_hide_glob      (GgitRevisionWalker  *walker,
+                                                             const gchar         *item,
+                                                             GError             **error);
+
+void                    ggit_revision_walker_hide_ref      (GgitRevisionWalker  *walker,
+                                                             const gchar         *item,
+                                                             GError             **error);
+
+void                    ggit_revision_walker_hide_head      (GgitRevisionWalker  *walker,
                                                              GError             **error);
 
 GgitOId                *ggit_revision_walker_next           (GgitRevisionWalker  *walker,

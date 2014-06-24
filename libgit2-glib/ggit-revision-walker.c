@@ -242,6 +242,123 @@ ggit_revision_walker_push (GgitRevisionWalker  *walker,
 }
 
 /**
+ * ggit_revision_walker_push_glob:
+ * @walker: a #GgitRevisionWalker.
+ * @item: the glob to push.
+ * @error: a #GError.
+ *
+ * Push all OIDs pointed to by references that match the given glob pattern
+ * to the revsision walker. A leading 'refs/' is implied if not present, as well
+ * as a trailing '/ \ *' if the glob lacks '?', '\ *' or '['.
+ *
+ **/
+void
+ggit_revision_walker_push_glob (GgitRevisionWalker  *walker,
+                                const gchar         *item,
+                                GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (item != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_push_glob (_ggit_native_get (walker),
+	                             item);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_revision_walker_push_ref:
+ * @walker: a #GgitRevisionWalker.
+ * @item: the reference to push.
+ * @error: a #GError.
+ *
+ * Push the OID pointed to by the named reference to the revision walker.
+ *
+ **/
+void
+ggit_revision_walker_push_ref (GgitRevisionWalker  *walker,
+                               const gchar         *item,
+                               GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (item != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_push_ref (_ggit_native_get (walker),
+	                            item);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_revision_walker_push_range:
+ * @walker: a #GgitRevisionWalker.
+ * @range: the range to push.
+ * @error: a #GError.
+ *
+ * Push and hide the respective endpoints of the given range. The range
+ * should be of the form: <commit>..<commit>, where each <commit> is in the
+ * form accepted by revparse. The left-hand commit will be hidden and the
+ * right-hand commit pushed.
+ *
+ **/
+void
+ggit_revision_walker_push_range (GgitRevisionWalker  *walker,
+                                 const gchar         *range,
+                                 GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (range != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_push_range (_ggit_native_get (walker),
+	                              range);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_revision_walker_push_head:
+ * @walker: a #GgitRevisionWalker.
+ * @error: a #GError.
+ *
+ * Push the OID of the current HEAD to the revision walker.
+ *
+ **/
+void
+ggit_revision_walker_push_head (GgitRevisionWalker  *walker,
+                                GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_push_head (_ggit_native_get (walker));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_revision_walker_hide:
  * @walker: a #GgitRevisionWalker.
  * @oid: a #GgitOId.
@@ -268,6 +385,91 @@ ggit_revision_walker_hide (GgitRevisionWalker  *walker,
 
 	ret = git_revwalk_hide (_ggit_native_get (walker),
 	                        _ggit_oid_get_oid (oid));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_revision_walker_hide_glob:
+ * @walker: a #GgitRevisionWalker.
+ * @item: the glob to hide.
+ * @error: a #GError.
+ *
+ * Hide all OIDs pointed to by references that match the given glob pattern
+ * to the revsision walker. A leading 'refs/' is implied if not present, as well
+ * as a trailing '/ \ *' if the glob lacks '?', '\ *' or '['.
+ *
+ **/
+void
+ggit_revision_walker_hide_glob (GgitRevisionWalker  *walker,
+                                const gchar         *item,
+                                GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (item != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_hide_glob (_ggit_native_get (walker),
+	                             item);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_revision_walker_hide_ref:
+ * @walker: a #GgitRevisionWalker.
+ * @item: the reference to hide.
+ * @error: a #GError.
+ *
+ * Hide the OID pointed to by the named reference to the revision walker.
+ *
+ **/
+void
+ggit_revision_walker_hide_ref (GgitRevisionWalker  *walker,
+                               const gchar         *item,
+                               GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (item != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_hide_ref (_ggit_native_get (walker),
+	                            item);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
+ * ggit_revision_walker_hide_head:
+ * @walker: a #GgitRevisionWalker.
+ * @error: a #GError.
+ *
+ * Hide the OID of the current HEAD to the revision walker.
+ *
+ **/
+void
+ggit_revision_walker_hide_head (GgitRevisionWalker  *walker,
+                                GError             **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REVISION_WALKER (walker));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_revwalk_hide_head (_ggit_native_get (walker));
 
 	if (ret != GIT_OK)
 	{
