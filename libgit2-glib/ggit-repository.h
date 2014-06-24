@@ -217,7 +217,7 @@ GgitBranch         *ggit_repository_create_branch     (GgitRepository        *re
                                                        GError               **error);
 
 GgitBranchEnumerator *ggit_repository_enumerate_branches (GgitRepository        *repository,
-                                                          GgitBranchType         list_flags,
+                                                          GgitBranchType         list_type,
                                                           GError               **error);
 
 GgitBranch         *ggit_repository_lookup_branch     (GgitRepository        *repository,

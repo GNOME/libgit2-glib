@@ -1504,9 +1504,9 @@ ggit_repository_create_branch (GgitRepository   *repository,
 }
 
 /**
- * ggit_repository_branches_foreach:
+ * ggit_repository_enumerate_branches:
  * @repository: a #GgitRepository.
- * @list_type: a GgitBranchType.
+ * @list_type: a #GgitBranchType.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Get a branch enumerator to enumerate over all branches of the specified
