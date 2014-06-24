@@ -173,6 +173,14 @@ GgitOId            *ggit_repository_create_tag_lightweight (
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
+GgitOId            *ggit_repository_create_tag_annotation (
+                                                       GgitRepository        *repository,
+                                                       const gchar           *tag_name,
+                                                       GgitObject            *target,
+                                                       GgitSignature         *signature,
+                                                       const gchar           *message,
+                                                       GError               **error);
+
 gboolean            ggit_repository_delete_tag        (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        GError               **error);

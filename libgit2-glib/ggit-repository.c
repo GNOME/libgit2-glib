@@ -1331,6 +1331,55 @@ ggit_repository_create_tag_lightweight (GgitRepository   *repository,
 }
 
 /**
+ * ggit_repository_create_tag_annotation:
+ * @repository: a #GgitRepository.
+ * @tag_name: the name of the tag.
+ * @target: a #GgitObject.
+ * @signature: a #GgitObject.
+ * @message: the tag message.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a new annotated tag.
+ *
+ * Returns: (transfer full) (allow-none): the id to which the tag points, or
+ *                                        %NULL in case of an error.
+ *
+ **/
+GgitOId *
+ggit_repository_create_tag_annotation (GgitRepository  *repository,
+                                       const gchar     *tag_name,
+                                       GgitObject      *target,
+                                       GgitSignature   *signature,
+                                       const gchar     *message,
+                                       GError         **error)
+{
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (tag_name != NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
+	g_return_val_if_fail (message != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_tag_annotation_create (&oid,
+	                                 _ggit_native_get (repository),
+	                                 tag_name,
+	                                 _ggit_native_get (target),
+	                                 _ggit_native_get (signature),
+	                                 message);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
+/**
  * ggit_repository_list_tags:
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
