@@ -118,8 +118,8 @@ ggit_utils_get_str_array_from_git_strarray (git_strarray *gitarray)
 }
 
 void
-ggit_utils_get_git_strarray_from_str_array (const gchar  **array,
-                                            git_strarray  *gitarray)
+ggit_utils_get_git_strarray_from_str_array (const gchar * const *array,
+                                            git_strarray        *gitarray)
 {
 	git_strarray fake_gitarray;
 

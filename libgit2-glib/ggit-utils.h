@@ -39,8 +39,8 @@ gchar         **ggit_utils_get_str_array_from_git_strarray
 
 
 void            ggit_utils_get_git_strarray_from_str_array
-                                                      (const gchar  **array,
-                                                       git_strarray  *gitarray);
+                                                      (const gchar * const *array,
+                                                       git_strarray        *gitarray);
 
 G_END_DECLS
 
