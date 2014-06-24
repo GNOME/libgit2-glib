@@ -1150,6 +1150,21 @@ typedef gint (* GgitSubmoduleCallback) (GgitSubmodule *submodule,
                                         gpointer       user_data);
 
 /**
+ * GgitTagCallback:
+ * @name: the tag name.
+ * @tag_oid: the tag oid.
+ * @user_data: (closure): user-suplied data.
+ *
+ * When iterating over all the tags, callback that will be
+ * issued per entry. See ggit_repository_tag_foreach().
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitTagCallback) (const gchar *name,
+                                  GgitOId     *tag_oid,
+                                  gpointer    *user_data);
+
+/**
  * GgitTransferProgressCallback:
  * @stats: a #GgitTransferProgress.
  * @user_data: (closure): user-supplied data.

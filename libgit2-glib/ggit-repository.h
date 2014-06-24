@@ -185,6 +185,11 @@ gboolean            ggit_repository_delete_tag        (GgitRepository        *re
                                                        const gchar           *name,
                                                        GError               **error);
 
+gboolean            ggit_repository_tag_foreach       (GgitRepository        *repository,
+                                                       GgitTagCallback        callback,
+                                                       gpointer               user_data,
+                                                       GError               **error);
+
 GgitTreeBuilder    *ggit_repository_create_tree_builder_from_tree (
                                                        GgitRepository        *repository,
                                                        GgitTree              *tree,

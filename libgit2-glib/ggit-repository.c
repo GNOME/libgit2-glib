@@ -1449,6 +1449,72 @@ ggit_repository_delete_tag (GgitRepository  *repository,
 	}
 }
 
+typedef struct
+{
+	gpointer user_data;
+
+	GgitTagCallback callback;
+} TagCallbackWrapperData;
+
+static gint
+tag_callback_wrapper (const gchar *name,
+                      git_oid     *tag_oid,
+                      gpointer     user_data)
+{
+	TagCallbackWrapperData *wrapper_data = (TagCallbackWrapperData *)user_data;
+	GgitOId *oid;
+	gint ret;
+
+	oid = _ggit_oid_wrap (tag_oid);
+
+	ret = wrapper_data->callback (name, oid, wrapper_data->user_data);
+	ggit_oid_free (oid);
+
+	return ret;
+}
+
+/**
+ * ggit_repository_tag_foreach:
+ * @repository: a #GgitRepository.
+ * @callback: (scope call): a #GgitTagCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Get all the tags in the repository and run the provided callback on each. If
+ * the callback returns something other than 0, the iteration will stop and
+ * @error will be set.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ **/
+gboolean
+ggit_repository_tag_foreach (GgitRepository   *repository,
+                             GgitTagCallback   callback,
+                             gpointer          user_data,
+                             GError          **error)
+{
+	TagCallbackWrapperData wrapper_data;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	wrapper_data.user_data = user_data;
+	wrapper_data.callback = callback;
+
+	ret = git_tag_foreach (_ggit_native_get (repository),
+	                       tag_callback_wrapper,
+	                       &wrapper_data);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /**
  * ggit_repository_create_branch:
  * @repository: a #GgitRepository.
