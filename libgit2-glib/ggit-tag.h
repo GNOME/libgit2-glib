@@ -76,6 +76,8 @@ GgitSignature    *ggit_tag_get_tagger           (GgitTag *tag);
 
 const gchar      *ggit_tag_get_message          (GgitTag  *tag);
 
+GType             ggit_tag_get_target_type      (GgitTag  *tag);
+
 G_END_DECLS
 
 #endif /* __GGIT_TAG_H__ */

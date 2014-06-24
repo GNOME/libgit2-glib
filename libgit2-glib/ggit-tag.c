@@ -181,4 +181,20 @@ ggit_tag_get_message (GgitTag *tag)
 	return git_tag_message (t);
 }
 
+/**
+ * ggit_tag_get_target_type:
+ * @tag: a #GgitTag.
+ *
+ * Get the target object type.
+ *
+ * Returns: a #GType.
+ **/
+GType
+ggit_tag_get_target_type (GgitTag *tag)
+{
+	g_return_val_if_fail (GGIT_IS_TAG (tag), G_TYPE_INVALID);
+
+	return ggit_utils_get_gtype_from_otype (git_tag_target_type (_ggit_native_get (tag)));
+}
+
 /* ex:set ts=8 noet: */
