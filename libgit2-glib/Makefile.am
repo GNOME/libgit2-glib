@@ -197,7 +197,7 @@ if HAVE_INTROSPECTION
 endif
 
 coverage:
-	$(AM_V_GEN) LIBGIT2_INCLUDE_DIR=$(shell $(PKG_CONFIG) --variable=includedir libgit2)/git2 $(top_srcdir)/tools/coverage.py $(AM_CPPFLAGS) -- $(C_FILES)
+	$(AM_V_GEN) LIBGIT2_INCLUDE_DIR=$(shell $(PKG_CONFIG) --variable=includedir libgit2)/git2 $(top_srcdir)/tools/coverage.py $(AM_CPPFLAGS) -isystem $(shell llvm-clang -print-file-name=include) -- $(C_FILES)
 
 .PHONY: coverage
 
