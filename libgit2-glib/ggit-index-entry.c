@@ -126,7 +126,7 @@ ggit_index_entry_unref (GgitIndexEntry *entry)
 	{
 		if (entry->owned)
 		{
-			g_free (entry->entry->path);
+			g_free ((gchar *)entry->entry->path);
 			g_slice_free (git_index_entry, entry->entry);
 		}
 
@@ -656,7 +656,7 @@ ggit_index_entry_set_path (GgitIndexEntry *entry,
 
 	if (entry->entry->path)
 	{
-		g_free (entry->entry->path);
+		g_free ((gchar *)entry->entry->path);
 		entry->entry->path = NULL;
 	}
 
