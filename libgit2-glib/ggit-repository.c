@@ -1367,6 +1367,40 @@ ggit_repository_list_tags (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_delete_tag:
+ * @repository: a #GgitRepository.
+ * @name: the name of the tag.
+ * @error: a #GError.
+ *
+ * Delete an existing tag reference by name.
+ *
+ * Returns: %TRUE if the tag was deleted successfully, %FALSE otherwise.
+ **/
+gboolean
+ggit_repository_delete_tag (GgitRepository  *repository,
+                            gchar const     *name,
+                            GError         **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (name != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_tag_delete (_ggit_native_get (repository), name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
+}
+
+/**
  * ggit_repository_create_branch:
  * @repository: a #GgitRepository.
  * @branch_name: the name of the branch.

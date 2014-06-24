@@ -173,6 +173,10 @@ GgitOId            *ggit_repository_create_tag_lightweight (
                                                        GgitCreateFlags        flags,
                                                        GError               **error);
 
+gboolean            ggit_repository_delete_tag        (GgitRepository        *repository,
+                                                       const gchar           *name,
+                                                       GError               **error);
+
 GgitTreeBuilder    *ggit_repository_create_tree_builder_from_tree (
                                                        GgitRepository        *repository,
                                                        GgitTree              *tree,
