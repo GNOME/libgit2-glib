@@ -667,6 +667,27 @@ ggit_index_entry_set_path (GgitIndexEntry *entry,
 	}
 }
 
+static git_filemode_t
+file_info_to_filemode (GFileInfo *info)
+{
+	git_filemode_t ret = 0;
+
+	if (g_file_info_get_is_symlink (info))
+	{
+		ret |= GIT_FILEMODE_LINK;
+	}
+	else if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE))
+	{
+		ret |= GIT_FILEMODE_BLOB_EXECUTABLE;
+	}
+	else
+	{
+		ret |= GIT_FILEMODE_BLOB;
+	}
+
+	return ret;
+}
+
 /**
  * ggit_index_entry_stat:
  * @entry: a #GgitIndexEntry.
@@ -698,7 +719,7 @@ ggit_index_entry_stat (GgitIndexEntry  *entry,
 	                          G_FILE_ATTRIBUTE_TIME_CREATED_USEC ","
 	                          G_FILE_ATTRIBUTE_UNIX_DEVICE ","
 	                          G_FILE_ATTRIBUTE_UNIX_INODE ","
-	                          G_FILE_ATTRIBUTE_UNIX_MODE ","
+	                          G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE ","
 	                          G_FILE_ATTRIBUTE_UNIX_UID ","
 	                          G_FILE_ATTRIBUTE_UNIX_GID,
 	                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
@@ -736,9 +757,7 @@ ggit_index_entry_stat (GgitIndexEntry  *entry,
 		g_file_info_get_attribute_uint64 (info,
 		                                  G_FILE_ATTRIBUTE_UNIX_INODE);
 
-	entry->entry->mode =
-		g_file_info_get_attribute_uint32 (info,
-		                                  G_FILE_ATTRIBUTE_UNIX_MODE);
+	entry->entry->mode = file_info_to_filemode (info);
 
 	entry->entry->uid =
 		g_file_info_get_attribute_uint32 (info,
