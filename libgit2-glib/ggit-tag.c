@@ -197,4 +197,35 @@ ggit_tag_get_target_type (GgitTag *tag)
 	return ggit_utils_get_gtype_from_otype (git_tag_target_type (_ggit_native_get (tag)));
 }
 
+/**
+ * ggit_tag_peel:
+ * @tag: a #GgitTag.
+ * @error: a #GError.
+ *
+ * Recursively peel a tag until a non tag object is found.
+ *
+ * Returns: (transfer full): a #GgitObject.
+ *
+ **/
+GgitObject *
+ggit_tag_peel (GgitTag  *tag,
+               GError  **error)
+{
+	git_object *o;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_TAG (tag), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_tag_peel (&o, _ggit_native_get (tag));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return ggit_utils_create_real_object (o, TRUE);
+}
+
 /* ex:set ts=8 noet: */

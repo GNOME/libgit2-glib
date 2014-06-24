@@ -78,6 +78,9 @@ const gchar      *ggit_tag_get_message          (GgitTag  *tag);
 
 GType             ggit_tag_get_target_type      (GgitTag  *tag);
 
+GgitObject       *ggit_tag_peel                 (GgitTag  *tag,
+                                                 GError  **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_TAG_H__ */
