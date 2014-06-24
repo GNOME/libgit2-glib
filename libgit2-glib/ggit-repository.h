@@ -213,6 +213,10 @@ GgitIndexEntry     *ggit_repository_create_index_entry_for_path (
 gchar             **ggit_repository_list_tags         (GgitRepository        *repository,
                                                        GError               **error);
 
+gchar             **ggit_repository_list_tags_match   (GgitRepository        *repository,
+                                                       const gchar           *pattern,
+                                                       GError               **error);
+
 GgitBranch         *ggit_repository_create_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,
                                                        GgitObject            *target,

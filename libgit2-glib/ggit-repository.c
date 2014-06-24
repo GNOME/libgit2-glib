@@ -1416,6 +1416,46 @@ ggit_repository_list_tags (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_list_tags_match:
+ * @repository: a #GgitRepository.
+ * @pattern: (allow-none): a pattern to match.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Fill a list with all the tags in the @repository matching the provided
+ * pattern. The pattern can use standard fnmatch syntax.
+ *
+ * Returns: (transfer full) (allow-none): a list with matching tags in @repository.
+ **/
+gchar **
+ggit_repository_list_tags_match (GgitRepository  *repository,
+                                 const gchar     *pattern,
+                                 GError         **error)
+{
+	gint ret;
+	git_strarray tag_names;
+	gchar **tags;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_tag_list_match (&tag_names,
+	                          pattern ? pattern : "",
+	                          _ggit_native_get (repository));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		tags = NULL;
+	}
+	else
+	{
+		tags = ggit_utils_get_str_array_from_git_strarray (&tag_names);
+	}
+
+	return tags;
+}
+
+/**
  * ggit_repository_delete_tag:
  * @repository: a #GgitRepository.
  * @name: the name of the tag.
