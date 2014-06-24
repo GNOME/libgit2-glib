@@ -196,6 +196,7 @@ ss.sort(key=lambda x: '{0} {1}'.format(os.path.basename(x.filename), x.ident))
 lastf = None
 
 keys = list(perfile.keys())
+keys.sort()
 
 for filename in keys:
     b = os.path.basename(filename)
