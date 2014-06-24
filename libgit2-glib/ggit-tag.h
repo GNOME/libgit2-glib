@@ -72,7 +72,7 @@ GgitOId          *ggit_tag_get_target_id        (GgitTag  *tag);
 
 const gchar      *ggit_tag_get_name             (GgitTag  *tag);
 
-GgitSignature    *ggit_tag_get_tagger           (GgitTag *tag);
+GgitSignature    *ggit_tag_get_tagger           (GgitTag  *tag);
 
 const gchar      *ggit_tag_get_message          (GgitTag  *tag);
 
