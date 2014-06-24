@@ -2699,4 +2699,126 @@ ggit_repository_get_attribute (GgitRepository           *repository,
 	return value;
 }
 
+/**
+ * ggit_repository_checkout_head:
+ * @repository: a #GgitRepository.
+ * @options: (allow-none): a #GgitCheckoutOptions or %NULL.
+ * @error: a #GError for error reporting or %NULL.
+ *
+ * Update files in the working tree to reflect the contents of current HEAD. If
+ * @options is %NULL, then the default checkout options will be used.
+ *
+ * If the checkout was not successfull, then @error will be set.
+ *
+ * Returns: %TRUE if the checkout was successfull, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_repository_checkout_head (GgitRepository       *repository,
+                               GgitCheckoutOptions  *options,
+                               GError              **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_checkout_head (_ggit_native_get (repository),
+	                         _ggit_checkout_options_get_checkout_options (options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_repository_checkout_index:
+ * @repository: a #GgitRepository.
+ * @index: (allow-none): a #GgitIndex or %NULL.
+ * @options: (allow-none): a #GgitCheckoutOptions or %NULL.
+ * @error: a #GError for error reporting or %NULL.
+ *
+ * Update files in the working tree to reflect the contents of the index. If
+ * @index is %NULL, then the current index of the repository will be used. If
+ * @options is %NULL, then the default checkout options will be used.
+ *
+ * If the checkout was not successfull, then @error will be set.
+ *
+ * Returns: %TRUE if the checkout was successfull, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_repository_checkout_index (GgitRepository       *repository,
+                                GgitIndex            *index,
+                                GgitCheckoutOptions  *options,
+                                GError              **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (index == NULL || GGIT_IS_INDEX (index), FALSE);
+	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_checkout_index (_ggit_native_get (repository),
+	                          index != NULL ? _ggit_index_get_index (index) : NULL,
+	                         _ggit_checkout_options_get_checkout_options (options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+/**
+ * ggit_repository_checkout_tree:
+ * @repository: a #GgitRepository.
+ * @tree: (allow-none): a #GgitObject or %NULL.
+ * @options: (allow-none): a #GgitCheckoutOptions or %NULL.
+ * @error: a #GError for error reporting or %NULL.
+ *
+ * Update files in the working tree to reflect the contents of the specified
+ * commit, tag or tree object. If @tree is %NULL, then the current HEAD of the
+ * repository will be used. If @options is %NULL, then the default checkout
+ * options will be used.
+ *
+ * If the checkout was not successfull, then @error will be set.
+ *
+ * Returns: %TRUE if the checkout was successfull, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_repository_checkout_tree (GgitRepository       *repository,
+                               GgitObject           *tree,
+                               GgitCheckoutOptions  *options,
+                               GError              **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (tree == NULL || GGIT_IS_OBJECT (tree), FALSE);
+	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_checkout_tree (_ggit_native_get (repository),
+	                         tree != NULL ? _ggit_native_get (tree) : NULL,
+	                         _ggit_checkout_options_get_checkout_options (options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
 /* ex:set ts=8 noet: */

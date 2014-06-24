@@ -33,6 +33,7 @@
 #include <libgit2-glib/ggit-tree.h>
 #include <libgit2-glib/ggit-branch.h>
 #include <libgit2-glib/ggit-blob-output-stream.h>
+#include <libgit2-glib/ggit-checkout-options.h>
 
 G_BEGIN_DECLS
 
@@ -348,6 +349,20 @@ const gchar        *ggit_repository_get_attribute     (GgitRepository           
                                                        const gchar              *path,
                                                        const gchar              *name,
                                                        GgitAttributeCheckFlags   flags,
+                                                       GError                  **error);
+
+gboolean            ggit_repository_checkout_head     (GgitRepository           *repository,
+                                                       GgitCheckoutOptions      *options,
+                                                       GError                  **error);
+
+gboolean            ggit_repository_checkout_index    (GgitRepository           *repository,
+                                                       GgitIndex                *index,
+                                                       GgitCheckoutOptions      *options,
+                                                       GError                  **error);
+
+gboolean            ggit_repository_checkout_tree     (GgitRepository           *repository,
+                                                       GgitObject               *tree,
+                                                       GgitCheckoutOptions      *options,
                                                        GError                  **error);
 
 G_END_DECLS

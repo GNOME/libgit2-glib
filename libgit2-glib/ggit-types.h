@@ -955,6 +955,39 @@ typedef enum
 	GGIT_PACKBUILDER_STAGE_DELTAFICATION  = 1
 } GgitPackbuilderStage;
 
+typedef enum
+{
+	GGIT_CHECKOUT_NONE                    = 0,
+	GGIT_CHECKOUT_SAFE                    = (1u << 0),
+	GGIT_CHECKOUT_SAFE_CREATE             = (1u << 1),
+	GGIT_CHECKOUT_FORCE                   = (1u << 2),
+	GGIT_CHECKOUT_ALLOW_CONFLICTS         = (1u << 4),
+	GGIT_CHECKOUT_REMOVE_UNTRACKED        = (1u << 5),
+	GGIT_CHECKOUT_REMOVE_IGNORED          = (1u << 6),
+	GGIT_CHECKOUT_UPDATE_ONLY             = (1u << 7),
+	GGIT_CHECKOUT_DONT_UPDATE_INDEX       = (1u << 8),
+	GGIT_CHECKOUT_NO_REFRESH              = (1u << 9),
+	GGIT_CHECKOUT_SKIP_UNMERGED           = (1u << 10),
+	GGIT_CHECKOUT_USE_OURS                = (1u << 11),
+	GGIT_CHECKOUT_USE_THEIRS              = (1u << 12),
+	GGIT_CHECKOUT_DISABLE_PATHSPEC_MATCH  = (1u << 13),
+	GGIT_CHECKOUT_SKIP_LOCKED_DIRECTORIES = (1u << 18),
+	GGIT_CHECKOUT_DONT_OVERWRITE_IGNORED  = (1u << 19),
+	GGIT_CHECKOUT_CONFLICT_STYLE_MERGE    = (1u << 20),
+	GGIT_CHECKOUT_CONFLICT_STYLE_DIFF3    = (1u << 21)
+} GgitCheckoutStrategy;
+
+typedef enum {
+	GGIT_CHECKOUT_NOTIFY_NONE      = 0,
+	GGIT_CHECKOUT_NOTIFY_CONFLICT  = (1u << 0),
+	GGIT_CHECKOUT_NOTIFY_DIRTY     = (1u << 1),
+	GGIT_CHECKOUT_NOTIFY_UPDATED   = (1u << 2),
+	GGIT_CHECKOUT_NOTIFY_UNTRACKED = (1u << 3),
+	GGIT_CHECKOUT_NOTIFY_IGNORED   = (1u << 4),
+
+	GGIT_CHECKOUT_NOTIFY_ALL       = 0x0FFFFu
+} GgitCheckoutNotifyFlags;
+
 /**
  * GgitConfigCallback:
  * @entry: a #GgitConfigEntry.
