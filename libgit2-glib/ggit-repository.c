@@ -1735,8 +1735,8 @@ ggit_repository_reset (GgitRepository  *repository,
 
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
 	g_return_if_fail (GGIT_IS_OBJECT (target));
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
-	g_return_val_if_fail (log_message != NULL, FALSE);
+	g_return_if_fail (GGIT_IS_SIGNATURE (signature));
+	g_return_if_fail (log_message != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_reset (_ggit_native_get (repository),
