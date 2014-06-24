@@ -114,8 +114,13 @@ def scan_libgit2_glib(cflags, files, git2dir):
             calls = {}
 
             for cursor in walk_cursors(tu, files):
-                if cursor.kind == cindex.CursorKind.CALL_EXPR:
+                if cursor.kind == cindex.CursorKind.CALL_EXPR or \
+                   cursor.kind == cindex.CursorKind.DECL_REF_EXPR:
+
                     cdecl = cursor.get_referenced()
+
+                    if cdecl.kind != cindex.CursorKind.FUNCTION_DECL:
+                        continue
 
                     if (not cdecl is None) and (not cdecl.location.file is None):
                         fdefname = cdecl.location.file.name.decode('utf-8')
