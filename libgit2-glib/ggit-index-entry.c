@@ -84,6 +84,7 @@ _ggit_index_entry_new (const gchar *path,
 	entry = g_slice_new0 (git_index_entry);
 
 	ret = ggit_index_entry_wrap (entry, TRUE);
+	entry->mode = GIT_FILEMODE_BLOB;
 
 	ggit_index_entry_set_path (ret, path);
 	ggit_index_entry_set_id (ret, id);
