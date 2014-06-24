@@ -100,6 +100,15 @@ GgitCommit          *ggit_commit_get_nth_ancestor     (GgitCommit        *commit
                                                        guint              n,
                                                        GError           **error);
 
+GgitOId             *ggit_commit_amend                (GgitCommit        *commit,
+                                                       const gchar       *update_ref,
+                                                       GgitSignature     *author,
+                                                       GgitSignature     *committer,
+                                                       const gchar       *message_encoding,
+                                                       const gchar       *message,
+                                                       GgitTree          *tree,
+                                                       GError           **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_COMMIT_H__ */

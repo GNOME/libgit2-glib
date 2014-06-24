@@ -486,4 +486,64 @@ ggit_commit_get_nth_ancestor (GgitCommit  *commit,
 	return _ggit_commit_wrap (ancestor, TRUE);
 }
 
+/**
+ * ggit_commit_amend:
+ * @commit: a #GgitCommit.
+ * @update_ref: (allow-none): name of the reference to update.
+ * @author: author signature.
+ * @committer: committer signature (and time of commit).
+ * @message_encoding: (allow-none): message encoding.
+ * @message: commit message.
+ * @tree: the tree of objects to commit.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Amend an existing commit. If @update_ref is not %NULL, the given reference will
+ * be updated to point to the newly created commit. Use "HEAD" to update the
+ * HEAD of the current branch and make it point to this commit.
+ *
+ * If @message_encoding is set to %NULL, "UTF-8" encoding is assumed for the
+ * provided @message. Note that @message will not be cleaned up automatically.
+ * You can use #ggit_message_prettify to do this yourself if needed.
+ *
+ * Returns: the #GgitOId of the created commit object, or %NULL in case of an error.
+ *
+ */
+GgitOId *
+ggit_commit_amend (GgitCommit      *commit,
+                   const gchar     *update_ref,
+                   GgitSignature   *author,
+                   GgitSignature   *committer,
+                   const gchar     *message_encoding,
+                   const gchar     *message,
+                   GgitTree        *tree,
+                   GError         **error)
+{
+	gint ret;
+	git_oid oid;
+
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (author), NULL);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), NULL);
+	g_return_val_if_fail (message != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_TREE (tree), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_commit_amend (&oid,
+	                         _ggit_native_get (commit),
+	                         update_ref,
+	                         _ggit_native_get (author),
+	                         _ggit_native_get (committer),
+	                         message_encoding,
+	                         message,
+	                         _ggit_native_get (tree));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
 /* ex:set ts=8 noet: */
