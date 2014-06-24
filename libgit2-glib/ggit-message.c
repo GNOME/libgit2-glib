@@ -43,8 +43,6 @@ ggit_message_prettify (const gchar *message,
 	git_buf buf = {0,};
 	gchar *d;
 
-	git_buf_set(&buf, message, strlen (message));
-
 	git_message_prettify (&buf, message, strip_comments, comment_char);
 
 	d = g_strdup (buf.ptr);
