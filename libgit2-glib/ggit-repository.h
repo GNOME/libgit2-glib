@@ -308,6 +308,11 @@ void                ggit_repository_reset              (GgitRepository          
                                                         const gchar             *log_message,
                                                         GError                 **error);
 
+void                ggit_repository_reset_default      (GgitRepository          *repository,
+                                                        GgitObject              *target,
+                                                        const gchar * const     *pathspecs,
+                                                        GError                 **error);
+
 GgitObject         *ggit_repository_revparse          (GgitRepository        *repository,
                                                        const gchar           *spec,
                                                        GError               **error);

@@ -1941,6 +1941,47 @@ ggit_repository_reset (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_reset_default:
+ * @repository: a #GgitRepository.
+ * @target: (allow-none): the target #GgitObject which is a commit or a tag.
+ * @pathspecs: a list of file paths to reset.
+ * @error: a #GError for error reporting or %NULL.
+ *
+ * Update some entries in the index from the target commit tree. The scope of
+ * the updated entries is determined by the paths specified in @pathspecs.
+ * Passing %NULL in @target will result in removing entries in the index
+ * matching the provided pathspecs.
+ *
+ **/
+void
+ggit_repository_reset_default (GgitRepository       *repository,
+                               GgitObject           *target,
+                               const gchar * const  *pathspecs,
+                               GError              **error)
+{
+	gint ret;
+	git_strarray pp;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (target == NULL || GGIT_IS_OBJECT (target));
+	g_return_if_fail (pathspecs != NULL && *pathspecs != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ggit_utils_get_git_strarray_from_str_array (pathspecs, &pp);
+
+	ret = git_reset_default (_ggit_native_get (repository),
+	                         _ggit_native_get (target),
+	                         &pp);
+
+	git_strarray_free (&pp);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_save_stash:
  * @repository: a #GgitRepository.
  * @stasher: a #GgitSignature.
