@@ -73,6 +73,8 @@ GgitSignature        *ggit_signature_new_now           (const gchar         *nam
                                                         const gchar         *email,
                                                         GError             **error);
 
+GgitSignature        *ggit_signature_copy              (GgitSignature       *signature);
+
 const gchar          *ggit_signature_get_name          (GgitSignature       *signature);
 
 const gchar          *ggit_signature_get_email         (GgitSignature       *signature);

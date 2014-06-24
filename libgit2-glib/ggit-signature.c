@@ -235,6 +235,26 @@ ggit_signature_new_now (const gchar  *name,
 	return signature;
 }
 
+/**
+ * ggit_signature_copy:
+ * @signature: a #GgitSignature.
+ *
+ * Create a copy of the signature.
+ *
+ * Returns: (transfer full): a #GgitSignature.
+ *
+ **/
+GgitSignature *
+ggit_signature_copy (GgitSignature *signature)
+{
+	git_signature *ret;
+
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
+
+	git_signature_dup (&ret, _ggit_native_get (signature));
+	return _ggit_signature_wrap (ret, signature->priv->encoding, TRUE);
+}
+
 static gchar *
 ensure_utf8 (gchar       *utf8,
              const gchar *encoding,
