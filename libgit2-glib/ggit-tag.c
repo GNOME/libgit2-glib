@@ -51,7 +51,7 @@ _ggit_tag_wrap (git_tag  *tag,
 	if (owned)
 	{
 		_ggit_native_set_destroy_func (gtag,
-		                               (GDestroyNotify)git_tag_free);
+		                               (GDestroyNotify)git_object_free);
 	}
 
 	return gtag;
