@@ -68,6 +68,8 @@ GgitBlob        *_ggit_blob_wrap             (git_blob *blob,
 const guchar     *ggit_blob_get_raw_content  (GgitBlob *blob,
                                               gsize    *length);
 
+gboolean          ggit_blob_is_binary        (GgitBlob *blob);
+
 G_END_DECLS
 
 #endif /* __GGIT_BLOB_H__ */

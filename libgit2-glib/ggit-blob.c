@@ -86,4 +86,21 @@ ggit_blob_get_raw_content (GgitBlob *blob,
 	return (const guchar *)git_blob_rawcontent (b);
 }
 
+/**
+ * ggit_blob_is_binary:
+ * @blob: a #GgitBlob.
+ *
+ * Check whether the blob is binary.
+ *
+ * Returns: %TRUE if the blob is binary, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_blob_is_binary (GgitBlob *blob)
+{
+	g_return_val_if_fail (GGIT_IS_BLOB (blob), FALSE);
+
+	return git_blob_is_binary (_ggit_native_get (blob));
+}
+
 /* ex:set ts=8 noet: */
