@@ -98,9 +98,25 @@ def scan_libgit2_glib(cflags, files, git2dir):
     dname = os.path.dirname(__file__)
     allcalls = {}
 
+    l = 0
+
+    if not os.getenv('SILENT'):
+        sys.stderr.write('\n')
+
+    i = 0
+
     for f in files:
         if not os.getenv('SILENT'):
-            sys.stderr.write('Processing {0}\n'.format(f))
+            name = os.path.basename(f)
+
+            if len(name) > l:
+                l = len(name)
+
+            perc = int((i / len(files)) * 100)
+
+            sys.stderr.write('[{0: >3}%] Processing ... {1}{2}\r'.format(perc, name, ' ' * (l - len(name))))
+
+        i += 1
 
         astf = os.path.join(dname, '.' + os.path.basename(f) + '.cache')
 
@@ -141,6 +157,9 @@ def scan_libgit2_glib(cflags, files, git2dir):
                 allcalls[k] += calls[k]
             else:
                 allcalls[k] = list(calls[k])
+
+    if not os.getenv('SILENT'):
+        sys.stderr.write('\r[100%] Processing ... done{0}\n'.format(' ' * (l - 4)))
 
     return allcalls
 
