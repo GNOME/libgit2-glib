@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 #define GGIT_IS_CHECKOUT_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CHECKOUT_OPTIONS))
 #define GGIT_CHECKOUT_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CHECKOUT_OPTIONS, GgitCheckoutOptionsClass))
 
-typedef struct _GgitCheckoutOptions		GgitCheckoutOptions;
 typedef struct _GgitCheckoutOptionsClass	GgitCheckoutOptionsClass;
 typedef struct _GgitCheckoutOptionsPrivate	GgitCheckoutOptionsPrivate;
 

@@ -384,6 +384,13 @@ typedef struct _GgitTreeBuilder GgitTreeBuilder;
 typedef struct _GgitBlameOptions GgitBlameOptions;
 
 /**
+ * GgitCheckoutOptions:
+ *
+ * Represents the options used when doign a checkout.
+ */
+typedef struct _GgitCheckoutOptions GgitCheckoutOptions;
+
+/**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
  * @GGIT_BRANCH_REMOTE: specifies a remote branch.
