@@ -308,7 +308,7 @@ ggit_revision_walker_push_ref (GgitRevisionWalker  *walker,
  * @error: a #GError.
  *
  * Push and hide the respective endpoints of the given range. The range
- * should be of the form: <commit>..<commit>, where each <commit> is in the
+ * should be of the form: &ltcommit&gt..&lt;commit&gt;, where each &lt;commit&gt; is in the
  * form accepted by revparse. The left-hand commit will be hidden and the
  * right-hand commit pushed.
  *
