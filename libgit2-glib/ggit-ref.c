@@ -600,4 +600,21 @@ ggit_ref_is_branch (GgitRef *ref)
 	return git_reference_is_branch (_ggit_native_get (ref));
 }
 
+/**
+ * ggit_ref_is_note:
+ * @ref: a #GgitRef.
+ *
+ * Check whether the reference is a note.
+ *
+ * Returns: %TRUE if the reference is a note, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_ref_is_note (GgitRef *ref)
+{
+	g_return_val_if_fail (ref != NULL, FALSE);
+
+	return git_reference_is_note (_ggit_native_get (ref));
+}
+
 /* ex:set ts=8 noet: */
