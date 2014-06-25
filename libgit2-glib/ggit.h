@@ -71,6 +71,11 @@
 #include <libgit2-glib/ggit-tree.h>
 #include <libgit2-glib/ggit-types.h>
 
+#ifdef GIT_SSH
+#include <libgit2-glib/ggit-cred-ssh-key-from-agent.h>
+#include <libgit2-glib/ggit-cred-ssh-interactive.h>
+#endif
+
 #endif
 
 /* ex:set ts=8 noet: */

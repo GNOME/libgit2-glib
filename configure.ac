@@ -64,14 +64,56 @@ PKG_CHECK_MODULES(LIBGIT2_GLIB, [
 	gio-2.0 >= $GLIB_REQUIRED
 	libgit2 >= $GIT2_REQUIRED
 	gobject-introspection-1.0 >= $INTROSPECTION_REQUIRED
-	libssh2
 ])
+
+LIBGIT2_INCLUDE_DIR=$($PKG_CONFIG --variable=includedir libgit2)
+LIBGIT2_GLIB_CFLAGS="${LIBGIT2_GLIB_CFLAGS} -I$LIBGIT2_INCLUDE_DIR"
 
 GOBJECT_INTROSPECTION_REQUIRE($INTROSPECTION_REQUIRED)
 
 AC_SUBST(INTROSPECTION_REQUIRED)
 AC_SUBST(GLIB_REQUIRED)
 AC_SUBST(GIT2_REQUIRED)
+
+dnl ===========================================================================
+dnl Check for libgit2 ssh support
+dnl ===========================================================================
+
+AC_MSG_CHECKING([for libgit2 ssh support])
+
+cflags_save="${CFLAGS}"
+libs_save="${LIBS}"
+
+CFLAGS="${LIBGIT2_GLIB_CFLAGS}"
+LIBS="${LIBGIT2_GLIB_LIBS}"
+
+AC_TRY_RUN([
+        #include <git2.h>
+        int
+        main(int argc, const char *argv[])
+        {
+                git_threads_init ();
+                return ((git_libgit2_features() & GIT_FEATURE_SSH) != 0) ? 0 : 1;
+        }
+],[
+    AC_MSG_RESULT([yes])
+    git_ssh=yes
+],[
+    AC_MSG_RESULT([no])
+    git_ssh=no
+])
+
+CFLAGS="${cflags_save}"
+LIBS="${libs_save}"
+
+if test "x$git_ssh" = "xyes"; then
+	LIBGIT2_GLIB_CFLAGS="${LIBGIT2_GLIB_CFLAGS} -DGIT_SSH=1"
+	LIBGIT2_GLIB_PCCFLAGS="-DGIT_SSH=1"
+fi
+
+AC_SUBST(LIBGIT2_GLIB_PCCFLAGS)
+
+AM_CONDITIONAL(GIT_SSH, test x"$git_ssh" = "xyes")
 
 dnl ===========================================================================
 dnl Check for python
