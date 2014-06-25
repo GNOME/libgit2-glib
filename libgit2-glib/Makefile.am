@@ -60,6 +60,7 @@ INST_H_FILES =				\
 	ggit-remote.h			\
 	ggit-remote-callbacks.h		\
 	ggit-repository.h		\
+	ggit-revert-options.h		\
 	ggit-revision-walker.h		\
 	ggit-signature.h		\
 	ggit-status-options.h		\
@@ -120,6 +121,7 @@ C_FILES =				\
 	ggit-remote.c			\
 	ggit-remote-callbacks.c		\
 	ggit-repository.c		\
+	ggit-revert-options.c		\
 	ggit-revision-walker.c		\
 	ggit-signature.c		\
 	ggit-status-options.c		\

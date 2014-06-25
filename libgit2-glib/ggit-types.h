@@ -391,6 +391,13 @@ typedef struct _GgitBlameOptions GgitBlameOptions;
 typedef struct _GgitCheckoutOptions GgitCheckoutOptions;
 
 /**
+ * GgitRevertOptions:
+ *
+ * Represents the options used when reverting.
+ */
+typedef struct _GgitRevertOptions GgitRevertOptions;
+
+/**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
  * @GGIT_BRANCH_REMOTE: specifies a remote branch.

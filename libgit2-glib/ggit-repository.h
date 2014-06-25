@@ -365,6 +365,11 @@ gboolean            ggit_repository_checkout_tree     (GgitRepository           
                                                        GgitCheckoutOptions      *options,
                                                        GError                  **error);
 
+gboolean            ggit_repository_revert            (GgitRepository           *repository,
+                                                       GgitCommit               *commit,
+                                                       GgitRevertOptions        *options,
+                                                       GError                  **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

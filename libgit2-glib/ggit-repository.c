@@ -36,6 +36,8 @@
 #include "ggit-branch-enumerator.h"
 #include "ggit-blame.h"
 #include "ggit-blame-options.h"
+#include "ggit-commit.h"
+#include "ggit-revert-options.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -2820,5 +2822,41 @@ ggit_repository_checkout_tree (GgitRepository       *repository,
 	return TRUE;
 }
 
+/**
+ * ggit_repository_revert:
+ * @repository: a #GgitRepository.
+ * @commit: a #GgitCommit.
+ * @options: a #GgitRevertOptions.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Revert the given @commit on top of the current working directory.
+ *
+ * Returns: %TRUE if the revert was successfull, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_repository_revert (GgitRepository     *repository,
+                        GgitCommit         *commit,
+                        GgitRevertOptions  *options,
+                        GError            **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_revert (_ggit_native_get (repository),
+	                  _ggit_native_get (commit),
+	                  options ? _ggit_revert_options_get_revert_options (options) : NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
 
 /* ex:set ts=8 noet: */
