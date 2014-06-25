@@ -6,6 +6,7 @@ AM_CPPFLAGS =								\
 	$(LIBGIT2_GLIB_CFLAGS)						\
 	$(WARN_CFLAGS)							\
 	$(DISABLE_DEPRECATED_CFLAGS)					\
+	-DGIT_SSH=1							\
 	-DDATADIR=\""$(datadir)"\"					\
 	-DLIBDIR=\""$(libdir)"\"
 
@@ -30,7 +31,9 @@ INST_H_FILES =				\
 	ggit-config.h			\
 	ggit-config-entry.h		\
 	ggit-cred.h			\
+	ggit-cred-ssh-interactive.h	\
 	ggit-cred-plaintext.h		\
+	ggit-cred-ssh-key-from-agent.h	\
 	ggit-diff.h			\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
@@ -92,6 +95,8 @@ C_FILES =				\
 	ggit-convert.c			\
 	ggit-cred.c			\
 	ggit-cred-plaintext.c		\
+	ggit-cred-ssh-interactive.c	\
+	ggit-cred-ssh-key-from-agent.c	\
 	ggit-diff.c			\
 	ggit-diff-delta.c		\
 	ggit-diff-file.c		\
