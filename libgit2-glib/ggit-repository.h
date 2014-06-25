@@ -340,6 +340,11 @@ void                ggit_repository_get_ahead_behind  (GgitRepository        *re
                                                        gsize                 *behind,
                                                        GError               **error);
 
+gboolean            ggit_repository_get_descendant_of (GgitRepository        *repository,
+                                                       GgitOId               *commit,
+                                                       GgitOId               *ancestor,
+                                                       GError               **error);
+
 GgitBlame          *ggit_repository_blame_file        (GgitRepository        *repository,
                                                        GFile                 *file,
                                                        GgitBlameOptions      *blame_options,

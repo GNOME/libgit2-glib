@@ -2165,6 +2165,51 @@ ggit_repository_get_ahead_behind (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_get_descendant_of:
+ * @repository: a #GgitRepository.
+ * @commit: the commit.
+ * @ancestor: the ancestor.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Check whether @com mit is a descendant of @ancestor. Note that if this
+ * function returns %FALSE, an error might have occurred. If so, @error will
+ * be set appropriately.
+ *
+ * Returns: %TRUE if @commit is a descendant of @ancestor, or %FALSE otherwise.
+ *
+ */
+gboolean
+ggit_repository_get_descendant_of (GgitRepository  *repository,
+                                   GgitOId         *commit,
+                                   GgitOId         *ancestor,
+                                   GError         **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (commit != NULL, FALSE);
+	g_return_val_if_fail (ancestor != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_graph_descendant_of (_ggit_native_get (repository),
+	                               _ggit_oid_get_oid (commit),
+	                               _ggit_oid_get_oid (ancestor));
+
+	if (ret == 1)
+	{
+		return TRUE;
+	}
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+
+	}
+
+	return FALSE;
+}
+
+/**
  * ggit_repository_create_blob:
  * @repository: a #GgitRepository.
  *
