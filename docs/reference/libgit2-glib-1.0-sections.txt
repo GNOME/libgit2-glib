@@ -4,6 +4,7 @@
 GgitBlob
 GgitBlobClass
 ggit_blob_get_raw_content
+ggit_blob_is_binary
 <SUBSECTION Standard>
 GGIT_BLOB
 GGIT_BLOB_CLASS
@@ -324,6 +325,19 @@ ggit_diff_options_get_type
 </SECTION>
 
 <SECTION>
+<FILE>ggit-diff-similarity-metric</FILE>
+<TITLE>GgitDiffSimilarityMetric</TITLE>
+GgitDiffSimilarityMetric
+ggit_diff_similarity_metric_copy
+ggit_diff_similarity_metric_free
+ggit_diff_similarity_metric_new
+<SUBSECTION Standard>
+GGIT_DIFF_SIMILARITY_METRIC
+GGIT_TYPE_DIFF_SIMILARITY_METRIC
+ggit_diff_similarity_metric_get_type
+</SECTION>
+
+<SECTION>
 <FILE>ggit-error</FILE>
 <TITLE>GgitError</TITLE>
 GgitError
@@ -430,12 +444,12 @@ ggit_index_entry_resolve_undo_get_type
 <SECTION>
 <FILE>ggit-main</FILE>
 <TITLE>Ggit Main</TITLE>
-GgitCapFlags
-ggit_get_capabilities
+GgitFeatureFlags
+ggit_get_features
 ggit_init
 <SUBSECTION Standard>
-GGIT_TYPE_CAP_FLAGS
-ggit_cap_flags_get_type
+GGIT_TYPE_FEATURE_FLAGS
+ggit_feature_flags_get_type
 </SECTION>
 
 <SECTION>
@@ -597,10 +611,12 @@ ggit_push_get_type
 GgitRef
 GgitRefClass
 GgitRefType
+ggit_ref_is_valid_name
 ggit_ref_get_target
 ggit_ref_get_symbolic_target
 ggit_ref_get_reference_type
 ggit_ref_get_name
+ggit_ref_get_shorthand
 ggit_ref_to_string
 ggit_ref_resolve
 ggit_ref_get_owner
@@ -609,8 +625,13 @@ ggit_ref_set_target
 ggit_ref_rename
 ggit_ref_delete
 ggit_ref_lookup
-ggit_ref_get_reflog
-ggit_ref_delete_reflog
+ggit_ref_has_log
+ggit_ref_get_log
+ggit_ref_delete_log
+ggit_ref_is_branch
+ggit_ref_is_note
+ggit_ref_is_remote
+ggit_ref_is_tag
 <SUBSECTION Standard>
 GGIT_IS_REF
 GGIT_IS_REF_CLASS
@@ -796,6 +817,13 @@ ggit_revision_walker_new
 ggit_revision_walker_reset
 ggit_revision_walker_push
 ggit_revision_walker_hide
+ggit_revision_walker_hide_glob
+ggit_revision_walker_hide_head
+ggit_revision_walker_hide_ref
+ggit_revision_walker_push_glob
+ggit_revision_walker_push_head
+ggit_revision_walker_push_range
+ggit_revision_walker_push_ref
 ggit_revision_walker_next
 ggit_revision_walker_set_sort_mode
 ggit_revision_walker_get_repository
