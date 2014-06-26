@@ -145,6 +145,13 @@ typedef struct _GgitDiffDelta GgitDiffDelta;
 typedef struct _GgitDiffFile GgitDiffFile;
 
 /**
+ * GgitDiffFindOptions:
+ *
+ * Represents options for finding diff similarity.
+ */
+typedef struct _GgitDiffFindOptions GgitDiffFindOptions;
+
+/**
  * GgitDiffHunk:
  *
  * Represents the hunk of a diff.
@@ -1022,6 +1029,26 @@ typedef enum {
 
 	GGIT_CHECKOUT_NOTIFY_ALL       = 0x0FFFFu
 } GgitCheckoutNotifyFlags;
+
+typedef enum {
+	GGIT_DIFF_FIND_BY_CONFIG                  = 0,
+	GGIT_DIFF_FIND_RENAMES                    = (1u << 0),
+	GGIT_DIFF_FIND_RENAMES_FROM_REWRITES      = (1u << 1),
+	GGIT_DIFF_FIND_COPIES                     = (1u << 2),
+	GGIT_DIFF_FIND_COPIES_FROM_UNMODIFIED     = (1u << 3),
+	GGIT_DIFF_FIND_REWRITES                   = (1u << 4),
+	GGIT_DIFF_BREAK_REWRITES                  = (1u << 5),
+	GGIT_DIFF_FIND_AND_BREAK_REWRITES         = (GGIT_DIFF_FIND_REWRITES |
+	                                             GGIT_DIFF_BREAK_REWRITES),
+	GGIT_DIFF_FIND_FOR_UNTRACKED              = (1u << 6),
+	GGIT_DIFF_FIND_ALL                        = (0x0ff),
+	GGIT_DIFF_FIND_IGNORE_LEADING_WHITESPACE  = 0,
+	GGIT_DIFF_FIND_IGNORE_WHITESPACE          = (1u << 12),
+	GGIT_DIFF_FIND_DONT_IGNORE_WHITESPACE     = (1u << 13),
+	GGIT_DIFF_FIND_EXACT_MATCH_ONLY           = (1u << 14),
+	GGIT_DIFF_BREAK_REWRITES_FOR_RENAMES_ONLY = (1u << 15),
+	GGIT_DIFF_FIND_REMOVE_UNMODIFIED          = (1u << 16),
+} GgitDiffFindFlags;
 
 /**
  * GgitConfigCallback:

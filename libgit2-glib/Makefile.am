@@ -34,6 +34,7 @@ INST_H_FILES =				\
 	ggit-diff.h			\
 	ggit-diff-delta.h		\
 	ggit-diff-file.h		\
+	ggit-diff-find-options.h	\
 	ggit-diff-hunk.h		\
 	ggit-diff-line.h		\
 	ggit-diff-options.h		\
@@ -95,6 +96,7 @@ C_FILES =				\
 	ggit-diff.c			\
 	ggit-diff-delta.c		\
 	ggit-diff-file.c		\
+	ggit-diff-find-options.c	\
 	ggit-diff-hunk.c		\
 	ggit-diff-line.c		\
 	ggit-diff-options.c		\
