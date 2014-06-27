@@ -119,6 +119,10 @@ void           ggit_diff_blob_to_buffer            (GgitBlob              *old_b
                                                     gpointer              *user_data,
                                                     GError               **error);
 
+gboolean       ggit_diff_find_similar              (GgitDiff              *diff,
+                                                    GgitDiffFindOptions   *options,
+                                                    GError               **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_DIFF_H__ */

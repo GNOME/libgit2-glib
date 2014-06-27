@@ -29,6 +29,7 @@
 #include "ggit-error.h"
 #include "ggit-repository.h"
 #include "ggit-diff-file.h"
+#include "ggit-diff-find-options.h"
 
 #define GGIT_DIFF_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_DIFF, GgitDiffPrivate))
 
@@ -770,6 +771,41 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 	{
 		_ggit_error_set (error, ret);
 	}
+}
+
+/**
+ * ggit_diff_find_similar:
+ * @diff: a #GgitDiff.
+ * @options: (allow-none): a #GgitDiffFindOptions or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Transform @diff marking file renames, copies, etc.. If @options is set to
+ * %NULL, then the default options will be used.
+ *
+ * Returns: %TRUE if there were no errors, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_diff_find_similar (GgitDiff             *diff,
+                        GgitDiffFindOptions  *options,
+                        GError              **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_DIFF (diff), FALSE);
+	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_diff_find_similar (_ggit_native_get (diff),
+	                             _ggit_diff_find_options_get_diff_find_options (options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* ex:set ts=8 noet: */
