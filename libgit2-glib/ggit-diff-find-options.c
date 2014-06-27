@@ -137,6 +137,7 @@ static void
 ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	git_diff_find_options defopt = GIT_DIFF_FIND_OPTIONS_INIT;
 
 	object_class->finalize = ggit_diff_find_options_finalize;
 
@@ -151,7 +152,7 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 	                                                     "Flags",
 	                                                     "Flags",
 	                                                     GGIT_TYPE_DIFF_FIND_FLAGS,
-	                                                     0,
+	                                                     defopt.flags,
 	                                                     G_PARAM_READWRITE |
 	                                                     G_PARAM_STATIC_STRINGS));
 
@@ -162,7 +163,7 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 	                                                    "Rename threshold",
 	                                                    0,
 	                                                    G_MAXUINT,
-	                                                    0,
+	                                                    defopt.rename_threshold,
 	                                                    G_PARAM_READWRITE |
 	                                                    G_PARAM_STATIC_STRINGS));
 
@@ -173,7 +174,7 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 	                                                    "Rename from rewrite threshold",
 	                                                    0,
 	                                                    G_MAXUINT,
-	                                                    0,
+	                                                    defopt.rename_from_rewrite_threshold,
 	                                                    G_PARAM_READWRITE |
 	                                                    G_PARAM_STATIC_STRINGS));
 
@@ -184,7 +185,7 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 	                                                    "Copy threshold",
 	                                                    0,
 	                                                    G_MAXUINT,
-	                                                    0,
+	                                                    defopt.copy_threshold,
 	                                                    G_PARAM_READWRITE |
 	                                                    G_PARAM_STATIC_STRINGS));
 
@@ -195,7 +196,7 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 	                                                    "Rename limit",
 	                                                    0,
 	                                                    G_MAXUINT,
-	                                                    0,
+	                                                    defopt.rename_limit,
 	                                                    G_PARAM_READWRITE |
 	                                                    G_PARAM_STATIC_STRINGS));
 
