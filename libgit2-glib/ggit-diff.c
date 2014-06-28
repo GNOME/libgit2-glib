@@ -793,7 +793,7 @@ ggit_diff_find_similar (GgitDiff             *diff,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_DIFF (diff), FALSE);
-	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), FALSE);
+	g_return_val_if_fail (options == NULL || GGIT_IS_DIFF_FIND_OPTIONS (options), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_diff_find_similar (_ggit_native_get (diff),
