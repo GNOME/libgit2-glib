@@ -18,7 +18,6 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef __GGIT_DIFF_OPTIONS_H__
 #define __GGIT_DIFF_OPTIONS_H__
 
@@ -29,22 +28,58 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_DIFF_OPTIONS       (ggit_diff_options_get_type ())
-#define GGIT_DIFF_OPTIONS(obj)       ((GgitDiffOptions *)obj)
+#define GGIT_TYPE_DIFF_OPTIONS			(ggit_diff_options_get_type ())
+#define GGIT_DIFF_OPTIONS(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptions))
+#define GGIT_DIFF_OPTIONS_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptions const))
+#define GGIT_DIFF_OPTIONS_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptionsClass))
+#define GGIT_IS_DIFF_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF_OPTIONS))
+#define GGIT_IS_DIFF_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF_OPTIONS))
+#define GGIT_DIFF_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptionsClass))
 
-GType                   ggit_diff_options_get_type          (void) G_GNUC_CONST;
+typedef struct _GgitDiffOptionsClass	GgitDiffOptionsClass;
+typedef struct _GgitDiffOptionsPrivate	GgitDiffOptionsPrivate;
 
-const git_diff_options *_ggit_diff_options_get_diff_options (GgitDiffOptions        *diff_options);
+struct _GgitDiffOptions
+{
+	GObject parent;
 
-GgitDiffOptions        *ggit_diff_options_copy              (GgitDiffOptions        *diff_options);
-void                    ggit_diff_options_free              (GgitDiffOptions        *diff_options);
+	GgitDiffOptionsPrivate *priv;
+};
 
-GgitDiffOptions        *ggit_diff_options_new               (GgitDiffOption          flags,
-                                                             gint                    n_context_lines,
-                                                             gint                    n_interhunk_lines,
-                                                             const gchar            *old_prefix,
-                                                             const gchar            *new_prefix,
-                                                             const gchar           **pathspec);
+struct _GgitDiffOptionsClass
+{
+	GObjectClass parent_class;
+};
+
+const git_diff_options *
+                 _ggit_diff_options_get_diff_options     (GgitDiffOptions  *options);
+
+GType            ggit_diff_options_get_type              (void) G_GNUC_CONST;
+GgitDiffOptions *ggit_diff_options_new                   (void);
+
+GgitDiffOption   ggit_diff_options_get_flags             (GgitDiffOptions  *options);
+void             ggit_diff_options_set_flags             (GgitDiffOptions  *options,
+                                                          GgitDiffOption    flags);
+
+gint             ggit_diff_options_get_n_context_lines   (GgitDiffOptions  *options);
+void             ggit_diff_options_set_n_context_lines   (GgitDiffOptions  *options,
+                                                          gint              n);
+
+gint             ggit_diff_options_get_n_interhunk_lines (GgitDiffOptions  *options);
+void             ggit_diff_options_set_n_interhunk_lines (GgitDiffOptions  *options,
+                                                          gint              n);
+
+const gchar     *ggit_diff_options_get_old_prefix        (GgitDiffOptions  *options);
+void             ggit_diff_options_set_old_prefix        (GgitDiffOptions  *options,
+                                                          const gchar      *prefix);
+
+const gchar     *ggit_diff_options_get_new_prefix        (GgitDiffOptions  *options);
+void             ggit_diff_options_set_new_prefix        (GgitDiffOptions  *options,
+                                                          const gchar      *prefix);
+
+const gchar    **ggit_diff_options_get_pathspec          (GgitDiffOptions  *options);
+void             ggit_diff_options_set_pathspec          (GgitDiffOptions  *options,
+                                                          const gchar     **pathspec);
 
 G_END_DECLS
 
