@@ -146,6 +146,11 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 
 	g_type_class_add_private (object_class, sizeof (GgitDiffFindOptionsPrivate));
 
+	/**
+	 * GgitDiffFindOptions:flags: (type GgitDiffFindFlags):
+	 *
+	 * The diff option flags.
+	 */
 	g_object_class_install_property (object_class,
 	                                 PROP_FLAGS,
 	                                 g_param_spec_flags ("flags",

@@ -147,6 +147,11 @@ ggit_diff_options_class_init (GgitDiffOptionsClass *klass)
 
 	g_type_class_add_private (object_class, sizeof (GgitDiffOptionsPrivate));
 
+	/**
+	 * GgitDiffOptions:flags: (type GgitDiffOption):
+	 *
+	 * The diff option flags.
+	 */
 	g_object_class_install_property (object_class,
 	                                 PROP_FLAGS,
 	                                 g_param_spec_flags ("flags",
@@ -463,7 +468,15 @@ ggit_diff_options_set_pathspec (GgitDiffOptions  *options,
 	options->priv->pathspec = g_strdupv ((gchar **)pathspec);
 
 	options->priv->diff_options.pathspec.strings = options->priv->pathspec;
-	options->priv->diff_options.pathspec.count = g_strv_length (options->priv->pathspec);
+
+	if (options->priv->pathspec != NULL)
+	{
+		options->priv->diff_options.pathspec.count = g_strv_length (options->priv->pathspec);
+	}
+	else
+	{
+		options->priv->diff_options.pathspec.count = 0;
+	}
 
 	g_object_notify (G_OBJECT (options), "pathspec");
 }

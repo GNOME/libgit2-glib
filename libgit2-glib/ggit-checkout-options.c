@@ -241,8 +241,11 @@ ggit_checkout_options_class_init (GgitCheckoutOptionsClass *klass)
 
 	g_type_class_add_private (object_class, sizeof (GgitCheckoutOptionsPrivate));
 
-	
-
+	/**
+	 * GgitCheckoutOptions:strategy: (type GgitCheckoutStrategy):
+	 *
+	 * The checkout strategy.
+	 */
 	g_object_class_install_property (object_class,
 	                                 PROP_STRATEGY,
 	                                 g_param_spec_flags ("strategy",
@@ -295,6 +298,11 @@ ggit_checkout_options_class_init (GgitCheckoutOptionsClass *klass)
 	                                                   G_PARAM_READWRITE |
 	                                                   G_PARAM_STATIC_STRINGS));
 
+	/**
+	 * GgitCheckoutOptions:notify-flags: (type GgitCheckoutNotifyFlags):
+	 *
+	 * The checkout notify flags.
+	 */
 	g_object_class_install_property (object_class,
 	                                 PROP_NOTIFY_FLAGS,
 	                                 g_param_spec_flags ("notify-flags",
