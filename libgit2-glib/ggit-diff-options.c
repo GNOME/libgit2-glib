@@ -222,6 +222,8 @@ static void
 ggit_diff_options_init (GgitDiffOptions *self)
 {
 	self->priv = GGIT_DIFF_OPTIONS_GET_PRIVATE (self);
+
+	git_diff_init_options (&self->priv->diff_options, GIT_DIFF_OPTIONS_VERSION);
 }
 
 /**
