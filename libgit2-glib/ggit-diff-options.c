@@ -453,7 +453,7 @@ ggit_diff_options_get_pathspec (GgitDiffOptions *options)
 /**
  * ggit_diff_options_set_pathspec:
  * @options: a #GgitDiffOptions.
- * @pathspec: (array zero-terminated=1): the pathspec.
+ * @pathspec: (array zero-terminated=1) (allow-none): the pathspec.
  *
  * Set the pathspec.
  *
