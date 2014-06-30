@@ -1,3 +1,10 @@
+News in 0.0.18
+--------------
+* Add checkout API
+* Add ssh credential schemes
+* Improve coverage
+* Cover more of the API
+
 News in 0.0.16
 --------------
 * Fix important crash
