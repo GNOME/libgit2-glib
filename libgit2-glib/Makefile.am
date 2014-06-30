@@ -210,7 +210,29 @@ if HAVE_INTROSPECTION
   CLEANFILES += \
 	$(gir_DATA)		\
 	$(typelib_DATA)
-endif
+
+if ENABLE_VAPIGEN
+include $(VAPIGEN_MAKEFILE)
+
+ggit-1.0.vapi: Ggit-1.0.gir
+
+VAPIGEN_VAPIS = ggit-1.0.vapi
+
+ggit_1_0_vapi_DEPS = gio-2.0
+ggit_1_0_vapi_METADATADIRS = $(top_srcdir)
+ggit_1_0_vapi_FILES = Ggit-1.0.gir
+
+vapidir = $(datadir)/vala/vapi
+vapi_DATA = $(VAPIGEN_VAPIS) ggit-1.0.deps
+
+ggit-1.0.deps:
+	$(AM_V_GEN) echo $(ggit_1_0_vapi_DEPS) | tr ' ' '\n' > $@
+
+CLEANFILES += $(VAPIGEN_VAPIS) ggit-1.0.deps
+
+endif # ENABLE_VAPIGEN
+
+endif # HAVE_INTROSPECTION
 
 coverage:
 	$(AM_V_GEN) LIBGIT2_INCLUDE_DIR=$(shell $(PKG_CONFIG) --variable=includedir libgit2)/git2 $(top_srcdir)/tools/coverage.py $(AM_CPPFLAGS) -isystem $(shell llvm-clang -print-file-name=include) -- $(C_FILES)

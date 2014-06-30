@@ -141,6 +141,9 @@ fi
 
 AM_CONDITIONAL(ENABLE_PYTHON, test x"$enable_python" = "xyes")
 
+# Vala
+VAPIGEN_CHECK
+
 GNOME_COMPILE_WARNINGS([maximum])
 
 AC_OUTPUT([
