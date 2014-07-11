@@ -260,6 +260,106 @@ test_repository_blob_stream (const gchar *git_dir)
 	g_object_unref (repo);
 }
 
+static void
+test_repository_encoding (const gchar *git_dir)
+{
+	GFile *f;
+	GError *err = NULL;
+	GgitOId *cid;
+	GgitTree *tree;
+	GgitIndex *idx;
+	GFile *afile;
+	GgitOId *toid;
+	GgitCommit *commit;
+	GgitRepository *repo;
+	GgitSignature *author;
+	const gchar *msg;
+
+	const char *encoding = "IBM862";
+	const char *message = "\x80\x89\x8f\x20\x84\x90\x87\x9a\x85\x8d\x20\x8e\x92\x89\x83\x20\x92\x8c\x20\x92\x89\x91\x9a\x85";
+	const char *message_utf8 = "\xd7\x90\xd7\x99\xd7\x9f\x20\xd7\x94\xd7\xa0\xd7\x97\xd7\xaa\xd7\x95\xd7\x9d\x20\xd7\x9e\xd7\xa2\xd7\x99\xd7\x93\x20\xd7\xa2\xd7\x9c\x20\xd7\xa2\xd7\x99\xd7\xa1\xd7\xaa\xd7\x95";
+
+	f = g_file_new_for_path (git_dir);
+	repo = ggit_repository_init_repository (f, FALSE, &err);
+
+	g_assert_no_error (err);
+	g_assert (repo != NULL);
+
+	idx = ggit_repository_get_index (repo, &err);
+
+	g_assert_no_error (err);
+	g_assert (idx != NULL);
+
+	afile = g_file_get_child (f, "a");
+	g_object_unref (f);
+
+	g_file_replace_contents (afile,
+	                         message,
+	                         strlen (message),
+	                         NULL,
+	                         FALSE,
+	                         G_FILE_CREATE_NONE,
+	                         NULL,
+	                         NULL,
+	                         &err);
+	g_assert_no_error (err);
+
+	ggit_index_add_file (idx, afile, &err);
+	g_assert_no_error (err);
+	g_object_unref (afile);
+
+	toid = ggit_index_write_tree (idx, &err);
+	g_assert_no_error (err);
+	g_assert (toid != NULL);
+
+	tree = GGIT_TREE (ggit_repository_lookup (repo, toid, GGIT_TYPE_TREE, &err));
+	g_assert_no_error (err);
+	g_assert (tree != NULL);
+
+	ggit_oid_free (toid);
+	g_object_unref (idx);
+
+	author = ggit_signature_new_now ("Jesse van den Kieboom",
+	                                 "jessevdk@gnome.org",
+	                                 &err);
+
+	g_assert_no_error (err);
+	g_assert (author != NULL);
+
+	cid = ggit_repository_create_commit (repo,
+	                                     "HEAD",
+	                                     author,
+	                                     author,
+	                                     encoding,
+	                                     message,
+	                                     tree,
+	                                     NULL,
+	                                     0,
+	                                     &err);
+
+	g_assert_no_error (err);
+	g_assert (cid != NULL);
+
+	g_object_unref (author);
+	g_object_unref (tree);
+
+	commit = GGIT_COMMIT (ggit_repository_lookup (repo, cid, GGIT_TYPE_COMMIT, &err));
+	g_assert_no_error (err);
+	g_assert (commit != NULL);
+
+	ggit_oid_free (cid);
+
+	g_assert_cmpstr (ggit_commit_get_message_encoding (commit),
+	                 ==,
+	                 encoding);
+
+	msg = ggit_commit_get_message (commit);
+	g_assert_cmpstr (msg, ==, message_utf8);
+
+	g_object_unref (commit);
+	g_object_unref (repo);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -276,6 +376,7 @@ main (int    argc,
 	TEST ("init", init);
 	TEST ("init-bare", init_bare);
 	TEST ("blob-stream", blob_stream);
+	TEST ("encoding", encoding);
 
 	return g_test_run ();
 }
