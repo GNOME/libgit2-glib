@@ -426,6 +426,13 @@ typedef struct _GgitCheckoutOptions GgitCheckoutOptions;
 typedef struct _GgitRevertOptions GgitRevertOptions;
 
 /**
+ * GgitFormatEmailOptions:
+ *
+ * Represents the options used when formatting a diff for e-mail.
+ */
+typedef struct _GgitDiffFormatEmailOptions GgitDiffFormatEmailOptions;
+
+/**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
  * @GGIT_BRANCH_REMOTE: specifies a remote branch.
@@ -1049,6 +1056,12 @@ typedef enum {
 	GGIT_DIFF_BREAK_REWRITES_FOR_RENAMES_ONLY = (1u << 15),
 	GGIT_DIFF_FIND_REMOVE_UNMODIFIED          = (1u << 16),
 } GgitDiffFindFlags;
+
+typedef enum
+{
+	GGIT_DIFF_FORMAT_EMAIL_NONE                         = 0,
+	GGIT_DIFF_FORMAT_EMAIL_EXCLUDE_SUBJECT_PATCH_MARKER = (1 << 0)
+} GgitDiffFormatEmailFlags;
 
 /**
  * GgitConfigCallback:
