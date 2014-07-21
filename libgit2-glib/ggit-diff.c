@@ -30,6 +30,7 @@
 #include "ggit-repository.h"
 #include "ggit-diff-file.h"
 #include "ggit-diff-find-options.h"
+#include "ggit-diff-format-email-options.h"
 
 #define GGIT_DIFF_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_DIFF, GgitDiffPrivate))
 
@@ -591,6 +592,47 @@ ggit_diff_print (GgitDiff              *diff,
 	{
 		_ggit_error_set (error, ret);
 	}
+}
+
+/**
+ * ggit_diff_format_email:
+ * @diff: a #GgitDiff.
+ * @options: a #GgitDiffFormatEmailOptions.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create an e-mail ready patch from a diff.
+ *
+ * Returns: (transfer full): the patch or %NULL if an error occurred.
+ *
+ **/
+gchar *
+ggit_diff_format_email (GgitDiff                    *diff,
+                        GgitDiffFormatEmailOptions  *options,
+                        GError                     **error)
+{
+	gint ret;
+	gchar *retval;
+	git_buf buf = {0,};
+
+	g_return_val_if_fail (GGIT_IS_DIFF (diff), NULL);
+	g_return_val_if_fail (options == NULL || GGIT_IS_DIFF_FORMAT_EMAIL_OPTIONS (options), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_diff_format_email (&buf,
+	                             _ggit_native_get (diff),
+	                             options ? _ggit_diff_format_email_options_get_diff_format_email_options (options) : NULL);
+
+	if (ret != GIT_OK)
+	{
+		git_buf_free (&buf);
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	retval = g_strndup (buf.ptr, buf.size);
+	git_buf_free (&buf);
+
+	return retval;
 }
 
 /**

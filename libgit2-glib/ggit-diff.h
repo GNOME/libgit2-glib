@@ -94,6 +94,10 @@ void           ggit_diff_print                     (GgitDiff              *diff,
                                                     gpointer              *user_data,
                                                     GError               **error);
 
+gchar         *ggit_diff_format_email              (GgitDiff              *diff,
+                                                    GgitDiffFormatEmailOptions *options,
+                                                    GError               **error);
+
 gint           ggit_diff_get_num_deltas            (GgitDiff              *diff);
 
 void           ggit_diff_blobs                     (GgitBlob              *old_blob,
