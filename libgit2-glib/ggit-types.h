@@ -462,7 +462,7 @@ typedef enum
 typedef enum
 {
 	GGIT_BLAME_NORMAL                 = 0,
-	GGIT_BLAME_TRACK_COPIES_SAME_FILE = 1 << 0,
+	GGIT_BLAME_TRACK_COPIES_SAME_FILE = 1 << 0
 } GgitBlameFlags;
 
 /**
@@ -479,10 +479,10 @@ typedef enum
  */
 typedef enum
 {
-	GGIT_CONFIG_LEVEL_SYSTEM = 1,
-	GGIT_CONFIG_LEVEL_XDG = 2,
-	GGIT_CONFIG_LEVEL_GLOBAL = 3,
-	GGIT_CONFIG_LEVEL_LOCAL = 4,
+	GGIT_CONFIG_LEVEL_SYSTEM  = 1,
+	GGIT_CONFIG_LEVEL_XDG     = 2,
+	GGIT_CONFIG_LEVEL_GLOBAL  = 3,
+	GGIT_CONFIG_LEVEL_LOCAL   = 4,
 	GGIT_CONFIG_LEVEL_HIGHEST = -1
 } GgitConfigLevel;
 
@@ -737,7 +737,7 @@ typedef enum {
 typedef enum {
 	GGIT_REMOTE_COMPLETION_DOWNLOAD = 0,
 	GGIT_REMOTE_COMPLETION_INDEXING = 1,
-	GGIT_REMOTE_COMPLETION_ERROR = 2
+	GGIT_REMOTE_COMPLETION_ERROR    = 2
 } GgitRemoteCompletionType;
 
 /* NOTE: keep in sync with git2/refs.h */
@@ -859,7 +859,7 @@ typedef enum {
 	GGIT_SUBMODULE_IGNORE_NONE      = 1,
 	GGIT_SUBMODULE_IGNORE_UNTRACKED = 2,
 	GGIT_SUBMODULE_IGNORE_DIRTY     = 3,
-	GGIT_SUBMODULE_IGNORE_ALL       = 4,
+	GGIT_SUBMODULE_IGNORE_ALL       = 4
 } GgitSubmoduleIgnore;
 
 /**
@@ -900,7 +900,7 @@ typedef enum {
 	GGIT_SUBMODULE_UPDATE_CHECKOUT = 1,
 	GGIT_SUBMODULE_UPDATE_REBASE   = 2,
 	GGIT_SUBMODULE_UPDATE_MERGE    = 3,
-	GGIT_SUBMODULE_UPDATE_NONE     = 4,
+	GGIT_SUBMODULE_UPDATE_NONE     = 4
 } GgitSubmoduleUpdate;
 
 /**
@@ -911,8 +911,8 @@ typedef enum {
  * Describes in which order a tree walk should be performed.
  */
 typedef enum {
-	GGIT_TREE_WALK_MODE_PRE = 0,
-	GGIT_TREE_WALK_MODE_POST = 1,
+	GGIT_TREE_WALK_MODE_PRE  = 0,
+	GGIT_TREE_WALK_MODE_POST = 1
 } GgitTreeWalkMode;
 
 /**
@@ -967,8 +967,8 @@ typedef enum {
  */
 typedef enum {
 	GGIT_STATUS_SHOW_INDEX_AND_WORKDIR = 0,
-	GGIT_STATUS_SHOW_INDEX_ONLY = 1,
-	GGIT_STATUS_SHOW_WORKDIR_ONLY = 2
+	GGIT_STATUS_SHOW_INDEX_ONLY        = 1,
+	GGIT_STATUS_SHOW_WORKDIR_ONLY      = 2
 } GgitStatusShow;
 
 /**
@@ -988,7 +988,7 @@ typedef enum
 	GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX = 0,
 	GGIT_ATTRIBUTE_CHECK_INDEX_THEN_FILE = 1 << 0,
 	GGIT_ATTRIBUTE_CHECK_INDEX_ONLY      = 1 << 1,
-	GGIT_ATTRIBUTE_CHECK_NO_SYSTEM       = 1 << 2,
+	GGIT_ATTRIBUTE_CHECK_NO_SYSTEM       = 1 << 2
 } GgitAttributeCheckFlags;
 
 /**
@@ -1054,7 +1054,7 @@ typedef enum {
 	GGIT_DIFF_FIND_DONT_IGNORE_WHITESPACE     = (1u << 13),
 	GGIT_DIFF_FIND_EXACT_MATCH_ONLY           = (1u << 14),
 	GGIT_DIFF_BREAK_REWRITES_FOR_RENAMES_ONLY = (1u << 15),
-	GGIT_DIFF_FIND_REMOVE_UNMODIFIED          = (1u << 16),
+	GGIT_DIFF_FIND_REMOVE_UNMODIFIED          = (1u << 16)
 } GgitDiffFindFlags;
 
 typedef enum
