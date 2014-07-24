@@ -5,9 +5,7 @@ AM_CPPFLAGS =								\
 	-I$(srcdir)							\
 	$(LIBGIT2_GLIB_CFLAGS)						\
 	$(WARN_CFLAGS)							\
-	$(DISABLE_DEPRECATED_CFLAGS)					\
-	-DDATADIR=\""$(datadir)"\"					\
-	-DLIBDIR=\""$(libdir)"\"
+	$(DISABLE_DEPRECATED_CFLAGS)
 
 libgit2_glib_1_0_la_LDFLAGS =				\
 	-version-info $(LIBGIT2_GLIB_LT_VERSION)	\
