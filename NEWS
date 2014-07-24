@@ -1,3 +1,9 @@
+News in 0.0.20
+--------------
+* More API support
+* Added vala bindings
+* Fixes to build on win32
+
 News in 0.0.18
 --------------
 * Add checkout API
