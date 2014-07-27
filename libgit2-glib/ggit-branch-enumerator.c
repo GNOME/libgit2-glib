@@ -53,6 +53,23 @@ ggit_branch_enumerator_unref (GgitBranchEnumerator *enumerator)
 }
 
 /**
+ * ggit_branch_enumerator_iterator:
+ * @enumerator: a #GgitBranchEnumerator.
+ *
+ * Get an iterator for the enumerator.
+ *
+ * Returns: (transfer none): a #GgitBranchEnumerator.
+ *
+ **/
+GgitBranchEnumerator *
+ggit_branch_enumerator_iterator (GgitBranchEnumerator *enumerator)
+{
+	g_return_val_if_fail (enumerator != NULL, NULL);
+
+	return enumerator;
+}
+
+/**
  * ggit_branch_enumerator_next:
  * @enumerator: a #GgitBranchEnumerator.
  *

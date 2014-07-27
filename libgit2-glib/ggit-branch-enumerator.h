@@ -39,6 +39,8 @@ GgitBranchEnumerator *_ggit_branch_enumerator_wrap      (git_branch_iterator *it
 GgitBranchEnumerator *ggit_branch_enumerator_ref        (GgitBranchEnumerator *enumerator);
 void                  ggit_branch_enumerator_unref      (GgitBranchEnumerator *enumerator);
 
+GgitBranchEnumerator *ggit_branch_enumerator_iterator   (GgitBranchEnumerator *enumerator);
+
 gboolean              ggit_branch_enumerator_next       (GgitBranchEnumerator *enumerator);
 GgitRef              *ggit_branch_enumerator_get        (GgitBranchEnumerator *enumerator);
 
