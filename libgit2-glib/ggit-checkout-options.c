@@ -572,7 +572,7 @@ ggit_checkout_options_set_file_open_flags (GgitCheckoutOptions *options,
 }
 
 /**
- * ggit_checkout_options_get_nofify_flags:
+ * ggit_checkout_options_get_notify_flags:
  * @options: a #GgitCheckoutOptions.
  *
  * Get the checkout notify flags.
@@ -581,7 +581,7 @@ ggit_checkout_options_set_file_open_flags (GgitCheckoutOptions *options,
  *
  **/
 GgitCheckoutNotifyFlags
-ggit_checkout_options_get_nofify_flags (GgitCheckoutOptions *options)
+ggit_checkout_options_get_notify_flags (GgitCheckoutOptions *options)
 {
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), 0);
 

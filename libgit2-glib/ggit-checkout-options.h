@@ -97,7 +97,7 @@ void                  ggit_checkout_options_set_file_open_flags (
                                                            gint                 flags);
 
 GgitCheckoutNotifyFlags
-                      ggit_checkout_options_get_nofify_flags (
+                      ggit_checkout_options_get_notify_flags (
                                                            GgitCheckoutOptions  *options);
 void                  ggit_checkout_options_set_notify_flags (
                                                            GgitCheckoutOptions  *options,
