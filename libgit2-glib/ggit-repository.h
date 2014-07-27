@@ -375,6 +375,11 @@ gboolean            ggit_repository_revert            (GgitRepository           
                                                        GgitRevertOptions        *options,
                                                        GError                  **error);
 
+gboolean            ggit_repository_cherry_pick       (GgitRepository           *repository,
+                                                       GgitCommit               *commit,
+                                                       GgitCherryPickOptions    *options,
+                                                       GError                  **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */

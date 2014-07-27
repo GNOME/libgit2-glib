@@ -419,6 +419,13 @@ typedef struct _GgitBlameOptions GgitBlameOptions;
 typedef struct _GgitCheckoutOptions GgitCheckoutOptions;
 
 /**
+ * GgitCherryPickOptions:
+ *
+ * Represents the options used when doign a cherry-pick.
+ */
+typedef struct _GgitCherryPickOptions GgitCherryPickOptions;
+
+/**
  * GgitRevertOptions:
  *
  * Represents the options used when reverting.

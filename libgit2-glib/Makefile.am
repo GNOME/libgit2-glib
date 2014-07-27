@@ -23,6 +23,7 @@ INST_H_FILES =					\
 	ggit-branch.h				\
 	ggit-branch-enumerator.h		\
 	ggit-checkout-options.h			\
+	ggit-cherry-pick-options.h		\
 	ggit-clone-options.h			\
 	ggit-commit.h				\
 	ggit-config.h				\
@@ -85,6 +86,7 @@ C_FILES =					\
 	ggit-branch.c				\
 	ggit-branch-enumerator.c		\
 	ggit-checkout-options.c			\
+	ggit-cherry-pick-options.c		\
 	ggit-clone-options.c			\
 	ggit-commit.c				\
 	ggit-config.c				\

@@ -38,6 +38,7 @@
 #include "ggit-blame-options.h"
 #include "ggit-commit.h"
 #include "ggit-revert-options.h"
+#include "ggit-cherry-pick-options.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -2894,6 +2895,45 @@ ggit_repository_revert (GgitRepository     *repository,
 	ret = git_revert (_ggit_native_get (repository),
 	                  _ggit_native_get (commit),
 	                  options ? _ggit_revert_options_get_revert_options (options) : NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_repository_cherry_pick:
+ * @repository: a #GgitRepository.
+ * @commit: a #GgitCommit.
+ * @options: a #GgitCherryPickOptions.
+ * @error: a #GError for error reporting or %NULL.
+ *
+ * Cherry pick the specified commit, making changes in the index and the working
+ * directory.
+ *
+ * Returns: %TRUE if the commit was cherry-picked successfully, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_repository_cherry_pick (GgitRepository         *repository,
+                             GgitCommit             *commit,
+                             GgitCherryPickOptions  *options,
+                             GError                **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), FALSE);
+	g_return_val_if_fail (options == NULL || GGIT_IS_CHERRY_PICK_OPTIONS (options), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_cherry_pick (_ggit_native_get (repository),
+	                       _ggit_native_get (commit),
+	                       _ggit_cherry_pick_options_get_cherry_pick_options (options));
 
 	if (ret != GIT_OK)
 	{
