@@ -39,6 +39,7 @@
 #include "ggit-commit.h"
 #include "ggit-revert-options.h"
 #include "ggit-cherry-pick-options.h"
+#include "ggit-merge-options.h"
 
 #define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
@@ -2942,6 +2943,53 @@ ggit_repository_cherry_pick (GgitRepository         *repository,
 	}
 
 	return TRUE;
+}
+
+/**
+ * ggit_repository_cherry_pick_commit:
+ * @repository: a #GgitRepository.
+ * @commit: a #GgitCommit to cherry-pick.
+ * @our_commit: a #GgitCommit to cherry-pick on.
+ * @mainline: the parent of the commit, in case of a merge commit.
+ * @merge_options: (allow-none): a #GgitMergeOptions.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Cherry-picks the given @commit against the provided @our_commit, producing
+ * and index that reflects the result of the cherry-pick.
+ *
+ * Returns: (transfer full): a #GgitIndex.
+ *
+ **/
+GgitIndex *
+ggit_repository_cherry_pick_commit (GgitRepository    *repository,
+                                    GgitCommit        *commit,
+                                    GgitCommit        *our_commit,
+                                    guint              mainline,
+                                    GgitMergeOptions  *merge_options,
+                                    GError           **error)
+{
+	gint ret;
+	git_index *idx;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+	g_return_val_if_fail (GGIT_IS_COMMIT (our_commit), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_cherry_pick_commit (&idx,
+	                              _ggit_native_get (repository),
+	                              _ggit_native_get (commit),
+	                              _ggit_native_get (our_commit),
+	                              mainline,
+	                              _ggit_merge_options_get_merge_options (merge_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_index_wrap (idx);
 }
 
 /* ex:set ts=8 noet: */

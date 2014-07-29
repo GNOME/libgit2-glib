@@ -380,6 +380,13 @@ gboolean            ggit_repository_cherry_pick       (GgitRepository           
                                                        GgitCherryPickOptions    *options,
                                                        GError                  **error);
 
+GgitIndex          *ggit_repository_cherry_pick_commit (GgitRepository           *repository,
+                                                        GgitCommit               *commit,
+                                                        GgitCommit               *our_commit,
+                                                        guint                     mainline,
+                                                        GgitMergeOptions         *merge_options,
+                                                        GError                  **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */
