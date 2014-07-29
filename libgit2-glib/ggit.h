@@ -33,6 +33,7 @@
 #include <libgit2-glib/ggit-cred-plaintext.h>
 #include <libgit2-glib/ggit-diff-delta.h>
 #include <libgit2-glib/ggit-diff-file.h>
+#include <libgit2-glib/ggit-diff-format-email-options.h>
 #include <libgit2-glib/ggit-diff.h>
 #include <libgit2-glib/ggit-diff-hunk.h>
 #include <libgit2-glib/ggit-diff-line.h>
