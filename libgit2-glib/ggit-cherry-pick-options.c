@@ -47,7 +47,7 @@ ggit_cherry_pick_options_set_property (GObject      *object,
 	switch (prop_id)
 	{
 	case PROP_MAINLINE:
-		self->priv->options.mainline = g_value_get_int (value);
+		self->priv->options.mainline = g_value_get_uint (value);
 		break;
 	case PROP_CHECKOUT_OPTIONS:
 		ggit_cherry_pick_options_set_checkout_options (self,
@@ -74,7 +74,7 @@ ggit_cherry_pick_options_get_property (GObject    *object,
 	switch (prop_id)
 	{
 	case PROP_MAINLINE:
-		g_value_set_int (value, self->priv->options.mainline);
+		g_value_set_uint (value, self->priv->options.mainline);
 		break;
 	case PROP_CHECKOUT_OPTIONS:
 		g_value_set_object (value, self->priv->checkout_options);
@@ -103,14 +103,14 @@ ggit_cherry_pick_options_class_init (GgitCherryPickOptionsClass *klass)
 
 	g_object_class_install_property (object_class,
 	                                 PROP_MAINLINE,
-	                                 g_param_spec_int ("mainline",
-	                                                   "Mainline",
-	                                                   "Mainline",
-	                                                   0,
-	                                                   G_MAXINT,
-	                                                   defopts.mainline,
-	                                                   G_PARAM_READWRITE |
-	                                                   G_PARAM_STATIC_STRINGS));
+	                                 g_param_spec_uint ("mainline",
+	                                                    "Mainline",
+	                                                    "Mainline",
+	                                                    0,
+	                                                    G_MAXUINT,
+	                                                    defopts.mainline,
+	                                                    G_PARAM_READWRITE |
+	                                                    G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_CHECKOUT_OPTIONS,
@@ -174,7 +174,7 @@ _ggit_cherry_pick_options_get_cherry_pick_options (GgitCherryPickOptions *option
  * Returns: the mainline parent.
  *
  **/
-gint
+guint
 ggit_cherry_pick_options_get_mainline (GgitCherryPickOptions *options)
 {
 	g_return_val_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options), 0);
@@ -192,7 +192,7 @@ ggit_cherry_pick_options_get_mainline (GgitCherryPickOptions *options)
  **/
 void
 ggit_cherry_pick_options_set_mainline (GgitCherryPickOptions *options,
-                                       gint                   mainline)
+                                       guint                  mainline)
 {
 	g_return_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options));
 

@@ -59,9 +59,9 @@ const git_cherry_pick_options *
 
 GgitCherryPickOptions *ggit_cherry_pick_options_new          (void);
 
-gint                   ggit_cherry_pick_options_get_mainline (GgitCherryPickOptions *options);
+guint                  ggit_cherry_pick_options_get_mainline (GgitCherryPickOptions *options);
 void                   ggit_cherry_pick_options_set_mainline (GgitCherryPickOptions *options,
-                                                              gint                   mainline);
+                                                              guint                  mainline);
 
 GgitCheckoutOptions   *ggit_cherry_pick_options_get_checkout_options (GgitCherryPickOptions *options);
 void                   ggit_cherry_pick_options_set_checkout_options (GgitCherryPickOptions *options,
