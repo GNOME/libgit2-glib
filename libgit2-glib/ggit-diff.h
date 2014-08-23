@@ -113,8 +113,8 @@ void           ggit_diff_blobs                     (GgitBlob              *old_b
 
 void           ggit_diff_blob_to_buffer            (GgitBlob              *old_blob,
                                                     const gchar           *old_as_path,
-                                                    const gchar           *buffer,
-                                                    gsize                  buffer_len,
+                                                    const guint8          *buffer,
+                                                    gssize                 buffer_len,
                                                     const gchar           *buffer_as_path,
                                                     GgitDiffOptions       *diff_options,
                                                     GgitDiffFileCallback   file_cb,

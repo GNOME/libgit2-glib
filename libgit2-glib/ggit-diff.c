@@ -18,6 +18,8 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <string.h>
+
 #include <git2.h>
 
 #include "ggit-diff.h"
@@ -757,8 +759,8 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 void
 ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
                           const gchar           *old_as_path,
-                          const gchar           *buffer,
-                          gsize                  buffer_len,
+                          const guint8          *buffer,
+                          gssize                 buffer_len,
                           const gchar           *buffer_as_path,
                           GgitDiffOptions       *diff_options,
                           GgitDiffFileCallback   file_cb,
@@ -782,6 +784,11 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 	wrapper_data.diff = NULL;
 	wrapper_data.encoding = NULL;
 
+	if (buffer_len == -1)
+	{
+		buffer_len = strlen((const gchar *) buffer);
+	}
+
 	if (file_cb != NULL)
 	{
 		real_file_cb = ggit_diff_file_callback_wrapper;
@@ -802,7 +809,7 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 
 	ret = git_diff_blob_to_buffer (old_blob ? _ggit_native_get (old_blob) : NULL,
 	                               old_as_path,
-	                               buffer,
+	                               (const gchar *) buffer,
 	                               buffer_len,
 	                               buffer_as_path,
 	                               (git_diff_options *) gdiff_options,
