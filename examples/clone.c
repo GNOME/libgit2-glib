@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <termios.h>
 #include <string.h>
+#include <glib/gprintf.h>
 #include "ggit.h"
 
 typedef struct

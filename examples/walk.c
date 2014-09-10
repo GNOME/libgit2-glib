@@ -19,6 +19,7 @@
  */
 
 #include <gio/gio.h>
+#include <glib/gprintf.h>
 
 #include "ggit.h"
 
