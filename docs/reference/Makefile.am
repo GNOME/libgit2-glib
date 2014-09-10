@@ -18,10 +18,17 @@ HFILE_GLOB = $(top_srcdir)/libgit2-glib/*.h
 CFILE_GLOB = $(top_srcdir)/libgit2-glib/*.c
 
 # Headers to ignore
-IGNORE_HFILES = \
+IGNORE_HFILES = 	\
 	config.h	\
 	ggit-convert.h	\
 	ggit-utils.h
+
+if GIT_SSH
+else
+IGNORE_HFILES +=			\
+	ggit-cred-ssh-interactive.h	\
+	ggit-cred-ssh-key-from-agent.h
+endif
 
 update-sections: $(HFILE_GLOB)
 	@echo 'gtk-doc: Scanning header files'
