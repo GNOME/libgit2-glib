@@ -57,7 +57,7 @@ diff_print_cb (GgitDiffDelta    *delta,
 	gchar *s;
 
 	content = ggit_diff_line_get_content (line, &len);
-	s = g_strndup (content, len);
+	s = g_strndup ((const gchar *)content, len);
 
 	g_print ("%s", s);
 	g_free (s);
