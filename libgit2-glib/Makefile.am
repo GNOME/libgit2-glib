@@ -179,7 +179,8 @@ endif
 EXTRA_DIST = 				\
 	Ggit.py				\
 	ggit-enum-types.h.template	\
-	ggit-enum-types.c.template
+	ggit-enum-types.c.template	\
+	ggit.h.in
 
 CLEANFILES = $(BUILT_SOURCES)
 

@@ -109,8 +109,14 @@ LIBS="${libs_save}"
 if test "x$git_ssh" = "xyes"; then
 	LIBGIT2_GLIB_CFLAGS="${LIBGIT2_GLIB_CFLAGS} -DGIT_SSH=1"
 	LIBGIT2_GLIB_PCCFLAGS="-DGIT_SSH=1"
+
+    GGIT_SSH_INCLUDES="
+#include <libgit2-glib/ggit-cred-ssh-key-from-agent.h>
+#include <libgit2-glib/ggit-cred-ssh-interactive.h>
+"
 fi
 
+AC_SUBST(GGIT_SSH_INCLUDES)
 AC_SUBST(LIBGIT2_GLIB_PCCFLAGS)
 
 AM_CONDITIONAL(GIT_SSH, test x"$git_ssh" = "xyes")
@@ -154,6 +160,7 @@ AC_OUTPUT([
 	docs/reference/version.xml
 	examples/Makefile
 	libgit2-glib/Makefile
+    libgit2-glib/ggit.h
 	tests/Makefile
 ])
 
