@@ -164,3 +164,6 @@ AC_OUTPUT([
 	tests/Makefile
 ])
 
+if test "x$git_ssh" != "xyes"; then
+echo "*** libgit2-glib will be built without SSH support! ***"
+fi
