@@ -18,6 +18,10 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifdef GIT_SSH
+#include <libssh2.h>
+#endif
+
 #include <git2.h>
 #include <gio/gio.h>
 
