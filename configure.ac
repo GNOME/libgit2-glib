@@ -150,6 +150,12 @@ AM_CONDITIONAL(ENABLE_PYTHON, test x"$enable_python" = "xyes")
 # Vala
 VAPIGEN_CHECK
 
+AC_CHECK_HEADER([termios.h],
+                [has_termios=yes],
+                [has_termios=no])
+
+AM_CONDITIONAL(HAS_TERMIOS, test x"$has_termios" = "xyes")
+
 GNOME_COMPILE_WARNINGS([maximum])
 
 AC_OUTPUT([

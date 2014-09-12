@@ -11,8 +11,10 @@ EXAMPLE_PROGS		+= walk
 walk_SOURCES		= walk.c
 walk_LDADD		= $(progs_ldadd)
 
+if HAS_TERMIOS
 EXAMPLE_PROGS		+= clone
 clone_SOURCES		= clone.c
 clone_LDADD		= $(progs_ldadd)
+endif
 
 # ex:set ts=8 noet:
