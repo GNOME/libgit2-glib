@@ -120,7 +120,7 @@ void           ggit_diff_blob_to_buffer            (GgitBlob              *old_b
                                                     GgitDiffFileCallback   file_cb,
                                                     GgitDiffHunkCallback   hunk_cb,
                                                     GgitDiffLineCallback   line_cb,
-                                                    gpointer              *user_data,
+                                                    gpointer               user_data,
                                                     GError               **error);
 
 gboolean       ggit_diff_find_similar              (GgitDiff              *diff,
