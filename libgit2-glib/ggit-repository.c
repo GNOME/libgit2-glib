@@ -2997,7 +2997,8 @@ ggit_repository_cherry_pick_commit (GgitRepository    *repository,
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Gets the default notes reference for @repository.
+ * Gets the default notes reference for @repository. It defaults to
+ * "refs/notes/commits".
  *
  * Returns: the default notes reference for @repository.
  */
