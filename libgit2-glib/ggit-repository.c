@@ -3119,4 +3119,42 @@ ggit_repository_remove_note (GgitRepository  *repository,
 	return TRUE;
 }
 
+/**
+ * ggit_repository_read_note:
+ * @repository: a #GgitRepository.
+ * @notes_ref: (allow-none): canonical name of the reference to use, or %NULL to use the default ref.
+ * @id: OID of the git object to decorate.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Reads the note for an object.
+ *
+ * Returns: (transfer full): the read note or %NULL in case of an error.
+ */
+GgitNote *
+ggit_repository_read_note (GgitRepository  *repository,
+                           const gchar     *notes_ref,
+                           GgitOId         *id,
+                           GError         **error)
+{
+	gint ret;
+	git_note *note;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (id != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_note_read (&note,
+	                     _ggit_native_get (repository),
+	                     notes_ref,
+	                     _ggit_oid_get_oid (id));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return _ggit_note_wrap (note);
+}
+
 /* ex:set ts=8 noet: */

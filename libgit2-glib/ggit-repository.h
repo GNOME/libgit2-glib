@@ -34,6 +34,7 @@
 #include <libgit2-glib/ggit-branch.h>
 #include <libgit2-glib/ggit-blob-output-stream.h>
 #include <libgit2-glib/ggit-checkout-options.h>
+#include <libgit2-glib/ggit-note.h>
 
 G_BEGIN_DECLS
 
@@ -403,6 +404,11 @@ gboolean            ggit_repository_remove_note        (GgitRepository          
                                                         const gchar             *notes_ref,
                                                         GgitSignature           *author,
                                                         GgitSignature           *committer,
+                                                        GgitOId                 *id,
+                                                        GError                 **error);
+
+GgitNote           *ggit_repository_read_note          (GgitRepository          *repository,
+                                                        const gchar             *notes_ref,
                                                         GgitOId                 *id,
                                                         GError                 **error);
 
