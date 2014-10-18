@@ -243,6 +243,13 @@ typedef struct _GgitMergeOptions GgitMergeOptions;
 typedef struct _GgitNative GgitNative;
 
 /**
+ * GgitNote:
+ *
+ * Represents a note object.
+ */
+typedef struct _GgitNote GgitNote;
+
+/**
  * GgitObject:
  *
  * Represents a generic object in a repository.

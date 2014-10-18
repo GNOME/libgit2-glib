@@ -2992,4 +2992,131 @@ ggit_repository_cherry_pick_commit (GgitRepository    *repository,
 	return _ggit_index_wrap (idx);
 }
 
+/**
+ * ggit_repository_get_default_notes_ref:
+ * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the default notes reference for @repository.
+ *
+ * Returns: the default notes reference for @repository.
+ */
+const gchar *
+ggit_repository_get_default_notes_ref (GgitRepository  *repository,
+                                       GError         **error)
+{
+	const gchar *ref = NULL;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_note_default_ref (&ref, _ggit_native_get (repository));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return ref;
+}
+
+/**
+ * ggit_repository_create_note:
+ * @repository: a #GgitRepository.
+ * @author: author signature.
+ * @committer: committer signature.
+ * @notes_ref: (allow-none): canonical name of the reference to use, or %NULL to use the default ref.
+ * @id: OID of the git object to decorate.
+ * @note: content of the note to add for object oid.
+ * @force: whether to overwrite existing note.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Adds a note for an object.
+ *
+ * Returns: (transfer full): the OID for the note or %NULL in case of error.
+ */
+GgitOId *
+ggit_repository_create_note (GgitRepository  *repository,
+                             GgitSignature   *author,
+                             GgitSignature   *committer,
+                             const gchar     *notes_ref,
+                             GgitOId         *id,
+                             const gchar     *note,
+                             gboolean         force,
+                             GError         **error)
+{
+	gint ret;
+	git_oid oid;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (author), NULL);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), NULL);
+	g_return_val_if_fail (id != NULL, NULL);
+	g_return_val_if_fail (note != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_note_create (&oid,
+	                       _ggit_native_get (repository),
+	                       _ggit_native_get (author),
+	                       _ggit_native_get (committer),
+	                       notes_ref,
+	                       _ggit_oid_get_oid (id),
+	                       note,
+	                       force);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
+/**
+ * ggit_repository_remove_note:
+ * @repository: a #GgitRepository.
+ * @notes_ref: (allow-none): canonical name of the reference to use, or %NULL to use the default ref.
+ * @author: author signature.
+ * @committer: committer signature.
+ * @id: OID of the git object to decorate.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Removes the note for an object.
+ *
+ * Returns: %TRUE if the note was removed from @id.
+ */
+gboolean
+ggit_repository_remove_note (GgitRepository  *repository,
+                             const gchar     *notes_ref,
+                             GgitSignature   *author,
+                             GgitSignature   *committer,
+                             GgitOId         *id,
+                             GError         **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (author), FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), FALSE);
+	g_return_val_if_fail (id != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_note_remove (_ggit_native_get (repository),
+	                       notes_ref,
+	                       _ggit_native_get (author),
+	                       _ggit_native_get (committer),
+	                       _ggit_oid_get_oid (id));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /* ex:set ts=8 noet: */

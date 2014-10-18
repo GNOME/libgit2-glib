@@ -47,6 +47,7 @@ INST_H_FILES =					\
 	ggit-message.h				\
 	ggit-merge-options.h			\
 	ggit-native.h				\
+	ggit-note.h				\
 	ggit-object.h				\
 	ggit-object-factory.h			\
 	ggit-object-factory-base.h		\
@@ -111,6 +112,7 @@ C_FILES =					\
 	ggit-message.c				\
 	ggit-merge-options.c			\
 	ggit-native.c				\
+	ggit-note.c				\
 	ggit-object.c				\
 	ggit-object-factory.c			\
 	ggit-object-factory-base.c		\
