@@ -3158,4 +3158,77 @@ ggit_repository_read_note (GgitRepository  *repository,
 	return _ggit_note_wrap (note);
 }
 
+typedef struct
+{
+	gpointer user_data;
+
+	GgitNoteCallback callback;
+} NoteCallbackWrapperData;
+
+static gint
+note_callback_wrapper (const git_oid *blob_id,
+                       const git_oid *annotated_object_id,
+                       gpointer       user_data)
+{
+	NoteCallbackWrapperData *wrapper_data = (NoteCallbackWrapperData *)user_data;
+	GgitOId *gblob_id;
+	GgitOId *gannotated_object_id;
+	gint ret;
+
+	gblob_id = _ggit_oid_wrap (blob_id);
+	gannotated_object_id = _ggit_oid_wrap (annotated_object_id);
+
+	ret = wrapper_data->callback (gblob_id, gannotated_object_id,
+	                              wrapper_data->user_data);
+	ggit_oid_free (gblob_id);
+	ggit_oid_free (gannotated_object_id);
+
+	return ret;
+}
+
+/**
+ * ggit_repository_note_foreach:
+ * @repository: a #GgitRepository.
+ * @notes_ref: (allow-none): canonical name of the reference to use, or %NULL to use the default ref.
+ * @callback: (scope call): a #GgitNoteCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Loop over all the notes within a specified namespace
+ * and issue a callback for each one.
+ * If @callback returns a non-zero value, this will stop looping.
+
+ * Returns: %TRUE if there was no error, %FALSE otherwise.
+ */
+gboolean
+ggit_repository_note_foreach (GgitRepository    *repository,
+                              const gchar       *notes_ref,
+                              GgitNoteCallback   callback,
+                              gpointer           user_data,
+                              GError           **error)
+{
+	NoteCallbackWrapperData wrapper_data;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	wrapper_data.user_data = user_data;
+	wrapper_data.callback = callback;
+
+	ret = git_note_foreach (_ggit_native_get (repository),
+	                        notes_ref,
+	                        note_callback_wrapper,
+	                        &wrapper_data);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /* ex:set ts=8 noet: */

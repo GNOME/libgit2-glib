@@ -1192,6 +1192,21 @@ typedef gint (* GgitDiffSimilarityMetricSimilarityCallback) (gint     *score,
                                                              gpointer  user_data);
 
 /**
+ * GgitNoteCallback:
+ * @blob_id: id of the blob containing the message.
+ * @annotated_object_id: id of the git object being annotated.
+ * @user_data: (closure): user-suplied data.
+ *
+ * When iterating over all the notes, callback that will be
+ * issued per note. See ggit_repository_note_foreach().
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitNoteCallback) (GgitOId *blob_id,
+                                   GgitOId *annotated_object_id,
+                                   gpointer user_data);
+
+/**
  * GgitReferencesNameCallback:
  * @name: the name of the reference
  * @user_data: (closure): user-supplied data.

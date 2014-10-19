@@ -412,6 +412,12 @@ GgitNote           *ggit_repository_read_note          (GgitRepository          
                                                         GgitOId                 *id,
                                                         GError                 **error);
 
+gboolean            ggit_repository_note_foreach       (GgitRepository          *repository,
+                                                        const gchar             *notes_ref,
+                                                        GgitNoteCallback         callback,
+                                                        gpointer                 user_data,
+                                                        GError                 **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REPOSITORY_H__ */
