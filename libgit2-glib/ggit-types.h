@@ -1254,7 +1254,7 @@ typedef gint (* GgitRemoteListCallback) (const gchar *name,
 typedef gint (* GgitStashCallback) (gsize        index,
                                     const gchar *message,
                                     GgitOId     *stash_oid,
-                                    gpointer    *user_data);
+                                    gpointer     user_data);
 
 /**
  * GgitStatusCallback:
@@ -1299,7 +1299,7 @@ typedef gint (* GgitSubmoduleCallback) (GgitSubmodule *submodule,
  */
 typedef gint (* GgitTagCallback) (const gchar *name,
                                   GgitOId     *tag_oid,
-                                  gpointer    *user_data);
+                                  gpointer     user_data);
 
 /**
  * GgitTransferProgressCallback:
