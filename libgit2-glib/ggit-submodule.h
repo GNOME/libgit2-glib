@@ -38,6 +38,9 @@ GgitSubmodule         *_ggit_submodule_wrap                  (const git_submodul
 GgitSubmodule          *ggit_submodule_ref                   (GgitSubmodule       *submodule);
 void                    ggit_submodule_unref                 (GgitSubmodule       *submodule);
 
+GgitRepository         *ggit_submodule_open                  (GgitSubmodule       *submodule,
+                                                              GError             **error);
+
 void                    ggit_submodule_save                  (GgitSubmodule       *submodule,
                                                               GError             **error);
 

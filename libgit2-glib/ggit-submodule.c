@@ -84,6 +84,39 @@ ggit_submodule_unref (GgitSubmodule *submodule)
 }
 
 /**
+ * ggit_submodule_open:
+ * @submodule: a #GgitSubmodule.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Open the repository for a submodule. Multiple calls to this function
+ * will return distinct #GgitRepository objects. Only submodules which are
+ * checked out in the working directory can be opened.
+ *
+ * Returns: (transfer full): the opened #GgitRepository or %NULL in case of an
+ *                           error.
+ */
+GgitRepository *
+ggit_submodule_open (GgitSubmodule  *submodule,
+                     GError       **error)
+{
+	git_repository *repo;
+	gint ret;
+
+	g_return_if_fail (submodule != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_submodule_open (&repo, submodule->submodule);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_repository_wrap (repo, TRUE);
+}
+
+/**
  * ggit_submodule_save:
  * @submodule: a #GgitSubmodule.
  * @error: a #GError for error reporting, or %NULL.
