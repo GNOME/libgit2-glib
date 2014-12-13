@@ -395,6 +395,8 @@ _ggit_repository_wrap (git_repository *repository,
 	                    "native", repository,
 	                    NULL);
 
+	ret->priv->workdir = ggit_repository_get_workdir (ret);
+
 	if (owned)
 	{
 		_ggit_native_set_destroy_func (ret,
