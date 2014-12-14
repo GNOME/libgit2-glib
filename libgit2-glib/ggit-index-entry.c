@@ -676,6 +676,10 @@ file_info_to_filemode (GFileInfo *info)
 	{
 		ret |= GIT_FILEMODE_LINK;
 	}
+	else if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+	{
+		ret |= GIT_FILEMODE_TREE;
+	}
 	else if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE))
 	{
 		ret |= GIT_FILEMODE_BLOB_EXECUTABLE;
