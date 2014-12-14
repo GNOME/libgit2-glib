@@ -21,6 +21,8 @@
 #include "ggit-index-entry.h"
 #include "ggit-index.h"
 #include "ggit-repository.h"
+#include "ggit-commit.h"
+#include "ggit-signature.h"
 
 #include <string.h>
 
@@ -773,6 +775,41 @@ ggit_index_entry_stat (GgitIndexEntry  *entry,
 
 	g_object_unref (info);
 	return TRUE;
+}
+
+/**
+ * ggit_index_entry_set_commit:
+ * @entry: a #GgitIndexEntry.
+ * @commit: a #GgitCommit.
+ *
+ * Set the index entry to point to a given commit. This sets the index entry
+ * id to the commit id, changes the mode to #GGIT_FILE_MODE_COMMIT and updates
+ * the timestamps to when the commit was made.
+ *
+ **/
+void
+ggit_index_entry_set_commit (GgitIndexEntry    *entry,
+                             GgitCommit        *commit)
+{
+	GgitSignature *sig;
+	gint64 ut;
+
+	g_return_if_fail (entry != NULL);
+	g_return_if_fail (GGIT_IS_COMMIT (commit));
+
+	ggit_index_entry_set_id (entry, ggit_object_get_id (GGIT_OBJECT (commit)));
+	ggit_index_entry_set_mode (entry, GIT_FILEMODE_COMMIT);
+
+	sig = ggit_commit_get_committer (commit);
+	ut = g_date_time_to_unix (ggit_signature_get_time (sig));
+
+	entry->entry->ctime.seconds = ut;
+	entry->entry->ctime.nanoseconds = 0;
+
+	entry->entry->mtime.seconds = ut;
+	entry->entry->mtime.nanoseconds = 0;
+
+	g_object_unref (sig);
 }
 
 const git_index_entry *

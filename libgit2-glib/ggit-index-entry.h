@@ -98,6 +98,9 @@ gboolean          ggit_index_entry_stat               (GgitIndexEntry    *entry,
                                                        GFile             *file,
                                                        GError           **error);
 
+void              ggit_index_entry_set_commit         (GgitIndexEntry    *entry,
+                                                       GgitCommit        *commit);
+
 const git_index_entry
                  *_ggit_index_entry_get_native        (GgitIndexEntry    *entry);
 
