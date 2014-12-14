@@ -62,7 +62,6 @@ struct _GgitCommitClass
 };
 
 GType                ggit_commit_get_type             (void) G_GNUC_CONST;
-GType                ggit_commit_parents_get_type     (void) G_GNUC_CONST;
 
 GgitCommit          *_ggit_commit_wrap                (git_commit        *commit,
                                                        gboolean           owned);
@@ -78,19 +77,6 @@ GgitSignature       *ggit_commit_get_committer        (GgitCommit        *commit
 GgitSignature       *ggit_commit_get_author           (GgitCommit        *commit);
 
 GgitCommitParents   *ggit_commit_get_parents          (GgitCommit        *commit);
-
-
-
-GgitCommitParents   *ggit_commit_parents_ref          (GgitCommitParents *parents);
-void                 ggit_commit_parents_unref        (GgitCommitParents *parents);
-
-guint                ggit_commit_parents_size         (GgitCommitParents *parents);
-
-GgitCommit          *ggit_commit_parents_get          (GgitCommitParents *parents,
-                                                       guint              idx);
-
-GgitOId             *ggit_commit_parents_get_id       (GgitCommitParents *parents,
-                                                       guint              idx);
 
 GgitTree            *ggit_commit_get_tree             (GgitCommit        *commit);
 

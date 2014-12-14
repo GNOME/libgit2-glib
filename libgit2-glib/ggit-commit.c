@@ -26,14 +26,9 @@
 #include "ggit-oid.h"
 #include "ggit-convert.h"
 #include "ggit-tree.h"
+#include "ggit-commit-parents.h"
 
 #define GGIT_COMMIT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT, GgitCommitPrivate))
-
-struct _GgitCommitParents
-{
-	GgitCommit *commit;
-	gint ref_count;
-};
 
 struct _GgitCommitPrivate
 {
@@ -42,61 +37,6 @@ struct _GgitCommitPrivate
 };
 
 G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
-
-G_DEFINE_BOXED_TYPE (GgitCommitParents,
-                     ggit_commit_parents,
-                     ggit_commit_parents_ref,
-                     ggit_commit_parents_unref)
-
-static GgitCommitParents *
-ggit_commit_parents_wrap (GgitCommit *commit)
-{
-	GgitCommitParents *ret;
-
-	ret = g_slice_new (GgitCommitParents);
-	ret->commit = g_object_ref (commit);
-	ret->ref_count = 1;
-
-	return ret;
-}
-
-/**
- * ggit_commit_parents_ref:
- * @parents: a #GgitCommitParents.
- *
- * Atomically increments the reference count of @parents by one.
- * This function is MT-safe and may be called from any thread.
- *
- * Returns: a #GgitCommitParents.
- **/
-GgitCommitParents *
-ggit_commit_parents_ref (GgitCommitParents *parents)
-{
-	g_return_val_if_fail (parents != NULL, NULL);
-
-	g_atomic_int_inc (&parents->ref_count);
-
-	return parents;
-}
-
-/**
- * ggit_commit_parents_unref:
- * @parents: a #GgitCommitParents.
- *
- * Atomically decrements the reference count of @parents by one.
- * If the reference count drops to 0, @parents is freed.
- **/
-void
-ggit_commit_parents_unref (GgitCommitParents *parents)
-{
-	g_return_if_fail (parents != NULL);
-
-	if (g_atomic_int_dec_and_test (&parents->ref_count))
-	{
-		g_clear_object (&parents->commit);
-		g_slice_free (GgitCommitParents, parents);
-	}
-}
 
 static void
 ggit_commit_finalize (GObject *object)
@@ -319,81 +259,7 @@ ggit_commit_get_parents (GgitCommit *commit)
 {
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
-	return ggit_commit_parents_wrap (commit);
-}
-
-/**
- * ggit_commit_parents_size:
- * @parents: a #GgitCommitParents.
- *
- * Get the number of parents in the parents collection.
- *
- * Returns: the number of parents.
- *
- **/
-guint
-ggit_commit_parents_size (GgitCommitParents *parents)
-{
-	git_commit *c;
-
-	g_return_val_if_fail (parents != NULL, 0);
-
-	c = _ggit_native_get (parents->commit);
-	return (guint)git_commit_parentcount (c);
-}
-
-/**
- * ggit_commit_parents_get:
- * @parents: a #GgitCommitParents.
- * @idx: the parent index.
- *
- * Get the #GgitCommit of a parent.
- *
- * Returns: (transfer full): a #GgitCommit.
- *
- **/
-GgitCommit *
-ggit_commit_parents_get (GgitCommitParents *parents,
-                         guint              idx)
-{
-	git_commit *c;
-	git_commit *p;
-
-	g_return_val_if_fail (parents != NULL, NULL);
-
-	c = _ggit_native_get (parents->commit);
-
-	if (git_commit_parent (&p, c, idx) == GIT_OK)
-	{
-		return _ggit_commit_wrap (p, TRUE);
-	}
-
-	return NULL;
-}
-
-/**
- * ggit_commit_parents_get_id:
- * @parents: a #GgitCommitParents.
- * @idx: the parent index.
- *
- * Get the #GgitOId of a parent.
- *
- * Returns: (transfer full): a #GgitOId.
- *
- **/
-GgitOId *
-ggit_commit_parents_get_id (GgitCommitParents *parents,
-                            guint              idx)
-{
-	git_commit *c;
-	const git_oid *oid;
-
-	g_return_val_if_fail (parents != NULL, NULL);
-
-	c = _ggit_native_get (parents->commit);
-
-	oid = git_commit_parent_id (c, idx);
-	return _ggit_oid_wrap (oid);
+	return ggit_commit_parents_new (commit);
 }
 
 /**

@@ -26,6 +26,7 @@ INST_H_FILES =					\
 	ggit-cherry-pick-options.h		\
 	ggit-clone-options.h			\
 	ggit-commit.h				\
+	ggit-commit-parents.h			\
 	ggit-config.h				\
 	ggit-config-entry.h			\
 	ggit-cred.h				\
@@ -90,6 +91,7 @@ C_FILES =					\
 	ggit-cherry-pick-options.c		\
 	ggit-clone-options.c			\
 	ggit-commit.c				\
+	ggit-commit-parents.c			\
 	ggit-config.c				\
 	ggit-config-entry.c			\
 	ggit-convert.c				\

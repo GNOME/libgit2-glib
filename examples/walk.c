@@ -166,7 +166,7 @@ main (int   argc,
 
 		commit_parents = ggit_commit_get_parents (commit);
 
-		if (ggit_commit_parents_size (commit_parents) > 0)
+		if (ggit_commit_parents_get_size (commit_parents) > 0)
 		{
 			GgitCommit *parent_commit;
 			GgitTree *commit_tree;
@@ -194,7 +194,7 @@ main (int   argc,
 
 		g_print ("----------------------------------------\n");
 
-		ggit_commit_parents_unref (commit_parents);
+		g_object_unref (commit_parents);
 		g_free (committer_str);
 		g_free (author_str);
 		g_object_unref (committer);

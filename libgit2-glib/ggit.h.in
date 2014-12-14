@@ -27,6 +27,7 @@
 #include <libgit2-glib/ggit-branch.h>
 #include <libgit2-glib/ggit-clone-options.h>
 #include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-commit-parents.h>
 #include <libgit2-glib/ggit-config-entry.h>
 #include <libgit2-glib/ggit-config.h>
 #include <libgit2-glib/ggit-cred.h>
