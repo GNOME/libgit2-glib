@@ -42,9 +42,9 @@ G_DEFINE_TYPE (GgitCommitParents, ggit_commit_parents, G_TYPE_OBJECT)
 
 static void
 ggit_commit_parents_get_property (GObject    *object,
-																	guint       prop_id,
-																	GValue     *value,
-																	GParamSpec *pspec)
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
 {
 	GgitCommitParents *parents = GGIT_COMMIT_PARENTS (object);
 
@@ -64,9 +64,9 @@ ggit_commit_parents_get_property (GObject    *object,
 
 static void
 ggit_commit_parents_set_property (GObject      *object,
-																	guint         prop_id,
-																	const GValue *value,
-																	GParamSpec   *pspec)
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
 	GgitCommitParentsPrivate *priv = GGIT_COMMIT_PARENTS (object)->priv;
 
@@ -168,7 +168,7 @@ ggit_commit_parents_get_size (GgitCommitParents *parents)
  **/
 GgitCommit *
 ggit_commit_parents_get (GgitCommitParents *parents,
-												 guint              idx)
+                         guint              idx)
 {
 	git_commit *c;
 	git_commit *p;
@@ -197,7 +197,7 @@ ggit_commit_parents_get (GgitCommitParents *parents,
  **/
 GgitOId *
 ggit_commit_parents_get_id (GgitCommitParents *parents,
-														guint              idx)
+                            guint              idx)
 {
 	git_commit *c;
 	const git_oid *oid;
