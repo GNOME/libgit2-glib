@@ -102,8 +102,8 @@ ggit_submodule_open (GgitSubmodule  *submodule,
 	git_repository *repo;
 	gint ret;
 
-	g_return_if_fail (submodule != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_submodule_open (&repo, submodule->submodule);
 
