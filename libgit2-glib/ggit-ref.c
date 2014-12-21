@@ -25,6 +25,7 @@
 #include "ggit-repository.h"
 #include "ggit-signature.h"
 #include "ggit-utils.h"
+#include "ggit-branch.h"
 
 #include <git2.h>
 
@@ -45,9 +46,16 @@ ggit_ref_init (GgitRef *self)
 GgitRef *
 _ggit_ref_wrap (git_reference *ref)
 {
-	return g_object_new (GGIT_TYPE_REF,
-	                     "native", ref,
-	                     NULL);
+	if (git_reference_is_branch (ref))
+	{
+		return GGIT_REF (_ggit_branch_wrap (ref));
+	}
+	else
+	{
+		return g_object_new (GGIT_TYPE_REF,
+		                     "native", ref,
+		                     NULL);
+	}
 }
 
 /**

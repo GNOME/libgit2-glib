@@ -165,8 +165,6 @@ ggit_branch_get_upstream (GgitBranch  *branch,
 {
 	gint ret;
 	git_reference *upstream;
-	const gchar *name;
-	GgitRef *ref;
 
 	g_return_val_if_fail (GGIT_IS_BRANCH (branch), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -180,18 +178,7 @@ ggit_branch_get_upstream (GgitBranch  *branch,
 		return NULL;
 	}
 
-	name = git_reference_name (upstream);
-
-	if (g_str_has_prefix (name, "refs/heads/"))
-	{
-		ref = GGIT_REF (_ggit_branch_wrap (upstream));
-	}
-	else
-	{
-		ref = _ggit_ref_wrap (upstream);
-	}
-
-	return ref;
+	return _ggit_ref_wrap (upstream);
 }
 
 /**
