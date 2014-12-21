@@ -20,7 +20,7 @@
 
 
 #include <glib.h>
-#include "ggit.h"
+#include "libgit2-glib/ggit.h"
 
 int
 main (int argc, char *argv[])

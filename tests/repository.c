@@ -31,7 +31,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 
-#include "ggit.h"
+#include "libgit2-glib/ggit.h"
 
 #define TESTREPO_NAME "testrepo.git"
 

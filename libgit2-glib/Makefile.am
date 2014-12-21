@@ -2,6 +2,7 @@ lib_LTLIBRARIES = libgit2-glib-1.0.la
 
 AM_CPPFLAGS =								\
 	-I$(top_srcdir)							\
+	-I$(top_builddir)						\
 	-I$(srcdir)							\
 	$(LIBGIT2_GLIB_CFLAGS)						\
 	$(WARN_CFLAGS)							\
@@ -15,7 +16,7 @@ libgit2_glib_1_0_la_LDFLAGS =				\
 
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
-INST_H_FILES =					\
+H_FILES =					\
 	ggit-blame.h				\
 	ggit-blame-options.h			\
 	ggit-blob.h				\
@@ -73,12 +74,10 @@ INST_H_FILES =					\
 	ggit-tree.h				\
 	ggit-tree-builder.h			\
 	ggit-tree-entry.h			\
-	ggit-types.h				\
-	ggit.h
+	ggit-types.h
 
-NOINST_H_FILES =			\
-	ggit-convert.h			\
-	ggit-utils.h
+BUILT_H_FILES = ggit.h
+BUILT_H_FILES_ENUMS = ggit-enum-types.h
 
 C_FILES =					\
 	ggit-blame.c				\
@@ -142,37 +141,45 @@ C_FILES =					\
 	ggit-types.c				\
 	ggit-utils.c
 
+BUILT_C_FILES =
+BUILT_C_FILES_ENUMS = ggit-enum-types.c
+
 if GIT_SSH
 C_FILES +=				\
 	ggit-cred-ssh-interactive.c	\
 	ggit-cred-ssh-key-from-agent.c
 
-INST_H_FILES +=				\
+H_FILES +=				\
 	ggit-cred-ssh-interactive.h	\
 	ggit-cred-ssh-key-from-agent.h
 endif
 
+BUILT_SOURCES = $(BUILT_C_FILES) $(BUILT_C_FILES_ENUMS) $(BUILT_H_FILES) $(BUILT_H_FILES_ENUMS)
+
+INST_H_FILES = $(H_FILES) $(BUILT_H_FILES) $(BUILT_H_FILES_ENUMS)
+
+NOINST_H_FILES =			\
+	ggit-convert.h			\
+	ggit-utils.h
+
 ENUM_TYPES =				\
-	$(INST_H_FILES)
+	$(H_FILES)
 
-ggit-enum-types.h: ggit-enum-types.h.template $(ENUM_TYPES) $(GLIB_MKENUMS)
-	$(AM_V_GEN) (cd $(srcdir) && $(GLIB_MKENUMS) --template ggit-enum-types.h.template $(ENUM_TYPES)) > $@
+ggit-enum-types.h: ggit-enum-types.h.template $(H_FILES) $(BUILT_H_FILES) $(GLIB_MKENUMS)
+	$(AM_V_GEN) (cd $(builddir) && $(GLIB_MKENUMS) --template $(srcdir)/ggit-enum-types.h.template $(addprefix $(srcdir)/,$(H_FILES)) $(BUILT_H_FILES)) > $@
 
-ggit-enum-types.c: ggit-enum-types.c.template $(ENUM_TYPES) $(GLIB_MKENUMS)
-	$(AM_V_GEN) (cd $(srcdir) && $(GLIB_MKENUMS) --template ggit-enum-types.c.template $(ENUM_TYPES)) > $@
-
-BUILT_SOURCES =				\
-	ggit-enum-types.c		\
-	ggit-enum-types.h
+ggit-enum-types.c: ggit-enum-types.c.template $(H_FILES) $(BUILT_H_FILES) $(GLIB_MKENUMS)
+	$(AM_V_GEN) (cd $(builddir) && $(GLIB_MKENUMS) --template $(srcdir)/ggit-enum-types.c.template $(addprefix $(srcdir)/,$(H_FILES)) $(BUILT_H_FILES)) > $@
 
 libgit2_glib_1_0_la_SOURCES = 	\
 	$(INST_H_FILES)		\
 	$(NOINST_H_FILES)	\
-	$(BUILT_SOURCES)	\
+	$(BUILT_C_FILES)	\
+	$(BUILT_C_FILES_ENUMS)	\
 	$(C_FILES)
 
 headerdir = $(prefix)/include/libgit2-glib-1.0/libgit2-glib
-header_DATA = $(INST_H_FILES) ggit-enum-types.h
+header_DATA = $(INST_H_FILES)
 
 if ENABLE_PYTHON
 overridesdir = $(pyoverridesdir)
@@ -194,18 +201,20 @@ if HAVE_INTROSPECTION
   INTROSPECTION_SCANNER_ENV = CC="$(CC)"
   INTROSPECTION_SCANNER_ARGS = \
 	-I$(top_srcdir) 		\
+	-I$(top_builddir) 		\
 	--identifier-prefix=Ggit	\
 	--c-include=libgit2-glib/ggit.h	\
 	--warn-all
 
-  introspection_sources = $(INST_H_FILES) $(C_FILES)
+  introspection_src_sources = $(H_FILES) $(C_FILES)
+  introspection_built_sources = $(BUILT_SOURCES)
 
   Ggit-1.0.gir: libgit2-glib-1.0.la
   Ggit_1_0_gir_NAMESPACE = Ggit
   Ggit_1_0_gir_INCLUDES = GObject-2.0 GLib-2.0 Gio-2.0
   Ggit_1_0_gir_CFLAGS = $(LIBGIT2_GLIB_CFLAGS)
   Ggit_1_0_gir_LIBS = libgit2-glib-1.0.la
-  Ggit_1_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources))
+  Ggit_1_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_src_sources)) $(introspection_built_sources)
   Ggit_1_0_gir_PACKAGES = gobject-2.0 glib-2.0 libgit2 gio-2.0
   Ggit_1_0_gir_EXPORT_PACKAGES = libgit2-glib-1.0
 

@@ -3,7 +3,8 @@
 #include <termios.h>
 #include <string.h>
 #include <glib/gprintf.h>
-#include "ggit.h"
+
+#include "libgit2-glib/ggit.h"
 
 typedef struct
 {

@@ -21,7 +21,7 @@
 #include <gio/gio.h>
 #include <glib/gprintf.h>
 
-#include "ggit.h"
+#include "libgit2-glib/ggit.h"
 
 static gchar *
 signature_to_string (GgitSignature *signature)
