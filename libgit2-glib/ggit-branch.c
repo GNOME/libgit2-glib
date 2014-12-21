@@ -180,7 +180,7 @@ ggit_branch_get_upstream (GgitBranch  *branch,
 		return NULL;
 	}
 
-	name = git_reference_name (_ggit_native_get (upstream));
+	name = git_reference_name (upstream);
 
 	if (g_str_has_prefix (name, "refs/heads/"))
 	{
