@@ -95,9 +95,23 @@ void               ggit_remote_add_fetch_spec           (GgitRemote       *remot
                                                          const gchar      *fetch_spec,
                                                          GError          **error);
 
+gchar            **ggit_remote_get_fetch_specs          (GgitRemote       *remote,
+                                                         GError          **error);
+
+gboolean           ggit_remote_set_fetch_specs          (GgitRemote           *remote,
+                                                         const gchar * const  *specs,
+                                                         GError              **error);
+
 void               ggit_remote_add_push_spec            (GgitRemote       *remote,
                                                          const gchar      *push_spec,
                                                          GError          **error);
+
+gchar            **ggit_remote_get_push_specs           (GgitRemote       *remote,
+                                                         GError          **error);
+
+gboolean           ggit_remote_set_push_specs           (GgitRemote           *remote,
+                                                         const gchar * const  *specs,
+                                                         GError              **error);
 
 GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);

@@ -26,6 +26,7 @@
 #include "ggit-ref-spec.h"
 #include "ggit-repository.h"
 #include "ggit-remote-callbacks.h"
+#include "ggit-utils.h"
 
 struct _GgitRemoteHead
 {
@@ -423,6 +424,72 @@ ggit_remote_add_fetch_spec (GgitRemote   *remote,
 }
 
 /**
+ * ggit_remote_get_fetch_specs:
+ * @remote: a #GgitRemote.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Get the list of fetch refspecs for the given remote.
+ *
+ * Returns: (transfer full) (allow-none): a list of fetch refspecs.
+ */
+gchar **
+ggit_remote_get_fetch_specs (GgitRemote  *remote,
+                             GError     **error)
+{
+	gint ret;
+	git_strarray specs;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_remote_get_fetch_refspecs (&specs, _ggit_native_get (remote));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return ggit_utils_get_str_array_from_git_strarray (&specs);
+}
+
+/**
+ * ggit_remote_set_fetch_specs:
+ * @remote: a #GgitRemote.
+ * @specs: (array zero-terminated=1) (allow-none): the ref specs.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Set the list of fetch refspecs for the given remote.
+ *
+ * Returns: %TRUE if successful, or %FALSE otherwise.
+ */
+gboolean
+ggit_remote_set_fetch_specs (GgitRemote           *remote,
+                             const gchar * const  *specs,
+                             GError              **error)
+{
+	gint ret;
+	git_strarray gspecs;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
+
+	ret = git_remote_set_fetch_refspecs (_ggit_native_get (remote), &gspecs);
+
+	git_strarray_free (&gspecs);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
  * ggit_remote_add_push_spec:
  * @remote: a #GgitRemote.
  * @push_spec: the push refspec.
@@ -447,6 +514,72 @@ ggit_remote_add_push_spec (GgitRemote   *remote,
 	{
 		_ggit_error_set (error, ret);
 	}
+}
+
+/**
+ * ggit_remote_get_push_specs:
+ * @remote: a #GgitRemote.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Get the list of push refspecs for the given remote.
+ *
+ * Returns: (transfer full) (allow-none): a list of push refspecs.
+ */
+gchar **
+ggit_remote_get_push_specs (GgitRemote  *remote,
+                            GError     **error)
+{
+	gint ret;
+	git_strarray specs;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_remote_get_push_refspecs (&specs, _ggit_native_get (remote));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return ggit_utils_get_str_array_from_git_strarray (&specs);
+}
+
+/**
+ * ggit_remote_set_push_specs:
+ * @remote: a #GgitRemote.
+ * @specs: (array zero-terminated=1) (allow-none): the ref specs.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Set the list of push refspecs for the given remote.
+ *
+ * Returns: %TRUE if successful, or %FALSE otherwise.
+ */
+gboolean
+ggit_remote_set_push_specs (GgitRemote           *remote,
+                            const gchar * const  *specs,
+                            GError              **error)
+{
+	gint ret;
+	git_strarray gspecs;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
+
+	ret = git_remote_set_push_refspecs (_ggit_native_get (remote), &gspecs);
+
+	git_strarray_free (&gspecs);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /**
