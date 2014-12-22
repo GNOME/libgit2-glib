@@ -78,9 +78,9 @@ struct _GgitRemoteCallbacksClass
 	                               GError                    **error);
 };
 
-GType                 ggit_remote_callbacks_get_type   (void) G_GNUC_CONST;
+GType                  ggit_remote_callbacks_get_type   (void) G_GNUC_CONST;
 
-git_remote_callbacks _ggit_remote_callbacks_get_native (GgitRemoteCallbacks *remote_cbs);
+git_remote_callbacks *_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *remote_cbs);
 
 G_END_DECLS
 

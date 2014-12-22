@@ -75,7 +75,7 @@ ggit_clone_options_copy (GgitCloneOptions *clone_options)
 	if (clone_options->remote_callbacks)
 	{
 		new_clone_options->remote_callbacks = g_object_ref (clone_options->remote_callbacks);
-		gnew_clone_options.remote_callbacks = _ggit_remote_callbacks_get_native (new_clone_options->remote_callbacks);
+		gnew_clone_options.remote_callbacks = *_ggit_remote_callbacks_get_native (new_clone_options->remote_callbacks);
 	}
 
 	new_clone_options->clone_options = gnew_clone_options;
@@ -254,7 +254,7 @@ ggit_clone_options_set_remote_callbacks (GgitCloneOptions    *options,
 	if (callbacks != NULL)
 	{
 		options->remote_callbacks = g_object_ref (callbacks);
-		options->clone_options.remote_callbacks = _ggit_remote_callbacks_get_native (callbacks);
+		options->clone_options.remote_callbacks = *_ggit_remote_callbacks_get_native (callbacks);
 	}
 	else
 	{
