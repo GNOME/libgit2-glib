@@ -1943,7 +1943,7 @@ ggit_repository_reset (GgitRepository  *repository,
  * ggit_repository_reset_default:
  * @repository: a #GgitRepository.
  * @target: (allow-none): the target #GgitObject which is a commit or a tag.
- * @pathspecs: a list of file paths to reset.
+ * @pathspecs: (array zero-terminated=1): a list of file paths to reset.
  * @error: a #GError for error reporting or %NULL.
  *
  * Update some entries in the index from the target commit tree. The scope of
