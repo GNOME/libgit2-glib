@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 #define GGIT_REMOTE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REMOTE, GgitRemoteClass))
 
 typedef struct _GgitRemoteClass		GgitRemoteClass;
+typedef struct _GgitRemotePrivate	GgitRemotePrivate;
 
 struct _GgitRemote
 {
@@ -45,7 +46,7 @@ struct _GgitRemote
 	GgitNative parent;
 
 	/*< priv padding >*/
-	gpointer priv;
+	GgitRemotePrivate *priv;
 };
 
 struct _GgitRemoteClass
@@ -100,6 +101,12 @@ void               ggit_remote_add_push_spec            (GgitRemote       *remot
 
 GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);
+
+GgitRemoteCallbacks *
+                   ggit_remote_get_callbacks            (GgitRemote       *remote);
+
+void               ggit_remote_set_callbacks            (GgitRemote       *remote,
+                                                         GgitRemoteCallbacks *callbacks);
 
 gboolean           ggit_remote_is_valid_url             (const gchar      *url);
 gboolean           ggit_remote_is_supported_url         (const gchar      *url);

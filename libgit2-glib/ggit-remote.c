@@ -25,6 +25,7 @@
 #include "ggit-oid.h"
 #include "ggit-ref-spec.h"
 #include "ggit-repository.h"
+#include "ggit-remote-callbacks.h"
 
 struct _GgitRemoteHead
 {
@@ -36,7 +37,18 @@ struct _GgitRemoteHead
 	gint ref_count;
 };
 
-G_DEFINE_TYPE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
+struct _GgitRemotePrivate
+{
+	GgitRemoteCallbacks *callbacks;
+};
+
+enum
+{
+	PROP_0,
+	PROP_CALLBACKS
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
 G_DEFINE_BOXED_TYPE (GgitRemoteHead, ggit_remote_head, ggit_remote_head_ref, ggit_remote_head_unref)
 
 static GgitRemoteHead *
@@ -137,21 +149,71 @@ ggit_remote_head_get_name (GgitRemoteHead *remote_head)
 GgitRemote *
 _ggit_remote_wrap (git_remote *remote)
 {
-	return g_object_new (GGIT_TYPE_REMOTE, "native", remote, NULL);
+	GgitRemote *ret;
+
+	ret = g_object_new (GGIT_TYPE_REMOTE, "native", remote, NULL);
+	_ggit_native_set_destroy_func (ret, (GDestroyNotify)git_remote_free);
+
+	return ret;
 }
 
 static void
 ggit_remote_dispose (GObject *object)
 {
-	git_remote *native = _ggit_native_get (object);
+	GgitRemote *remote = GGIT_REMOTE (object);
+	git_remote *native;
 
-	if (native != NULL)
+	g_clear_object (&remote->priv->callbacks);
+
+	native = _ggit_native_get (remote);
+
+	if (native)
 	{
-		git_remote_free (native);
-		_ggit_native_set (object, NULL, NULL);
+		git_remote_callbacks cb = GIT_REMOTE_CALLBACKS_INIT;
+		git_remote_set_callbacks (native, &cb);
 	}
 
 	G_OBJECT_CLASS (ggit_remote_parent_class)->dispose (object);
+}
+
+static void
+ggit_remote_set_property (GObject      *object,
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
+{
+	GgitRemote *self = GGIT_REMOTE (object);
+
+	switch (prop_id)
+	{
+		case PROP_CALLBACKS:
+		{
+			ggit_remote_set_callbacks (self, g_value_get_object (value));
+			break;
+		}
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
+}
+
+static void
+ggit_remote_get_property (GObject    *object,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
+{
+	GgitRemote *self = GGIT_REMOTE (object);
+
+	switch (prop_id)
+	{
+		case PROP_CALLBACKS:
+			g_value_set_object (value, self->priv->callbacks);
+			break;
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+			break;
+	}
 }
 
 static void
@@ -160,11 +222,24 @@ ggit_remote_class_init (GgitRemoteClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->dispose = ggit_remote_dispose;
+
+	object_class->get_property = ggit_remote_get_property;
+	object_class->set_property = ggit_remote_set_property;
+
+	g_object_class_install_property (object_class,
+	                                 PROP_CALLBACKS,
+	                                 g_param_spec_object ("callbacks",
+	                                                      "Callbacks",
+	                                                      "Callbacks",
+	                                                      GGIT_TYPE_REMOTE_CALLBACKS,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_STATIC_STRINGS));
 }
 
 static void
 ggit_remote_init (GgitRemote *self)
 {
+	self->priv = ggit_remote_get_instance_private (self);
 }
 
 /**
@@ -412,6 +487,57 @@ ggit_remote_list (GgitRemote              *remote,
 	}
 
 	return retval;
+}
+
+/**
+ * ggit_remote_get_callbacks:
+ * @remote: a #GgitRemote.
+ *
+ * Returns: (transfer none): the remote callbacks.
+ */
+GgitRemoteCallbacks *
+ggit_remote_get_callbacks (GgitRemote *remote)
+{
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+
+	return remote->priv->callbacks;
+}
+
+/**
+ * ggit_remote_set_callbacks:
+ * @remote: a #GgitRemote.
+ * @callbacks: (allow-none): a #GgitRemoteCallbacks, or %NULL.
+ *
+ * Set the remote callbacks.
+ */
+void
+ggit_remote_set_callbacks (GgitRemote          *remote,
+                           GgitRemoteCallbacks *callbacks)
+{
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
+	g_return_if_fail (callbacks == NULL || GGIT_IS_REMOTE_CALLBACKS (callbacks));
+
+	if (callbacks == remote->priv->callbacks)
+	{
+		return;
+	}
+
+	g_clear_object (&remote->priv->callbacks);
+
+	if (callbacks)
+	{
+		remote->priv->callbacks = g_object_ref (callbacks);
+
+		git_remote_set_callbacks (_ggit_native_get (remote),
+		                          _ggit_remote_callbacks_get_native (callbacks));
+	}
+	else
+	{
+		git_remote_callbacks cb = GIT_REMOTE_CALLBACKS_INIT;
+		git_remote_set_callbacks (_ggit_native_get (remote), &cb);
+	}
+
+	g_object_notify (G_OBJECT (remote), "callbacks");
 }
 
 /**
