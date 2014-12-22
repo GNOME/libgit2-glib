@@ -83,7 +83,7 @@ const gchar       *ggit_remote_get_name                 (GgitRemote       *remot
 const gchar       *ggit_remote_get_url                  (GgitRemote       *remote);
 
 void               ggit_remote_connect                  (GgitRemote       *remote,
-                                                         gboolean          direction,
+                                                         GgitDirection     direction,
                                                          GError          **error);
 
 gboolean           ggit_remote_get_connected            (GgitRemote       *remote);

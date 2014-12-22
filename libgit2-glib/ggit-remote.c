@@ -272,9 +272,9 @@ ggit_remote_get_url (GgitRemote *remote)
  * starts up a specific binary which can only do the one or the other.
  */
 void
-ggit_remote_connect (GgitRemote  *remote,
-                     gboolean     direction,
-                     GError     **error)
+ggit_remote_connect (GgitRemote     *remote,
+                     GgitDirection   direction,
+                     GError        **error)
 {
 	gint ret;
 

@@ -1075,6 +1075,21 @@ typedef enum
 	GGIT_DIFF_FORMAT_EMAIL_EXCLUDE_SUBJECT_PATCH_MARKER = (1 << 0)
 } GgitDiffFormatEmailFlags;
 
+typedef enum
+{
+	GGIT_CREDTYPE_USERPASS_PLAINTEXT = (1u << 0),
+	GGIT_CREDTYPE_SSH_KEY            = (1u << 1),
+	GGIT_CREDTYPE_SSH_CUSTOM         = (1u << 2),
+	GGIT_CREDTYPE_DEFAULT            = (1u << 3),
+	GGIT_CREDTYPE_SSH_INTERACTIVE    = (1u << 4),
+} GgitCredtype;
+
+typedef enum
+{
+	GGIT_DIRECTION_FETCH = 0,
+	GGIT_DIRECTION_PUSH  = 1
+} GgitDirection;
+
 /**
  * GgitConfigCallback:
  * @entry: a #GgitConfigEntry.

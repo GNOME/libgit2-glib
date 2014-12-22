@@ -63,7 +63,7 @@ struct _GgitRemoteCallbacksClass
 	gboolean (*credentials)       (GgitRemoteCallbacks        *callbacks,
 	                               const gchar                *url,
 	                               const gchar                *username_from_url,
-	                               guint                       allowed_types,
+	                               GgitCredtype                allowed_types,
 	                               GgitCred                  **cred,
 	                               GError                    **error);
 
