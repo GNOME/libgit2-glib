@@ -281,6 +281,45 @@ ggit_remote_new (GgitRepository   *repository,
 }
 
 /**
+ * ggit_remote_new_anonymous:
+ * @repository: a #GgitRepository.
+ * @url: the remote repository's URL.
+ * @fetch: the remote fetchspec.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Creates a remote with the specified refspec in memory. You can use
+ * this when you have a URL instead of a remote's name.
+ *
+ * Returns: (transfer full): a newly allocated #GgitRemote.
+ */
+GgitRemote *
+ggit_remote_new_anonymous (GgitRepository  *repository,
+                           const gchar     *url,
+                           const gchar     *fetch,
+                           GError         **error)
+{
+	gint ret;
+	git_remote *remote;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (url != NULL, NULL);
+	g_return_val_if_fail (fetch != NULL, NULL);
+
+	ret = git_remote_create_anonymous (&remote,
+	                                   _ggit_native_get (repository),
+	                                   url,
+	                                   fetch);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_remote_wrap (remote);
+}
+
+/**
  * ggit_remote_save:
  * @remote: a #GgitRemote.
  * @error: a #GError or %NULL.

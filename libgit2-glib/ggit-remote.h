@@ -76,6 +76,11 @@ GgitRemote        *ggit_remote_new                      (GgitRepository   *repos
                                                          const gchar      *url,
                                                          GError          **error);
 
+GgitRemote        *ggit_remote_new_anonymous            (GgitRepository   *repository,
+                                                         const gchar      *url,
+                                                         const gchar      *fetch,
+                                                         GError          **error);
+
 void               ggit_remote_save                     (GgitRemote       *remote,
                                                          GError          **error);
 
