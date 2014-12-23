@@ -102,6 +102,9 @@ gboolean           ggit_remote_get_connected            (GgitRemote       *remot
 
 void               ggit_remote_disconnect               (GgitRemote       *remote);
 
+gboolean           ggit_remote_download                 (GgitRemote       *remote,
+                                                         GError          **error);
+
 void               ggit_remote_add_fetch_spec           (GgitRemote       *remote,
                                                          const gchar      *fetch_spec,
                                                          GError          **error);

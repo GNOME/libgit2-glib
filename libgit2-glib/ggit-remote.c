@@ -564,6 +564,41 @@ ggit_remote_disconnect (GgitRemote *remote)
 }
 
 /**
+ * ggit_remote_download:
+ * @remote: a #GgitRemote.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Connect to the remote if not yet connected, negotiate with the remote
+ * about which objects are missing and download the resulting packfile and
+ * its index.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ */
+gboolean
+ggit_remote_download (GgitRemote  *remote,
+                      GError     **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	reset_transfer_progress (remote, FALSE);
+
+	ret = git_remote_download (_ggit_native_get (remote));
+
+	reset_transfer_progress (remote, TRUE);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
  * ggit_remote_add_fetch_spec:
  * @remote: a #GgitRemote.
  * @fetch_spec: the fetch refspec.
