@@ -247,7 +247,7 @@ ggit_cred_ssh_interactive_initable_iface_init (GInitableIface *iface)
 
 GgitCredSshInteractive *
 ggit_cred_ssh_interactive_new (const gchar  *username,
-                         GError      **error)
+                               GError      **error)
 {
 	return g_initable_new (GGIT_TYPE_CRED_SSH_INTERACTIVE,
 	                       NULL, error,

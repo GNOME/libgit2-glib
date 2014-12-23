@@ -65,7 +65,9 @@ GgitCredSshInteractive *
 
 const gchar  *ggit_cred_ssh_interactive_get_username  (GgitCredSshInteractive  *cred);
 
-GType        ggit_cred_ssh_interactive_prompt_get_type (void) G_GNUC_CONST;
+
+GType         ggit_cred_ssh_interactive_prompt_get_type
+                                               (void) G_GNUC_CONST;
 
 GgitCredSshInteractivePrompt *
               ggit_cred_ssh_interactive_prompt_new

@@ -188,10 +188,8 @@ ggit_remote_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_CALLBACKS:
-		{
 			ggit_remote_set_callbacks (self, g_value_get_object (value));
 			break;
-		}
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
