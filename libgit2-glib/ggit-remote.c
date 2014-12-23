@@ -27,6 +27,7 @@
 #include "ggit-repository.h"
 #include "ggit-remote-callbacks.h"
 #include "ggit-utils.h"
+#include "ggit-signature.h"
 #include "ggit-transfer-progress.h"
 
 struct _GgitRemoteHead
@@ -588,6 +589,43 @@ ggit_remote_download (GgitRemote  *remote,
 	ret = git_remote_download (_ggit_native_get (remote));
 
 	reset_transfer_progress (remote, TRUE);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_remote_update_tips:
+ * @remote: a #GgitRemote.
+ * @signature: a #GgitSignature with which to add to the reflog.
+ * @message: (allow-none): the message to add to the reflog, or %NULL for the
+ *                         "fetch" message.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Update tips to the new state.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ */
+gboolean
+ggit_remote_update_tips (GgitRemote     *remote,
+                         GgitSignature  *signature,
+                         const gchar    *message,
+                         GError        **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_remote_update_tips (_ggit_native_get (remote),
+	                             _ggit_native_get (signature),
+	                              message != NULL ? message : "fetch");
 
 	if (ret != GIT_OK)
 	{
