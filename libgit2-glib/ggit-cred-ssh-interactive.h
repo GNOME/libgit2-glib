@@ -51,7 +51,9 @@ struct _GgitCredSshInteractiveClass
 	/*< private >*/
 	GgitCredClass parent_class;
 
-	void (*prompt) (GgitCredSshInteractivePrompt **prompts,
+	/* virtual methods */
+	void (*prompt) (GgitCredSshInteractive        *cred,
+	                GgitCredSshInteractivePrompt **prompts,
 	                gsize                          num_prompts);
 };
 

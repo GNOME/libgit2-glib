@@ -186,7 +186,7 @@ callback_wrapper (const char                            *name,
 	g_free (wname);
 	g_free (winstruction);
 
-	GGIT_CRED_SSH_INTERACTIVE_GET_CLASS (interactive)->prompt (wprompts, num_prompts);
+	GGIT_CRED_SSH_INTERACTIVE_GET_CLASS (interactive)->prompt (interactive, wprompts, num_prompts);
 
 	for (i = 0; i < num_prompts; i++)
 	{
