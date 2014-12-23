@@ -54,6 +54,8 @@ guint          ggit_oid_hash            (GgitOId const *oid);
 gboolean       ggit_oid_equal           (GgitOId const *a,
                                          GgitOId const *b);
 
+gboolean       ggit_oid_is_zero         (GgitOId const *oid);
+
 G_END_DECLS
 
 #endif /* __GGIT_OID_H__ */

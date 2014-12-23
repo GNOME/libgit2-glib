@@ -218,4 +218,20 @@ ggit_oid_equal (GgitOId const *a,
 	return git_oid_cmp (&a->oid, &b->oid) == 0;
 }
 
+/**
+ * ggit_oid_is_zero:
+ * @oid: a #GgitOId.
+ *
+ * Get whether the oid contains only zeros.
+ *
+ * Returns: %TRUE if the oid contains only zeros, %FALSE otherwise.
+ */
+gboolean
+ggit_oid_is_zero (GgitOId const *oid)
+{
+	g_return_val_if_fail (oid != NULL, FALSE);
+
+	return git_oid_iszero (&oid->oid) == 1 ? TRUE : FALSE;
+}
+
 /* ex:set ts=8 noet: */
