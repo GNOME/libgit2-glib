@@ -50,16 +50,22 @@ struct _GgitRemoteCallbacksClass
 {
 	GObjectClass parent_class;
 
+	/* signals */
+	void (*progress)              (GgitRemoteCallbacks        *callbacks,
+	                               const gchar                *message);
+
+	void (*transfer_progress)     (GgitRemoteCallbacks        *callbacks,
+	                               GgitTransferProgress       *stats);
+
+	void (*update_tips)           (GgitRemoteCallbacks        *callbacks,
+	                               const gchar                *refname,
+	                               const GgitOId              *a,
+	                               const GgitOId              *b);
+
+	void (*completion)            (GgitRemoteCallbacks        *callbacks,
+	                               GgitRemoteCompletionType    type);
+
 	/* virtual methods */
-	gboolean (*progress)          (GgitRemoteCallbacks        *callbacks,
-	                               const gchar                *str,
-	                               gint                        len,
-	                               GError                    **error);
-
-	gboolean (*completion)        (GgitRemoteCallbacks        *callbacks,
-	                               GgitRemoteCompletionType    type,
-	                               GError                    **error);
-
 	gboolean (*credentials)       (GgitRemoteCallbacks        *callbacks,
 	                               const gchar                *url,
 	                               const gchar                *username_from_url,
@@ -67,15 +73,7 @@ struct _GgitRemoteCallbacksClass
 	                               GgitCred                  **cred,
 	                               GError                    **error);
 
-	gboolean (*transfer_progress) (GgitRemoteCallbacks        *callbacks,
-	                               GgitTransferProgress       *stats,
-	                               GError                    **error);
 
-	gboolean (*update_tips)       (GgitRemoteCallbacks        *callbacks,
-	                               const gchar                *refname,
-	                               const GgitOId              *a,
-	                               const GgitOId              *b,
-	                               GError                    **error);
 };
 
 GType                  ggit_remote_callbacks_get_type   (void) G_GNUC_CONST;

@@ -25,10 +25,9 @@ cloner_init (Cloner *cloner)
 {
 }
 
-static gboolean
+static void
 cloner_transfer_progress (GgitRemoteCallbacks   *callbacks,
-                          GgitTransferProgress  *stats,
-                          GError               **error)
+                          GgitTransferProgress  *stats)
 {
 	guint recvobjs;
 	guint totobjs;
@@ -52,8 +51,6 @@ cloner_transfer_progress (GgitRemoteCallbacks   *callbacks,
 	{
 		g_printf("\n");
 	}
-
-	return TRUE;
 }
 
 static void

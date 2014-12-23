@@ -22,6 +22,7 @@
 #include "ggit-cred.h"
 #include "ggit-transfer-progress.h"
 #include "ggit-oid.h"
+#include "ggit-enum-types.h"
 
 #define GGIT_REMOTE_CALLBACKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksPrivate))
 
@@ -44,8 +45,10 @@ struct _GgitRemoteCallbacksPrivate
 
 enum
 {
-	UPDATE_TIPS,
+	PROGRESS,
 	TRANSFER_PROGRESS,
+	UPDATE_TIPS,
+	COMPLETION,
 	NUM_SIGNALS
 };
 
@@ -74,7 +77,7 @@ ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
 		g_signal_new ("update-tips",
 		              G_TYPE_FROM_CLASS (object_class),
 		              G_SIGNAL_RUN_LAST,
-		              0,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, update_tips),
 		              NULL, NULL,
 		              NULL,
 		              G_TYPE_NONE,
@@ -84,83 +87,39 @@ ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
 		              GGIT_TYPE_OID);
 
 	signals[TRANSFER_PROGRESS] =
+		g_signal_new ("progress",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, progress),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              1,
+		              G_TYPE_STRING);
+
+	signals[TRANSFER_PROGRESS] =
 		g_signal_new ("transfer-progress",
 		              G_TYPE_FROM_CLASS (object_class),
 		              G_SIGNAL_RUN_LAST,
-		              0,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, transfer_progress),
 		              NULL, NULL,
 		              NULL,
 		              G_TYPE_NONE,
 		              1,
 		              GGIT_TYPE_TRANSFER_PROGRESS);
 
+	signals[COMPLETION] =
+		g_signal_new ("completion",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, completion),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              1,
+		              GGIT_TYPE_REMOTE_COMPLETION_TYPE);
+
 	g_type_class_add_private (object_class, sizeof (GgitRemoteCallbacksPrivate));
-}
-
-static int
-progress_wrap (const char *str, int len, void *data)
-{
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
-
-	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress != NULL)
-	{
-		GError *error = NULL;
-
-		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->progress (self,
-		                                                      str,
-		                                                      len,
-		                                                      &error))
-		{
-			return GIT_OK;
-		}
-		else
-		{
-			if (error)
-			{
-				giterr_set_str (GIT_ERROR, error->message);
-				g_error_free (error);
-			}
-
-			return GIT_ERROR;
-		}
-	}
-	else
-	{
-		return GIT_OK;
-	}
-}
-
-static int
-completion_wrap (git_remote_completion_type type, void *data)
-{
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
-
-	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion != NULL)
-	{
-		GError *error = NULL;
-		GgitRemoteCompletionType rt = (GgitRemoteCompletionType)type;
-
-		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->completion (self,
-		                                                        rt,
-		                                                        &error))
-		{
-			return GIT_OK;
-		}
-		else
-		{
-			if (error)
-			{
-				giterr_set_str (GIT_ERROR, error->message);
-				g_error_free (error);
-			}
-
-			return GIT_ERROR;
-		}
-	}
-	else
-	{
-		return GIT_OK;
-	}
 }
 
 static int
@@ -213,45 +172,33 @@ credentials_wrap (git_cred     **cred,
 	}
 }
 
+
+static int
+progress_wrap (const char *str, int len, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	gchar *message;
+
+	message = g_strndup (str, len);
+
+	g_signal_emit (self, signals[PROGRESS], 0, message);
+
+	g_free (message);
+	return GIT_OK;
+}
+
 static int
 transfer_progress_wrap (const git_transfer_progress *stats, void *data)
 {
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
 	GgitTransferProgress *p;
-	gint ret;
 
 	p = _ggit_transfer_progress_wrap (stats);
 
-	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress != NULL)
-	{
-		GError *error = NULL;
-
-		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress (self,
-		                                                               p,
-		                                                               &error))
-		{
-			ret = GIT_OK;
-		}
-		else
-		{
-			if (error)
-			{
-				giterr_set_str (GIT_ERROR, error->message);
-				g_error_free (error);
-			}
-
-			ret = GIT_ERROR;
-		}
-	}
-	else
-	{
-		ret = GIT_OK;
-	}
-
-	g_signal_emit (self, signals[TRANSFER_PROGRESS], 0, ret == GIT_OK ? p : NULL);
+	g_signal_emit (self, signals[TRANSFER_PROGRESS], 0, p);
 	ggit_transfer_progress_free (p);
 
-	return ret;
+	return GIT_OK;
 }
 
 static int
@@ -263,47 +210,27 @@ update_tips_wrap (const char    *refname,
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
 	GgitOId *na;
 	GgitOId *nb;
-	gint ret;
-	GError *error = NULL;
 
 	na = _ggit_oid_wrap (a);
 	nb = _ggit_oid_wrap (b);
 
-	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips != NULL)
-	{
-		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips (self,
-		                                                         refname,
-		                                                         na,
-		                                                         nb,
-		                                                         &error))
-		{
-			ret = GIT_OK;
-		}
-		else
-		{
-			if (error)
-			{
-				giterr_set_str (GIT_ERROR, error->message);
-				g_error_free (error);
-			}
-
-			ret = GIT_ERROR;
-		}
-	}
-	else
-	{
-		ret = GIT_OK;
-	}
-
-	if (ret == GIT_OK)
-	{
-		g_signal_emit (self, signals[UPDATE_TIPS], 0, refname, na, nb);
-	}
+	g_signal_emit (self, signals[UPDATE_TIPS], 0, refname, na, nb);
 
 	ggit_oid_free (na);
 	ggit_oid_free (nb);
 
-	return ret;
+	return GIT_OK;
+}
+
+static int
+completion_wrap (git_remote_completion_type type, void *data)
+{
+	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCompletionType rt = (GgitRemoteCompletionType)type;
+
+	g_signal_emit (self, signals[COMPLETION], 0, rt);
+
+	return GIT_OK;
 }
 
 static void
@@ -316,10 +243,11 @@ ggit_remote_callbacks_init (GgitRemoteCallbacks *self)
 	self->priv->native = gcallbacks;
 
 	self->priv->native.sideband_progress = progress_wrap;
-	self->priv->native.completion = completion_wrap;
-	self->priv->native.credentials = credentials_wrap;
 	self->priv->native.transfer_progress = transfer_progress_wrap;
 	self->priv->native.update_tips = update_tips_wrap;
+	self->priv->native.completion = completion_wrap;
+
+	self->priv->native.credentials = credentials_wrap;
 
 	self->priv->native.payload = self;
 }
