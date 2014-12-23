@@ -86,7 +86,7 @@ ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
 		              GGIT_TYPE_OID,
 		              GGIT_TYPE_OID);
 
-	signals[TRANSFER_PROGRESS] =
+	signals[PROGRESS] =
 		g_signal_new ("progress",
 		              G_TYPE_FROM_CLASS (object_class),
 		              G_SIGNAL_RUN_LAST,
