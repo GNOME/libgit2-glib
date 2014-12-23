@@ -42,6 +42,15 @@ struct _GgitRemoteCallbacksPrivate
  * Returns:
  */
 
+enum
+{
+	UPDATE_TIPS,
+	TRANSFER_PROGRESS,
+	NUM_SIGNALS
+};
+
+static guint signals[NUM_SIGNALS] = {0,};
+
 G_DEFINE_TYPE (GgitRemoteCallbacks, ggit_remote_callbacks, G_TYPE_OBJECT)
 
 static void
@@ -60,6 +69,30 @@ ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ggit_remote_callbacks_finalize;
+
+	signals[UPDATE_TIPS] =
+		g_signal_new ("update-tips",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              0,
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              3,
+		              G_TYPE_STRING,
+		              GGIT_TYPE_OID,
+		              GGIT_TYPE_OID);
+
+	signals[TRANSFER_PROGRESS] =
+		g_signal_new ("transfer-progress",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              0,
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              1,
+		              GGIT_TYPE_TRANSFER_PROGRESS);
 
 	g_type_class_add_private (object_class, sizeof (GgitRemoteCallbacksPrivate));
 }
@@ -184,14 +217,14 @@ static int
 transfer_progress_wrap (const git_transfer_progress *stats, void *data)
 {
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitTransferProgress *p;
+	gint ret;
+
+	p = _ggit_transfer_progress_wrap (stats);
 
 	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress != NULL)
 	{
-		GgitTransferProgress *p;
 		GError *error = NULL;
-		gint ret;
-
-		p = _ggit_transfer_progress_wrap (stats);
 
 		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->transfer_progress (self,
 		                                                               p,
@@ -209,14 +242,16 @@ transfer_progress_wrap (const git_transfer_progress *stats, void *data)
 
 			ret = GIT_ERROR;
 		}
-
-		ggit_transfer_progress_free (p);
-		return ret;
 	}
 	else
 	{
-		return GIT_OK;
+		ret = GIT_OK;
 	}
+
+	g_signal_emit (self, signals[TRANSFER_PROGRESS], 0, ret == GIT_OK ? p : NULL);
+	ggit_transfer_progress_free (p);
+
+	return ret;
 }
 
 static int
@@ -226,17 +261,16 @@ update_tips_wrap (const char    *refname,
                   void          *data)
 {
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitOId *na;
+	GgitOId *nb;
+	gint ret;
+	GError *error = NULL;
+
+	na = _ggit_oid_wrap (a);
+	nb = _ggit_oid_wrap (b);
 
 	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips != NULL)
 	{
-		GgitOId *na;
-		GgitOId *nb;
-		gint ret;
-		GError *error = NULL;
-
-		na = _ggit_oid_wrap (a);
-		nb = _ggit_oid_wrap (b);
-
 		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->update_tips (self,
 		                                                         refname,
 		                                                         na,
@@ -255,16 +289,21 @@ update_tips_wrap (const char    *refname,
 
 			ret = GIT_ERROR;
 		}
-
-		ggit_oid_free (na);
-		ggit_oid_free (nb);
-
-		return ret;
 	}
 	else
 	{
-		return GIT_OK;
+		ret = GIT_OK;
 	}
+
+	if (ret == GIT_OK)
+	{
+		g_signal_emit (self, signals[UPDATE_TIPS], 0, refname, na, nb);
+	}
+
+	ggit_oid_free (na);
+	ggit_oid_free (nb);
+
+	return ret;
 }
 
 static void
