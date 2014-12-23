@@ -53,6 +53,12 @@ struct _GgitRemoteClass
 {
 	/*< private >*/
 	GgitNativeClass parent_class;
+
+	/* < signals > */
+	void (*tip_updated) (GgitRemote    *remote,
+	                     const gchar   *refname,
+	                     const GgitOId *a,
+	                     const GgitOId *b);
 };
 
 #define GGIT_TYPE_REMOTE_HEAD   (ggit_remote_head_get_type ())

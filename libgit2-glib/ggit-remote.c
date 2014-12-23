@@ -27,6 +27,7 @@
 #include "ggit-repository.h"
 #include "ggit-remote-callbacks.h"
 #include "ggit-utils.h"
+#include "ggit-transfer-progress.h"
 
 struct _GgitRemoteHead
 {
@@ -41,13 +42,28 @@ struct _GgitRemoteHead
 struct _GgitRemotePrivate
 {
 	GgitRemoteCallbacks *callbacks;
+	gdouble transfer_progress;
+
+	guint reset_transfer_progress_timeout;
+
+	gulong update_tips_id;
+	gulong transfer_progress_id;
 };
 
 enum
 {
 	PROP_0,
-	PROP_CALLBACKS
+	PROP_CALLBACKS,
+	PROP_TRANSFER_PROGRESS
 };
+
+enum
+{
+	TIP_UPDATED,
+	NUM_SIGNALS
+};
+
+static guint signals[NUM_SIGNALS] = {0,};
 
 G_DEFINE_TYPE_WITH_PRIVATE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
 G_DEFINE_BOXED_TYPE (GgitRemoteHead, ggit_remote_head, ggit_remote_head_ref, ggit_remote_head_unref)
@@ -159,12 +175,27 @@ _ggit_remote_wrap (git_remote *remote)
 }
 
 static void
+clear_callbacks (GgitRemote *remote)
+{
+	if (remote->priv->callbacks)
+	{
+		g_signal_handler_disconnect (remote->priv->callbacks,
+		                             remote->priv->update_tips_id);
+
+		g_signal_handler_disconnect (remote->priv->callbacks,
+		                             remote->priv->transfer_progress_id);
+
+		g_clear_object (&remote->priv->callbacks);
+	}
+}
+
+static void
 ggit_remote_dispose (GObject *object)
 {
 	GgitRemote *remote = GGIT_REMOTE (object);
 	git_remote *native;
 
-	g_clear_object (&remote->priv->callbacks);
+	clear_callbacks (remote);
 
 	native = _ggit_native_get (remote);
 
@@ -172,6 +203,12 @@ ggit_remote_dispose (GObject *object)
 	{
 		git_remote_callbacks cb = GIT_REMOTE_CALLBACKS_INIT;
 		git_remote_set_callbacks (native, &cb);
+	}
+
+	if (remote->priv->reset_transfer_progress_timeout != 0)
+	{
+		g_source_remove (remote->priv->reset_transfer_progress_timeout);
+		remote->priv->reset_transfer_progress_timeout = 0;
 	}
 
 	G_OBJECT_CLASS (ggit_remote_parent_class)->dispose (object);
@@ -209,6 +246,9 @@ ggit_remote_get_property (GObject    *object,
 		case PROP_CALLBACKS:
 			g_value_set_object (value, self->priv->callbacks);
 			break;
+		case PROP_TRANSFER_PROGRESS:
+			g_value_set_double (value, self->priv->transfer_progress);
+			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
@@ -232,13 +272,96 @@ ggit_remote_class_init (GgitRemoteClass *klass)
 	                                                      "Callbacks",
 	                                                      GGIT_TYPE_REMOTE_CALLBACKS,
 	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_STATIC_STRINGS |
+	                                                      G_PARAM_CONSTRUCT));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_TRANSFER_PROGRESS,
+	                                 g_param_spec_double ("transfer-progress",
+	                                                      "Transfer Progress",
+	                                                      "Transfer Progress",
+	                                                      0,
+	                                                      1,
+	                                                      0,
+	                                                      G_PARAM_READABLE |
 	                                                      G_PARAM_STATIC_STRINGS));
+	signals[TIP_UPDATED] =
+		g_signal_new ("tip-updated",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteClass, tip_updated),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              3,
+		              G_TYPE_STRING,
+		              GGIT_TYPE_OID,
+		              GGIT_TYPE_OID);
 }
 
 static void
 ggit_remote_init (GgitRemote *self)
 {
 	self->priv = ggit_remote_get_instance_private (self);
+}
+
+static gboolean
+reset_transfer_progress_impl (GgitRemote *remote)
+{
+	remote->priv->reset_transfer_progress_timeout = 0;
+
+	remote->priv->transfer_progress = 0;
+	g_object_notify (G_OBJECT (remote), "transfer_progress");
+
+	return FALSE;
+}
+
+static void
+reset_transfer_progress (GgitRemote *remote,
+                         gboolean    with_delay)
+{
+	if (remote->priv->transfer_progress == 0)
+	{
+		return;
+	}
+
+	if (with_delay)
+	{
+		remote->priv->reset_transfer_progress_timeout =
+			g_timeout_add (500,
+			               (GSourceFunc)reset_transfer_progress_impl,
+			               remote);
+	}
+	else if (remote->priv->reset_transfer_progress_timeout == 0)
+	{
+		reset_transfer_progress_impl (remote);
+	}
+}
+
+static void
+callbacks_update_tips (GgitRemote    *remote,
+                       const gchar   *refname,
+                       const GgitOId *a,
+                       const GgitOId *b)
+{
+	g_signal_emit (remote, signals[TIP_UPDATED], 0, refname, a, b);
+}
+
+static void
+callbacks_transfer_progress (GgitRemote           *remote,
+                             GgitTransferProgress *progress)
+{
+	guint total = ggit_transfer_progress_get_total_objects (progress);
+	guint received = ggit_transfer_progress_get_received_objects (progress);
+	guint indexed = ggit_transfer_progress_get_indexed_objects (progress);
+
+	remote->priv->transfer_progress = (gdouble)(received + indexed) / (gdouble)(total + total);
+	g_object_notify (G_OBJECT (remote), "transfer-progress");
+
+	if (received == total && indexed == total)
+	{
+		reset_transfer_progress (remote, TRUE);
+	}
 }
 
 /**
@@ -394,6 +517,11 @@ ggit_remote_connect (GgitRemote     *remote,
 	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	if (!ggit_remote_get_connected (remote))
+	{
+		reset_transfer_progress (remote, FALSE);
+	}
+
 	ret = git_remote_connect (_ggit_native_get (remote), direction);
 
 	if (ret != GIT_OK)
@@ -431,6 +559,8 @@ ggit_remote_disconnect (GgitRemote *remote)
 	g_return_if_fail (GGIT_IS_REMOTE (remote));
 
 	git_remote_disconnect (_ggit_native_get (remote));
+
+	reset_transfer_progress (remote, TRUE);
 }
 
 /**
@@ -687,25 +817,36 @@ ggit_remote_set_callbacks (GgitRemote          *remote,
 	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (callbacks == NULL || GGIT_IS_REMOTE_CALLBACKS (callbacks));
 
-	if (callbacks == remote->priv->callbacks)
+	if (callbacks != NULL && callbacks == remote->priv->callbacks)
 	{
 		return;
 	}
 
-	g_clear_object (&remote->priv->callbacks);
+	clear_callbacks (remote);
 
-	if (callbacks)
+	if (!callbacks)
 	{
-		remote->priv->callbacks = g_object_ref (callbacks);
+		/* Always create a dummy callbacks anyway, since:
+		 * 1. libgit2 assumes there always is one
+		 * 2. We want to proxy update-tips
+		 */
+		callbacks = g_object_new (GGIT_TYPE_REMOTE_CALLBACKS, NULL);
+	}
 
-		git_remote_set_callbacks (_ggit_native_get (remote),
-		                          _ggit_remote_callbacks_get_native (callbacks));
-	}
-	else
-	{
-		git_remote_callbacks cb = GIT_REMOTE_CALLBACKS_INIT;
-		git_remote_set_callbacks (_ggit_native_get (remote), &cb);
-	}
+	remote->priv->callbacks = g_object_ref (callbacks);
+
+	git_remote_set_callbacks (_ggit_native_get (remote),
+	                          _ggit_remote_callbacks_get_native (callbacks));
+
+	remote->priv->update_tips_id = g_signal_connect_swapped (callbacks,
+	                                                         "update-tips",
+	                                                         G_CALLBACK (callbacks_update_tips),
+	                                                         remote);
+
+	remote->priv->transfer_progress_id = g_signal_connect_swapped (callbacks,
+	                                                               "transfer-progress",
+	                                                               G_CALLBACK (callbacks_transfer_progress),
+	                                                               remote);
 
 	g_object_notify (G_OBJECT (remote), "callbacks");
 }
