@@ -56,6 +56,13 @@ G_DEFINE_BOXED_TYPE (GgitCredSshInteractivePrompt,
 
 static void ggit_cred_ssh_interactive_initable_iface_init (GInitableIface  *iface);
 
+/**
+ * GgitCredSshInteractiveClass::prompt:
+ * @cred: a #GgitCredSshInteractive
+ * @prompts: (array length=num_prompts): a list of prompts.
+ * @num_prompts: number of prompts.
+  */
+
 G_DEFINE_TYPE_EXTENDED (GgitCredSshInteractive,
                         ggit_cred_ssh_interactive,
                         GGIT_TYPE_CRED,
