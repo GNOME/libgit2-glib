@@ -442,6 +442,23 @@ ggit_remote_new_anonymous (GgitRepository  *repository,
 }
 
 /**
+ * ggit_remote_get_owner:
+ * @remote: a #GgitRemote.
+ *
+ * Gets the repository where @remote resides.
+ *
+ * Returns: (transfer full): the repository where the remote resides.
+ */
+GgitRepository *
+ggit_remote_get_owner (GgitRemote *remote)
+{
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+
+	return _ggit_repository_wrap (git_remote_owner (_ggit_native_get (remote)),
+	                              FALSE);
+}
+
+/**
  * ggit_remote_save:
  * @remote: a #GgitRemote.
  * @error: a #GError or %NULL.
