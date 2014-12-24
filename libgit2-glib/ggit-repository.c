@@ -74,10 +74,53 @@ G_DEFINE_TYPE_EXTENDED (GgitRepository, ggit_repository, GGIT_TYPE_NATIVE,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_repository_initable_iface_init))
 
+static GHashTable *registry = NULL;
+
+static GgitRepository *
+repository_from_registry (git_repository *repository)
+{
+	if (registry == NULL)
+	{
+		return NULL;
+	}
+
+	return g_hash_table_lookup (registry, repository);
+}
+
+static void
+register_repository (git_repository *repository,
+                     GgitRepository *wrapper)
+{
+	if (registry == NULL)
+	{
+		registry = g_hash_table_new (g_direct_hash, g_direct_equal);
+	}
+
+	g_hash_table_insert (registry, repository, wrapper);
+}
+
+static void
+unregister_repository (git_repository *repository)
+{
+	if (registry == NULL)
+	{
+		return;
+	}
+
+	g_hash_table_remove (registry, repository);
+
+	if (g_hash_table_size (registry) == 0)
+	{
+		g_hash_table_destroy (registry);
+		registry = NULL;
+	}
+}
+
 static void
 ggit_repository_finalize (GObject *object)
 {
 	GgitRepositoryPrivate *priv = GGIT_REPOSITORY (object)->priv;
+	git_repository *repo;
 
 	g_free (priv->url);
 	g_clear_object (&priv->location);
@@ -86,6 +129,13 @@ ggit_repository_finalize (GObject *object)
 	if (priv->clone_options != NULL)
 	{
 		ggit_clone_options_free (priv->clone_options);
+	}
+
+	repo = _ggit_native_get (object);
+
+	if (repo != NULL)
+	{
+		unregister_repository (repo);
 	}
 
 	G_OBJECT_CLASS (ggit_repository_parent_class)->finalize (object);
@@ -391,6 +441,13 @@ _ggit_repository_wrap (git_repository *repository,
 {
 	GgitRepository *ret;
 
+	ret = repository_from_registry (repository);
+
+	if (ret != NULL)
+	{
+		return g_object_ref (ret);
+	}
+
 	ret = g_object_new (GGIT_TYPE_REPOSITORY,
 	                    "native", repository,
 	                    NULL);
@@ -401,6 +458,11 @@ _ggit_repository_wrap (git_repository *repository,
 	{
 		_ggit_native_set_destroy_func (ret,
 		                               (GDestroyNotify)git_repository_free);
+	}
+
+	if (owned)
+	{
+		register_repository (repository, ret);
 	}
 
 	return ret;
