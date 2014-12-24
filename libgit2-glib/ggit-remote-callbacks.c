@@ -31,18 +31,6 @@ struct _GgitRemoteCallbacksPrivate
 	git_remote_callbacks native;
 };
 
-/**
- * GgitRemoteCallbacksClass::credentials:
- * @callbacks:
- * @url:
- * @username_from_url:
- * @allowed_types:
- * @cred: (out):
- * @error:
- *
- * Returns:
- */
-
 enum
 {
 	PROGRESS,
@@ -53,6 +41,18 @@ enum
 };
 
 static guint signals[NUM_SIGNALS] = {0,};
+
+
+/**
+ * GgitRemoteCallbacksClass::credentials:
+ * @callbacks: a #GgitRemoteCallbacks.
+ * @url: the url.
+ * @username_from_url: (allow-none): the username extracted from the url.
+ * @allowed_types: the allowed credential types.
+ * @error: a #GError for error reporting.
+ *
+ * Returns: (transfer full) (nullable): a #GgitCred or %NULL in case of an error.
+ */
 
 G_DEFINE_TYPE (GgitRemoteCallbacks, ggit_remote_callbacks, G_TYPE_OBJECT)
 
@@ -130,28 +130,24 @@ credentials_wrap (git_cred     **cred,
                   void          *data)
 {
 	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksClass *cls = GGIT_REMOTE_CALLBACKS_GET_CLASS (self);
 
-	if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials != NULL)
+	*cred = NULL;
+
+	if (cls->credentials != NULL)
 	{
 		GgitCred *mcred = NULL;
 		GError *error = NULL;
 
-		if (GGIT_REMOTE_CALLBACKS_GET_CLASS (self)->credentials (self,
-		                                                         url,
-		                                                         username_from_url,
-		                                                         allowed_types,
-		                                                         &mcred,
-		                                                         &error))
-		{
-			if (mcred != NULL)
-			{
-				*cred = _ggit_native_release (mcred);
-				g_object_unref (mcred);
-			}
-			else
-			{
-				*cred = NULL;
-			}
+		mcred = cls->credentials (self,
+		                          url,
+		                          username_from_url,
+		                          allowed_types,
+		                          &error);
+
+		if (mcred != NULL) {
+			*cred = _ggit_native_release (mcred);
+			g_object_unref (mcred);
 
 			return GIT_OK;
 		}

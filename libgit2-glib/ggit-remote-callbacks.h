@@ -66,11 +66,10 @@ struct _GgitRemoteCallbacksClass
 	                               GgitRemoteCompletionType    type);
 
 	/* virtual methods */
-	gboolean (*credentials)       (GgitRemoteCallbacks        *callbacks,
+	GgitCred *(*credentials)      (GgitRemoteCallbacks        *callbacks,
 	                               const gchar                *url,
 	                               const gchar                *username_from_url,
 	                               GgitCredtype                allowed_types,
-	                               GgitCred                  **cred,
 	                               GError                    **error);
 
 
