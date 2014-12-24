@@ -66,23 +66,25 @@ chomp (gchar *s)
 	}
 }
 
-static gboolean
+static GgitCred *
 cloner_credentials (GgitRemoteCallbacks  *callbacks,
                     const gchar          *url,
                     const gchar          *username_from_url,
                     guint                 allowed_types,
-                    GgitCred            **cred,
                     GError              **error)
 {
 	gchar username[128];
 	gchar password[128];
 	struct termios old, new;
+	GgitCred *cred;
+
+	g_return_val_if_fail (error != NULL && *error == NULL, NULL);
 
 	g_printf ("Username: ");
 
 	if (fgets (username, sizeof (username) - 1, stdin) == NULL)
 	{
-		return FALSE;
+		return NULL;
 	}
 
 	g_printf ("Password: ");
@@ -90,7 +92,7 @@ cloner_credentials (GgitRemoteCallbacks  *callbacks,
 
 	if (tcgetattr (STDIN_FILENO, &old) != 0)
 	{
-		return FALSE;
+		return NULL;
 	}
 
 	new = old;
@@ -98,14 +100,14 @@ cloner_credentials (GgitRemoteCallbacks  *callbacks,
 
 	if (tcsetattr (STDIN_FILENO, TCSAFLUSH, &new) != 0)
 	{
-		return FALSE;
+		return NULL;
 	}
 
 	if (fgets (password, sizeof (password) - 1, stdin) == NULL)
 	{
 		tcsetattr (STDIN_FILENO, TCSAFLUSH, &old);
 
-		return FALSE;
+		return NULL;
 	}
 
 	tcsetattr (STDIN_FILENO, TCSAFLUSH, &old);
@@ -113,14 +115,19 @@ cloner_credentials (GgitRemoteCallbacks  *callbacks,
 	chomp (username);
 	chomp (password);
 
-	*cred = GGIT_CRED (ggit_cred_plaintext_new (username, password, error));
+	cred = GGIT_CRED (ggit_cred_plaintext_new (username, password, error));
 
 	if (*error != NULL)
 	{
-		return FALSE;
+		if (cred != NULL)
+		{
+			g_object_unref (cred);
+		}
+
+		return NULL;
 	}
 
-	return TRUE;
+	return cred;
 }
 
 static void
