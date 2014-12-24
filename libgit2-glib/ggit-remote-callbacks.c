@@ -145,7 +145,8 @@ credentials_wrap (git_cred     **cred,
 		                          allowed_types,
 		                          &error);
 
-		if (mcred != NULL) {
+		if (mcred != NULL)
+		{
 			*cred = _ggit_native_release (mcred);
 			g_object_unref (mcred);
 
