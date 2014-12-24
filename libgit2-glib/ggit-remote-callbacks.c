@@ -157,9 +157,13 @@ credentials_wrap (git_cred     **cred,
 			{
 				giterr_set_str (GIT_ERROR, error->message);
 				g_error_free (error);
-			}
 
-			return GIT_ERROR;
+				return GIT_ERROR;
+			}
+			else
+			{
+				return GIT_PASSTHROUGH;
+			}
 		}
 	}
 	else
