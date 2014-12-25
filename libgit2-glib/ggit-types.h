@@ -292,6 +292,13 @@ typedef struct _GgitPatch GgitPatch;
 typedef struct _GgitPush GgitPush;
 
 /**
+ * GgitPushOptions:
+ *
+ * Represents a git push options.
+ */
+typedef struct _GgitPushOptions GgitPushOptions;
+
+/**
  * GgitRef:
  *
  * Reprensents a git reference.

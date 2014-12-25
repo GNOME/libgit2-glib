@@ -68,6 +68,11 @@ GType             ggit_push_get_type                       (void) G_GNUC_CONST;
 GgitPush         *ggit_push_new                            (GgitRemote        *remote,
                                                             GError           **error);
 
+void              ggit_push_set_options                    (GgitPush          *push,
+                                                            GgitPushOptions   *options);
+
+GgitPushOptions  *ggit_push_get_options                    (GgitPush          *push);
+
 void              ggit_push_add_refspec                    (GgitPush          *push,
                                                             const gchar       *refspec,
                                                             GError           **error);

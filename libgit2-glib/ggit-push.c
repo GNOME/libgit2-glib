@@ -24,6 +24,7 @@
 #include "ggit-push.h"
 #include "ggit-remote.h"
 #include "ggit-enum-types.h"
+#include "ggit-push-options.h"
 #include "ggit-error.h"
 
 #define GGIT_PUSH_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_PUSH, GgitPushPrivate))
@@ -31,12 +32,14 @@
 struct _GgitPushPrivate
 {
 	GgitRemote *remote;
+	GgitPushOptions *options;
 };
 
 enum
 {
 	PROP_0,
-	PROP_REMOTE
+	PROP_REMOTE,
+	PROP_OPTIONS
 };
 
 enum
@@ -62,7 +65,9 @@ ggit_push_dispose (GObject *object)
 	GgitPushPrivate *priv;
 
 	priv = GGIT_PUSH (object)->priv;
+
 	g_clear_object (&priv->remote);
+	g_clear_object (&priv->options);
 
 	G_OBJECT_CLASS (ggit_push_parent_class)->dispose (object);
 }
@@ -79,6 +84,9 @@ ggit_push_get_property (GObject    *object,
 	{
 		case PROP_REMOTE:
 			g_value_set_object (value, priv->remote);
+			break;
+		case PROP_OPTIONS:
+			g_value_set_object (value, priv->options);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -98,6 +106,10 @@ ggit_push_set_property (GObject      *object,
 	{
 		case PROP_REMOTE:
 			priv->remote = g_value_dup_object (value);
+			break;
+		case PROP_OPTIONS:
+			ggit_push_set_options (GGIT_PUSH (object),
+			                       g_value_get_object (value));
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -122,6 +134,15 @@ ggit_push_class_init (GgitPushClass *klass)
 	                                                      GGIT_TYPE_REMOTE,
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_OPTIONS,
+	                                 g_param_spec_object ("optionse",
+	                                                      "Options",
+	                                                      "The options associated with this push",
+	                                                      GGIT_TYPE_PUSH_OPTIONS,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT));
 
 	signals[TRANSFER_PROGRESS] =
 		g_signal_new ("transfer-progress",
@@ -241,6 +262,54 @@ ggit_push_new (GgitRemote  *remote,
 	return g_initable_new (GGIT_TYPE_PUSH, NULL, error,
 	                       "remote", remote,
 	                       NULL);
+}
+
+/**
+ * ggit_push_set_options:
+ * @push: a #GgitPush.
+ * @options: (allow-none): the push options or %NULL for default options.
+ *
+ * Set the options used for the push. Providing %NULL for @options will reset
+ * the push options to the default.
+ */
+void
+ggit_push_set_options (GgitPush        *push,
+                       GgitPushOptions *options)
+{
+	g_return_if_fail (GGIT_IS_PUSH (push));
+	g_return_if_fail (options == NULL || GGIT_IS_PUSH_OPTIONS (options));
+
+	g_clear_object (&push->priv->options);
+
+	if (options == NULL)
+	{
+		push->priv->options = ggit_push_options_new ();
+	}
+	else
+	{
+		push->priv->options = g_object_ref (options);
+	}
+
+	git_push_set_options (_ggit_native_get (push),
+	                      _ggit_push_options_get_push_options (push->priv->options));
+
+	g_object_notify (G_OBJECT (push), "options");
+}
+
+/**
+ * ggit_push_get_options:
+ * @push: a #GgitPush.
+ *
+ * Get the push options. Changes made to the returned options will be used
+ * for the next push.
+ *
+ * Returns: (transfer none): the push options.
+ */
+GgitPushOptions *
+ggit_push_get_options (GgitPush *push)
+{
+	g_return_val_if_fail (GGIT_IS_PUSH (push), NULL);
+	return push->priv->options;
 }
 
 /**
