@@ -231,7 +231,7 @@ ggit_oid_is_zero (GgitOId const *oid)
 {
 	g_return_val_if_fail (oid != NULL, FALSE);
 
-	return git_oid_iszero (&oid->oid) == 1 ? TRUE : FALSE;
+	return git_oid_iszero (&oid->oid) == 1;
 }
 
 /* ex:set ts=8 noet: */
