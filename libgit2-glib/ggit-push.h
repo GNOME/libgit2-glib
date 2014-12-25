@@ -80,6 +80,11 @@ void              ggit_push_add_refspec                    (GgitPush          *p
 gboolean          ggit_push_finish                         (GgitPush          *push,
                                                             GError           **error);
 
+gboolean          ggit_push_update_tips                    (GgitPush          *push,
+                                                            GgitSignature     *signature,
+                                                            const gchar       *message,
+                                                            GError           **error);
+
 gboolean          ggit_push_is_unpack_ok                   (GgitPush          *push);
 
 G_END_DECLS

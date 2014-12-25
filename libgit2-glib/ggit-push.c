@@ -26,6 +26,7 @@
 #include "ggit-enum-types.h"
 #include "ggit-push-options.h"
 #include "ggit-error.h"
+#include "ggit-signature.h"
 
 #define GGIT_PUSH_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_PUSH, GgitPushPrivate))
 
@@ -371,6 +372,43 @@ ggit_push_finish (GgitPush  *push,
 			_ggit_error_set (error, ret);
 		}
 
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
+ * ggit_push_update_tips:
+ * @push: a #GgitPush.
+ * @signature: a #GgitSignature with which to add to the reflog.
+ * @message: (allow-none): the message to add to the reflog, or %NULL for the
+ *                         "update by push" message.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Update remote tips to the new state after a push.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ */
+gboolean
+ggit_push_update_tips (GgitPush       *push,
+                       GgitSignature  *signature,
+                       const gchar    *message,
+                       GError        **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_PUSH (push), FALSE);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_push_update_tips (_ggit_native_get (push),
+	                            _ggit_native_get (signature),
+	                            message != NULL ? message : "update by push");
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
 		return FALSE;
 	}
 
