@@ -22,8 +22,9 @@
 #include <git2.h>
 
 #include "ggit-push.h"
+#include "ggit-remote.h"
+#include "ggit-enum-types.h"
 #include "ggit-error.h"
-
 
 #define GGIT_PUSH_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_PUSH, GgitPushPrivate))
 
@@ -37,6 +38,15 @@ enum
 	PROP_0,
 	PROP_REMOTE
 };
+
+enum
+{
+	TRANSFER_PROGRESS,
+	PACKBUILDER_PROGRESS,
+	NUM_SIGNALS
+};
+
+static guint signals[NUM_SIGNALS] = {0,};
 
 static void ggit_push_initable_iface_init (GInitableIface *iface);
 
@@ -113,6 +123,32 @@ ggit_push_class_init (GgitPushClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY));
 
+	signals[TRANSFER_PROGRESS] =
+		g_signal_new ("transfer-progress",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitPushClass, transfer_progress),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              3,
+		              G_TYPE_UINT,
+		              G_TYPE_UINT,
+		              G_TYPE_UINT);
+
+	signals[PACKBUILDER_PROGRESS] =
+		g_signal_new ("packbuilder-progress",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitPushClass, packbuilder_progress),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              3,
+		              GGIT_TYPE_PACKBUILDER_STAGE,
+		              G_TYPE_UINT,
+		              G_TYPE_UINT);
+
 	g_type_class_add_private (object_class, sizeof (GgitPushPrivate));
 }
 
@@ -120,6 +156,26 @@ static void
 ggit_push_init (GgitPush *push)
 {
 	push->priv = GGIT_PUSH_GET_PRIVATE (push);
+}
+
+static gint
+packbuilder_progress_wrapper (gint     stage,
+                              guint    current,
+                              guint    total,
+                              gpointer payload)
+{
+	g_signal_emit (payload, signals[PACKBUILDER_PROGRESS], 0, stage, current, total);
+	return GIT_OK;
+}
+
+static gint
+transfer_progress_wrapper (guint    current,
+                           guint    total,
+                           gsize    bytes,
+                           gpointer payload)
+{
+	g_signal_emit (payload, signals[TRANSFER_PROGRESS], 0, current, total, bytes);
+	return GIT_OK;
 }
 
 static gboolean
@@ -150,6 +206,12 @@ ggit_push_initable_init (GInitable    *initable,
 	_ggit_native_set (initable,
 	                  push,
 	                  (GDestroyNotify)git_push_free);
+
+	git_push_set_callbacks (push,
+	                        packbuilder_progress_wrapper,
+	                        initable,
+	                        transfer_progress_wrapper,
+	                        initable);
 
 	return TRUE;
 }
@@ -209,96 +271,29 @@ ggit_push_add_refspec (GgitPush     *push,
 	}
 }
 
-typedef struct
-{
-	GgitPushProgress  *progress;
-	GError           **error;
-} PushProgressInfo;
-
-static gint
-packbuilder_progress_wrapper (gint     stage,
-                              guint    current,
-                              guint    total,
-                              gpointer payload)
-{
-	PushProgressInfo *info;
-	info = payload;
-
-	if (!ggit_push_progress_packbuilder_progress (info->progress,
-	                                              stage,
-	                                              current,
-	                                              total,
-	                                              info->error))
-	{
-		return GIT_ERROR;
-	}
-
-	return GIT_OK;
-}
-
-static gint
-transfer_progress_wrapper (guint    current,
-                           guint    total,
-                           gsize    bytes,
-                           gpointer payload)
-{
-	PushProgressInfo *info;
-	info = payload;
-
-	if (!ggit_push_progress_transfer_progress (info->progress,
-	                                           current,
-	                                           total,
-	                                           bytes,
-	                                           info->error))
-	{
-		return GIT_ERROR;
-	}
-
-	return GIT_OK;
-}
-
 /**
  * ggit_push_finish:
  * @push: a #GgitPush.
- * @progress: (allow-none): a #GgitPushProgress, or %NULL.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Actually push all given refspecs.
+ * Actually push all the refspecs added to the push object.
  */
 gboolean
-ggit_push_finish (GgitPush          *push,
-                  GgitPushProgress  *progress,
-                  GError           **error)
+ggit_push_finish (GgitPush  *push,
+                  GError   **error)
 {
 	gint ret;
-
-	PushProgressInfo info = {0,};
 
 	g_return_val_if_fail (GGIT_IS_PUSH (push), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	info.progress = progress;
-	info.error = error;
-
-	if (progress != NULL)
-	{
-		git_push_set_callbacks (_ggit_native_get (push),
-		                        packbuilder_progress_wrapper,
-		                        &info,
-		                        transfer_progress_wrapper,
-		                        &info);
-	}
+	/* Options might have changed externally, need to make sure to set
+	 * them again.
+	 */
+	git_push_set_options (_ggit_native_get (push),
+	                      _ggit_push_options_get_push_options (push->priv->options));
 
 	ret = git_push_finish (_ggit_native_get (push));
-
-	if (progress != NULL)
-	{
-		git_push_set_callbacks (_ggit_native_get (push),
-		                        NULL,
-		                        NULL,
-		                        NULL,
-		                        NULL);
-	}
 
 	if (ret != GIT_OK)
 	{

@@ -24,8 +24,6 @@
 
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-types.h>
-#include <libgit2-glib/ggit-remote.h>
-#include <libgit2-glib/ggit-push-progress.h>
 
 G_BEGIN_DECLS
 
@@ -52,6 +50,17 @@ struct _GgitPushClass
 {
 	/*< private >*/
 	GgitNativeClass parent_class;
+
+	/*< signals >*/
+	void (*packbuilder_progress) (GgitPush              *push,
+	                              GgitPackbuilderStage   stage,
+	                              guint                  current,
+	                              guint                  total);
+
+	void (*transfer_progress)    (GgitPush              *push,
+	                              guint                  current,
+	                              guint                  total,
+	                              gsize                  bytes);
 };
 
 GType             ggit_push_get_type                       (void) G_GNUC_CONST;
@@ -64,7 +73,6 @@ void              ggit_push_add_refspec                    (GgitPush          *p
                                                             GError           **error);
 
 gboolean          ggit_push_finish                         (GgitPush          *push,
-                                                            GgitPushProgress  *progress,
                                                             GError           **error);
 
 gboolean          ggit_push_is_unpack_ok                   (GgitPush          *push);
