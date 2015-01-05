@@ -234,4 +234,82 @@ ggit_oid_is_zero (GgitOId const *oid)
 	return git_oid_iszero (&oid->oid) == 1;
 }
 
+static gint
+c_to_h (gchar c)
+{
+	if (c >= '0' && c <= '9')
+	{
+		return c - '0';
+	}
+	else if (c >= 'A' && c <= 'F')
+	{
+		return 10 + (c - 'A');
+	}
+	else if (c >= 'a' && c <= 'f')
+	{
+		return 10 + (c - 'a');
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+/**
+ * ggit_oid_has_prefix:
+ * @oid: a #GgitOId.
+ * @prefix: a prefix.
+ *
+ * Check whether the object id has a given prefix. Note that the prefix is
+ * specified in hexadecimal ASCII.
+ *
+ * Returns: %TRUE if the id has the given prefix, %FALSE otherwise.
+ */
+gboolean
+ggit_oid_has_prefix (GgitOId     *oid,
+                     const gchar *str)
+{
+	gint i;
+
+	for (i = 0; i < GIT_OID_RAWSZ; ++i)
+	{
+		gint v1;
+
+		if (*str == '\0')
+		{
+			return TRUE;
+		}
+
+		v1 = c_to_h (*str++);
+
+		if (v1 == -1)
+		{
+			return FALSE;
+		}
+
+		if (*str != '\0')
+		{
+			gint v2;
+
+			v2 = c_to_h (*str++);
+
+			if (v2 == -1)
+			{
+				return FALSE;
+			}
+
+			if (oid->oid.id[i] != (v1 << 4) + v2)
+			{
+				return FALSE;
+			}
+		}
+		else if (oid->oid.id[i] >> 4 != v1)
+		{
+			return FALSE;
+		}
+	}
+
+	return *str == '\0';
+}
+
 /* ex:set ts=8 noet: */

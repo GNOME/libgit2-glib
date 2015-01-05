@@ -56,6 +56,9 @@ gboolean       ggit_oid_equal           (GgitOId const *a,
 
 gboolean       ggit_oid_is_zero         (GgitOId const *oid);
 
+gboolean       ggit_oid_has_prefix      (GgitOId       *oid,
+                                         const gchar   *prefix);
+
 G_END_DECLS
 
 #endif /* __GGIT_OID_H__ */
