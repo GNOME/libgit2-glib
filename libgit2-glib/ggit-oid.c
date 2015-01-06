@@ -267,7 +267,7 @@ c_to_h (gchar c)
  */
 gboolean
 ggit_oid_has_prefix (GgitOId     *oid,
-                     const gchar *str)
+                     const gchar *prefix)
 {
 	gint i;
 
@@ -275,23 +275,23 @@ ggit_oid_has_prefix (GgitOId     *oid,
 	{
 		gint v1;
 
-		if (*str == '\0')
+		if (*prefix == '\0')
 		{
 			return TRUE;
 		}
 
-		v1 = c_to_h (*str++);
+		v1 = c_to_h (*prefix++);
 
 		if (v1 == -1)
 		{
 			return FALSE;
 		}
 
-		if (*str != '\0')
+		if (*prefix != '\0')
 		{
 			gint v2;
 
-			v2 = c_to_h (*str++);
+			v2 = c_to_h (*prefix++);
 
 			if (v2 == -1)
 			{
@@ -309,7 +309,7 @@ ggit_oid_has_prefix (GgitOId     *oid,
 		}
 	}
 
-	return *str == '\0';
+	return *prefix == '\0';
 }
 
 /* ex:set ts=8 noet: */
