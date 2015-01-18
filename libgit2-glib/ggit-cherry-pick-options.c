@@ -92,7 +92,7 @@ static void
 ggit_cherry_pick_options_class_init (GgitCherryPickOptionsClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-	git_cherry_pick_options defopts = GIT_CHERRY_PICK_OPTIONS_INIT;
+	git_cherrypick_options defopts = GIT_CHERRYPICK_OPTIONS_INIT;
 
 	object_class->finalize = ggit_cherry_pick_options_finalize;
 
@@ -128,7 +128,7 @@ ggit_cherry_pick_options_init (GgitCherryPickOptions *self)
 {
 	self->priv = GGIT_CHERRY_PICK_OPTIONS_GET_PRIVATE (self);
 
-	git_cherrypick_init_options (&self->priv->options, GIT_CHERRY_PICK_OPTIONS_VERSION);
+	git_cherrypick_init_options (&self->priv->options, GIT_CHERRYPICK_OPTIONS_VERSION);
 }
 
 /**
