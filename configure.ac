@@ -1,8 +1,8 @@
 AC_PREREQ([2.63])
 
-m4_define(libgit2_glib_major_version,  0)
-m4_define(libgit2_glib_minor_version,  0)
-m4_define(libgit2_glib_micro_version, 25)
+m4_define(libgit2_glib_major_version, 0)
+m4_define(libgit2_glib_minor_version, 22)
+m4_define(libgit2_glib_micro_version, 0)
 m4_define(libgit2_glib_version, libgit2_glib_major_version.libgit2_glib_minor_version.libgit2_glib_micro_version)
 
 AC_INIT([libgit2-glib],
@@ -166,7 +166,7 @@ AC_OUTPUT([
 	docs/reference/version.xml
 	examples/Makefile
 	libgit2-glib/Makefile
-    libgit2-glib/ggit.h
+	libgit2-glib/ggit.h
 	tests/Makefile
 ])
 
