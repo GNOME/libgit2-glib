@@ -584,6 +584,7 @@ ggit_remote_disconnect (GgitRemote *remote)
 /**
  * ggit_remote_download:
  * @remote: a #GgitRemote.
+ * @specs: (array zero-terminated=1) (allow-none): the ref specs.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Connect to the remote if not yet connected, negotiate with the remote
@@ -593,17 +594,21 @@ ggit_remote_disconnect (GgitRemote *remote)
  * Returns: %TRUE if successful, %FALSE otherwise.
  */
 gboolean
-ggit_remote_download (GgitRemote  *remote,
-                      GError     **error)
+ggit_remote_download (GgitRemote           *remote,
+                      const gchar * const  *specs,
+                      GError              **error)
 {
 	gint ret;
+	git_strarray gspecs;
 
 	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	reset_transfer_progress (remote, FALSE);
 
-	ret = git_remote_download (_ggit_native_get (remote));
+	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
+
+	ret = git_remote_download (_ggit_native_get (remote), &gspecs);
 
 	reset_transfer_progress (remote, TRUE);
 
