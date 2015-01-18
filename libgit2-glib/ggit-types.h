@@ -686,7 +686,7 @@ typedef enum {
 
 /* NOTE: keep in sync with git2/refs.h */
 typedef enum {
-	GGIT_FILE_MODE_NEW             = 0000000,
+	GGIT_FILE_MODE_UNREADABLE      = 0000000,
 	GGIT_FILE_MODE_TREE            = 0040000,
 	GGIT_FILE_MODE_BLOB            = 0100644,
 	GGIT_FILE_MODE_BLOB_EXECUTABLE = 0100755,
