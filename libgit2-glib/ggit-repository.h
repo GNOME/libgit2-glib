@@ -192,13 +192,14 @@ gboolean            ggit_repository_tag_foreach       (GgitRepository        *re
                                                        gpointer               user_data,
                                                        GError               **error);
 
+GgitTreeBuilder    *ggit_repository_create_tree_builder (
+                                                       GgitRepository        *repository,
+                                                       GError               **error);
+
 GgitTreeBuilder    *ggit_repository_create_tree_builder_from_tree (
                                                        GgitRepository        *repository,
                                                        GgitTree              *tree,
                                                        GError               **error);
-
-GgitTreeBuilder    *ggit_repository_create_tree_builder (
-                                                       GgitRepository        *repository);
 
 GgitIndexEntry     *ggit_repository_create_index_entry_for_file (
                                                        GgitRepository        *repository,

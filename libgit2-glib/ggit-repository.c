@@ -2547,22 +2547,30 @@ ggit_repository_create_commit_from_ids (GgitRepository  *repository,
 /**
  * ggit_repository_create_tree_builder:
  * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new tree builder.
  *
- * Returns: (transfer full): a #GgitTreeBuilder.
- *
+ * Returns: (transfer full): a new #GgitTreeBuilder, or %NULL if there was an error.
  **/
 GgitTreeBuilder *
-ggit_repository_create_tree_builder (GgitRepository *repository)
+ggit_repository_create_tree_builder (GgitRepository  *repository,
+                                     GError         **error)
 {
+	gint ret;
 	git_treebuilder *builder;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	git_treebuilder_new (&builder,
-	                     _ggit_native_get (repository),
-	                     NULL);
+	ret = git_treebuilder_new (&builder,
+	                           _ggit_native_get (repository),
+	                           NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
 
 	return _ggit_tree_builder_wrap (builder, repository, TRUE);
 }
@@ -2576,7 +2584,6 @@ ggit_repository_create_tree_builder (GgitRepository *repository)
  * tree builder, use #ggit_repository_create_tree_builder instead.
  *
  * Returns: (transfer full): a new #GgitTreeBuilder object, or %NULL if there was an error.
- *
  **/
 GgitTreeBuilder *
 ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
@@ -2590,7 +2597,9 @@ ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_TREE (tree), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_treebuilder_create (&builder, _ggit_native_get (tree));
+	ret = git_treebuilder_new (&builder,
+	                           _ggit_native_get (repository),
+	                           _ggit_native_get (tree));
 
 	if (ret != GIT_OK)
 	{
