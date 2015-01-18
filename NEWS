@@ -1,3 +1,9 @@
+News in 0.22.0
+--------------
+* Fix api breaks made in libgit2
+* Follow libgit2's version
+* Misc bugfixing
+
 News in 0.0.24
 --------------
 * Support Notes
