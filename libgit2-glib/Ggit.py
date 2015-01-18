@@ -96,7 +96,7 @@ for c in dir(Ggit):
     elif hasattr(o, 'next'):
         _override_dyn(o, __iter__=_wrap_iter_next)
 
-    # GgitIndex, GgitPush, GgitRepository, GgitRevisionWalker, ...
+    # GgitIndex, GgitRepository, GgitRevisionWalker, ...
     if o.__gtype__.is_a(Gio.Initable):
         _override_dyn(o, __init__=_wrap_initable_init)
 

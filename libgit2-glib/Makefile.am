@@ -55,7 +55,6 @@ H_FILES =					\
 	ggit-object-factory-base.h		\
 	ggit-oid.h				\
 	ggit-patch.h				\
-	ggit-push.h				\
 	ggit-push-options.h			\
 	ggit-ref.h				\
 	ggit-ref-spec.h				\
@@ -119,7 +118,6 @@ C_FILES =					\
 	ggit-object-factory-base.c		\
 	ggit-oid.c				\
 	ggit-patch.c				\
-	ggit-push.c				\
 	ggit-push-options.c			\
 	ggit-ref.c				\
 	ggit-ref-spec.c				\
