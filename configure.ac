@@ -92,7 +92,7 @@ AC_TRY_RUN([
         int
         main(int argc, const char *argv[])
         {
-                git_threads_init ();
+                git_libgit2_init ();
                 return ((git_libgit2_features() & GIT_FEATURE_SSH) != 0) ? 0 : 1;
         }
 ],[
