@@ -375,7 +375,7 @@ ggit_submodule_get_update (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
 
-	return (GgitSubmoduleUpdate)git_submodule_update (submodule->submodule);
+	return (GgitSubmoduleUpdate)git_submodule_update_strategy (submodule->submodule);
 }
 
 /**
