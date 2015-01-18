@@ -43,7 +43,7 @@ ggit_get_features (void)
 void
 ggit_init (void)
 {
-	git_threads_init ();
+	git_libgit2_init ();
 }
 
 /* ex:set ts=8 noet: */
