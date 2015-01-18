@@ -68,6 +68,7 @@ H_FILES =					\
 	ggit-signature.h			\
 	ggit-status-options.h			\
 	ggit-submodule.h			\
+	ggit-submodule-update-options.h		\
 	ggit-tag.h				\
 	ggit-transfer-progress.h		\
 	ggit-tree.h				\
@@ -131,6 +132,7 @@ C_FILES =					\
 	ggit-signature.c			\
 	ggit-status-options.c			\
 	ggit-submodule.c			\
+	ggit-submodule-update-options.c		\
 	ggit-tag.c				\
 	ggit-transfer-progress.c		\
 	ggit-tree.c				\
