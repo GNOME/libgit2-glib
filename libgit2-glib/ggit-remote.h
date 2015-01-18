@@ -143,9 +143,6 @@ GgitRemoteCallbacks *
 void               ggit_remote_set_callbacks            (GgitRemote       *remote,
                                                          GgitRemoteCallbacks *callbacks);
 
-gboolean           ggit_remote_is_valid_url             (const gchar      *url);
-gboolean           ggit_remote_is_supported_url         (const gchar      *url);
-
 G_END_DECLS
 
 #endif /* __GGIT_REMOTE_H__ */

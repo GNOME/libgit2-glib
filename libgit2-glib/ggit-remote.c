@@ -941,36 +941,4 @@ ggit_remote_set_callbacks (GgitRemote          *remote,
 	g_object_notify (G_OBJECT (remote), "callbacks");
 }
 
-/**
- * ggit_remote_is_valid_url:
- * @url: a url string.
- *
- * Checks if @url is a valid remote URL.
- *
- * Returns: whether a string is a valid remote URL.
- */
-gboolean
-ggit_remote_is_valid_url (const gchar *url)
-{
-	g_return_val_if_fail (url != NULL, FALSE);
-
-	return git_remote_valid_url (url);
-}
-
-/**
- * ggit_remote_is_supported_url:
- * @url: a url string.
- *
- * Checks if @url is a supported remote URL.
- *
- * Returns: whether a string is a supported remote URL.
- */
-gboolean
-ggit_remote_is_supported_url (const gchar *url)
-{
-	g_return_val_if_fail (url != NULL, FALSE);
-
-	return git_remote_supported_url (url);
-}
-
 /* ex:set ts=8 noet: */
