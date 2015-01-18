@@ -728,7 +728,7 @@ ggit_remote_set_fetch_specs (GgitRemote           *remote,
 	gint ret;
 	git_strarray gspecs;
 
-	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
@@ -821,7 +821,7 @@ ggit_remote_set_push_specs (GgitRemote           *remote,
 	gint ret;
 	git_strarray gspecs;
 
-	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
