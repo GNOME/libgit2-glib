@@ -264,35 +264,6 @@ ggit_config_add_file (GgitConfig      *config,
 }
 
 /**
- * ggit_config_refresh:
- * @config: a #GgitConfig.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Reloads changed config files.
- *
- * A config file may be changed on disk out from under the in-memory
- * config object. This function causes us to look for files that have
- * been modified since we last loaded them and refresh the config with
- * the latest information.
- */
-void
-ggit_config_refresh (GgitConfig  *config,
-                     GError     **error)
-{
-	gint ret;
-
-	g_return_if_fail (GGIT_IS_CONFIG (config));
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_config_refresh (_ggit_native_get (config));
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
  * ggit_config_get_int32:
  * @config: a #GgitConfig.
  * @name: the name of the configuration value.
