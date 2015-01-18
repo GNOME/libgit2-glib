@@ -53,7 +53,7 @@ struct _GgitCherryPickOptionsClass
 
 GType                  ggit_cherry_pick_options_get_type (void) G_GNUC_CONST;
 
-const git_cherry_pick_options *
+const git_cherrypick_options *
                       _ggit_cherry_pick_options_get_cherry_pick_options (
                                                               GgitCherryPickOptions  *options);
 

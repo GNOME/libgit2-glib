@@ -2989,9 +2989,9 @@ ggit_repository_cherry_pick (GgitRepository         *repository,
 	g_return_val_if_fail (options == NULL || GGIT_IS_CHERRY_PICK_OPTIONS (options), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_cherry_pick (_ggit_native_get (repository),
-	                       _ggit_native_get (commit),
-	                       _ggit_cherry_pick_options_get_cherry_pick_options (options));
+	ret = git_cherrypick (_ggit_native_get (repository),
+	                      _ggit_native_get (commit),
+	                      _ggit_cherry_pick_options_get_cherry_pick_options (options));
 
 	if (ret != GIT_OK)
 	{
@@ -3033,12 +3033,12 @@ ggit_repository_cherry_pick_commit (GgitRepository    *repository,
 	g_return_val_if_fail (GGIT_IS_COMMIT (our_commit), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_cherry_pick_commit (&idx,
-	                              _ggit_native_get (repository),
-	                              _ggit_native_get (commit),
-	                              _ggit_native_get (our_commit),
-	                              mainline,
-	                              _ggit_merge_options_get_merge_options (merge_options));
+	ret = git_cherrypick_commit (&idx,
+	                             _ggit_native_get (repository),
+	                             _ggit_native_get (commit),
+	                             _ggit_native_get (our_commit),
+	                             mainline,
+	                             _ggit_merge_options_get_merge_options (merge_options));
 
 	if (ret != GIT_OK)
 	{

@@ -7,7 +7,7 @@
 
 struct _GgitCherryPickOptionsPrivate
 {
-	git_cherry_pick_options options;
+	git_cherrypick_options options;
 
 	GgitCheckoutOptions *checkout_options;
 	GgitMergeOptions *merge_options;
@@ -128,7 +128,7 @@ ggit_cherry_pick_options_init (GgitCherryPickOptions *self)
 {
 	self->priv = GGIT_CHERRY_PICK_OPTIONS_GET_PRIVATE (self);
 
-	git_cherry_pick_init_options (&self->priv->options, GIT_CHERRY_PICK_OPTIONS_VERSION);
+	git_cherrypick_init_options (&self->priv->options, GIT_CHERRY_PICK_OPTIONS_VERSION);
 }
 
 /**
@@ -145,7 +145,7 @@ ggit_cherry_pick_options_new ()
 	return g_object_new (GGIT_TYPE_CHERRY_PICK_OPTIONS, NULL);
 }
 
-const git_cherry_pick_options *
+const git_cherrypick_options *
 _ggit_cherry_pick_options_get_cherry_pick_options (GgitCherryPickOptions *options)
 {
 	if (options != NULL)
