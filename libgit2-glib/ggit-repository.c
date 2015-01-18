@@ -2560,7 +2560,10 @@ ggit_repository_create_tree_builder (GgitRepository *repository)
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 
-	git_treebuilder_create (&builder, NULL);
+	git_treebuilder_new (&builder,
+	                     _ggit_native_get (repository),
+	                     NULL);
+
 	return _ggit_tree_builder_wrap (builder, repository, TRUE);
 }
 
