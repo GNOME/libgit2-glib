@@ -47,11 +47,6 @@ gboolean                   ggit_clone_options_get_is_bare         (GgitCloneOpti
 void                       ggit_clone_options_set_is_bare         (GgitCloneOptions        *options,
                                                                    gboolean                 bare);
 
-const gchar               *ggit_clone_options_get_remote_name     (GgitCloneOptions        *options);
-
-void                       ggit_clone_options_set_remote_name     (GgitCloneOptions        *options,
-                                                                   const gchar             *remote_name);
-
 const gchar               *ggit_clone_options_get_checkout_branch (GgitCloneOptions        *options);
 
 void                       ggit_clone_options_set_checkout_branch (GgitCloneOptions        *options,

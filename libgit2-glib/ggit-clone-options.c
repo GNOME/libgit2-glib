@@ -69,7 +69,6 @@ ggit_clone_options_copy (GgitCloneOptions *clone_options)
 	new_clone_options = g_slice_new0 (GgitCloneOptions);
 
 	gnew_clone_options.bare = gclone_options->bare;
-	gnew_clone_options.remote_name = g_strdup (gclone_options->remote_name);
 	gnew_clone_options.checkout_branch = g_strdup (gclone_options->checkout_branch);
 
 	if (clone_options->remote_callbacks)
@@ -97,7 +96,6 @@ ggit_clone_options_free (GgitCloneOptions *clone_options)
 	g_return_if_fail (clone_options != NULL);
 
 	gclone_options = &clone_options->clone_options;
-	g_free ((gchar *)gclone_options->remote_name);
 	g_free ((gchar *)gclone_options->checkout_branch);
 
 	g_clear_object (&clone_options->remote_callbacks);
@@ -154,38 +152,6 @@ ggit_clone_options_set_is_bare (GgitCloneOptions *options,
 	g_return_if_fail (options != NULL);
 
 	options->clone_options.bare = bare;
-}
-
-/**
- * ggit_clone_options_get_remote_name:
- * @options: a #GgitCloneOptions.
- *
- * Gets the name given to the "origin" remote.  The default is "origin".
- *
- * Returns: the name given to the "origin" remote.  The default is "origin".
- */
-const gchar *
-ggit_clone_options_get_remote_name (GgitCloneOptions *options)
-{
-	g_return_val_if_fail (options != NULL, NULL);
-
-	return options->clone_options.remote_name;
-}
-
-/**
- * ggit_clone_options_set_remote_name:
- * @options: a #GgitCloneOptions.
- * @remote_name: (allow-none): the name given to the "origin" remote.
- *
- * Sets the name given to the "origin" remote.
- */
-void
-ggit_clone_options_set_remote_name (GgitCloneOptions *options,
-                                    const gchar      *remote_name)
-{
-	g_return_if_fail (options != NULL);
-
-	options->clone_options.remote_name = g_strdup (remote_name);
 }
 
 /**
