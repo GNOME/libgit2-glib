@@ -54,7 +54,6 @@
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-patch.h>
-#include <libgit2-glib/ggit-push.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-reflog-entry.h>
 #include <libgit2-glib/ggit-reflog.h>
@@ -66,6 +65,7 @@
 #include <libgit2-glib/ggit-signature.h>
 #include <libgit2-glib/ggit-status-options.h>
 #include <libgit2-glib/ggit-submodule.h>
+#include <libgit2-glib/ggit-submodule-update-options.h>
 #include <libgit2-glib/ggit-tag.h>
 #include <libgit2-glib/ggit-transfer-progress.h>
 #include <libgit2-glib/ggit-tree-builder.h>
