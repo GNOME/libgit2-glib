@@ -3117,9 +3117,9 @@ ggit_repository_create_note (GgitRepository  *repository,
 
 	ret = git_note_create (&oid,
 	                       _ggit_native_get (repository),
+	                       notes_ref,
 	                       _ggit_native_get (author),
 	                       _ggit_native_get (committer),
-	                       notes_ref,
 	                       _ggit_oid_get_oid (id),
 	                       note,
 	                       force);
