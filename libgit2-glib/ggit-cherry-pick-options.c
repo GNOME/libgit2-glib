@@ -1,3 +1,23 @@
+/*
+ * ggit-cherry-pick-options.c
+ * This file is part of libgit2-glib
+ *
+ * Copyright (C) 2014 - Jesse van den Kieboom
+ *
+ * libgit2-glib is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * libgit2-glib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "ggit-cherry-pick-options.h"
 #include "ggit-enum-types.h"
 #include "ggit-checkout-options.h"
@@ -38,9 +58,9 @@ ggit_cherry_pick_options_finalize (GObject *object)
 
 static void
 ggit_cherry_pick_options_set_property (GObject      *object,
-                                    guint         prop_id,
-                                    const GValue *value,
-                                    GParamSpec   *pspec)
+                                       guint         prop_id,
+                                       const GValue *value,
+                                       GParamSpec   *pspec)
 {
 	GgitCherryPickOptions *self = GGIT_CHERRY_PICK_OPTIONS (object);
 
@@ -65,9 +85,9 @@ ggit_cherry_pick_options_set_property (GObject      *object,
 
 static void
 ggit_cherry_pick_options_get_property (GObject    *object,
-                                    guint       prop_id,
-                                    GValue     *value,
-                                    GParamSpec *pspec)
+                                       guint       prop_id,
+                                       GValue     *value,
+                                       GParamSpec *pspec)
 {
 	GgitCherryPickOptions *self = GGIT_CHERRY_PICK_OPTIONS (object);
 
@@ -298,3 +318,4 @@ ggit_cherry_pick_options_set_merge_options (GgitCherryPickOptions *options,
 	g_object_notify (G_OBJECT (options), "merge-options");
 }
 
+/* ex:set ts=8 noet: */
