@@ -237,7 +237,7 @@ GgitBranch         *ggit_repository_lookup_branch     (GgitRepository        *re
                                                        GgitBranchType         branch_type,
                                                        GError               **error);
 
-GgitRemote         *ggit_repository_get_remote        (GgitRepository        *repository,
+GgitRemote         *ggit_repository_lookup_remote     (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        GError               **error);
 

@@ -1744,7 +1744,7 @@ ggit_repository_lookup_branch (GgitRepository *repository,
 }
 
 /**
- * ggit_repository_get_remote:
+ * ggit_repository_lookup_remote:
  * @repository: a #GgitRepository.
  * @name: the remote's name.
  * @error: a #GError for error reporting, or %NULL.
@@ -1754,9 +1754,9 @@ ggit_repository_lookup_branch (GgitRepository *repository,
  * Returns: (transfer full) (allow-none): a new #GgitRemote or %NULL if there is an error.
  */
 GgitRemote *
-ggit_repository_get_remote (GgitRepository  *repository,
-                            const gchar     *name,
-                            GError         **error)
+ggit_repository_lookup_remote (GgitRepository  *repository,
+                               const gchar     *name,
+                               GError         **error)
 {
 	gint ret;
 	git_remote *remote;
@@ -1765,7 +1765,7 @@ ggit_repository_get_remote (GgitRepository  *repository,
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	ret = git_remote_load (&remote,
+	ret = git_remote_lookup (&remote,
 	                       _ggit_native_get (repository),
 	                       name);
 
