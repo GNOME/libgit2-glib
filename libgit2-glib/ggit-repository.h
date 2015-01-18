@@ -392,9 +392,9 @@ const gchar        *ggit_repository_get_default_notes_ref (GgitRepository       
                                                            GError                  **error);
 
 GgitOId            *ggit_repository_create_note        (GgitRepository          *repository,
+                                                        const gchar             *notes_ref,
                                                         GgitSignature           *author,
                                                         GgitSignature           *committer,
-                                                        const gchar             *notes_ref,
                                                         GgitOId                 *id,
                                                         const gchar             *note,
                                                         gboolean                 force,

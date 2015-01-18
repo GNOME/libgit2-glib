@@ -3083,9 +3083,9 @@ ggit_repository_get_default_notes_ref (GgitRepository  *repository,
 /**
  * ggit_repository_create_note:
  * @repository: a #GgitRepository.
+ * @notes_ref: (allow-none): canonical name of the reference to use, or %NULL to use the default ref.
  * @author: author signature.
  * @committer: committer signature.
- * @notes_ref: (allow-none): canonical name of the reference to use, or %NULL to use the default ref.
  * @id: OID of the git object to decorate.
  * @note: content of the note to add for object oid.
  * @force: whether to overwrite existing note.
@@ -3097,9 +3097,9 @@ ggit_repository_get_default_notes_ref (GgitRepository  *repository,
  */
 GgitOId *
 ggit_repository_create_note (GgitRepository  *repository,
+                             const gchar     *notes_ref,
                              GgitSignature   *author,
                              GgitSignature   *committer,
-                             const gchar     *notes_ref,
                              GgitOId         *id,
                              const gchar     *note,
                              gboolean         force,
