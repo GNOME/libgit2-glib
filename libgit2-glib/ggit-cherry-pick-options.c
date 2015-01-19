@@ -141,6 +141,14 @@ ggit_cherry_pick_options_class_init (GgitCherryPickOptionsClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_STATIC_STRINGS));
 
+	g_object_class_install_property (object_class,
+	                                 PROP_MERGE_OPTIONS,
+	                                 g_param_spec_boxed ("merge-options",
+	                                                     "Merge Options",
+	                                                     "Merge options",
+	                                                     GGIT_TYPE_MERGE_OPTIONS,
+	                                                     G_PARAM_READWRITE |
+	                                                     G_PARAM_STATIC_STRINGS));
 }
 
 static void
