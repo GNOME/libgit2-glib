@@ -178,7 +178,7 @@ ggit_branch_get_upstream (GgitBranch  *branch,
 		return NULL;
 	}
 
-	return _ggit_ref_wrap (upstream);
+	return _ggit_ref_wrap (upstream, FALSE);
 }
 
 /**

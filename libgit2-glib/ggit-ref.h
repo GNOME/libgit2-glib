@@ -60,7 +60,8 @@ struct _GgitRefClass
 
 GType           ggit_ref_get_type           (void) G_GNUC_CONST;
 
-GgitRef        *_ggit_ref_wrap              (git_reference  *ref);
+GgitRef        *_ggit_ref_wrap              (git_reference  *ref,
+                                             gboolean        owned);
 
 gboolean        ggit_ref_is_valid_name      (const gchar    *name);
 

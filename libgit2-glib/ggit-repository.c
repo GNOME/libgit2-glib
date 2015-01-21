@@ -686,7 +686,7 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 
 	if (ret == GIT_OK)
 	{
-		ref = _ggit_ref_wrap (reference);
+		ref = _ggit_ref_wrap (reference, FALSE);
 	}
 	else
 	{
@@ -737,7 +737,7 @@ ggit_repository_create_reference (GgitRepository  *repository,
 
 	if (ret == GIT_OK)
 	{
-		ref = _ggit_ref_wrap (reference);
+		ref = _ggit_ref_wrap (reference, FALSE);
 	}
 	else
 	{
@@ -788,7 +788,7 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
 
 	if (ret == GIT_OK)
 	{
-		ref = _ggit_ref_wrap (reference);
+		ref = _ggit_ref_wrap (reference, FALSE);
 	}
 	else
 	{
@@ -825,7 +825,7 @@ ggit_repository_get_head (GgitRepository  *repository,
 
 	if (ret == GIT_OK)
 	{
-		ref = _ggit_ref_wrap (reference);
+		ref = _ggit_ref_wrap (reference, TRUE);
 	}
 	else
 	{

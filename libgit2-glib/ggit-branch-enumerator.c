@@ -98,7 +98,7 @@ ggit_branch_enumerator_next (GgitBranchEnumerator *enumerator)
 	}
 	else
 	{
-		enumerator->ref = _ggit_ref_wrap (ref);
+		enumerator->ref = _ggit_ref_wrap (ref, FALSE);
 	}
 
 	return TRUE;

@@ -44,18 +44,29 @@ ggit_ref_init (GgitRef *self)
 }
 
 GgitRef *
-_ggit_ref_wrap (git_reference *ref)
+_ggit_ref_wrap (git_reference *ref,
+                gboolean       owned)
 {
+	GgitRef *gref;
+
 	if (git_reference_is_branch (ref))
 	{
-		return GGIT_REF (_ggit_branch_wrap (ref));
+		gref = GGIT_REF (_ggit_branch_wrap (ref));
 	}
 	else
 	{
-		return g_object_new (GGIT_TYPE_REF,
+		gref = g_object_new (GGIT_TYPE_REF,
 		                     "native", ref,
 		                     NULL);
 	}
+
+	if (owned)
+	{
+		_ggit_native_set_destroy_func (gref,
+		                               (GDestroyNotify)git_reference_free);
+	}
+
+	return gref;
 }
 
 /**
@@ -221,7 +232,7 @@ ggit_ref_resolve (GgitRef  *ref,
 
 	if (ret == GIT_OK)
 	{
-		rev_ref = _ggit_ref_wrap (reference);
+		rev_ref = _ggit_ref_wrap (reference, FALSE);
 	}
 	else
 	{
@@ -293,7 +304,7 @@ ggit_ref_set_symbolic_target (GgitRef       *ref,
 		return NULL;
 	}
 
-	return _ggit_ref_wrap (out);
+	return _ggit_ref_wrap (out, FALSE);
 }
 
 /**
@@ -338,7 +349,7 @@ ggit_ref_set_target (GgitRef       *ref,
 		return NULL;
 	}
 
-	return _ggit_ref_wrap (out);
+	return _ggit_ref_wrap (out, FALSE);
 }
 
 /**
@@ -402,7 +413,7 @@ ggit_ref_rename (GgitRef       *ref,
 		return NULL;
 	}
 
-	return _ggit_ref_wrap (out);
+	return _ggit_ref_wrap (out, FALSE);
 }
 
 /**
