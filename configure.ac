@@ -110,7 +110,7 @@ if test "x$enable_ssh" != "xno"; then
         AC_MSG_RESULT([no])
         git_ssh=no
         if test "x$enable_ssh" = "xyes"; then
-            AC_MSG_ERROR([libgit2 ssh support was requiested, but not found])
+            AC_MSG_ERROR([libgit2 ssh support was requested, but not found])
         fi
     ])
 
