@@ -116,7 +116,7 @@ ggit_clone_options_new (void)
 	GgitCloneOptions *clone_options;
 	git_clone_options gclone_options = GIT_CLONE_OPTIONS_INIT;
 
-	clone_options = g_slice_new (GgitCloneOptions);
+	clone_options = g_slice_new0 (GgitCloneOptions);
 	clone_options->clone_options = gclone_options;
 
 	return clone_options;
