@@ -1,3 +1,7 @@
+News in 0.22.6
+--------------
+* Add ggit_repository_path_is_ignored
+
 News in 0.22.4
 --------------
 * Fix crash when cloning
