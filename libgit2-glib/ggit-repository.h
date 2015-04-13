@@ -419,6 +419,9 @@ gboolean            ggit_repository_note_foreach       (GgitRepository          
                                                         GgitNoteCallback         callback,
                                                         gpointer                 user_data,
                                                         GError                 **error);
+gboolean           ggit_repository_path_is_ignored     (GgitRepository          *repository,
+                                                        const gchar             *path,
+                                                        GError                 **error);
 
 G_END_DECLS
 

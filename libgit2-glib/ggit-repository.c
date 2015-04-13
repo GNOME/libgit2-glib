@@ -116,6 +116,41 @@ unregister_repository (git_repository *repository)
 	}
 }
 
+/**
+ * ggit_repository_path_is_ignored:
+ * @repository: A #GgitRepository.
+ * @path: A path within the repository.
+ * @error: (allow-none): A location for a #GError, or %NULL.
+ *
+ * Tests if the ignore rules apply to the path provided.
+ *
+ * This acts similar to filtering performed when calling "git add ."
+ * on the command line.
+ *
+ * Returns: %TRUE if @path should be ignored.
+ */
+gboolean
+ggit_repository_path_is_ignored (GgitRepository  *repository,
+                                 const gchar     *path,
+				 GError         **error)
+{
+	int ignored = FALSE;
+	int ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (path != NULL, FALSE);
+
+	ret = git_ignore_path_is_ignored (&ignored, _ggit_native_get (repository), path);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return !!ignored;
+}
+
 static void
 ggit_repository_finalize (GObject *object)
 {
