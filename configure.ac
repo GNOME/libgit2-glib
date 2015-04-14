@@ -92,8 +92,8 @@ if test "x$enable_ssh" != "xno"; then
     cflags_save="${CFLAGS}"
     libs_save="${LIBS}"
 
-    CFLAGS="${LIBGIT2_GLIB_CFLAGS}"
-    LIBS="${LIBGIT2_GLIB_LIBS}"
+    CFLAGS="${CFLAGS} ${LIBGIT2_GLIB_CFLAGS}"
+    LIBS="${LIBS} ${LIBGIT2_GLIB_LIBS}"
 
     AC_TRY_RUN([
             #include <git2.h>
