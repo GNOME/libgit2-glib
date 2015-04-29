@@ -1,3 +1,7 @@
+News in 0.22.8
+--------------
+* Include passed in cflags for ssh check
+
 News in 0.22.6
 --------------
 * Add ggit_repository_path_is_ignored
