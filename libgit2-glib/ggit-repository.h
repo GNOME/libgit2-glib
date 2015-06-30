@@ -309,8 +309,6 @@ void                ggit_repository_reset              (GgitRepository          
                                                         GgitObject              *target,
                                                         GgitResetType            reset_type,
                                                         GgitCheckoutOptions     *checkout_options,
-                                                        GgitSignature           *signature,
-                                                        const gchar             *log_message,
                                                         GError                 **error);
 
 void                ggit_repository_reset_default      (GgitRepository          *repository,
