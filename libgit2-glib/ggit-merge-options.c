@@ -93,7 +93,7 @@ ggit_merge_options_free (GgitMergeOptions *merge_options)
  * Returns: a newly allocated #GgitMergeOptions.
  */
 GgitMergeOptions *
-ggit_merge_options_new (GgitMergeTreeFlags        flags,
+ggit_merge_options_new (GgitMergeTreeFlags        tree_flags,
                         guint                     rename_threshold,
                         guint                     target_limit,
                         GgitDiffSimilarityMetric *metric,
@@ -104,7 +104,7 @@ ggit_merge_options_new (GgitMergeTreeFlags        flags,
 
 	merge_options = g_slice_new (GgitMergeOptions);
 
-	gmerge_options.flags = (git_merge_tree_flag_t)flags;
+	gmerge_options.tree_flags = (git_merge_tree_flag_t)tree_flags;
 	gmerge_options.rename_threshold = rename_threshold;
 	gmerge_options.target_limit = target_limit;
 	gmerge_options.metric = _ggit_diff_similarity_metric_get_similarity_metric (metric);

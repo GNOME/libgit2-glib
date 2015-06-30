@@ -40,7 +40,7 @@ const git_merge_options *
 GgitMergeOptions      *ggit_merge_options_copy                    (GgitMergeOptions   *merge_options);
 void                   ggit_merge_options_free                    (GgitMergeOptions   *merge_options);
 
-GgitMergeOptions      *ggit_merge_options_new                     (GgitMergeTreeFlags        flags,
+GgitMergeOptions      *ggit_merge_options_new                     (GgitMergeTreeFlags        tree_flags,
                                                                    guint                     rename_threshold,
                                                                    guint                     target_limit,
                                                                    GgitDiffSimilarityMetric *metric,
