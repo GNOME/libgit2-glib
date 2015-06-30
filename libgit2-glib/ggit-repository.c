@@ -736,7 +736,6 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
  * @repository: a #GgitRepository.
  * @name: the name for the new #GgitRef.
  * @oid: the #GgitOId pointed to by the reference.
- * @signature: a #GgitSignature that will used to populate the reflog entry.
  * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -751,7 +750,6 @@ GgitRef *
 ggit_repository_create_reference (GgitRepository  *repository,
                                   const gchar     *name,
                                   GgitOId         *oid,
-                                  GgitSignature   *signature,
                                   const gchar     *log_message,
                                   GError         **error)
 {
@@ -762,13 +760,12 @@ ggit_repository_create_reference (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (oid != NULL, NULL);
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 	g_return_val_if_fail (log_message != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_reference_create (&reference, _ggit_native_get (repository),
 	                            name, _ggit_oid_get_oid (oid), FALSE,
-	                            _ggit_native_get (signature), log_message);
+	                            log_message);
 
 	if (ret == GIT_OK)
 	{
@@ -787,7 +784,6 @@ ggit_repository_create_reference (GgitRepository  *repository,
  * @repository: a #GgitRepository.
  * @name: the name for the new #GgitRef.
  * @target: the full name to the reference.
- * @signature: a #GgitSignature that will used to populate the reflog entry.
  * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -802,7 +798,6 @@ GgitRef *
 ggit_repository_create_symbolic_reference (GgitRepository  *repository,
                                            const gchar     *name,
                                            const gchar     *target,
-                                           GgitSignature   *signature,
                                            const gchar     *log_message,
                                            GError         **error)
 {
@@ -813,13 +808,12 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (target != NULL, NULL);
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 	g_return_val_if_fail (log_message != NULL, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_reference_symbolic_create (&reference, _ggit_native_get (repository),
 	                                     name, target, FALSE,
-	                                     _ggit_native_get (signature), log_message);
+	                                     log_message);
 
 	if (ret == GIT_OK)
 	{

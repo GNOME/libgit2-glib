@@ -99,7 +99,6 @@ GgitRef            *ggit_repository_lookup_reference  (GgitRepository        *re
 GgitRef            *ggit_repository_create_reference  (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        GgitOId               *oid,
-                                                       GgitSignature         *signature,
                                                        const gchar           *log_message,
                                                        GError               **error);
 
@@ -107,7 +106,6 @@ GgitRef            *ggit_repository_create_symbolic_reference
                                                       (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        const gchar           *target,
-                                                       GgitSignature         *signature,
                                                        const gchar           *log_message,
                                                        GError               **error);
 
