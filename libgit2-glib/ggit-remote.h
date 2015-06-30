@@ -53,12 +53,6 @@ struct _GgitRemoteClass
 {
 	/*< private >*/
 	GgitNativeClass parent_class;
-
-	/* < signals > */
-	void (*tip_updated) (GgitRemote    *remote,
-	                     const gchar   *refname,
-	                     const GgitOId *a,
-	                     const GgitOId *b);
 };
 
 #define GGIT_TYPE_REMOTE_HEAD   (ggit_remote_head_get_type ())
@@ -130,12 +124,6 @@ gboolean           ggit_remote_set_push_specs           (GgitRemote           *r
 
 GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);
-
-GgitRemoteCallbacks *
-                   ggit_remote_get_callbacks            (GgitRemote       *remote);
-
-void               ggit_remote_set_callbacks            (GgitRemote       *remote,
-                                                         GgitRemoteCallbacks *callbacks);
 
 G_END_DECLS
 
