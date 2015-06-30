@@ -29,6 +29,7 @@
 #include "ggit-utils.h"
 #include "ggit-signature.h"
 #include "ggit-transfer-progress.h"
+#include "ggit-fetch-options.h"
 
 struct _GgitRemoteHead
 {
@@ -406,7 +407,6 @@ ggit_remote_new (GgitRepository   *repository,
  * ggit_remote_new_anonymous:
  * @repository: a #GgitRepository.
  * @url: the remote repository's URL.
- * @fetch: the remote fetchspec.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Creates a remote with the specified refspec in memory. You can use
@@ -417,7 +417,6 @@ ggit_remote_new (GgitRepository   *repository,
 GgitRemote *
 ggit_remote_new_anonymous (GgitRepository  *repository,
                            const gchar     *url,
-                           const gchar     *fetch,
                            GError         **error)
 {
 	gint ret;
@@ -425,12 +424,10 @@ ggit_remote_new_anonymous (GgitRepository  *repository,
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (url != NULL, NULL);
-	g_return_val_if_fail (fetch != NULL, NULL);
 
 	ret = git_remote_create_anonymous (&remote,
 	                                   _ggit_native_get (repository),
-	                                   url,
-	                                   fetch);
+	                                   url);
 
 	if (ret != GIT_OK)
 	{
@@ -585,6 +582,7 @@ ggit_remote_disconnect (GgitRemote *remote)
  * ggit_remote_download:
  * @remote: a #GgitRemote.
  * @specs: (array zero-terminated=1) (allow-none): the ref specs.
+ * @fetch_options: a #GgitFetchOptions.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Connect to the remote if not yet connected, negotiate with the remote
@@ -596,6 +594,7 @@ ggit_remote_disconnect (GgitRemote *remote)
 gboolean
 ggit_remote_download (GgitRemote           *remote,
                       const gchar * const  *specs,
+                      GgitFetchOptions     *fetch_options,
                       GError              **error)
 {
 	gint ret;
@@ -608,7 +607,8 @@ ggit_remote_download (GgitRemote           *remote,
 
 	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
 
-	ret = git_remote_download (_ggit_native_get (remote), &gspecs);
+	ret = git_remote_download (_ggit_native_get (remote), &gspecs,
+	                           _ggit_fetch_options_get_fetch_options (fetch_options));
 
 	reset_transfer_progress (remote, TRUE);
 

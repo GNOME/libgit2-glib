@@ -84,7 +84,6 @@ GgitRemote        *ggit_remote_new                      (GgitRepository   *repos
 
 GgitRemote        *ggit_remote_new_anonymous            (GgitRepository   *repository,
                                                          const gchar      *url,
-                                                         const gchar      *fetch,
                                                          GError          **error);
 
 GgitRepository    *ggit_remote_get_owner                (GgitRemote       *remote);
@@ -106,6 +105,7 @@ void               ggit_remote_disconnect               (GgitRemote       *remot
 
 gboolean           ggit_remote_download                 (GgitRemote           *remote,
                                                          const gchar * const  *specs,
+                                                         GgitFetchOptions     *fetch_options,
                                                          GError              **error);
 
 gboolean           ggit_remote_update_tips              (GgitRemote       *remote,
