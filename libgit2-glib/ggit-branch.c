@@ -76,8 +76,6 @@ ggit_branch_delete (GgitBranch  *branch,
  * @branch: a #GgitBranch.
  * @new_branch_name: target name of the branch once the move is performed; this name is validated for consistency.
  * @flags: a #GgitCreateFlags.
- * @signature: a #GgitSignature used to populate the reflog entry.
- * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Moves/renames an existing branch reference.
@@ -88,8 +86,6 @@ GgitBranch *
 ggit_branch_move (GgitBranch       *branch,
                   const gchar      *new_branch_name,
                   GgitCreateFlags   flags,
-                  GgitSignature    *signature,
-                  const gchar      *log_message,
                   GError          **error)
 {
 	git_reference *out;
@@ -105,9 +101,7 @@ ggit_branch_move (GgitBranch       *branch,
 	ret = git_branch_move (&out,
 	                       _ggit_native_get (branch),
 	                       new_branch_name,
-	                       force ? 1 : 0,
-	                       _ggit_native_get (signature),
-	                       log_message);
+	                       force ? 1 : 0);
 
 	if (ret != GIT_OK)
 	{

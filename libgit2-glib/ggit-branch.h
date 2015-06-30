@@ -59,8 +59,6 @@ void                ggit_branch_delete             (GgitBranch       *branch,
 GgitBranch         *ggit_branch_move               (GgitBranch       *branch,
                                                     const gchar      *new_branch_name,
                                                     GgitCreateFlags   flags,
-                                                    GgitSignature    *signature,
-                                                    const gchar      *log_message,
                                                     GError          **error);
 
 const gchar        *ggit_branch_get_name           (GgitBranch       *branch,
