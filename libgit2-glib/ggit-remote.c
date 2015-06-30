@@ -752,33 +752,6 @@ ggit_remote_set_fetch_specs (GgitRemote           *remote,
 }
 
 /**
- * ggit_remote_add_push_spec:
- * @remote: a #GgitRemote.
- * @push_spec: the push refspec.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Sets @remote's push spec to @fetch_spec.
- */
-void
-ggit_remote_add_push_spec (GgitRemote   *remote,
-                           const gchar  *push_spec,
-                           GError      **error)
-{
-	gint ret;
-
-	g_return_if_fail (GGIT_IS_REMOTE (remote));
-	g_return_if_fail (push_spec != NULL && push_spec[0] != '\0');
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_remote_add_push (_ggit_native_get (remote), push_spec);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
  * ggit_remote_get_push_specs:
  * @remote: a #GgitRemote.
  * @error: a #GError for error reporting, or %NULL.

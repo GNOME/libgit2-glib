@@ -249,6 +249,11 @@ GgitRemote         *ggit_repository_create_remote     (GgitRepository        *re
 gchar             **ggit_repository_list_remotes      (GgitRepository        *repository,
                                                        GError               **error);
 
+void                ggit_repository_add_remote_push   (GgitRepository        *repository,
+                                                       GgitRemote            *remote,
+                                                       const gchar           *push_spec,
+                                                       GError               **error);
+
 GgitRef            *ggit_repository_get_head          (GgitRepository        *repository,
                                                        GError               **error);
 
