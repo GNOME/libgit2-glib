@@ -194,6 +194,13 @@ typedef struct _GgitBlame GgitBlame;
 typedef struct _GgitBlameHunk GgitBlameHunk;
 
 /**
+ * GgitFetchOptions:
+ *
+ * Represents a git fetch options.
+ */
+typedef struct _GgitFetchOptions GgitFetchOptions;
+
+/**
  * GgitIndex:
  *
  * Represents an index object.

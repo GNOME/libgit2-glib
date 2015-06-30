@@ -26,7 +26,7 @@
 #include <git2.h>
 
 #include <libgit2-glib/ggit-types.h>
-#include <libgit2-glib/ggit-remote-callbacks.h>
+#include <libgit2-glib/ggit-fetch-options.h>
 
 G_BEGIN_DECLS
 
@@ -52,9 +52,9 @@ const gchar               *ggit_clone_options_get_checkout_branch (GgitCloneOpti
 void                       ggit_clone_options_set_checkout_branch (GgitCloneOptions        *options,
                                                                    const gchar             *checkout_branch);
 
-GgitRemoteCallbacks       *ggit_clone_options_get_remote_callbacks (GgitCloneOptions       *options);
-void                       ggit_clone_options_set_remote_callbacks (GgitCloneOptions       *options,
-                                                                    GgitRemoteCallbacks    *callbacks);
+GgitFetchOptions          *ggit_clone_options_get_fetch_options   (GgitCloneOptions       *options);
+void                       ggit_clone_options_set_fetch_options   (GgitCloneOptions       *options,
+                                                                   GgitFetchOptions       *fetch_options);
 
 G_END_DECLS
 

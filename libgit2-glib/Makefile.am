@@ -43,6 +43,7 @@ H_FILES =					\
 	ggit-diff-options.h			\
 	ggit-diff-similarity-metric.h		\
 	ggit-error.h				\
+	ggit-fetch-options.h			\
 	ggit-index.h				\
 	ggit-index-entry.h			\
 	ggit-index-entry-resolve-undo.h		\
@@ -107,6 +108,7 @@ C_FILES =					\
 	ggit-diff-options.c			\
 	ggit-diff-similarity-metric.c		\
 	ggit-error.c				\
+	ggit-fetch-options.c			\
 	ggit-index.c				\
 	ggit-index-entry.c			\
 	ggit-index-entry-resolve-undo.c		\

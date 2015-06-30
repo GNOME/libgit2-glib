@@ -27,7 +27,7 @@
 struct _GgitCloneOptions
 {
 	git_clone_options clone_options;
-	GgitRemoteCallbacks *remote_callbacks;
+	GgitFetchOptions *fetch_options;
 };
 
 G_DEFINE_BOXED_TYPE (GgitCloneOptions, ggit_clone_options,
@@ -71,10 +71,10 @@ ggit_clone_options_copy (GgitCloneOptions *clone_options)
 	gnew_clone_options.bare = gclone_options->bare;
 	gnew_clone_options.checkout_branch = g_strdup (gclone_options->checkout_branch);
 
-	if (clone_options->remote_callbacks)
+	if (clone_options->fetch_options)
 	{
-		new_clone_options->remote_callbacks = g_object_ref (clone_options->remote_callbacks);
-		gnew_clone_options.remote_callbacks = *_ggit_remote_callbacks_get_native (new_clone_options->remote_callbacks);
+		new_clone_options->fetch_options = g_object_ref (clone_options->fetch_options);
+		gnew_clone_options.fetch_opts = *_ggit_fetch_options_get_fetch_options (new_clone_options->fetch_options);
 	}
 
 	new_clone_options->clone_options = gnew_clone_options;
@@ -98,7 +98,7 @@ ggit_clone_options_free (GgitCloneOptions *clone_options)
 	gclone_options = &clone_options->clone_options;
 	g_free ((gchar *)gclone_options->checkout_branch);
 
-	g_clear_object (&clone_options->remote_callbacks);
+	ggit_fetch_options_free (clone_options->fetch_options);
 
 	g_slice_free (GgitCloneOptions, clone_options);
 }
@@ -188,44 +188,44 @@ ggit_clone_options_set_checkout_branch (GgitCloneOptions *options,
 }
 
 /**
- * ggit_clone_options_get_remote_callbacks:
+ * ggit_clone_options_get_fetch_options:
  * @options: a #GgitCloneOptions.
  *
- * Get the remote callbacks object or %NULL if not set.
+ * Get the fetch options object or %NULL if not set.
  *
- * Returns: (transfer none): the remote callbacks or %NULL.
+ * Returns: (transfer none): the fetch options or %NULL.
  */
-GgitRemoteCallbacks *
-ggit_clone_options_get_remote_callbacks (GgitCloneOptions *options)
+GgitFetchOptions *
+ggit_clone_options_get_fetch_options (GgitCloneOptions *options)
 {
 	g_return_val_if_fail (options != NULL, NULL);
-	return options->remote_callbacks;
+	return options->fetch_options;
 }
 
 /**
- * ggit_clone_options_set_remote_callbacks:
+ * ggit_clone_options_set_fetch_options:
  * @options: a #GgitCloneOptions.
- * @callbacks: (allow-none): a #GgitRemoteCallbacks or %NULL.
+ * @fetch_options: (allow-none): a #GgitFetchOptions or %NULL.
  *
- * Set the remote callbacks object.
+ * Set the fetch options object.
  */
 void
-ggit_clone_options_set_remote_callbacks (GgitCloneOptions    *options,
-                                         GgitRemoteCallbacks *callbacks)
+ggit_clone_options_set_fetch_options (GgitCloneOptions *options,
+                                      GgitFetchOptions *fetch_options)
 {
 	g_return_if_fail (options != NULL);
 
-	g_clear_object (&options->remote_callbacks);
+	g_clear_object (&options->fetch_options);
 
-	if (callbacks != NULL)
+	if (fetch_options != NULL)
 	{
-		options->remote_callbacks = g_object_ref (callbacks);
-		options->clone_options.remote_callbacks = *_ggit_remote_callbacks_get_native (callbacks);
+		options->fetch_options = g_object_ref (fetch_options);
+		options->clone_options.fetch_opts = *_ggit_fetch_options_get_fetch_options (fetch_options);
 	}
 	else
 	{
-		git_remote_callbacks i = GIT_REMOTE_CALLBACKS_INIT;
-		options->clone_options.remote_callbacks = i;
+		git_fetch_options i = GIT_FETCH_OPTIONS_INIT;
+		options->clone_options.fetch_opts = i;
 	}
 }
 
