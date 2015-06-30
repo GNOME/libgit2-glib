@@ -480,6 +480,22 @@ typedef enum
 	GGIT_FEATURE_SSH     = (1 << 2)
 } GgitFeatureFlags;
 
+/**
+ * GgitDiffBinaryType:
+ * @GIT_DIFF_BINARY_NONE: There is no binary delta.
+ * @GIT_DIFF_BINARY_LITERAL: The binary data is the literal contents of the file.
+ * @GIT_DIFF_BINARY_DELTA: The binary data is the delta from one side to the other.
+ *
+ * When producing a binary diff, the binary data returned will be
+ * either the deflated full ("literal") contents of the file, or
+ * the deflated binary delta between the two sides (whichever is
+ * smaller).
+ */
+typedef enum {
+	GGIT_DIFF_BINARY_NONE,
+	GGIT_DIFF_BINARY_LITERAL,
+	GGIT_DIFF_BINARY_DELTA
+} GgitDiffBinaryType;
 
 /**
  * GgitBlameFlags:
