@@ -34,6 +34,7 @@ H_FILES =					\
 	ggit-cred.h				\
 	ggit-cred-plaintext.h			\
 	ggit-diff.h				\
+	ggit-diff-binary-file.h			\
 	ggit-diff-delta.h			\
 	ggit-diff-file.h			\
 	ggit-diff-find-options.h		\
@@ -99,6 +100,7 @@ C_FILES =					\
 	ggit-cred.c				\
 	ggit-cred-plaintext.c			\
 	ggit-diff.c				\
+	ggit-diff-binary-file.c			\
 	ggit-diff-delta.c			\
 	ggit-diff-file.c			\
 	ggit-diff-find-options.c		\

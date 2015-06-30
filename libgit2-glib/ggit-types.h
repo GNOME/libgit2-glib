@@ -131,6 +131,13 @@ typedef struct _GgitCredPlaintext GgitCredPlaintext;
 typedef struct _GgitDiff GgitDiff;
 
 /**
+ * GgitDiffBinaryFile:
+ *
+ * Represents a diff binary file.
+ */
+typedef struct _GgitDiffBinaryFile GgitDiffBinaryFile;
+
+/**
  * GgitDiffDelta:
  *
  * Represents the changes done to one file.
