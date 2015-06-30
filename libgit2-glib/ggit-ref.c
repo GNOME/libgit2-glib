@@ -263,7 +263,6 @@ ggit_ref_get_owner (GgitRef *ref)
  * ggit_ref_set_symbolic_target:
  * @ref: a #GgitRef.
  * @target: The new target for the reference.
- * @signature: a #GgitSignature that will used to populate the reflog entry.
  * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -281,7 +280,6 @@ ggit_ref_get_owner (GgitRef *ref)
 GgitRef *
 ggit_ref_set_symbolic_target (GgitRef       *ref,
                               const gchar   *target,
-                              GgitSignature *signature,
                               const gchar   *log_message,
                               GError       **error)
 {
@@ -295,7 +293,6 @@ ggit_ref_set_symbolic_target (GgitRef       *ref,
 	ret = git_reference_symbolic_set_target (&out,
 	                                         _ggit_native_get (ref),
 	                                         target,
-	                                         _ggit_native_get (signature),
 	                                         log_message);
 
 	if (ret != GIT_OK)
@@ -311,7 +308,6 @@ ggit_ref_set_symbolic_target (GgitRef       *ref,
  * ggit_ref_set_target:
  * @ref: a #GgitRef.
  * @oid: a #GgitOId.
- * @signature: a #GgitSignature that will used to populate the reflog entry.
  * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -326,7 +322,6 @@ ggit_ref_set_symbolic_target (GgitRef       *ref,
 GgitRef *
 ggit_ref_set_target (GgitRef       *ref,
                      GgitOId       *oid,
-                     GgitSignature *signature,
                      const gchar   *log_message,
                      GError       **error)
 {
@@ -340,7 +335,6 @@ ggit_ref_set_target (GgitRef       *ref,
 	ret = git_reference_set_target (&out,
 	                                _ggit_native_get (ref),
 	                                _ggit_oid_get_oid (oid),
-	                                _ggit_native_get (signature),
 	                                log_message);
 
 	if (ret != GIT_OK)
@@ -357,7 +351,6 @@ ggit_ref_set_target (GgitRef       *ref,
  * @ref: a #GgitRef.
  * @new_name: the new name.
  * @force: %TRUE to force the renaming.
- * @signature: a #GgitSignature that will used to populate the reflog entry.
  * @log_message: The one line long message to be appended to the reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -387,7 +380,6 @@ GgitRef *
 ggit_ref_rename (GgitRef       *ref,
                  const gchar   *new_name,
                  gboolean       force,
-                 GgitSignature *signature,
                  const gchar   *log_message,
                  GError       **error)
 {
@@ -404,7 +396,6 @@ ggit_ref_rename (GgitRef       *ref,
 	                            _ggit_native_get (ref),
 	                            new_name,
 	                            force,
-	                            _ggit_native_get (signature),
 	                            log_message);
 
 	if (ret != GIT_OK)

@@ -82,20 +82,17 @@ GgitRepository *ggit_ref_get_owner          (GgitRef        *ref);
 
 GgitRef        *ggit_ref_set_symbolic_target(GgitRef        *ref,
                                              const gchar    *target,
-                                             GgitSignature  *signature,
                                              const gchar    *log_message,
                                              GError        **error);
 
 GgitRef        *ggit_ref_set_target         (GgitRef        *ref,
                                              GgitOId        *oid,
-                                             GgitSignature  *signature,
                                              const gchar    *log_message,
                                              GError        **error);
 
 GgitRef        *ggit_ref_rename             (GgitRef        *ref,
                                              const gchar    *new_name,
                                              gboolean        force,
-                                             GgitSignature  *signature,
                                              const gchar    *log_message,
                                              GError        **error);
 
