@@ -23,6 +23,7 @@
 #include <git2.h>
 
 #include "ggit-diff.h"
+#include "ggit-diff-binary.h"
 #include "ggit-diff-delta.h"
 #include "ggit-diff-options.h"
 #include "ggit-diff-line.h"
@@ -49,6 +50,7 @@ typedef struct {
 	gpointer user_data;
 
 	GgitDiffFileCallback file_cb;
+	GgitDiffBinaryCallback binary_cb;
 	GgitDiffHunkCallback hunk_cb;
 	GgitDiffLineCallback line_cb;
 } CallbackWrapperData;
@@ -105,6 +107,27 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 	ret = data->file_cb (gdelta, progress, data->user_data);
 
 	ggit_diff_delta_unref (gdelta);
+
+	return ret;
+}
+
+static gint
+ggit_diff_binary_callback_wrapper (const git_diff_delta  *delta,
+                                   const git_diff_binary *binary,
+                                   gpointer               user_data)
+{
+	CallbackWrapperData *data = user_data;
+	GgitDiffDelta *gdelta;
+	GgitDiffBinary *gbinary;
+	gint ret;
+
+	gdelta = _ggit_diff_delta_wrap (delta);
+	gbinary = _ggit_diff_binary_wrap (binary);
+
+	ret = data->binary_cb (gdelta, gbinary, data->user_data);
+
+	ggit_diff_delta_unref (gdelta);
+	ggit_diff_binary_unref (gbinary);
 
 	return ret;
 }
@@ -497,6 +520,8 @@ ggit_diff_merge (GgitDiff  *onto,
  * @diff: a #GgitDiff.
  * @file_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffFileCallback.
+ * @binary_cb: (allow-none) (scope call) (closure user_data):
+ *  a #GgitDiffBinaryCallback.
  * @hunk_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffHunkCallback.
  * @line_cb: (allow-none) (scope call) (closure user_data):
@@ -504,11 +529,12 @@ ggit_diff_merge (GgitDiff  *onto,
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Iterates over the diff calling @file_cb, @hunk_cb and @line_cb.
+ * Iterates over the diff calling @file_cb, @binary_cb, @hunk_cb and @line_cb.
  */
 void
 ggit_diff_foreach (GgitDiff              *diff,
                    GgitDiffFileCallback   file_cb,
+                   GgitDiffBinaryCallback binary_cb,
                    GgitDiffHunkCallback   hunk_cb,
                    GgitDiffLineCallback   line_cb,
                    gpointer              *user_data,
@@ -517,11 +543,12 @@ ggit_diff_foreach (GgitDiff              *diff,
 	gint ret;
 	CallbackWrapperData wrapper_data;
 	git_diff_file_cb real_file_cb = NULL;
+	git_diff_binary_cb real_binary_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
 	git_diff_line_cb real_line_cb = NULL;
 
 	g_return_if_fail (GGIT_IS_DIFF (diff));
-	g_return_if_fail (file_cb != NULL && hunk_cb != NULL && line_cb != NULL);
+	g_return_if_fail (file_cb != NULL && binary_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	wrapper_data.user_data = user_data;
@@ -532,6 +559,12 @@ ggit_diff_foreach (GgitDiff              *diff,
 	{
 		real_file_cb = ggit_diff_file_callback_wrapper;
 		wrapper_data.file_cb = file_cb;
+	}
+
+	if (binary_cb != NULL)
+	{
+		real_binary_cb = ggit_diff_binary_callback_wrapper;
+		wrapper_data.binary_cb = binary_cb;
 	}
 
 	if (hunk_cb != NULL)
@@ -547,7 +580,8 @@ ggit_diff_foreach (GgitDiff              *diff,
 	}
 
 	ret = git_diff_foreach (_ggit_native_get (diff),
-	                        real_file_cb, real_hunk_cb, real_line_cb,
+	                        real_file_cb, real_binary_cb,
+	                        real_hunk_cb, real_line_cb,
 	                        &wrapper_data);
 
 	if (ret != GIT_OK)
@@ -663,6 +697,8 @@ ggit_diff_get_num_deltas (GgitDiff *diff)
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @file_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffFileCallback.
+ * @binary_cb: (allow-none) (scope call) (closure user_data):
+ *  a #GgitDiffBinaryCallback.
  * @hunk_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffHunkCallback.
  * @line_cb: (allow-none) (scope call) (closure user_data):
@@ -670,7 +706,7 @@ ggit_diff_get_num_deltas (GgitDiff *diff)
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Iterates over the diff calling @file_cb, @hunk_cb and @line_cb.
+ * Iterates over the diff calling @file_cb, @binary_cb, @hunk_cb and @line_cb.
  *
  * The #GgitDiffFile mode always be 0, path will be %NULL and when a blob is
  * %NULL the oid will be 0.
@@ -685,6 +721,7 @@ ggit_diff_blobs (GgitBlob              *old_blob,
                  const gchar           *new_as_path,
                  GgitDiffOptions       *diff_options,
                  GgitDiffFileCallback   file_cb,
+                 GgitDiffBinaryCallback binary_cb,
                  GgitDiffHunkCallback   hunk_cb,
                  GgitDiffLineCallback   line_cb,
                  gpointer              *user_data,
@@ -694,6 +731,7 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 	const git_diff_options *gdiff_options;
 	CallbackWrapperData wrapper_data;
 	git_diff_file_cb real_file_cb = NULL;
+	git_diff_binary_cb real_binary_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
 	git_diff_line_cb real_line_cb = NULL;
 
@@ -709,6 +747,12 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 	{
 		real_file_cb = ggit_diff_file_callback_wrapper;
 		wrapper_data.file_cb = file_cb;
+	}
+
+	if (binary_cb != NULL)
+	{
+		real_binary_cb = ggit_diff_binary_callback_wrapper;
+		wrapper_data.binary_cb = binary_cb;
 	}
 
 	if (hunk_cb != NULL)
@@ -728,7 +772,8 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 	                      new_blob ? _ggit_native_get (new_blob) : NULL,
 	                      new_as_path,
 	                      (git_diff_options *) gdiff_options,
-	                      real_file_cb, real_hunk_cb, real_line_cb,
+	                      real_file_cb, real_binary_cb,
+	                      real_hunk_cb, real_line_cb,
 	                      &wrapper_data);
 
 	if (ret != GIT_OK)
@@ -747,6 +792,8 @@ ggit_diff_blobs (GgitBlob              *old_blob,
  * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
  * @file_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffFileCallback.
+ * @binary_cb: (allow-none) (scope call) (closure user_data):
+ *  a #GgitDiffBinaryCallback.
  * @hunk_cb: (allow-none) (scope call) (closure user_data):
  *  a #GgitDiffHunkCallback.
  * @line_cb: (allow-none) (scope call) (closure user_data):
@@ -764,6 +811,7 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
                           const gchar           *buffer_as_path,
                           GgitDiffOptions       *diff_options,
                           GgitDiffFileCallback   file_cb,
+                          GgitDiffBinaryCallback binary_cb,
                           GgitDiffHunkCallback   hunk_cb,
                           GgitDiffLineCallback   line_cb,
                           gpointer               user_data,
@@ -773,6 +821,7 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 	const git_diff_options *gdiff_options;
 	CallbackWrapperData wrapper_data;
 	git_diff_file_cb real_file_cb = NULL;
+	git_diff_binary_cb real_binary_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
 	git_diff_line_cb real_line_cb = NULL;
 
@@ -795,6 +844,12 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 		wrapper_data.file_cb = file_cb;
 	}
 
+	if (binary_cb != NULL)
+	{
+		real_binary_cb = ggit_diff_binary_callback_wrapper;
+		wrapper_data.binary_cb = binary_cb;
+	}
+
 	if (hunk_cb != NULL)
 	{
 		real_hunk_cb = ggit_diff_hunk_callback_wrapper;
@@ -813,7 +868,8 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 	                               buffer_len,
 	                               buffer_as_path,
 	                               (git_diff_options *) gdiff_options,
-	                               real_file_cb, real_hunk_cb, real_line_cb,
+	                               real_file_cb, real_binary_cb,
+	                               real_hunk_cb, real_line_cb,
 	                               &wrapper_data);
 
 	if (ret != GIT_OK)

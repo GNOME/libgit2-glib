@@ -1182,6 +1182,20 @@ typedef gint (* GgitCredAcquireCallback) (const gchar *url,
                                           gpointer     user_data);
 
 /**
+ * GgitDiffBinaryCallback:
+ * @delta: a #GgitDiffDelta.
+ * @binary: a #GgitDiffBinary.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Called for each file.
+ *
+ * Returns: 0 to go continue or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitDiffBinaryCallback) (GgitDiffDelta  *delta,
+                                         GgitDiffBinary *binary,
+                                         gpointer        user_data);
+
+/**
  * GgitDiffFileCallback:
  * @delta: a #GgitDiffDelta.
  * @progress: the progress.
