@@ -117,35 +117,6 @@ ggit_submodule_open (GgitSubmodule  *submodule,
 }
 
 /**
- * ggit_submodule_save:
- * @submodule: a #GgitSubmodule.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Writes submodule settings to .gitmodules file.
- * Commits any in-memory changes to the submodule to the gitmodules
- * file on disk.  You may also be interested in ggit_submodule_init() which
- * writes submodule info to ".git/config" (which is better for local changes
- * to submodule settings) and/or ggit_submodule_sync() which writes
- * settings about remotes to the actual submodule repository.
- */
-void
-ggit_submodule_save (GgitSubmodule  *submodule,
-                     GError        **error)
-{
-	gint ret;
-
-	g_return_if_fail (submodule != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_submodule_save (submodule->submodule);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
  * ggit_submodule_get_owner:
  * @submodule: a #GgitSubmodule.
  *

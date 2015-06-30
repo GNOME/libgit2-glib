@@ -41,9 +41,6 @@ void                    ggit_submodule_unref                 (GgitSubmodule     
 GgitRepository         *ggit_submodule_open                  (GgitSubmodule       *submodule,
                                                               GError             **error);
 
-void                    ggit_submodule_save                  (GgitSubmodule       *submodule,
-                                                              GError             **error);
-
 GgitRepository         *ggit_submodule_get_owner             (GgitSubmodule       *submodule);
 
 const gchar            *ggit_submodule_get_name              (GgitSubmodule       *submodule);
