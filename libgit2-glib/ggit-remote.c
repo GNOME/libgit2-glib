@@ -456,30 +456,6 @@ ggit_remote_get_owner (GgitRemote *remote)
 }
 
 /**
- * ggit_remote_save:
- * @remote: a #GgitRemote.
- * @error: a #GError or %NULL.
- *
- * Saves a remote to its repository's configuration.
- */
-void
-ggit_remote_save (GgitRemote  *remote,
-                  GError     **error)
-{
-	gint ret;
-
-	g_return_if_fail (GGIT_IS_REMOTE (remote));
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_remote_save (_ggit_native_get (remote));
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
  * ggit_remote_get_name:
  * @remote: a #GgitRemote.
  *

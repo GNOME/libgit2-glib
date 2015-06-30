@@ -88,9 +88,6 @@ GgitRemote        *ggit_remote_new_anonymous            (GgitRepository   *repos
 
 GgitRepository    *ggit_remote_get_owner                (GgitRemote       *remote);
 
-void               ggit_remote_save                     (GgitRemote       *remote,
-                                                         GError          **error);
-
 const gchar       *ggit_remote_get_name                 (GgitRemote       *remote);
 
 const gchar       *ggit_remote_get_url                  (GgitRemote       *remote);
