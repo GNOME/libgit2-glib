@@ -298,6 +298,7 @@ ggit_remote_get_url (GgitRemote *remote)
  * ggit_remote_connect:
  * @remote: a #GgitRemote.
  * @direction: whether you want to receive or send data.
+ * @callbacks: the callbacks to use for this connection.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Opens a connection to a remote.
@@ -306,16 +307,19 @@ ggit_remote_get_url (GgitRemote *remote)
  * starts up a specific binary which can only do the one or the other.
  */
 void
-ggit_remote_connect (GgitRemote     *remote,
-                     GgitDirection   direction,
-                     GError        **error)
+ggit_remote_connect (GgitRemote           *remote,
+                     GgitDirection         direction,
+                     GgitRemoteCallbacks  *callbacks,
+                     GError              **error)
 {
 	gint ret;
 
 	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	ret = git_remote_connect (_ggit_native_get (remote), direction);
+	ret = git_remote_connect (_ggit_native_get (remote),
+	                          (git_direction)direction,
+	                          _ggit_remote_callbacks_get_native (callbacks));
 
 	if (ret != GIT_OK)
 	{
