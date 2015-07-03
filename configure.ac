@@ -7,7 +7,7 @@ m4_define(libgit2_glib_version, libgit2_glib_major_version.libgit2_glib_minor_ve
 
 AC_INIT([libgit2-glib],
         [libgit2_glib_version],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=libgit2-glib],
+        [https://bugzilla.gnome.org/enter_bug.cgi?product=gitg],
         [libgit2-glib])
 
 # Libtool versioning
