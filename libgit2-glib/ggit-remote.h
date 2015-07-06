@@ -111,10 +111,6 @@ gchar            **ggit_remote_get_fetch_specs          (GgitRemote       *remot
 gchar            **ggit_remote_get_push_specs           (GgitRemote       *remote,
                                                          GError          **error);
 
-gboolean           ggit_remote_set_push_specs           (GgitRemote           *remote,
-                                                         const gchar * const  *specs,
-                                                         GError              **error);
-
 GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);
 
