@@ -112,10 +112,6 @@ void               ggit_remote_add_fetch_spec           (GgitRemote       *remot
 gchar            **ggit_remote_get_fetch_specs          (GgitRemote       *remote,
                                                          GError          **error);
 
-gboolean           ggit_remote_set_fetch_specs          (GgitRemote           *remote,
-                                                         const gchar * const  *specs,
-                                                         GError              **error);
-
 gchar            **ggit_remote_get_push_specs           (GgitRemote       *remote,
                                                          GError          **error);
 
