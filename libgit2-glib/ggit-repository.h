@@ -247,7 +247,12 @@ gchar             **ggit_repository_list_remotes      (GgitRepository        *re
 
 void                ggit_repository_add_remote_push   (GgitRepository        *repository,
                                                        GgitRemote            *remote,
-                                                       const gchar           *push_spec,
+                                                       const gchar           *refspec,
+                                                       GError               **error);
+
+void                ggit_repository_add_remote_fetch  (GgitRepository        *repository,
+                                                       GgitRemote            *remote,
+                                                       const gchar           *refspec,
                                                        GError               **error);
 
 GgitRef            *ggit_repository_get_head          (GgitRepository        *repository,

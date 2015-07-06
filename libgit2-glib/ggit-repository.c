@@ -1907,6 +1907,39 @@ ggit_repository_add_remote_push (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_add_remote_fetch:
+ * @repository: a #GgitRepository.
+ * @remote: a #GgitRemote.
+ * @refspec: the fetch refspec.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Adds a fetch refspec to the @remote's configuration.
+ * Adds @refspec to the fetch list in the configuration. No
+ * loaded remote instances will be affected.
+ */
+void
+ggit_repository_add_remote_fetch (GgitRepository  *repository,
+                                  GgitRemote      *remote,
+                                  const gchar     *refspec,
+                                  GError         **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
+	g_return_if_fail (refspec != NULL && refspec[0] != '\0');
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_remote_add_fetch (_ggit_native_get (repository),
+	                            _ggit_native_get (remote),
+	                            refspec);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_lookup_submodule:
  * @repository: a #GgitRepository.
  * @name: the name of the submodule.

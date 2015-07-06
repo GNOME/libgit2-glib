@@ -105,10 +105,6 @@ gboolean           ggit_remote_update_tips              (GgitRemote       *remot
                                                          const gchar      *message,
                                                          GError          **error);
 
-void               ggit_remote_add_fetch_spec           (GgitRemote       *remote,
-                                                         const gchar      *fetch_spec,
-                                                         GError          **error);
-
 gchar            **ggit_remote_get_fetch_specs          (GgitRemote       *remote,
                                                          GError          **error);
 
