@@ -400,9 +400,15 @@ ggit_remote_download (GgitRemote           *remote,
 /**
  * ggit_remote_update_tips:
  * @remote: a #GgitRemote.
- * @signature: a #GgitSignature with which to add to the reflog.
- * @message: (allow-none): the message to add to the reflog, or %NULL for the
- *                         "fetch" message.
+ * @callbacks: a #GgitRemoteCallbacks.
+ * @update_fetch_head: whether to write to FETCH_HEAD. %TRUE to behave like git.
+ * @tags_type: what the behaviour for downloading tags is for this fetch. This is
+ *             ignored for push. This must be the same value passed to
+ *             ggit_remote_download().
+ * @message: (allow-none): reflog_message The message to insert into the reflogs. If
+ *                         %NULL and fetching, the default is "fetch <name>",
+ *                         where <name> is the name of the remote (or its url,
+ *                         for in-memory remotes). This parameter is ignored when pushing.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Update tips to the new state.
@@ -410,20 +416,23 @@ ggit_remote_download (GgitRemote           *remote,
  * Returns: %TRUE if successful, %FALSE otherwise.
  */
 gboolean
-ggit_remote_update_tips (GgitRemote     *remote,
-                         GgitSignature  *signature,
-                         const gchar    *message,
-                         GError        **error)
+ggit_remote_update_tips (GgitRemote                  *remote,
+                         GgitRemoteCallbacks         *callbacks,
+                         gboolean                     update_fetch_head,
+                         GgitRemoteDownloadTagsType   tags_type,
+                         const gchar                 *message,
+                         GError                     **error)
 {
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_remote_update_tips (_ggit_native_get (remote),
-	                             _ggit_native_get (signature),
-	                              message != NULL ? message : "fetch");
+	                              _ggit_remote_callbacks_get_native (callbacks),
+	                              update_fetch_head,
+	                              (git_remote_autotag_option_t)tags_type,
+	                              message);
 
 	if (ret != GIT_OK)
 	{

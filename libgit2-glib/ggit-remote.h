@@ -100,10 +100,12 @@ gboolean           ggit_remote_download                 (GgitRemote           *r
                                                          GgitFetchOptions     *fetch_options,
                                                          GError              **error);
 
-gboolean           ggit_remote_update_tips              (GgitRemote       *remote,
-                                                         GgitSignature    *signature,
-                                                         const gchar      *message,
-                                                         GError          **error);
+gboolean           ggit_remote_update_tips              (GgitRemote                  *remote,
+                                                         GgitRemoteCallbacks         *callbacks,
+                                                         gboolean                     update_fetch_head,
+                                                         GgitRemoteDownloadTagsType   tags_type,
+                                                         const gchar                 *message,
+                                                         GError                     **error);
 
 gchar            **ggit_remote_get_fetch_specs          (GgitRemote       *remote,
                                                          GError          **error);
