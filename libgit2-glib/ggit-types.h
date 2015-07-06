@@ -773,14 +773,21 @@ typedef enum {
 /* NOTE: keep in sync with git2/refs.h */
 /**
  * GgitRemoteDownloadTagsType:
- * @GGIT_REMOTE_DOWNLOAD_TAGS_AUTO:
- * @GGIT_REMOTE_DOWNLOAD_TAGS_NONE:
- * @GGIT_REMOTE_DOWNLOAD_TAGS_ALL:
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED: Use the setting from the configuration.
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_AUTO: Ask the server for tags pointing to objects we're already
+ * downloading.
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_NONE: Don't ask for any tags beyond the refspecs.
+ * @GGIT_REMOTE_DOWNLOAD_TAGS_ALL: Ask for the all the tags.
+ *
+ * Automatic tag following option
+ *
+ * Lets us select the --tags option to use.
  */
 typedef enum {
-	GGIT_REMOTE_DOWNLOAD_TAGS_AUTO = 0,
-	GGIT_REMOTE_DOWNLOAD_TAGS_NONE = 1,
-	GGIT_REMOTE_DOWNLOAD_TAGS_ALL  = 2
+	GGIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED = 0,
+	GGIT_REMOTE_DOWNLOAD_TAGS_AUTO,
+	GGIT_REMOTE_DOWNLOAD_TAGS_NONE,
+	GGIT_REMOTE_DOWNLOAD_TAGS_ALL
 } GgitRemoteDownloadTagsType;
 
 /* NOTE: keep in sync with git2/remote.h */
