@@ -1089,8 +1089,8 @@ typedef enum
 {
 	GGIT_CHECKOUT_NONE                    = 0,
 	GGIT_CHECKOUT_SAFE                    = (1u << 0),
-	GGIT_CHECKOUT_SAFE_CREATE             = (1u << 1),
-	GGIT_CHECKOUT_FORCE                   = (1u << 2),
+	GGIT_CHECKOUT_FORCE                   = (1u << 1),
+	GGIT_CHECKOUT_RECREATE_MISSING        = (1u << 2),
 	GGIT_CHECKOUT_ALLOW_CONFLICTS         = (1u << 4),
 	GGIT_CHECKOUT_REMOVE_UNTRACKED        = (1u << 5),
 	GGIT_CHECKOUT_REMOVE_IGNORED          = (1u << 6),
@@ -1104,7 +1104,11 @@ typedef enum
 	GGIT_CHECKOUT_SKIP_LOCKED_DIRECTORIES = (1u << 18),
 	GGIT_CHECKOUT_DONT_OVERWRITE_IGNORED  = (1u << 19),
 	GGIT_CHECKOUT_CONFLICT_STYLE_MERGE    = (1u << 20),
-	GGIT_CHECKOUT_CONFLICT_STYLE_DIFF3    = (1u << 21)
+	GGIT_CHECKOUT_CONFLICT_STYLE_DIFF3    = (1u << 21),
+	GGIT_CHECKOUT_DONT_REMOVE_EXISTING    = (1u << 22),
+	GGIT_CHECKOUT_DONT_WRITE_INDEX        = (1u << 23),
+	GGIT_CHECKOUT_UPDATE_SUBMODULES       = (1u << 16),
+	GGIT_CHECKOUT_UPDATE_SUBMODULES_IF_CHANGED = (1u << 17)
 } GgitCheckoutStrategy;
 
 typedef enum {
