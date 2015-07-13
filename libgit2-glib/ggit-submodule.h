@@ -49,10 +49,6 @@ const gchar            *ggit_submodule_get_path              (GgitSubmodule     
 
 const gchar            *ggit_submodule_get_url               (GgitSubmodule       *submodule);
 
-void                    ggit_submodule_set_url               (GgitSubmodule       *submodule,
-                                                              const gchar         *url,
-                                                              GError             **error);
-
 GgitOId                *ggit_submodule_get_index_id          (GgitSubmodule       *submodule);
 
 GgitOId                *ggit_submodule_get_head_id           (GgitSubmodule       *submodule);

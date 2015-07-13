@@ -2057,7 +2057,7 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
  *
  * Sets the URL for the submodule in the configuration.
  *
- * After calling this, you may wish to call `git_submodule_sync()` to
+ * After calling this, you may wish to call ggit_submodule_sync() to
  * write the changes to the checked out submodule repository.
  */
 void
