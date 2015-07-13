@@ -2081,6 +2081,38 @@ ggit_repository_set_submodule_ignore (GgitRepository       *repository,
 }
 
 /**
+ * ggit_repository_set_submodule_update:
+ * @repository: a #GgitRepository.
+ * @name: the name of the submodule.
+ * @update: a #GgitSubmoduleUpdate.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Sets the update rule for the submodule in the configuration.
+ * This setting won't affect any existing instances.
+ */
+void
+ggit_repository_set_submodule_update (GgitRepository       *repository,
+                                      const gchar          *name,
+                                      GgitSubmoduleUpdate   update,
+                                      GError              **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (name != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_submodule_set_update (_ggit_native_get (repository),
+	                                name,
+	                                (git_submodule_update_t)update);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_set_submodule_url:
  * @repository: a #GgitRepository.
  * @name: the name of the submodule to configure.

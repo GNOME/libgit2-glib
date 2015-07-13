@@ -59,9 +59,6 @@ GgitSubmoduleIgnore     ggit_submodule_get_ignore            (GgitSubmodule     
 
 GgitSubmoduleUpdate     ggit_submodule_get_update            (GgitSubmodule       *submodule);
 
-GgitSubmoduleUpdate     ggit_submodule_set_update            (GgitSubmodule       *submodule,
-                                                              GgitSubmoduleUpdate  update);
-
 gboolean                ggit_submodule_get_fetch_recurse     (GgitSubmodule       *submodule);
 
 void                    ggit_submodule_init                  (GgitSubmodule       *submodule,

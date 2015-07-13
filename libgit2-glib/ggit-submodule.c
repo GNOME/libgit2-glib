@@ -290,30 +290,6 @@ ggit_submodule_get_update (GgitSubmodule *submodule)
 }
 
 /**
- * ggit_submodule_set_update:
- * @submodule: a #GgitSubmodule.
- * @update: a #GgitSubmoduleUpdate.
- *
- * Sets the update rule in memory for the submodule.  You should call
- * ggit_submodule_save() if you want to persist the new update rule.
- *
- * Calling this again with GGIT_SUBMODULE_UPDATE_DEFAULT or calling
- * ggit_submodule_reload() will revert the rule to the value that was in the
- * original config.
- *
- * Returns: the old #GgitSubmoduleUpdate.
- */
-GgitSubmoduleUpdate
-ggit_submodule_set_update (GgitSubmodule       *submodule,
-                           GgitSubmoduleUpdate  update)
-{
-	g_return_val_if_fail (submodule != NULL, 0);
-
-	return (GgitSubmoduleUpdate)git_submodule_set_update (submodule->submodule,
-	                                                      (git_submodule_update_t)update);
-}
-
-/**
  * ggit_submodule_get_fetch_recurse:
  * @submodule: a #GgitSubmodule.
  *

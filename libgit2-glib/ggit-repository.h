@@ -315,6 +315,11 @@ void                ggit_repository_set_submodule_ignore (GgitRepository       *
                                                           GgitSubmoduleIgnore   ignore,
                                                           GError              **error);
 
+void                ggit_repository_set_submodule_update (GgitRepository       *repository,
+                                                          const gchar          *name,
+                                                          GgitSubmoduleUpdate   update,
+                                                          GError              **error);
+
 void                ggit_repository_set_submodule_url  (GgitRepository          *repository,
                                                         const gchar             *name,
                                                         const gchar             *url,
