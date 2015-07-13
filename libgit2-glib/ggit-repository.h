@@ -394,7 +394,7 @@ GgitIndex          *ggit_repository_cherry_pick_commit (GgitRepository          
                                                         GgitMergeOptions         *merge_options,
                                                         GError                  **error);
 
-const gchar        *ggit_repository_get_default_notes_ref (GgitRepository           *repository,
+gchar              *ggit_repository_get_default_notes_ref (GgitRepository           *repository,
                                                            GError                  **error);
 
 GgitOId            *ggit_repository_create_note        (GgitRepository          *repository,

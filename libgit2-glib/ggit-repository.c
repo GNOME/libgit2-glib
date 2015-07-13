@@ -3152,25 +3152,29 @@ ggit_repository_cherry_pick_commit (GgitRepository    *repository,
  * Gets the default notes reference for @repository. It defaults to
  * "refs/notes/commits".
  *
- * Returns: the default notes reference for @repository.
+ * Returns: (transfer full): the default notes reference for @repository.
  */
-const gchar *
+gchar *
 ggit_repository_get_default_notes_ref (GgitRepository  *repository,
                                        GError         **error)
 {
-	const gchar *ref = NULL;
+	git_buf buf = {0,};
+	gchar *ref;
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-	ret = git_note_default_ref (&ref, _ggit_native_get (repository));
+	ret = git_note_default_ref (&buf, _ggit_native_get (repository));
 
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
+
+	ref = g_strdup (buf.ptr);
+	git_buf_free (&buf);
 
 	return ref;
 }
