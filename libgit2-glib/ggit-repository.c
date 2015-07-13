@@ -2084,6 +2084,37 @@ ggit_repository_set_submodule_url (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_set_submodule_fetch_recurse:
+ * @repository: a #GgitRepository.
+ * @name: the name of the submodule to configure.
+ * @fetch_recurse_submodules: a #GgitSubmoduleRecurse.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Sets the submodule.'name'.fetchRecurseSubmodules value for
+ * the submodule. This setting won't affect any existing instances..
+ */
+void
+ggit_repository_set_submodule_fetch_recurse (GgitRepository        *repository,
+                                             const gchar           *name,
+                                             GgitSubmoduleRecurse   fetch_recurse_submodules,
+                                             GError               **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_submodule_set_fetch_recurse_submodules (_ggit_native_get (repository),
+	                                                  name,
+	                                                  (git_submodule_recurse_t)fetch_recurse_submodules);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_get_submodule_status:
  * @repository: a #GgitRepository.
  * @name: the name of the submodule.

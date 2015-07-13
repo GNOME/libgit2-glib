@@ -356,26 +356,6 @@ ggit_submodule_get_fetch_recurse (GgitSubmodule *submodule)
 }
 
 /**
- * ggit_submodule_set_fetch_recurse:
- * @submodule: a #GgitSubmodule.
- * @fetch_recurse: %TRUE to fetch recurse submodules.
- *
- * Sets the submodule.'name'.fetchRecurseSubmodules value for
- * the submodule.  You should call ggit_submodule_save() if you want
- * to persist the new value.
- *
- * Returns: the old value.
- */
-gboolean
-ggit_submodule_set_fetch_recurse (GgitSubmodule *submodule,
-                                  gboolean       fetch_recurse)
-{
-	g_return_val_if_fail (submodule != NULL, FALSE);
-
-	return git_submodule_set_fetch_recurse_submodules (submodule->submodule, fetch_recurse);
-}
-
-/**
  * ggit_submodule_init:
  * @submodule: a #GgitSubmodule.
  * @overwrite: forces existing entries to be updated.

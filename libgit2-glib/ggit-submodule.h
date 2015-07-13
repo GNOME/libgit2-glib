@@ -67,9 +67,6 @@ GgitSubmoduleUpdate     ggit_submodule_set_update            (GgitSubmodule     
 
 gboolean                ggit_submodule_get_fetch_recurse     (GgitSubmodule       *submodule);
 
-gboolean                ggit_submodule_set_fetch_recurse     (GgitSubmodule       *submodule,
-                                                              gboolean             fetch_recurse);
-
 void                    ggit_submodule_init                  (GgitSubmodule       *submodule,
                                                               gboolean             overwrite,
                                                               GError             **error);
