@@ -148,6 +148,7 @@ int main(int argc, char **argv)
 	GError *error = NULL;
 	GFile *location;
 	Cloner *cloner;
+	GgitFetchOptions *fetch_options;
 
 	// Validate args
 	if (argc < 3) {
@@ -163,12 +164,14 @@ int main(int argc, char **argv)
 	location = g_file_new_for_commandline_arg (path);
 
 	options = ggit_clone_options_new ();
-	cloner = g_object_new (cloner_get_type(), NULL);
-
-	ggit_clone_options_set_remote_callbacks (options,
+	cloner = g_object_new (cloner_get_type (), NULL);
+	fetch_options = ggit_fetch_options_new ();
+	ggit_fetch_options_set_remote_callbacks (fetch_options,
 	                                         GGIT_REMOTE_CALLBACKS (cloner));
-
 	g_object_unref (cloner);
+
+	ggit_clone_options_set_fetch_options (options, fetch_options);
+	ggit_fetch_options_free (fetch_options);
 
 	// Do the clone
 	cloned_repo = ggit_repository_clone (url, location, options, &error);
