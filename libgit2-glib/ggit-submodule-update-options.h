@@ -1,5 +1,5 @@
 /*
- * ggit-submodule-options.h
+ * ggit-submodule-update-options.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2015 - Ignacio Casal Quinteiro
