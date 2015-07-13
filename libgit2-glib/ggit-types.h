@@ -910,7 +910,7 @@ typedef enum {
 
 /**
  * GgitSubmoduleIgnore:
- * @GGIT_SUBMODULE_IGNORE_RESET: reset to on-disk value.
+ * @GGIT_SUBMODULE_IGNORE_UNSPECIFIED: reset to on-disk value.
  * @GGIT_SUBMODULE_IGNORE_NONE: don't ignore any change.
  * @GGIT_SUBMODULE_IGNORE_UNTRACKED: ignore untracked files.
  * @GGIT_SUBMODULE_IGNORE_DIRTY: ignore changes in the working directory.
@@ -919,12 +919,12 @@ typedef enum {
  * Describes which submodules should be ignored.
  */
 typedef enum {
-	GGIT_SUBMODULE_IGNORE_RESET     = -1,
+	GGIT_SUBMODULE_IGNORE_UNSPECIFIED = -1,
 
-	GGIT_SUBMODULE_IGNORE_NONE      = 1,
+	GGIT_SUBMODULE_IGNORE_NONE = 1,
 	GGIT_SUBMODULE_IGNORE_UNTRACKED = 2,
-	GGIT_SUBMODULE_IGNORE_DIRTY     = 3,
-	GGIT_SUBMODULE_IGNORE_ALL       = 4
+	GGIT_SUBMODULE_IGNORE_DIRTY = 3,
+	GGIT_SUBMODULE_IGNORE_ALL = 4
 } GgitSubmoduleIgnore;
 
 /**
