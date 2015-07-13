@@ -315,6 +315,11 @@ void                ggit_repository_set_submodule_url  (GgitRepository          
                                                         const gchar             *url,
                                                         GError                 **error);
 
+GgitSubmoduleStatus ggit_repository_get_submodule_status (GgitRepository        *repository,
+                                                          const gchar           *name,
+                                                          GgitSubmoduleIgnore    ignore,
+                                                          GError               **error);
+
 void                ggit_repository_reset              (GgitRepository          *repository,
                                                         GgitObject              *target,
                                                         GgitResetType            reset_type,

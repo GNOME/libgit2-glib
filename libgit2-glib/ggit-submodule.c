@@ -458,38 +458,4 @@ ggit_submodule_reload (GgitSubmodule  *submodule,
 	}
 }
 
-/**
- * ggit_submodule_get_status:
- * @submodule: a #GgitSubmodule.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Gets the status for a submodule.
- * This looks at a submodule and tries to determine the status.  It
- * will return a combination of the %GGIT_SUBMODULE_STATUS values.
- * How deeply it examines the working directory to do this will depend
- * on the #GgitSubmoduleIgnore value for the submodule - which can be
- * set either temporarily or permanently with ggit_submodule_set_ignore().
- *
- * Returns: the #GgitSubmoduleStatus for @submodule.
- */
-GgitSubmoduleStatus
-ggit_submodule_get_status (GgitSubmodule  *submodule,
-                           GError        **error)
-{
-	gint ret;
-	GgitSubmoduleStatus status;
-
-	g_return_val_if_fail (submodule != NULL, 0);
-	g_return_val_if_fail (error == NULL || *error == NULL, 0);
-
-	ret = git_submodule_status (&status, submodule->submodule);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-
-	return status;
-}
-
 /* ex:set ts=8 noet: */

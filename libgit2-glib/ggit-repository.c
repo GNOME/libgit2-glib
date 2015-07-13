@@ -2084,6 +2084,47 @@ ggit_repository_set_submodule_url (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_get_submodule_status:
+ * @repository: a #GgitRepository.
+ * @name: the name of the submodule.
+ * @ignore: the ignore rules to follow.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the status for a submodule.
+ * This looks at a submodule and tries to determine the status.  It
+ * will return a combination of the %GGIT_SUBMODULE_STATUS values.
+ * How deeply it examines the working directory to do this will depend
+ * on @ignore.
+ *
+ * Returns: the #GgitSubmoduleStatus for @submodule.
+ */
+GgitSubmoduleStatus
+ggit_repository_get_submodule_status (GgitRepository      *repository,
+                                      const gchar         *name,
+                                      GgitSubmoduleIgnore  ignore,
+                                      GError             **error)
+{
+	gint ret;
+	GgitSubmoduleStatus status;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), 0);
+	g_return_val_if_fail (name != NULL, 0);
+	g_return_val_if_fail (error == NULL || *error == NULL, 0);
+
+	ret = git_submodule_status (&status,
+	                            _ggit_native_get (repository),
+	                            name,
+	                            (git_submodule_ignore_t)ignore);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return status;
+}
+
+/**
  * ggit_repository_reset:
  * @repository: a #GgitRepository.
  * @target: the target #GgitObject which is a commit or a tag.

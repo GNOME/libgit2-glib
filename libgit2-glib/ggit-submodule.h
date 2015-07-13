@@ -81,9 +81,6 @@ void                    ggit_submodule_reload                (GgitSubmodule     
                                                               gboolean             force,
                                                               GError             **error);
 
-GgitSubmoduleStatus     ggit_submodule_get_status            (GgitSubmodule       *submodule,
-                                                              GError             **error);
-
 G_END_DECLS
 
 #endif /* __GGIT_SUBMODULE_H__ */
