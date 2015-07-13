@@ -2102,6 +2102,7 @@ ggit_repository_set_submodule_fetch_recurse (GgitRepository        *repository,
 	gint ret;
 
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (name != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_submodule_set_fetch_recurse_submodules (_ggit_native_get (repository),
