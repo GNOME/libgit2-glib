@@ -57,9 +57,6 @@ GgitOId                *ggit_submodule_get_workdir_id        (GgitSubmodule     
 
 GgitSubmoduleIgnore     ggit_submodule_get_ignore            (GgitSubmodule       *submodule);
 
-GgitSubmoduleIgnore     ggit_submodule_set_ignore            (GgitSubmodule       *submodule,
-                                                              GgitSubmoduleIgnore  ignore);
-
 GgitSubmoduleUpdate     ggit_submodule_get_update            (GgitSubmodule       *submodule);
 
 GgitSubmoduleUpdate     ggit_submodule_set_update            (GgitSubmodule       *submodule,

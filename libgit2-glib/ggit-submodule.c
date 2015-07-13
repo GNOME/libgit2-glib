@@ -274,32 +274,6 @@ ggit_submodule_get_ignore (GgitSubmodule *submodule)
 }
 
 /**
- * ggit_submodule_set_ignore:
- * @submodule: a #GgitSubmodule.
- * @ignore: a #GgitSubmoduleIgnore.
- *
- * Sets the ignore rule in memory for the submodule.  This will be used
- * for any following actions (such as ggit_submodule_status()) while the
- * submodule is in memory.  You should call ggit_submodule_save() if you
- * want to persist the new ignore role.
- *
- * Calling this again with GGIT_SUBMODULE_IGNORE_DEFAULT or calling
- * ggit_submodule_reload() will revert the rule to the value that was in the
- * original config.
- *
- * Returns: the old #GgitSubmoduleIgnore.
- */
-GgitSubmoduleIgnore
-ggit_submodule_set_ignore (GgitSubmodule       *submodule,
-                           GgitSubmoduleIgnore  ignore)
-{
-	g_return_val_if_fail (submodule != NULL, 0);
-
-	return (GgitSubmoduleIgnore)git_submodule_set_ignore (submodule->submodule,
-	                                                      (git_submodule_ignore_t)ignore);
-}
-
-/**
  * ggit_submodule_get_update:
  * @submodule: a #GgitSubmodule.
  *

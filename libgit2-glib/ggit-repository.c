@@ -2049,6 +2049,38 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
 }
 
 /**
+ * ggit_repository_set_submodule_ignore:
+ * @repository: a #GgitRepository.
+ * @name: the name of the submodule.
+ * @ignore: a #GgitSubmoduleIgnore.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Sets the ignore rule for the submodule in the configuration.
+ * This does not affect any currently-loaded instances..
+ */
+void
+ggit_repository_set_submodule_ignore (GgitRepository       *repository,
+                                      const gchar          *name,
+                                      GgitSubmoduleIgnore   ignore,
+                                      GError              **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (name != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_submodule_set_ignore (_ggit_native_get (repository),
+	                                name,
+	                                (git_submodule_ignore_t)ignore);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_set_submodule_url:
  * @repository: a #GgitRepository.
  * @name: the name of the submodule to configure.
@@ -2086,7 +2118,7 @@ ggit_repository_set_submodule_url (GgitRepository  *repository,
 /**
  * ggit_repository_set_submodule_fetch_recurse:
  * @repository: a #GgitRepository.
- * @name: the name of the submodule to configure.
+ * @name: the name of the submodule.
  * @fetch_recurse_submodules: a #GgitSubmoduleRecurse.
  * @error: a #GError for error reporting, or %NULL.
  *
