@@ -950,22 +950,24 @@ typedef enum {
 
 /**
  * GgitSubmoduleUpdate:
- * @GGIT_SUBMODULE_UPDATE_RESET: reset to on-disk value.
  * @GGIT_SUBMODULE_UPDATE_CHECKOUT: checkout the submodule.
  * @GGIT_SUBMODULE_UPDATE_REBASE: rebase the current branch onto the
  *                                commit recorded in the superproject.
  * @GGIT_SUBMODULE_UPDATE_MERGE: merge the commit recorded in the
  *                               superproject into the current branch.
  * @GGIT_SUBMODULE_UPDATE_NONE: do not update this submodule.
+ * @GGIT_SUBMODULE_UPDATE_DEFAULT: not used except as static initializer
+ * when we don't want any particular update rule to be specified.
  *
  * Describes how a submodule should be updated.
  */
 typedef enum {
-	GGIT_SUBMODULE_UPDATE_RESET    = -1,
 	GGIT_SUBMODULE_UPDATE_CHECKOUT = 1,
 	GGIT_SUBMODULE_UPDATE_REBASE   = 2,
 	GGIT_SUBMODULE_UPDATE_MERGE    = 3,
-	GGIT_SUBMODULE_UPDATE_NONE     = 4
+	GGIT_SUBMODULE_UPDATE_NONE     = 4,
+
+	GGIT_SUBMODULE_UPDATE_DEFAULT = 0
 } GgitSubmoduleUpdate;
 
 /**
