@@ -928,6 +928,22 @@ typedef enum {
 } GgitSubmoduleIgnore;
 
 /**
+ * GgitSubmoduleRecurse:
+ * @GGIT_SUBMODULE_RECURSE_NO: do no recurse into submodules.
+ * @GGIT_SUBMODULE_RECURSE_YES: recurse into submodules.
+ * @GGIT_SUBMODULE_RECURSE_ONDEMAND: recurse into submodules only when
+ * commit not already in local clone.
+ *
+ * Options for submodule recurse.
+ * Represents the value of `submodule.$name.fetchRecurseSubmodules`
+ */
+typedef enum {
+	GGIT_SUBMODULE_RECURSE_NO = 0,
+	GGIT_SUBMODULE_RECURSE_YES = 1,
+	GGIT_SUBMODULE_RECURSE_ONDEMAND = 2
+} GgitSubmoduleRecurse;
+
+/**
  * GgitSubmoduleStatus:
  * FIXME
  */
