@@ -2049,6 +2049,41 @@ ggit_repository_submodule_foreach (GgitRepository        *repository,
 }
 
 /**
+ * ggit_repository_set_submodule_url:
+ * @repository: a #GgitRepository.
+ * @name: the name of the submodule to configure.
+ * @url: URL that should be used for the submodule.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Sets the URL for the submodule in the configuration.
+ *
+ * After calling this, you may wish to call `git_submodule_sync()` to
+ * write the changes to the checked out submodule repository.
+ */
+void
+ggit_repository_set_submodule_url (GgitRepository  *repository,
+                                   const gchar     *name,
+                                   const gchar     *url,
+                                   GError         **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (name != NULL);
+	g_return_if_fail (url != NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_submodule_set_url (_ggit_native_get (repository),
+	                             name,
+	                             url);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_reset:
  * @repository: a #GgitRepository.
  * @target: the target #GgitObject which is a commit or a tag.

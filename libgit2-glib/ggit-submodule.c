@@ -185,40 +185,6 @@ ggit_submodule_get_url (GgitSubmodule *submodule)
 }
 
 /**
- * ggit_submodule_set_url:
- * @submodule: a #GgitSubmodule.
- * @url: URL that should be used for the submodule.
- * @error: a #GError for error reporting, or %NULL.
- *
- * Sets the URL for the submodule.
- *
- * This sets the URL in memory for the submodule. This will be used for
- * any following submodule actions while this submodule data is in memory.
- *
- * After calling this, you may wish to call ggit_submodule_save() to write
- * the changes back to the ".gitmodules" file and ggit_submodule_sync() to
- * write the changes to the checked out submodule repository.
- */
-void
-ggit_submodule_set_url (GgitSubmodule       *submodule,
-                        const gchar         *url,
-                        GError             **error)
-{
-	gint ret;
-
-	g_return_if_fail (submodule != NULL);
-	g_return_if_fail (error == NULL || *error == NULL);
-
-	ret = git_submodule_set_url (submodule->submodule,
-	                             url);
-
-	if (ret != GIT_OK)
-	{
-		_ggit_error_set (error, ret);
-	}
-}
-
-/**
  * ggit_submodule_get_index_id:
  * @submodule: a #GgitSubmodule.
  *

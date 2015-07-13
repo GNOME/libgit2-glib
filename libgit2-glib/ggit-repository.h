@@ -310,6 +310,11 @@ gboolean            ggit_repository_submodule_foreach  (GgitRepository          
                                                         gpointer                 user_data,
                                                         GError                 **error);
 
+void                ggit_repository_set_submodule_url  (GgitRepository          *repository,
+                                                        const gchar             *name,
+                                                        const gchar             *url,
+                                                        GError                 **error);
+
 void                ggit_repository_reset              (GgitRepository          *repository,
                                                         GgitObject              *target,
                                                         GgitResetType            reset_type,
