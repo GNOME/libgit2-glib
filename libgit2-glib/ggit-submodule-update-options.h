@@ -62,17 +62,13 @@ GgitCheckoutOptions   *ggit_submodule_update_options_get_checkout_options  (Ggit
 void                   ggit_submodule_update_options_set_checkout_options  (GgitSubmoduleUpdateOptions *options,
                                                                             GgitCheckoutOptions        *checkout_options);
 
-GgitRemoteCallbacks   *ggit_submodule_update_options_get_remote_callbacks  (GgitSubmoduleUpdateOptions *options);
-void                   ggit_submodule_update_options_set_remote_callbacks  (GgitSubmoduleUpdateOptions *options,
-                                                                            GgitRemoteCallbacks        *remote_callbacks);
+GgitFetchOptions      *ggit_submodule_update_options_get_fetch_options     (GgitSubmoduleUpdateOptions *options);
+void                   ggit_submodule_update_options_set_fetch_options     (GgitSubmoduleUpdateOptions *options,
+                                                                            GgitFetchOptions           *fetch_options);
 
 GgitCheckoutStrategy   ggit_submodule_update_options_get_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options);
 void                   ggit_submodule_update_options_set_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options,
                                                                                   GgitCheckoutStrategy        checkout_strategy);
-
-GgitSignature         *ggit_submodule_update_options_get_signature         (GgitSubmoduleUpdateOptions *options);
-void                   ggit_submodule_update_options_set_signature         (GgitSubmoduleUpdateOptions *options,
-                                                                            GgitSignature              *signature);
 
 G_END_DECLS
 

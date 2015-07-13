@@ -21,8 +21,7 @@
 #include "ggit-submodule-update-options.h"
 #include "ggit-enum-types.h"
 #include "ggit-checkout-options.h"
-#include "ggit-remote-callbacks.h"
-#include "ggit-signature.h"
+#include "ggit-fetch-options.h"
 
 #define GGIT_SUBMODULE_UPDATE_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, GgitSubmoduleUpdateOptionsPrivate))
 
@@ -31,8 +30,7 @@ struct _GgitSubmoduleUpdateOptionsPrivate
 	git_submodule_update_options options;
 
 	GgitCheckoutOptions *checkout_options;
-	GgitRemoteCallbacks *remote_callbacks;
-	GgitSignature *signature;
+	GgitFetchOptions *fetch_options;
 };
 
 G_DEFINE_TYPE (GgitSubmoduleUpdateOptions, ggit_submodule_update_options, G_TYPE_OBJECT)
@@ -41,9 +39,8 @@ enum
 {
 	PROP_0,
 	PROP_CHECKOUT_OPTIONS,
-	PROP_REMOTE_CALLBACKS,
+	PROP_FETCH_OPTIONS,
 	PROP_CLONE_CHECKOUT_STRATEGY,
-	PROP_SIGNATURE
 };
 
 static void
@@ -54,8 +51,7 @@ ggit_submodule_update_options_finalize (GObject *object)
 	options = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
 
 	g_clear_object (&options->priv->checkout_options);
-	g_clear_object (&options->priv->remote_callbacks);
-	g_clear_object (&options->priv->signature);
+	g_clear_pointer (&options->priv->fetch_options, ggit_fetch_options_free);
 
 	G_OBJECT_CLASS (ggit_submodule_update_options_parent_class)->finalize (object);
 }
@@ -74,17 +70,13 @@ ggit_submodule_update_options_set_property (GObject      *object,
 		ggit_submodule_update_options_set_checkout_options (self,
 		                                                    g_value_get_object (value));
 		break;
-	case PROP_REMOTE_CALLBACKS:
-		ggit_submodule_update_options_set_remote_callbacks (self,
-		                                                    g_value_get_object (value));
+	case PROP_FETCH_OPTIONS:
+		ggit_submodule_update_options_set_fetch_options (self,
+		                                                 g_value_get_boxed (value));
 		break;
 	case PROP_CLONE_CHECKOUT_STRATEGY:
 		ggit_submodule_update_options_set_clone_checkout_strategy (self,
 		                                                           g_value_get_flags (value));
-		break;
-	case PROP_SIGNATURE:
-		ggit_submodule_update_options_set_signature (self,
-		                                             g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -105,15 +97,12 @@ ggit_submodule_update_options_get_property (GObject    *object,
 	case PROP_CHECKOUT_OPTIONS:
 		g_value_set_object (value, self->priv->checkout_options);
 		break;
-	case PROP_REMOTE_CALLBACKS:
-		g_value_set_object (value, self->priv->remote_callbacks);
+	case PROP_FETCH_OPTIONS:
+		g_value_set_boxed (value, self->priv->fetch_options);
 		break;
 	case PROP_CLONE_CHECKOUT_STRATEGY:
 		g_value_set_flags (value,
 		                   ggit_submodule_update_options_get_clone_checkout_strategy (self));
-		break;
-	case PROP_SIGNATURE:
-		g_value_set_object (value, self->priv->signature);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -143,11 +132,11 @@ ggit_submodule_update_options_class_init (GgitSubmoduleUpdateOptionsClass *klass
 	                                                      G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
-	                                 PROP_REMOTE_CALLBACKS,
-	                                 g_param_spec_object ("remote-callbacks",
-	                                                      "Remote Callbacks",
-	                                                      "Remote callbacks",
-	                                                      GGIT_TYPE_REMOTE_CALLBACKS,
+	                                 PROP_FETCH_OPTIONS,
+	                                 g_param_spec_object ("fetch-options",
+	                                                      "Fetch options",
+	                                                      "Fetch options",
+	                                                      GGIT_TYPE_FETCH_OPTIONS,
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_STATIC_STRINGS));
 
@@ -160,15 +149,6 @@ ggit_submodule_update_options_class_init (GgitSubmoduleUpdateOptionsClass *klass
 	                                                     GGIT_CHECKOUT_NONE,
 	                                                     G_PARAM_READWRITE |
 	                                                     G_PARAM_STATIC_STRINGS));
-
-	g_object_class_install_property (object_class,
-	                                 PROP_SIGNATURE,
-	                                 g_param_spec_object ("signature",
-	                                                      "Signature",
-	                                                      "Signature",
-	                                                      GGIT_TYPE_SIGNATURE,
-	                                                      G_PARAM_READWRITE |
-	                                                      G_PARAM_STATIC_STRINGS));
 }
 
 static void
@@ -267,49 +247,48 @@ ggit_submodule_update_options_set_checkout_options (GgitSubmoduleUpdateOptions *
  * ggit_submodule_update_options_get_remote_callbacks:
  * @options: a #GgitSubmoduleUpdateOptions.
  *
- * Gets the remote callbacks.
+ * Gets the fetch options.
  *
- * Returns: (transfer none): a #GgitRemoteCallbacks.
+ * Returns: (transfer none): a #GgitFetchOptions.
  *
  **/
-GgitRemoteCallbacks *
-ggit_submodule_update_options_get_remote_callbacks (GgitSubmoduleUpdateOptions *options)
+GgitFetchOptions *
+ggit_submodule_update_options_get_fetch_options (GgitSubmoduleUpdateOptions *options)
 {
 	g_return_val_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), NULL);
 
-	return options->priv->remote_callbacks;
+	return options->priv->fetch_options;
 
 }
 
 /**
- * ggit_submodule_update_options_set_remote_callbacks:
+ * ggit_submodule_update_options_set_fetch_options:
  * @options: a #GgitSubmoduleUpdateOptions.
- * @remote_callbacks: (allow-none): a #GgitRemoteCallbacks.
+ * @fetch_options: (allow-none): a #GgitFetchOptions.
  *
- * Set the remote callbacks.
+ * Sets the fetch options.
  **/
 void
-ggit_submodule_update_options_set_remote_callbacks (GgitSubmoduleUpdateOptions *options,
-                                                    GgitRemoteCallbacks        *remote_callbacks)
+ggit_submodule_update_options_set_fetch_options (GgitSubmoduleUpdateOptions *options,
+                                                 GgitFetchOptions           *fetch_options)
 {
 	g_return_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
-	g_return_if_fail (remote_callbacks == NULL || GGIT_IS_REMOTE_CALLBACKS (remote_callbacks));
 
-	if (options->priv->remote_callbacks)
+	if (options->priv->fetch_options)
 	{
-		g_object_unref (options->priv->remote_callbacks);
-		options->priv->remote_callbacks = NULL;
+		ggit_fetch_options_free (options->priv->fetch_options);
+		options->priv->fetch_options = NULL;
 
-		git_remote_init_callbacks (&options->priv->options.remote_callbacks, GIT_REMOTE_CALLBACKS_VERSION);
+		git_fetch_init_options (&options->priv->options.fetch_opts, GIT_FETCH_OPTIONS_VERSION);
 	}
 
-	if (remote_callbacks)
+	if (fetch_options)
 	{
-		options->priv->remote_callbacks = g_object_ref (remote_callbacks);
-		options->priv->options.remote_callbacks = *_ggit_remote_callbacks_get_native (options->priv->remote_callbacks);
+		options->priv->fetch_options = ggit_fetch_options_copy (fetch_options);
+		options->priv->options.fetch_opts = *_ggit_fetch_options_get_fetch_options (options->priv->fetch_options);
 	}
 
-	g_object_notify (G_OBJECT (options), "remote-callbacks");
+	g_object_notify (G_OBJECT (options), "fetch-options");
 }
 
 /**
@@ -348,55 +327,6 @@ ggit_submodule_update_options_set_clone_checkout_strategy (GgitSubmoduleUpdateOp
 
 		g_object_notify (G_OBJECT (options), "clone-checkout-strategy");
 	}
-}
-
-/**
- * ggit_submodule_update_options_get_signature:
- * @options: a #GgitSubmoduleUpdateOptions.
- *
- * Gets the identity used when updating the reflog or %NULL to
- * use the default signature using the config.
- *
- * Returns: (transfer none): a #GgitSignature or %NULL.
- *
- **/
-GgitSignature *
-ggit_submodule_update_options_get_signature (GgitSubmoduleUpdateOptions *options)
-{
-	g_return_val_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), NULL);
-
-	return options->priv->signature;
-}
-
-/**
- * ggit_submodule_update_options_set_signature:
- * @options: a #GgitSubmoduleUpdateOptions.
- * @signature: (allow-none): a #GgitSignature.
- *
- * Sets the identity used when updating the reflog. Use %NULL to
- * use the default signature using the config.
- **/
-void
-ggit_submodule_update_options_set_signature (GgitSubmoduleUpdateOptions *options,
-                                             GgitSignature              *signature)
-{
-	g_return_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
-	g_return_if_fail (signature == NULL || GGIT_IS_SIGNATURE (signature));
-
-	if (options->priv->signature)
-	{
-		g_object_unref (options->priv->signature);
-		options->priv->signature = NULL;
-		options->priv->options.signature = NULL;
-	}
-
-	if (signature)
-	{
-		options->priv->signature = g_object_ref (signature);
-		options->priv->options.signature = _ggit_native_get (signature);
-	}
-
-	g_object_notify (G_OBJECT (options), "signature");
 }
 
 /* ex:set ts=8 noet: */
