@@ -278,13 +278,6 @@ typedef struct _GgitPatch GgitPatch;
 typedef struct _GgitPushOptions GgitPushOptions;
 
 /**
- * GgitRef:
- *
- * Reprensents a git reference.
- */
-typedef struct _GgitRef GgitRef;
-
-/**
  * GgitRefSpec:
  *
  * Reprensents a git reference specification.

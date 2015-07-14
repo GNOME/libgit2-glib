@@ -29,23 +29,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REF			(ggit_ref_get_type ())
-#define GGIT_REF(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REF, GgitRef))
-#define GGIT_REF_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REF, GgitRefClass))
-#define GGIT_IS_REF(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REF))
-#define GGIT_IS_REF_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REF))
-#define GGIT_REF_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REF, GgitRefClass))
-
-typedef struct _GgitRefClass	GgitRefClass;
-
-struct _GgitRef
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/* priv padding */
-	gpointer *_priv;
-};
+#define GGIT_TYPE_REF (ggit_ref_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitRef, ggit_ref, GGIT, REF, GgitNative)
 
 /**
  * GgitRefClass:
@@ -58,8 +43,6 @@ struct _GgitRefClass
 	/*< private >*/
 	GgitNativeClass parent_class;
 };
-
-GType           ggit_ref_get_type           (void) G_GNUC_CONST;
 
 GgitRef        *_ggit_ref_wrap              (git_reference  *ref,
                                              gboolean        owned);
