@@ -30,37 +30,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CONFIG		(ggit_config_get_type ())
-#define GGIT_CONFIG(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CONFIG, GgitConfig))
-#define GGIT_CONFIG_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CONFIG, GgitConfigClass))
-#define GGIT_IS_CONFIG(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CONFIG))
-#define GGIT_IS_CONFIG_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CONFIG))
-#define GGIT_CONFIG_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CONFIG, GgitConfigClass))
-
-typedef struct _GgitConfigClass		GgitConfigClass;
-
-struct _GgitConfig
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/* priv padding */
-	gpointer priv;
-};
-
-/**
- * GgitConfigClass:
- * @parent_class: The parent class.
- *
- * The class structure for #GgitConfigClass.
- */
-struct _GgitConfigClass
-{
-	/*< private >*/
-	GgitNativeClass parent_class;
-};
-
-GType        ggit_config_get_type      (void) G_GNUC_CONST;
+#define GGIT_TYPE_CONFIG (ggit_config_get_type ())
+G_DECLARE_FINAL_TYPE (GgitConfig, ggit_config, GGIT, CONFIG, GgitNative)
 
 GgitConfig  *ggit_config_new           (void);
 

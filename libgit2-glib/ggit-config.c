@@ -25,7 +25,15 @@
 
 #include "ggit-error.h"
 
-#define GGIT_CONFIG_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_CONFIG, GgitConfigPrivate))
+/**
+ * GgitConfig:
+ *
+ * Represents a git configuration.
+ */
+struct _GgitConfig
+{
+	GgitNative parent_instance;
+};
 
 G_DEFINE_TYPE (GgitConfig, ggit_config, GGIT_TYPE_NATIVE)
 

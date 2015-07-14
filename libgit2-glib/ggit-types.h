@@ -61,13 +61,6 @@ typedef struct _GgitCommit GgitCommit;
 typedef struct _GgitCommitParents GgitCommitParents;
 
 /**
- * GgitConfig:
- *
- * Represents a git configuration.
- */
-typedef struct _GgitConfig GgitConfig;
-
-/**
  * GgitConfigEntry:
  *
  * Represents a git configuration entry.
