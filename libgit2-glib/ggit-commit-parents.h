@@ -25,6 +25,7 @@
 #include <glib-object.h>
 
 #include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-commit.h>
 
 G_BEGIN_DECLS
 

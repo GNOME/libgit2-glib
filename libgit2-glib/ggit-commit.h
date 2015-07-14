@@ -30,24 +30,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_COMMIT		(ggit_commit_get_type ())
-#define GGIT_COMMIT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_COMMIT, GgitCommit))
-#define GGIT_COMMIT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_COMMIT, GgitCommitClass))
-#define GGIT_IS_COMMIT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_COMMIT))
-#define GGIT_IS_COMMIT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_COMMIT))
-#define GGIT_COMMIT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_COMMIT, GgitCommitClass))
-
-typedef struct _GgitCommitClass		GgitCommitClass;
-typedef struct _GgitCommitPrivate	GgitCommitPrivate;
-
-struct _GgitCommit
-{
-	/*< private >*/
-	GgitObject parent;
-
-	/* priv padding */
-	GgitCommitPrivate *priv;
-};
+#define GGIT_TYPE_COMMIT (ggit_commit_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCommit, ggit_commit, GGIT, COMMIT, GgitObject)
 
 /**
  * GgitCommitClass:
@@ -60,8 +44,6 @@ struct _GgitCommitClass
 	/*< private >*/
 	GgitObjectClass parent_class;
 };
-
-GType                ggit_commit_get_type             (void) G_GNUC_CONST;
 
 GgitCommit          *_ggit_commit_wrap                (git_commit        *commit,
                                                        gboolean           owned);

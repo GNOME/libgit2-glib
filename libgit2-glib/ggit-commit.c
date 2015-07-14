@@ -28,23 +28,30 @@
 #include "ggit-tree.h"
 #include "ggit-commit-parents.h"
 
-#define GGIT_COMMIT_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT, GgitCommitPrivate))
+/**
+ * GgitCommit:
+ *
+ * Represents a commit object.
+ */
 
-struct _GgitCommitPrivate
+typedef struct _GgitCommitPrivate
 {
 	gchar *message_utf8;
 	gchar *subject_utf8;
-};
+} GgitCommitPrivate;
 
-G_DEFINE_TYPE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitCommit, ggit_commit, GGIT_TYPE_OBJECT)
 
 static void
 ggit_commit_finalize (GObject *object)
 {
 	GgitCommit *commit = GGIT_COMMIT (object);
+	GgitCommitPrivate *priv;
 
-	g_free (commit->priv->message_utf8);
-	g_free (commit->priv->subject_utf8);
+	priv = ggit_commit_get_instance_private (commit);
+
+	g_free (priv->message_utf8);
+	g_free (priv->subject_utf8);
 
 	G_OBJECT_CLASS (ggit_commit_parent_class)->finalize (object);
 }
@@ -55,14 +62,11 @@ ggit_commit_class_init (GgitCommitClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ggit_commit_finalize;
-
-	g_type_class_add_private (object_class, sizeof (GgitCommitPrivate));
 }
 
 static void
 ggit_commit_init (GgitCommit *self)
 {
-	self->priv = GGIT_COMMIT_GET_PRIVATE (self);
 }
 
 GgitCommit *
@@ -121,12 +125,15 @@ ggit_commit_get_message_encoding (GgitCommit *commit)
 static void
 ensure_message_utf8 (GgitCommit *commit)
 {
+	GgitCommitPrivate *priv;
 	git_commit *c;
 	const gchar *msg;
 	const gchar *encoding;
 	const gchar *ptr;
 
-	if (commit->priv->message_utf8)
+	priv = ggit_commit_get_instance_private (commit);
+
+	if (priv->message_utf8)
 	{
 		return;
 	}
@@ -136,17 +143,17 @@ ensure_message_utf8 (GgitCommit *commit)
 
 	encoding = ggit_commit_get_message_encoding (commit);
 
-	commit->priv->message_utf8 = ggit_convert_utf8 (msg,
-	                                                -1,
-	                                                encoding);
+	priv->message_utf8 = ggit_convert_utf8 (msg,
+	                                        -1,
+	                                        encoding);
 
 	/* Extract the subject */
-	ptr = g_utf8_strchr (commit->priv->message_utf8, -1, '\n');
+	ptr = g_utf8_strchr (priv->message_utf8, -1, '\n');
 
 	if (ptr != NULL)
 	{
-		commit->priv->subject_utf8 = g_strndup (commit->priv->message_utf8,
-		                                        ptr - commit->priv->message_utf8);
+		priv->subject_utf8 = g_strndup (priv->message_utf8,
+		                                ptr - priv->message_utf8);
 	}
 }
 
@@ -162,11 +169,15 @@ ensure_message_utf8 (GgitCommit *commit)
 const gchar *
 ggit_commit_get_message (GgitCommit *commit)
 {
+	GgitCommitPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+
+	priv = ggit_commit_get_instance_private (commit);
 
 	ensure_message_utf8 (commit);
 
-	return commit->priv->message_utf8;
+	return priv->message_utf8;
 }
 
 /**
@@ -182,17 +193,21 @@ ggit_commit_get_message (GgitCommit *commit)
 const gchar *
 ggit_commit_get_subject (GgitCommit *commit)
 {
+	GgitCommitPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
+
+	priv = ggit_commit_get_instance_private (commit);
 
 	ensure_message_utf8 (commit);
 
-	if (commit->priv->subject_utf8)
+	if (priv->subject_utf8)
 	{
-		return commit->priv->subject_utf8;
+		return priv->subject_utf8;
 	}
 	else
 	{
-		return commit->priv->message_utf8;
+		return priv->message_utf8;
 	}
 }
 
