@@ -23,6 +23,16 @@
 #include "ggit-signature.h"
 #include "ggit-error.h"
 
+/**
+ * GgitBlame:
+ *
+ * Represents a blame.
+ */
+struct _GgitBlame
+{
+	GgitNative parent_instance;
+};
+
 struct _GgitBlameHunk
 {
 	guint16 lines_in_hunk;

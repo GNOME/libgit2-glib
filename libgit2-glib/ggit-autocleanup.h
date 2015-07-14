@@ -57,7 +57,6 @@ G_BEGIN_DECLS
 #ifndef __GI_SCANNER__
 #if GLIB_CHECK_VERSION (2, 44, 0)
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlame, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlameHunk, ggit_blame_hunk_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlameOptions, ggit_blame_options_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlob, g_object_unref)

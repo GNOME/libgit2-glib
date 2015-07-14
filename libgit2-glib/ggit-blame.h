@@ -28,30 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_BLAME			(ggit_blame_get_type ())
-#define GGIT_BLAME(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_BLAME, GgitBlame))
-#define GGIT_BLAME_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_BLAME, GgitBlame const))
-#define GGIT_BLAME_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_BLAME, GgitBlameClass))
-#define GGIT_IS_BLAME(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_BLAME))
-#define GGIT_IS_BLAME_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_BLAME))
-#define GGIT_BLAME_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_BLAME, GgitBlameClass))
-
-typedef struct _GgitBlameClass		GgitBlameClass;
-
-struct _GgitBlame
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/* priv padding */
-	gpointer priv;
-};
-
-struct _GgitBlameClass
-{
-	/*< private >*/
-	GgitNativeClass parent_class;
-};
+#define GGIT_TYPE_BLAME (ggit_blame_get_type ())
+G_DECLARE_FINAL_TYPE (GgitBlame, ggit_blame, GGIT, BLAME, GgitNative)
 
 GType          ggit_blame_hunk_get_type (void) G_GNUC_CONST;
 GgitBlameHunk *ggit_blame_hunk_ref      (GgitBlameHunk *blame_hunk);
@@ -69,8 +47,6 @@ GgitSignature *ggit_blame_hunk_get_orig_signature          (GgitBlameHunk *blame
 const gchar   *ggit_blame_hunk_get_orig_path               (GgitBlameHunk *blame_hunk);
 
 gboolean       ggit_blame_hunk_is_boundary                 (GgitBlameHunk *blame_hunk);
-
-GType ggit_blame_get_type (void) G_GNUC_CONST;
 
 GgitBlame     *_ggit_blame_wrap             (git_blame *blame);
 

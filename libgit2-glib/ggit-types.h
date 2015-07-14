@@ -194,13 +194,6 @@ typedef struct _GgitDiffOptions GgitDiffOptions;
 typedef struct _GgitDiffSimilarityMetric GgitDiffSimilarityMetric;
 
 /**
- * GgitBlame:
- *
- * Represents a blame.
- */
-typedef struct _GgitBlame GgitBlame;
-
-/**
  * GgitBlameHunk:
  *
  * Represents a blame hunk.
