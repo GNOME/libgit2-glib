@@ -28,23 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CHECKOUT_OPTIONS		(ggit_checkout_options_get_type ())
-#define GGIT_CHECKOUT_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CHECKOUT_OPTIONS, GgitCheckoutOptions))
-#define GGIT_CHECKOUT_OPTIONS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CHECKOUT_OPTIONS, GgitCheckoutOptions const))
-#define GGIT_CHECKOUT_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CHECKOUT_OPTIONS, GgitCheckoutOptionsClass))
-#define GGIT_IS_CHECKOUT_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CHECKOUT_OPTIONS))
-#define GGIT_IS_CHECKOUT_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CHECKOUT_OPTIONS))
-#define GGIT_CHECKOUT_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CHECKOUT_OPTIONS, GgitCheckoutOptionsClass))
-
-typedef struct _GgitCheckoutOptionsClass	GgitCheckoutOptionsClass;
-typedef struct _GgitCheckoutOptionsPrivate	GgitCheckoutOptionsPrivate;
-
-struct _GgitCheckoutOptions
-{
-	GObject parent;
-
-	GgitCheckoutOptionsPrivate *priv;
-};
+#define GGIT_TYPE_CHECKOUT_OPTIONS (ggit_checkout_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCheckoutOptions, ggit_checkout_options, GGIT, CHECKOUT_OPTIONS, GObject)
 
 struct _GgitCheckoutOptionsClass
 {
@@ -62,8 +47,6 @@ struct _GgitCheckoutOptionsClass
 	                  gsize                    completed_steps,
 	                  gsize                    total_steps);
 };
-
-GType                  ggit_checkout_options_get_type (void) G_GNUC_CONST;
 
 const git_checkout_options *
                       _ggit_checkout_options_get_checkout_options (

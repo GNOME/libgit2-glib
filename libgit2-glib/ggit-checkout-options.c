@@ -1,11 +1,35 @@
+/*
+ * ggit-checkout-options.c
+ * This file is part of libgit2-glib
+ *
+ * Copyright (C) 2013 - Ignacio Casal Quinteiro
+ *
+ * libgit2-glib is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * libgit2-glib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "ggit-checkout-options.h"
 #include "ggit-enum-types.h"
 #include "ggit-tree.h"
 #include "ggit-diff-file.h"
 
-#define GGIT_CHECKOUT_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_CHECKOUT_OPTIONS, GgitCheckoutOptionsPrivate))
+/**
+ * GgitCheckoutOptions:
+ *
+ * Represents the options used when doign a checkout.
+ */
 
-struct _GgitCheckoutOptionsPrivate
+typedef struct _GgitCheckoutOptionsPrivate
 {
 	git_checkout_options options;
 
@@ -16,9 +40,9 @@ struct _GgitCheckoutOptionsPrivate
 	gchar *ancestor_label;
 	gchar *our_label;
 	gchar *their_label;
-};
+} GgitCheckoutOptionsPrivate;
 
-G_DEFINE_TYPE (GgitCheckoutOptions, ggit_checkout_options, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitCheckoutOptions, ggit_checkout_options, G_TYPE_OBJECT)
 
 enum
 {
@@ -40,16 +64,18 @@ static void
 ggit_checkout_options_finalize (GObject *object)
 {
 	GgitCheckoutOptions *options;
+	GgitCheckoutOptionsPrivate *priv;
 
 	options = GGIT_CHECKOUT_OPTIONS (object);
+	priv = ggit_checkout_options_get_instance_private (options);
 
-	g_strfreev (options->priv->paths);
-	g_clear_object (&options->priv->baseline);
+	g_strfreev (priv->paths);
+	g_clear_object (&priv->baseline);
 
-	g_free (options->priv->target_directory);
-	g_free (options->priv->ancestor_label);
-	g_free (options->priv->our_label);
-	g_free (options->priv->their_label);
+	g_free (priv->target_directory);
+	g_free (priv->ancestor_label);
+	g_free (priv->our_label);
+	g_free (priv->their_label);
 
 	G_OBJECT_CLASS (ggit_checkout_options_parent_class)->finalize (object);
 }
@@ -60,46 +86,49 @@ ggit_checkout_options_set_property (GObject      *object,
                                     const GValue *value,
                                     GParamSpec   *pspec)
 {
-	GgitCheckoutOptions *self = GGIT_CHECKOUT_OPTIONS (object);
+	GgitCheckoutOptions *options = GGIT_CHECKOUT_OPTIONS (object);
+	GgitCheckoutOptionsPrivate *priv;
+
+	priv = ggit_checkout_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_STRATEGY:
-		self->priv->options.checkout_strategy = g_value_get_flags (value);
+		priv->options.checkout_strategy = g_value_get_flags (value);
 		break;
 	case PROP_DISABLE_FILTERS:
-		self->priv->options.disable_filters = g_value_get_boolean (value);
+		priv->options.disable_filters = g_value_get_boolean (value);
 		break;
 	case PROP_DIR_MODE:
-		self->priv->options.dir_mode = g_value_get_uint (value);
+		priv->options.dir_mode = g_value_get_uint (value);
 		break;
 	case PROP_FILE_MODE:
-		self->priv->options.file_mode = g_value_get_uint (value);
+		priv->options.file_mode = g_value_get_uint (value);
 		break;
 	case PROP_FILE_OPEN_FLAGS:
-		self->priv->options.file_open_flags = g_value_get_int (value);
+		priv->options.file_open_flags = g_value_get_int (value);
 		break;
 	case PROP_NOTIFY_FLAGS:
-		self->priv->options.notify_flags = g_value_get_flags (value);
+		priv->options.notify_flags = g_value_get_flags (value);
 		break;
 	case PROP_BASELINE:
-		ggit_checkout_options_set_baseline (self,
+		ggit_checkout_options_set_baseline (options,
 		                                    g_value_get_object (value));
 		break;
 	case PROP_TARGET_DIRECTORY:
-		ggit_checkout_options_set_target_directory (self,
+		ggit_checkout_options_set_target_directory (options,
 		                                            g_value_get_string (value));
 		break;
 	case PROP_ANCESTOR_LABEL:
-		ggit_checkout_options_set_ancestor_label (self,
+		ggit_checkout_options_set_ancestor_label (options,
 		                                          g_value_get_string (value));
 		break;
 	case PROP_OUR_LABEL:
-		ggit_checkout_options_set_our_label (self,
+		ggit_checkout_options_set_our_label (options,
 		                                     g_value_get_string (value));
 		break;
 	case PROP_THEIR_LABEL:
-		ggit_checkout_options_set_their_label (self,
+		ggit_checkout_options_set_their_label (options,
 		                                       g_value_get_string (value));
 		break;
 	default:
@@ -114,42 +143,45 @@ ggit_checkout_options_get_property (GObject    *object,
                                     GValue     *value,
                                     GParamSpec *pspec)
 {
-	GgitCheckoutOptions *self = GGIT_CHECKOUT_OPTIONS (object);
+	GgitCheckoutOptions *options = GGIT_CHECKOUT_OPTIONS (object);
+	GgitCheckoutOptionsPrivate *priv;
+
+	priv = ggit_checkout_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_STRATEGY:
-		g_value_set_flags (value, self->priv->options.checkout_strategy);
+		g_value_set_flags (value, priv->options.checkout_strategy);
 		break;
 	case PROP_DISABLE_FILTERS:
-		g_value_set_boolean (value, self->priv->options.disable_filters);
+		g_value_set_boolean (value, priv->options.disable_filters);
 		break;
 	case PROP_DIR_MODE:
-		g_value_set_uint (value, self->priv->options.dir_mode);
+		g_value_set_uint (value, priv->options.dir_mode);
 		break;
 	case PROP_FILE_MODE:
-		g_value_set_uint (value, self->priv->options.file_mode);
+		g_value_set_uint (value, priv->options.file_mode);
 		break;
 	case PROP_FILE_OPEN_FLAGS:
-		g_value_set_int (value, self->priv->options.file_open_flags);
+		g_value_set_int (value, priv->options.file_open_flags);
 		break;
 	case PROP_NOTIFY_FLAGS:
-		g_value_set_flags (value, self->priv->options.notify_flags);
+		g_value_set_flags (value, priv->options.notify_flags);
 		break;
 	case PROP_BASELINE:
-		g_value_set_object (value, self->priv->baseline);
+		g_value_set_object (value, priv->baseline);
 		break;
 	case PROP_TARGET_DIRECTORY:
-		g_value_set_string (value, self->priv->target_directory);
+		g_value_set_string (value, priv->target_directory);
 		break;
 	case PROP_ANCESTOR_LABEL:
-		g_value_set_string (value, self->priv->ancestor_label);
+		g_value_set_string (value, priv->ancestor_label);
 		break;
 	case PROP_OUR_LABEL:
-		g_value_set_string (value, self->priv->our_label);
+		g_value_set_string (value, priv->our_label);
 		break;
 	case PROP_THEIR_LABEL:
-		g_value_set_string (value, self->priv->their_label);
+		g_value_set_string (value, priv->their_label);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -209,20 +241,21 @@ notify_callback_wrapper (git_checkout_notify_t  flags,
 static void
 ggit_checkout_options_constructed (GObject *object)
 {
-	GgitCheckoutOptions *options;
+	GgitCheckoutOptions *options = GGIT_CHECKOUT_OPTIONS (object);
+	GgitCheckoutOptionsPrivate *priv;
 
-	options = GGIT_CHECKOUT_OPTIONS (object);
+	priv = ggit_checkout_options_get_instance_private (options);
 
 	if (GGIT_CHECKOUT_OPTIONS_GET_CLASS (object)->progress != NULL)
 	{
-		options->priv->options.progress_cb = progress_callback_wrapper;
-		options->priv->options.progress_payload = options;
+		priv->options.progress_cb = progress_callback_wrapper;
+		priv->options.progress_payload = options;
 	}
 
 	if (GGIT_CHECKOUT_OPTIONS_GET_CLASS (object)->notify != NULL)
 	{
-		options->priv->options.notify_cb = notify_callback_wrapper;
-		options->priv->options.notify_payload = options;
+		priv->options.notify_cb = notify_callback_wrapper;
+		priv->options.notify_payload = options;
 	}
 }
 
@@ -238,8 +271,6 @@ ggit_checkout_options_class_init (GgitCheckoutOptionsClass *klass)
 	object_class->set_property = ggit_checkout_options_set_property;
 
 	object_class->constructed = ggit_checkout_options_constructed;
-
-	g_type_class_add_private (object_class, sizeof (GgitCheckoutOptionsPrivate));
 
 	/**
 	 * GgitCheckoutOptions:strategy: (type GgitCheckoutStrategy):
@@ -360,11 +391,13 @@ ggit_checkout_options_class_init (GgitCheckoutOptionsClass *klass)
 }
 
 static void
-ggit_checkout_options_init (GgitCheckoutOptions *self)
+ggit_checkout_options_init (GgitCheckoutOptions *options)
 {
-	self->priv = GGIT_CHECKOUT_OPTIONS_GET_PRIVATE (self);
+	GgitCheckoutOptionsPrivate *priv;
 
-	git_checkout_init_options (&self->priv->options, GIT_CHECKOUT_OPTIONS_VERSION);
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	git_checkout_init_options (&priv->options, GIT_CHECKOUT_OPTIONS_VERSION);
 }
 
 /**
@@ -384,14 +417,11 @@ ggit_checkout_options_new ()
 const git_checkout_options *
 _ggit_checkout_options_get_checkout_options (GgitCheckoutOptions *options)
 {
-	if (options != NULL)
-	{
-		return &options->priv->options;
-	}
-	else
-	{
-		return NULL;
-	}
+	GgitCheckoutOptionsPrivate *priv;
+
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (options != NULL) ? &priv->options : NULL;
 }
 
 /**
@@ -406,9 +436,13 @@ _ggit_checkout_options_get_checkout_options (GgitCheckoutOptions *options)
 GgitCheckoutStrategy
 ggit_checkout_options_get_strategy (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), 0);
 
-	return (GgitCheckoutStrategy)options->priv->options.checkout_strategy;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (GgitCheckoutStrategy)priv->options.checkout_strategy;
 }
 
 /**
@@ -423,9 +457,13 @@ void
 ggit_checkout_options_set_strategy (GgitCheckoutOptions  *options,
                                     GgitCheckoutStrategy  strategy)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	options->priv->options.checkout_strategy = strategy;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	priv->options.checkout_strategy = strategy;
 	g_object_notify (G_OBJECT (options), "strategy");
 }
 
@@ -441,9 +479,13 @@ ggit_checkout_options_set_strategy (GgitCheckoutOptions  *options,
 gboolean
 ggit_checkout_options_get_disable_filters (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
 
-	return (gboolean)options->priv->options.disable_filters;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (gboolean)priv->options.disable_filters;
 }
 
 /**
@@ -458,9 +500,13 @@ void
 ggit_checkout_options_set_disable_filters (GgitCheckoutOptions *options,
                                            gboolean             disable)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	options->priv->options.disable_filters = (gboolean)disable;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	priv->options.disable_filters = (gboolean)disable;
 	g_object_notify (G_OBJECT (options), "disable-filters");
 }
 
@@ -476,9 +522,13 @@ ggit_checkout_options_set_disable_filters (GgitCheckoutOptions *options,
 guint
 ggit_checkout_options_get_dir_mode (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), 0);
 
-	return (guint)options->priv->options.dir_mode;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (guint)priv->options.dir_mode;
 }
 
 /**
@@ -493,9 +543,13 @@ void
 ggit_checkout_options_set_dir_mode (GgitCheckoutOptions *options,
                                     guint                dir_mode)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	options->priv->options.dir_mode = dir_mode;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	priv->options.dir_mode = dir_mode;
 	g_object_notify (G_OBJECT (options), "dir-mode");
 }
 
@@ -511,9 +565,13 @@ ggit_checkout_options_set_dir_mode (GgitCheckoutOptions *options,
 guint
 ggit_checkout_options_get_file_mode (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), 0);
 
-	return (guint)options->priv->options.file_mode;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (guint)priv->options.file_mode;
 }
 
 /**
@@ -528,9 +586,13 @@ void
 ggit_checkout_options_set_file_mode (GgitCheckoutOptions *options,
                                      guint                file_mode)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	options->priv->options.file_mode = file_mode;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	priv->options.file_mode = file_mode;
 	g_object_notify (G_OBJECT (options), "file-mode");
 }
 
@@ -547,9 +609,13 @@ ggit_checkout_options_set_file_mode (GgitCheckoutOptions *options,
 gint
 ggit_checkout_options_get_file_open_flags (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), 0);
 
-	return options->priv->options.file_open_flags;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return priv->options.file_open_flags;
 }
 
 /**
@@ -565,9 +631,13 @@ void
 ggit_checkout_options_set_file_open_flags (GgitCheckoutOptions *options,
                                            gint                 flags)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	options->priv->options.file_open_flags = flags;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	priv->options.file_open_flags = flags;
 	g_object_notify (G_OBJECT (options), "file-open-flags");
 }
 
@@ -583,9 +653,13 @@ ggit_checkout_options_set_file_open_flags (GgitCheckoutOptions *options,
 GgitCheckoutNotifyFlags
 ggit_checkout_options_get_notify_flags (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), 0);
 
-	return (GgitCheckoutNotifyFlags)options->priv->options.notify_flags;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (GgitCheckoutNotifyFlags)priv->options.notify_flags;
 }
 
 /**
@@ -600,9 +674,13 @@ void
 ggit_checkout_options_set_notify_flags (GgitCheckoutOptions     *options,
                                         GgitCheckoutNotifyFlags  flags)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	options->priv->options.notify_flags = flags;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	priv->options.notify_flags = flags;
 	g_object_notify (G_OBJECT (options), "notify-flags");
 }
 
@@ -618,9 +696,13 @@ ggit_checkout_options_set_notify_flags (GgitCheckoutOptions     *options,
 const gchar * const *
 ggit_checkout_options_get_paths (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), NULL);
 
-	return (const gchar * const *)options->priv->paths;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return (const gchar * const *)priv->paths;
 }
 
 /**
@@ -636,13 +718,17 @@ void
 ggit_checkout_options_set_paths (GgitCheckoutOptions *options,
                                  const gchar * const *paths)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	g_strfreev (options->priv->paths);
+	priv = ggit_checkout_options_get_instance_private (options);
 
-	options->priv->paths = g_strdupv ((gchar **)paths);
-	options->priv->options.paths.strings = options->priv->paths;
-	options->priv->options.paths.count = g_strv_length (options->priv->paths);
+	g_strfreev (priv->paths);
+
+	priv->paths = g_strdupv ((gchar **)paths);
+	priv->options.paths.strings = priv->paths;
+	priv->options.paths.count = g_strv_length (priv->paths);
 
 	g_object_notify (G_OBJECT (options), "paths");
 }
@@ -659,9 +745,13 @@ ggit_checkout_options_set_paths (GgitCheckoutOptions *options,
 GgitTree *
 ggit_checkout_options_get_baseline (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), NULL);
 
-	return options->priv->baseline;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return priv->baseline;
 }
 
 /**
@@ -677,23 +767,27 @@ void
 ggit_checkout_options_set_baseline (GgitCheckoutOptions *options,
                                     GgitTree            *tree)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 	g_return_if_fail (tree == NULL || GGIT_IS_TREE (tree));
 
-	if (options->priv->baseline)
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	if (priv->baseline)
 	{
-		g_object_unref (options->priv->baseline);
+		g_object_unref (priv->baseline);
 	}
 
 	if (tree)
 	{
-		options->priv->baseline = g_object_ref (tree);
-		options->priv->options.baseline = _ggit_native_get (tree);
+		priv->baseline = g_object_ref (tree);
+		priv->options.baseline = _ggit_native_get (tree);
 	}
 	else
 	{
-		options->priv->baseline = NULL;
-		options->priv->options.baseline = NULL;
+		priv->baseline = NULL;
+		priv->options.baseline = NULL;
 	}
 
 	g_object_notify (G_OBJECT (options), "baseline");
@@ -711,9 +805,13 @@ ggit_checkout_options_set_baseline (GgitCheckoutOptions *options,
 const gchar *
 ggit_checkout_options_get_target_directory (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), NULL);
 
-	return options->priv->target_directory;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return priv->target_directory;
 }
 
 /**
@@ -728,12 +826,16 @@ void
 ggit_checkout_options_set_target_directory (GgitCheckoutOptions *options,
                                             const gchar         *directory)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	g_free (options->priv->target_directory);
-	options->priv->target_directory = g_strdup (directory);
+	priv = ggit_checkout_options_get_instance_private (options);
 
-	options->priv->options.target_directory = options->priv->target_directory;
+	g_free (priv->target_directory);
+	priv->target_directory = g_strdup (directory);
+
+	priv->options.target_directory = priv->target_directory;
 
 	g_object_notify (G_OBJECT (options), "target-directory");
 }
@@ -750,9 +852,13 @@ ggit_checkout_options_set_target_directory (GgitCheckoutOptions *options,
 const gchar *
 ggit_checkout_options_get_ancestor_label (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), NULL);
 
-	return options->priv->ancestor_label;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return priv->ancestor_label;
 }
 
 /**
@@ -767,12 +873,16 @@ void
 ggit_checkout_options_set_ancestor_label (GgitCheckoutOptions *options,
                                           const gchar         *label)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	g_free (options->priv->ancestor_label);
-	options->priv->ancestor_label = g_strdup (label);
+	priv = ggit_checkout_options_get_instance_private (options);
 
-	options->priv->options.ancestor_label = options->priv->ancestor_label;
+	g_free (priv->ancestor_label);
+	priv->ancestor_label = g_strdup (label);
+
+	priv->options.ancestor_label = priv->ancestor_label;
 
 	g_object_notify (G_OBJECT (options), "ancestor-label");
 }
@@ -789,9 +899,13 @@ ggit_checkout_options_set_ancestor_label (GgitCheckoutOptions *options,
 const gchar *
 ggit_checkout_options_get_our_label (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), NULL);
 
-	return options->priv->our_label;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return priv->our_label;
 }
 
 /**
@@ -806,12 +920,16 @@ void
 ggit_checkout_options_set_our_label (GgitCheckoutOptions *options,
                                      const gchar         *label)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	g_free (options->priv->our_label);
-	options->priv->our_label = g_strdup (label);
+	priv = ggit_checkout_options_get_instance_private (options);
 
-	options->priv->options.our_label = options->priv->our_label;
+	g_free (priv->our_label);
+	priv->our_label = g_strdup (label);
+
+	priv->options.our_label = priv->our_label;
 
 	g_object_notify (G_OBJECT (options), "our-label");
 }
@@ -828,9 +946,13 @@ ggit_checkout_options_set_our_label (GgitCheckoutOptions *options,
 const gchar *
 ggit_checkout_options_get_their_label (GgitCheckoutOptions *options)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), NULL);
 
-	return options->priv->their_label;
+	priv = ggit_checkout_options_get_instance_private (options);
+
+	return priv->their_label;
 }
 
 /**
@@ -845,12 +967,16 @@ void
 ggit_checkout_options_set_their_label (GgitCheckoutOptions *options,
                                        const gchar         *label)
 {
+	GgitCheckoutOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options));
 
-	g_free (options->priv->their_label);
-	options->priv->their_label = g_strdup (label);
+	priv = ggit_checkout_options_get_instance_private (options);
 
-	options->priv->options.their_label = options->priv->their_label;
+	g_free (priv->their_label);
+	priv->their_label = g_strdup (label);
+
+	priv->options.their_label = priv->their_label;
 
 	g_object_notify (G_OBJECT (options), "their-label");
 }

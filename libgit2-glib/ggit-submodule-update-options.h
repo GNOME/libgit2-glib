@@ -25,6 +25,7 @@
 #include <git2.h>
 
 #include "ggit-types.h"
+#include "ggit-checkout-options.h"
 
 G_BEGIN_DECLS
 
