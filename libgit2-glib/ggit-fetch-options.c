@@ -118,7 +118,7 @@ ggit_fetch_options_new (void)
 }
 
 /**
- * ggit_fetch_options_get_fetch_options:
+ * ggit_fetch_options_get_remote_callbacks:
  * @options: a #GgitFetchOptions.
  *
  * Get the remote callbacks object or %NULL if not set.
@@ -133,9 +133,9 @@ ggit_fetch_options_get_remote_callbacks (GgitFetchOptions *options)
 }
 
 /**
- * ggit_fetch_options_set_fetch_options:
+ * ggit_fetch_options_set_remote_callbacks:
  * @options: a #GgitFetchOptions.
- * @fetch_options: (allow-none): a #GgitFetchOptions or %NULL.
+ * @callbacks: (allow-none): a #GgitRemoteCallbacks or %NULL.
  *
  * Set the fetch options object.
  */

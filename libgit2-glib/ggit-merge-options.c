@@ -81,7 +81,7 @@ ggit_merge_options_free (GgitMergeOptions *merge_options)
 
 /**
  * ggit_merge_options_new:
- * @flags: flags to consider when merging.
+ * @tree_flags: flags to consider when merging.
  * @rename_threshold: similarity to consider a file renamed (default 50).
  * @target_limit: maximum similarity sources to examine
  *                (overrides the `merge.renameLimit` config) (default 200).
