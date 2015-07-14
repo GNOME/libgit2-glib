@@ -257,13 +257,6 @@ typedef struct _GgitMergeOptions GgitMergeOptions;
 typedef struct _GgitNote GgitNote;
 
 /**
- * GgitObject:
- *
- * Represents a generic object in a repository.
- */
-typedef struct _GgitObject GgitObject;
-
-/**
  * GgitOId:
  *
  * Represents a unique ID of any object.

@@ -30,23 +30,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_OBJECT		(ggit_object_get_type ())
-#define GGIT_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_OBJECT, GgitObject))
-#define GGIT_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_OBJECT, GgitObjectClass))
-#define GGIT_IS_OBJECT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_OBJECT))
-#define GGIT_IS_OBJECT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_OBJECT))
-#define GGIT_OBJECT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_OBJECT, GgitObjectClass))
-
-typedef struct _GgitObjectClass		GgitObjectClass;
-
-struct _GgitObject
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/* priv padding */
-	gpointer _priv;
-};
+#define GGIT_TYPE_OBJECT (ggit_object_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitObject, ggit_object, GGIT, OBJECT, GgitNative)
 
 /**
  * GgitObjectClass:
@@ -59,8 +44,6 @@ struct _GgitObjectClass
 	/*< private >*/
 	GgitNativeClass parent_class;
 };
-
-GType            ggit_object_get_type          (void) G_GNUC_CONST;
 
 GgitOId         *ggit_object_get_id            (GgitObject *object);
 

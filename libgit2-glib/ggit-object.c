@@ -23,6 +23,12 @@
 #include "ggit-oid.h"
 #include "ggit-repository.h"
 
+/**
+ * GgitObject:
+ *
+ * Represents a generic object in a repository.
+ */
+
 G_DEFINE_ABSTRACT_TYPE (GgitObject, ggit_object, GGIT_TYPE_NATIVE)
 
 static void

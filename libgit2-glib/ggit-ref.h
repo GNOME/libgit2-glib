@@ -25,6 +25,7 @@
 #include <git2.h>
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-native.h>
+#include <libgit2-glib/ggit-object.h>
 
 G_BEGIN_DECLS
 
