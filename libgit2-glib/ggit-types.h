@@ -26,13 +26,6 @@
 G_BEGIN_DECLS
 
 /**
- * GgitBlob:
- *
- * Represents a blob object.
- */
-typedef struct _GgitBlob GgitBlob;
-
-/**
  * GgitBlobOutputStream:
  *
  * Represents a blob stream object.

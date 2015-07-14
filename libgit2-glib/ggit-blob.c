@@ -21,6 +21,16 @@
 
 #include "ggit-blob.h"
 
+/**
+ * GgitBlob:
+ *
+ * Represents a blob object.
+ */
+struct _GgitBlob
+{
+	GgitObject parent_instance;
+};
+
 G_DEFINE_TYPE (GgitBlob, ggit_blob, GGIT_TYPE_OBJECT)
 
 static void

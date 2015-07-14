@@ -24,6 +24,7 @@
 #include <git2.h>
 #include "ggit-native.h"
 #include "ggit-types.h"
+#include "ggit-blob.h"
 
 G_BEGIN_DECLS
 

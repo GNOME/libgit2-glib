@@ -25,6 +25,7 @@
 #include <gio/gio.h>
 #include <git2.h>
 #include "ggit-types.h"
+#include "ggit-blob.h"
 
 G_BEGIN_DECLS
 
