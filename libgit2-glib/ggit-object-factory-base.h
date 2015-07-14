@@ -27,20 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_OBJECT_FACTORY_BASE			(ggit_object_factory_base_get_type ())
-#define GGIT_OBJECT_FACTORY_BASE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_OBJECT_FACTORY_BASE, GgitObjectFactoryBase))
-#define GGIT_OBJECT_FACTORY_BASE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_OBJECT_FACTORY_BASE, GgitObjectFactoryBaseClass))
-#define GGIT_IS_OBJECT_FACTORY_BASE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_OBJECT_FACTORY_BASE))
-#define GGIT_IS_OBJECT_FACTORY_BASE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_OBJECT_FACTORY_BASE))
-#define GGIT_OBJECT_FACTORY_BASE_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_OBJECT_FACTORY_BASE, GgitObjectFactoryBaseClass))
-
-typedef struct _GgitObjectFactoryBaseClass	GgitObjectFactoryBaseClass;
-
-struct _GgitObjectFactoryBase
-{
-	/*< private >*/
-	GObject parent;
-};
+#define GGIT_TYPE_OBJECT_FACTORY_BASE (ggit_object_factory_base_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitObjectFactoryBase, ggit_object_factory_base, GGIT, OBJECT_FACTORY_BASE, GObject)
 
 /**
  * GgitObjectFactoryBaseClass:
@@ -53,8 +41,6 @@ struct _GgitObjectFactoryBaseClass
 	/*< private >*/
 	GObjectClass parent_class;
 };
-
-GType ggit_object_factory_base_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 

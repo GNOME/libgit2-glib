@@ -21,6 +21,12 @@
 #include "ggit-object-factory-base.h"
 #include "ggit-object-factory.h"
 
+/**
+ * GgitObjectFactoryBase:
+ *
+ * Represents the base type for objects created by an object factory.
+ */
+
 G_DEFINE_ABSTRACT_TYPE (GgitObjectFactoryBase, ggit_object_factory_base, G_TYPE_OBJECT)
 
 static GObject *

@@ -278,13 +278,6 @@ typedef struct _GgitNote GgitNote;
 typedef struct _GgitObject GgitObject;
 
 /**
- * GgitObjectFactoryBase:
- *
- * Represents the base type for objects created by an object factory.
- */
-typedef struct _GgitObjectFactoryBase GgitObjectFactoryBase;
-
-/**
  * GgitOId:
  *
  * Represents a unique ID of any object.
