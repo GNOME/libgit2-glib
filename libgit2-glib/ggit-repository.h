@@ -35,6 +35,7 @@
 #include <libgit2-glib/ggit-blob-output-stream.h>
 #include <libgit2-glib/ggit-checkout-options.h>
 #include <libgit2-glib/ggit-note.h>
+#include <libgit2-glib/ggit-blame.h>
 
 G_BEGIN_DECLS
 
