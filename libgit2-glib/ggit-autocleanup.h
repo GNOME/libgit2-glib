@@ -60,7 +60,6 @@ G_BEGIN_DECLS
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlameHunk, ggit_blame_hunk_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlameOptions, ggit_blame_options_free)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlobOutputStream, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBranch, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBranchEnumerator, ggit_branch_enumerator_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCheckoutOptions, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCherryPickOptions, g_object_unref)

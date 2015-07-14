@@ -25,31 +25,14 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_BRANCH		(ggit_branch_get_type ())
-#define GGIT_BRANCH(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_BRANCH, GgitBranch))
-#define GGIT_BRANCH_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_BRANCH, GgitBranch const))
-#define GGIT_BRANCH_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_BRANCH, GgitBranchClass))
-#define GGIT_IS_BRANCH(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_BRANCH))
-#define GGIT_IS_BRANCH_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_BRANCH))
-#define GGIT_BRANCH_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_BRANCH, GgitBranchClass))
-
-typedef struct _GgitBranchClass		GgitBranchClass;
-
-struct _GgitBranch
-{
-	/*< private >*/
-	GgitRef parent;
-
-	gpointer *_priv;
-};
+#define GGIT_TYPE_BRANCH (ggit_branch_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitBranch, ggit_branch, GGIT, BRANCH, GgitRef)
 
 struct _GgitBranchClass
 {
 	/*< private >*/
 	GgitRefClass parent_class;
 };
-
-GType               ggit_branch_get_type           (void) G_GNUC_CONST;
 
 GgitBranch        *_ggit_branch_wrap               (git_reference    *ref);
 

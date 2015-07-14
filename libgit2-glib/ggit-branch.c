@@ -23,6 +23,11 @@
 
 #include <git2.h>
 
+/**
+ * GgitBranch:
+ *
+ * Represents a branch object.
+ */
 
 G_DEFINE_TYPE (GgitBranch, ggit_branch, GGIT_TYPE_REF)
 
