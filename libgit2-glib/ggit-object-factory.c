@@ -36,6 +36,8 @@ typedef struct
  */
 struct _GgitObjectFactory
 {
+	GObject parent_instance;
+
 	GHashTable *typemap;
 };
 
