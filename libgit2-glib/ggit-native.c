@@ -20,15 +20,19 @@
 
 #include "ggit-native.h"
 
-#define GGIT_NATIVE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_NATIVE, GgitNativePrivate))
+/**
+ * GgitNative:
+ *
+ * Represents a generic native object.
+ */
 
-struct _GgitNativePrivate
+typedef struct _GgitNativePrivate
 {
 	gpointer native;
 	GDestroyNotify destroy_notify;
-};
+} GgitNativePrivate;
 
-G_DEFINE_ABSTRACT_TYPE (GgitNative, ggit_native, GGIT_TYPE_OBJECT_FACTORY_BASE)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GgitNative, ggit_native, GGIT_TYPE_OBJECT_FACTORY_BASE)
 
 enum
 {
@@ -40,12 +44,14 @@ static void
 ggit_native_finalize (GObject *object)
 {
 	GgitNative *native;
+	GgitNativePrivate *priv;
 
 	native = GGIT_NATIVE (object);
+	priv = ggit_native_get_instance_private (native);
 
-	if (native->priv->native && native->priv->destroy_notify)
+	if (priv->native && priv->destroy_notify)
 	{
-		native->priv->destroy_notify (native->priv->native);
+		priv->destroy_notify (priv->native);
 	}
 
 	G_OBJECT_CLASS (ggit_native_parent_class)->finalize (object);
@@ -57,12 +63,15 @@ ggit_native_set_property (GObject      *object,
                           const GValue *value,
                           GParamSpec   *pspec)
 {
-	GgitNative *self = GGIT_NATIVE (object);
+	GgitNative *native = GGIT_NATIVE (object);
+	GgitNativePrivate *priv;
+
+	priv = ggit_native_get_instance_private (native);
 
 	switch (prop_id)
 	{
 		case PROP_NATIVE:
-			self->priv->native = g_value_get_pointer (value);
+			priv->native = g_value_get_pointer (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -79,8 +88,6 @@ ggit_native_class_init (GgitNativeClass *klass)
 
 	object_class->set_property = ggit_native_set_property;
 
-	g_type_class_add_private (object_class, sizeof (GgitNativePrivate));
-
 	g_object_class_install_property (object_class,
 	                                 PROP_NATIVE,
 	                                 g_param_spec_pointer ("native",
@@ -92,17 +99,20 @@ ggit_native_class_init (GgitNativeClass *klass)
 }
 
 static void
-ggit_native_init (GgitNative *self)
+ggit_native_init (GgitNative *native)
 {
-	self->priv = GGIT_NATIVE_GET_PRIVATE (self);
 }
 
 gpointer
 _ggit_native_get (gpointer self)
 {
+	GgitNativePrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_NATIVE (self), NULL);
 
-	return GGIT_NATIVE (self)->priv->native;
+	priv = ggit_native_get_instance_private (GGIT_NATIVE (self));
+
+	return priv->native;
 }
 
 void
@@ -114,7 +124,7 @@ _ggit_native_set (gpointer self,
 
 	g_return_if_fail (GGIT_IS_NATIVE (self));
 
-	priv = GGIT_NATIVE (self)->priv;
+	priv = ggit_native_get_instance_private (GGIT_NATIVE (self));
 
 	if (priv->native && priv->destroy_notify)
 	{
@@ -133,7 +143,7 @@ _ggit_native_release (gpointer self)
 
 	g_return_val_if_fail (GGIT_IS_NATIVE (self), NULL);
 
-	priv = GGIT_NATIVE (self)->priv;
+	priv = ggit_native_get_instance_private (GGIT_NATIVE (self));
 
 	ret = priv->native;
 	priv->native = NULL;
@@ -146,9 +156,13 @@ void
 _ggit_native_set_destroy_func (gpointer       self,
                                GDestroyNotify destroy_notify)
 {
+	GgitNativePrivate *priv;
+
 	g_return_if_fail (GGIT_IS_NATIVE (self));
 
-	GGIT_NATIVE (self)->priv->destroy_notify = destroy_notify;
+	priv = ggit_native_get_instance_private (GGIT_NATIVE (self));
+
+	priv->destroy_notify = destroy_notify;
 }
 
 /* ex:set ts=8 noet: */

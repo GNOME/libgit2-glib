@@ -257,13 +257,6 @@ typedef struct _GgitIndexEntryResolveUndo GgitIndexEntryResolveUndo;
 typedef struct _GgitMergeOptions GgitMergeOptions;
 
 /**
- * GgitNative:
- *
- * Represents a generic native object.
- */
-typedef struct _GgitNative GgitNative;
-
-/**
  * GgitNote:
  *
  * Represents a note object.

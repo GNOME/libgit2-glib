@@ -26,23 +26,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_NATIVE		(ggit_native_get_type ())
-#define GGIT_NATIVE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_NATIVE, GgitNative))
-#define GGIT_NATIVE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_NATIVE, GgitNativeClass))
-#define GGIT_IS_NATIVE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_NATIVE))
-#define GGIT_IS_NATIVE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_NATIVE))
-#define GGIT_NATIVE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_NATIVE, GgitNativeClass))
-
-typedef struct _GgitNativeClass		GgitNativeClass;
-typedef struct _GgitNativePrivate	GgitNativePrivate;
-
-struct _GgitNative
-{
-	/*< private >*/
-	GgitObjectFactoryBase parent;
-
-	GgitNativePrivate *priv;
-};
+#define GGIT_TYPE_NATIVE (ggit_native_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitNative, ggit_native, GGIT, NATIVE, GgitObjectFactoryBase)
 
 /**
  * GgitNativeClass:
@@ -55,8 +40,6 @@ struct _GgitNativeClass
 	/*< private >*/
 	GgitObjectFactoryBaseClass parent_class;
 };
-
-GType    ggit_native_get_type          (void) G_GNUC_CONST;
 
 gpointer _ggit_native_get              (gpointer       self);
 
