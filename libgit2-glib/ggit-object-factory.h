@@ -27,37 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_OBJECT_FACTORY		(ggit_object_factory_get_type ())
-#define GGIT_OBJECT_FACTORY(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_OBJECT_FACTORY, GgitObjectFactory))
-#define GGIT_OBJECT_FACTORY_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_OBJECT_FACTORY, GgitObjectFactoryClass))
-#define GGIT_IS_OBJECT_FACTORY(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_OBJECT_FACTORY))
-#define GGIT_IS_OBJECT_FACTORY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_OBJECT_FACTORY))
-#define GGIT_OBJECT_FACTORY_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_OBJECT_FACTORY, GgitObjectFactoryClass))
-
-typedef struct _GgitObjectFactoryClass		GgitObjectFactoryClass;
-typedef struct _GgitObjectFactoryPrivate	GgitObjectFactoryPrivate;
-
-struct _GgitObjectFactory
-{
-	/*< private >*/
-	GObject parent;
-
-	GgitObjectFactoryPrivate *priv;
-};
-
-/**
- * GgitObjectFactoryClass:
- * @parent_class: The parent class.
- *
- * The class structure for #GgitObjectFactoryClass.
- */
-struct _GgitObjectFactoryClass
-{
-	/*< private >*/
-	GObjectClass parent_class;
-};
-
-GType              ggit_object_factory_get_type    (void) G_GNUC_CONST;
+#define GGIT_TYPE_OBJECT_FACTORY (ggit_object_factory_get_type ())
+G_DECLARE_FINAL_TYPE (GgitObjectFactory, ggit_object_factory, GGIT, OBJECT_FACTORY, GObject)
 
 GgitObjectFactory *ggit_object_factory_get_default (void);
 

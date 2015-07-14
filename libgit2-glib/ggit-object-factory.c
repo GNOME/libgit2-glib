@@ -28,7 +28,13 @@ typedef struct
 	GType type;
 } TypeWrap;
 
-struct _GgitObjectFactoryPrivate
+
+/**
+ * GgitObjectFactory:
+ *
+ * Represents an object factory.
+ */
+struct _GgitObjectFactory
 {
 	GHashTable *typemap;
 };
@@ -61,7 +67,7 @@ ggit_object_factory_finalize (GObject *object)
 
 	factory = GGIT_OBJECT_FACTORY (object);
 
-	g_hash_table_destroy (factory->priv->typemap);
+	g_hash_table_destroy (factory->typemap);
 
 	G_OBJECT_CLASS (ggit_object_factory_parent_class)->finalize (object);
 }
@@ -93,19 +99,15 @@ ggit_object_factory_class_init (GgitObjectFactoryClass *klass)
 
 	object_class->finalize = ggit_object_factory_finalize;
 	object_class->constructor = ggit_object_factory_constructor;
-
-	g_type_class_add_private (object_class, sizeof (GgitObjectFactoryPrivate));
 }
 
 static void
-ggit_object_factory_init (GgitObjectFactory *self)
+ggit_object_factory_init (GgitObjectFactory *factory)
 {
-	self->priv = GGIT_OBJECT_FACTORY_GET_PRIVATE (self);
-
-	self->priv->typemap = g_hash_table_new_full ((GHashFunc)g_direct_hash,
-	                                             (GEqualFunc)g_direct_equal,
-	                                             NULL,
-	                                             (GDestroyNotify)type_wrap_free);
+	factory->typemap = g_hash_table_new_full ((GHashFunc)g_direct_hash,
+	                                          (GEqualFunc)g_direct_equal,
+	                                          NULL,
+	                                          (GDestroyNotify)type_wrap_free);
 }
 
 /**
@@ -150,7 +152,7 @@ ggit_object_factory_register (GgitObjectFactory *factory,
 	g_return_if_fail (basetype == subtype || g_type_is_a (subtype, basetype));
 	g_return_if_fail (g_type_is_a (basetype, GGIT_TYPE_OBJECT_FACTORY_BASE));
 
-	g_hash_table_insert (factory->priv->typemap,
+	g_hash_table_insert (factory->typemap,
 	                     GINT_TO_POINTER (g_type_qname (basetype)),
 	                     type_wrap_new (subtype));
 }
@@ -173,12 +175,12 @@ ggit_object_factory_unregister (GgitObjectFactory *factory,
 
 	g_return_if_fail (GGIT_IS_OBJECT_FACTORY (factory));
 
-	val = g_hash_table_lookup (factory->priv->typemap,
+	val = g_hash_table_lookup (factory->typemap,
 	                           GINT_TO_POINTER (g_type_qname (basetype)));
 
 	if (val && val->type == subtype)
 	{
-		g_hash_table_remove (factory->priv->typemap,
+		g_hash_table_remove (factory->typemap,
 		                     GINT_TO_POINTER (g_type_qname (basetype)));
 	}
 }
@@ -228,7 +230,7 @@ ggit_object_factory_construct (GgitObjectFactory     *factory,
 
 	g_return_val_if_fail (GGIT_IS_OBJECT_FACTORY (factory), NULL);
 
-	val = g_hash_table_lookup (factory->priv->typemap,
+	val = g_hash_table_lookup (factory->typemap,
 	                           GINT_TO_POINTER (g_type_qname (basetype)));
 
 	if (val)
