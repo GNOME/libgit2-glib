@@ -26,6 +26,12 @@
 #include "ggit-tag.h"
 #include "ggit-utils.h"
 
+/**
+ * GgitTag:
+ *
+ * Represents a tag object.
+ */
+
 G_DEFINE_TYPE (GgitTag, ggit_tag, GGIT_TYPE_OBJECT)
 
 static void

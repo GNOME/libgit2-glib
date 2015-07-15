@@ -335,13 +335,6 @@ typedef struct _GgitSubmodule GgitSubmodule;
 typedef struct _GgitSubmoduleUpdateOptions GgitSubmoduleUpdateOptions;
 
 /**
- * GgitTag:
- *
- * Represents a tag object.
- */
-typedef struct _GgitTag GgitTag;
-
-/**
  * GgitTransferProgress:
  *
  * Represents transfering progress.

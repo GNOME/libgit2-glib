@@ -30,23 +30,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_TAG			(ggit_tag_get_type ())
-#define GGIT_TAG(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TAG, GgitTag))
-#define GGIT_TAG_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_TAG, GgitTagClass))
-#define GGIT_IS_TAG(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_TAG))
-#define GGIT_IS_TAG_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_TAG))
-#define GGIT_TAG_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_TAG, GgitTagClass))
-
-typedef struct _GgitTagClass	GgitTagClass;
-
-struct _GgitTag
-{
-	/*< private >*/
-	GgitObject parent;
-
-	/* priv padding */
-	gpointer _priv;
-};
+#define GGIT_TYPE_TAG (ggit_tag_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitTag, ggit_tag, GGIT, TAG, GgitObject)
 
 /**
  * GgitTagClass:
@@ -59,8 +44,6 @@ struct _GgitTagClass
 	/*< private >*/
 	GgitObjectClass parent_class;
 };
-
-GType             ggit_tag_get_type             (void) G_GNUC_CONST;
 
 GgitTag         *_ggit_tag_wrap                 (git_tag  *tag,
                                                  gboolean owned);
