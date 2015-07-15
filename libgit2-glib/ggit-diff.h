@@ -25,6 +25,7 @@
 #include "ggit-native.h"
 #include "ggit-types.h"
 #include "ggit-blob.h"
+#include "ggit-tree.h"
 
 G_BEGIN_DECLS
 

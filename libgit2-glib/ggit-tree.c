@@ -24,6 +24,12 @@
 #include "ggit-oid.h"
 #include "ggit-error.h"
 
+/**
+ * GgitTree:
+ *
+ * Represents a tree object.
+ */
+
 G_DEFINE_TYPE (GgitTree, ggit_tree, GGIT_TYPE_OBJECT)
 
 static void

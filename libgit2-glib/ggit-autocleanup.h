@@ -75,7 +75,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRepository, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRevisionWalker, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSignature, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSubmoduleUpdateOptions, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitTree, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitTreeBuilder, g_object_unref)
 
 #endif /* GLIB_CHECK_VERSION (2, 44, 0) */

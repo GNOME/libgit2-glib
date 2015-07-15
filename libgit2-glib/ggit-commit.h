@@ -27,6 +27,7 @@
 
 #include <libgit2-glib/ggit-object.h>
 #include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-tree.h>
 
 G_BEGIN_DECLS
 

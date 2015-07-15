@@ -29,23 +29,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_TREE			(ggit_tree_get_type ())
-#define GGIT_TREE(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TREE, GgitTree))
-#define GGIT_TREE_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_TREE, GgitTreeClass))
-#define GGIT_IS_TREE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_TREE))
-#define GGIT_IS_TREE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_TREE))
-#define GGIT_TREE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_TREE, GgitTreeClass))
-
-typedef struct _GgitTreeClass	GgitTreeClass;
-
-struct _GgitTree
-{
-	/*< private >*/
-	GgitObject parent;
-
-	/* priv padding */
-	gpointer priv;
-};
+#define GGIT_TYPE_TREE (ggit_tree_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitTree, ggit_tree, GGIT, TREE, GgitObject)
 
 /**
  * GgitTreeClass:
@@ -58,8 +43,6 @@ struct _GgitTreeClass
 	/*< private >*/
 	GgitObjectClass parent_class;
 };
-
-GType          ggit_tree_get_type       (void) G_GNUC_CONST;
 
 GgitTree      *_ggit_tree_wrap          (git_tree *tree,
                                          gboolean  owned);

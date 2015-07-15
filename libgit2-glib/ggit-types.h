@@ -335,13 +335,6 @@ typedef struct _GgitSubmoduleUpdateOptions GgitSubmoduleUpdateOptions;
 typedef struct _GgitTransferProgress GgitTransferProgress;
 
 /**
- * GgitTree:
- *
- * Represents a tree object.
- */
-typedef struct _GgitTree GgitTree;
-
-/**
  * GgitTreeEntry:
  *
  * Represents an entry in a tree.
