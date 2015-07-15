@@ -48,6 +48,8 @@ const gchar   *ggit_blame_hunk_get_orig_path               (GgitBlameHunk *blame
 
 gboolean       ggit_blame_hunk_is_boundary                 (GgitBlameHunk *blame_hunk);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlameHunk, ggit_blame_hunk_unref)
+
 GgitBlame     *_ggit_blame_wrap             (git_blame *blame);
 
 guint32        ggit_blame_get_hunk_count    (GgitBlame *blame);

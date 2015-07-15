@@ -46,6 +46,8 @@ GgitRevertOptions      *ggit_revert_options_new   (guint                mainline
                                                    GgitMergeOptions    *merge_options,
                                                    GgitCheckoutOptions *checkout_options);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRevertOptions, ggit_revert_options_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_REVERT_OPTIONS_H__ */

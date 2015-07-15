@@ -56,6 +56,8 @@ gboolean          ggit_reflog_append               (GgitReflog     *reflog,
                                                     const gchar    *message,
                                                     GError        **error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitReflog, ggit_reflog_unref)
+
 G_END_DECLS
 
 #endif /* __GGIT_REFLOG_H__ */

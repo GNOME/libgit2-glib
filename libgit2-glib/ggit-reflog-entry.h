@@ -42,6 +42,7 @@ GgitOId          *ggit_reflog_entry_get_new_id     (GgitReflogEntry        *refl
 GgitSignature    *ggit_reflog_entry_get_committer  (GgitReflogEntry        *reflog_entry);
 const gchar      *ggit_reflog_entry_get_message    (GgitReflogEntry        *reflog_entry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitReflogEntry, ggit_reflog_entry_unref)
 
 G_END_DECLS
 

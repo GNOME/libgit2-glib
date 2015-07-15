@@ -77,6 +77,8 @@ GgitDiffHunk    *ggit_patch_get_hunk         (GgitPatch     *patch,
                                               gsize          idx,
                                               GError       **error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitPatch, ggit_patch_unref)
+
 G_END_DECLS
 
 #endif /* __GGIT_PATCH_H__ */

@@ -45,6 +45,8 @@ GgitStatusOptions *ggit_status_options_new                (GgitStatusOption     
                                                            GgitStatusShow            show,
                                                            const gchar             **pathspec);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitStatusOptions, ggit_status_options_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_STATUS_OPTIONS_H__ */

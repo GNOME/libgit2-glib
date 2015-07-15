@@ -50,6 +50,8 @@ GgitIndexEntry   *ggit_index_entries_get_by_path      (GgitIndexEntries *entries
 
 guint             ggit_index_entries_size             (GgitIndexEntries  *entries);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitIndexEntries, ggit_index_entries_unref)
+
 GType             ggit_index_entry_get_type           (void) G_GNUC_CONST;
 
 GgitIndexEntry   *ggit_index_entry_ref                (GgitIndexEntry    *entry);
@@ -107,6 +109,8 @@ const git_index_entry
 
 GgitIndexEntry   *_ggit_index_entry_new               (const gchar       *path,
                                                        GgitOId           *id);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitIndexEntry, ggit_index_entry_unref)
 
 G_END_DECLS
 

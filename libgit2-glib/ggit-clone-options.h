@@ -56,6 +56,8 @@ GgitFetchOptions          *ggit_clone_options_get_fetch_options   (GgitCloneOpti
 void                       ggit_clone_options_set_fetch_options   (GgitCloneOptions       *options,
                                                                    GgitFetchOptions       *fetch_options);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCloneOptions, ggit_clone_options_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_CLONE_OPTIONS_H__ */

@@ -44,6 +44,8 @@ const gchar       *ggit_config_entry_get_value      (GgitConfigEntry        *ent
 
 GgitConfigLevel    ggit_config_entry_get_level      (GgitConfigEntry        *entry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitConfigEntry, ggit_config_entry_unref)
+
 G_END_DECLS
 
 #endif /* __GGIT_CONFIG_ENTRY_H__ */

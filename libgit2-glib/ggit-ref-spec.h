@@ -21,6 +21,7 @@
 #ifndef __GGIT_REF_SPEC_H__
 #define __GGIT_REF_SPEC_H__
 
+#include <glib-object.h>
 #include <git2.h>
 
 #include "ggit-types.h"
@@ -40,6 +41,8 @@ void            ggit_ref_spec_unref            (GgitRefSpec       *refspec);
 const gchar    *ggit_ref_spec_get_source       (GgitRefSpec       *refspec);
 const gchar    *ggit_ref_spec_get_destination  (GgitRefSpec       *refspec);
 gboolean        ggit_ref_spec_is_forced        (GgitRefSpec       *refspec);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRefSpec, ggit_ref_spec_unref)
 
 G_END_DECLS
 

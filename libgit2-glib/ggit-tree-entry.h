@@ -43,6 +43,8 @@ const gchar *  ggit_tree_entry_get_name        (GgitTreeEntry        *entry);
 
 GType          ggit_tree_entry_get_object_type (GgitTreeEntry        *entry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitTreeEntry, ggit_tree_entry_unref)
+
 G_END_DECLS
 
 #endif /* __GGIT_TREE_ENTRY_H__ */

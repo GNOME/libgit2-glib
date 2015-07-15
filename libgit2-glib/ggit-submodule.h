@@ -72,6 +72,8 @@ void                    ggit_submodule_reload                (GgitSubmodule     
                                                               gboolean             force,
                                                               GError             **error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSubmodule, ggit_submodule_unref)
+
 G_END_DECLS
 
 #endif /* __GGIT_SUBMODULE_H__ */

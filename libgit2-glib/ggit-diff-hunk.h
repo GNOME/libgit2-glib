@@ -21,6 +21,8 @@
 #ifndef __GGIT_DIFF_HUNK_H__
 #define __GGIT_DIFF_HUNK_H__
 
+#include <glib-object.h>
+#include <git2.h>
 #include "ggit-types.h"
 
 G_BEGIN_DECLS
@@ -40,6 +42,8 @@ gint            ggit_diff_hunk_get_old_lines      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_new_start      (GgitDiffHunk        *hunk);
 gint            ggit_diff_hunk_get_new_lines      (GgitDiffHunk        *hunk);
 const gchar    *ggit_diff_hunk_get_header         (GgitDiffHunk        *hunk);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitDiffHunk, ggit_diff_hunk_unref)
 
 G_END_DECLS
 

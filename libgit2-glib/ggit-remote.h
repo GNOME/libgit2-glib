@@ -69,6 +69,8 @@ GgitOId           *ggit_remote_head_get_local_oid       (GgitRemoteHead *remote_
 gboolean           ggit_remote_head_is_local            (GgitRemoteHead *remote_head);
 const gchar       *ggit_remote_head_get_name            (GgitRemoteHead *remote_head);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRemoteHead, ggit_remote_head_unref)
+
 GgitRemote       *_ggit_remote_wrap                     (git_remote     *remote);
 
 GgitRemote        *ggit_remote_new                      (GgitRepository   *repository,

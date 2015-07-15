@@ -46,6 +46,8 @@ GgitMergeOptions      *ggit_merge_options_new                     (GgitMergeTree
                                                                    GgitDiffSimilarityMetric *metric,
                                                                    GgitMergeFileFavor        file_favor);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitMergeOptions, ggit_merge_options_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_MERGE_OPTIONS_H__ */

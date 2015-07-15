@@ -46,6 +46,8 @@ guint                   ggit_transfer_progress_get_received_objects (GgitTransfe
 
 gsize                   ggit_transfer_progress_get_received_bytes   (GgitTransferProgress     *progress);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitTransferProgress, ggit_transfer_progress_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_TRANSFER_PROGRESS_H__ */

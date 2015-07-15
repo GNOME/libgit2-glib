@@ -21,6 +21,7 @@
 #ifndef __GGIT_DIFF_FILE_H__
 #define __GGIT_DIFF_FILE_H__
 
+#include <glib-object.h>
 #include <git2.h>
 
 #include "ggit-types.h"
@@ -42,6 +43,8 @@ const gchar       *ggit_diff_file_get_path  (GgitDiffFile        *file);
 guint16            ggit_diff_file_get_mode  (GgitDiffFile        *file);
 gint64             ggit_diff_file_get_size  (GgitDiffFile        *file);
 GgitDiffFlag       ggit_diff_file_get_flags (GgitDiffFile        *file);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitDiffFile, ggit_diff_file_unref)
 
 G_END_DECLS
 

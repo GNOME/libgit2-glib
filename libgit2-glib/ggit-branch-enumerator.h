@@ -44,4 +44,6 @@ GgitBranchEnumerator *ggit_branch_enumerator_iterator   (GgitBranchEnumerator *e
 gboolean              ggit_branch_enumerator_next       (GgitBranchEnumerator *enumerator);
 GgitRef              *ggit_branch_enumerator_get        (GgitBranchEnumerator *enumerator);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBranchEnumerator, ggit_branch_enumerator_unref)
+
 #endif /* __GGIT_BRANCH_ENUMERATOR_H__ */

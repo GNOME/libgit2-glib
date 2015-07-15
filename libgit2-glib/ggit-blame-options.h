@@ -68,6 +68,8 @@ void              ggit_blame_options_set_minimum_match_characters
                                                         (GgitBlameOptions *blame_options,
                                                          guint16           characters);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitBlameOptions, ggit_blame_options_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_BLAME_OPTIONS_H__ */

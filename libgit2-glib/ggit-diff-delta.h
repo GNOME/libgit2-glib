@@ -21,6 +21,7 @@
 #ifndef __GGIT_DIFF_DELTA_H__
 #define __GGIT_DIFF_DELTA_H__
 
+#include <glib-object.h>
 #include <git2.h>
 
 #include "ggit-types.h"
@@ -42,6 +43,8 @@ GgitDiffFile   *ggit_diff_delta_get_new_file   (GgitDiffDelta        *delta);
 GgitDeltaType   ggit_diff_delta_get_status     (GgitDiffDelta        *delta);
 guint           ggit_diff_delta_get_similarity (GgitDiffDelta        *delta);
 GgitDiffFlag    ggit_diff_delta_get_flags      (GgitDiffDelta        *delta);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitDiffDelta, ggit_diff_delta_unref)
 
 G_END_DECLS
 

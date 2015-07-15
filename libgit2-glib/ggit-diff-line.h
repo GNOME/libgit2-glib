@@ -21,6 +21,8 @@
 #ifndef __GGIT_DIFF_LINE_H__
 #define __GGIT_DIFF_LINE_H__
 
+#include <glib-object.h>
+#include <git2.h>
 #include "ggit-types.h"
 
 G_BEGIN_DECLS
@@ -45,6 +47,8 @@ const guint8     *ggit_diff_line_get_content        (GgitDiffLine        *line,
                                                      gsize               *length);
 
 const gchar      *ggit_diff_line_get_text           (GgitDiffLine        *line);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitDiffLine, ggit_diff_line_unref)
 
 G_END_DECLS
 

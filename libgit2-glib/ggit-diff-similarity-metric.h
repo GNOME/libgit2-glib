@@ -46,6 +46,8 @@ GgitDiffSimilarityMetric  *ggit_diff_similarity_metric_new                     (
                                                                                 GgitDiffSimilarityMetricSimilarityCallback      similarity,
                                                                                 gpointer                                        user_data);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitDiffSimilarityMetric, ggit_diff_similarity_metric_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_DIFF_SIMILARITY_METRIC_H__ */

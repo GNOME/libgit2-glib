@@ -42,6 +42,8 @@ const gchar      *ggit_note_get_message        (GgitNote       *note);
 
 GgitOId          *ggit_note_get_id             (GgitNote       *note);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitNote, ggit_note_unref)
+
 G_END_DECLS
 
 #endif /* __GGIT_NOTE_H__ */

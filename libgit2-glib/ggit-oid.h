@@ -59,6 +59,8 @@ gboolean       ggit_oid_is_zero         (GgitOId const *oid);
 gboolean       ggit_oid_has_prefix      (GgitOId       *oid,
                                          const gchar   *prefix);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitOId, ggit_oid_free)
+
 G_END_DECLS
 
 #endif /* __GGIT_OID_H__ */

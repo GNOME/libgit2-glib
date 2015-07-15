@@ -52,6 +52,8 @@ GgitIndexEntriesResolveUndo *
 void     ggit_index_entries_resolve_undo_unref       (GgitIndexEntriesResolveUndo *entries);
 guint    ggit_index_entries_resolve_undo_size        (GgitIndexEntriesResolveUndo *entries);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitIndexEntriesResolveUndo, ggit_index_entries_resolve_undo_unref)
+
 GType    ggit_index_entry_resolve_undo_get_type      (void) G_GNUC_CONST;
 
 GgitIndexEntryResolveUndo *
@@ -66,6 +68,7 @@ GgitOId *ggit_index_entry_resolve_undo_get_id        (GgitIndexEntryResolveUndo 
 
 GFile   *ggit_index_entry_resolve_undo_get_file      (GgitIndexEntryResolveUndo   *entry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitIndexEntryResolveUndo, ggit_index_entry_resolve_undo_unref)
 
 G_END_DECLS
 

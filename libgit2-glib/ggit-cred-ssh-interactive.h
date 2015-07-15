@@ -35,6 +35,9 @@ G_BEGIN_DECLS
 #define GGIT_IS_CRED_SSH_INTERACTIVE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CRED_SSH_INTERACTIVE))
 #define GGIT_CRED_SSH_INTERACTIVE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED_SSH_INTERACTIVE, GgitCredSshInteractiveClass))
 
+#define GGIT_TYPE_CRED_SSH_INTERACTIVE_PROMPT	(ggit_cred_ssh_interactive_prompt_get_type ())
+#define GGIT_CRED_SSH_INTERACTIVE_PROMPT(obj)	((GgitCredSshInteractivePrompt*)obj)
+
 typedef struct _GgitCredSshInteractiveClass	GgitCredSshInteractiveClass;
 typedef struct _GgitCredSshInteractivePrivate	GgitCredSshInteractivePrivate;
 
@@ -101,6 +104,8 @@ void          ggit_cred_ssh_interactive_prompt_set_response
 
 const gchar  *ggit_cred_ssh_interactive_prompt_get_response
                                                (GgitCredSshInteractivePrompt *prompt);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCredSshInteractivePrompt, ggit_cred_ssh_interactive_prompt_unref)
 
 G_END_DECLS
 
