@@ -28,23 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_DIFF			(ggit_diff_get_type ())
-#define GGIT_DIFF(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF, GgitDiff))
-#define GGIT_DIFF_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF, GgitDiffClass))
-#define GGIT_IS_DIFF(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF))
-#define GGIT_IS_DIFF_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF))
-#define GGIT_DIFF_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF, GgitDiffClass))
-
-typedef struct _GgitDiffClass	GgitDiffClass;
-typedef struct _GgitDiffPrivate GgitDiffPrivate;
-
-struct _GgitDiff
-{
-	/*< private >*/
-	GgitNative parent;
-
-	GgitDiffPrivate *priv;
-};
+#define GGIT_TYPE_DIFF (ggit_diff_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitDiff, ggit_diff, GGIT, DIFF, GgitNative)
 
 /**
  * GgitDiffClass:
@@ -57,8 +42,6 @@ struct _GgitDiffClass
 	/*< private >*/
 	GgitNativeClass parent_class;
 };
-
-GType          ggit_diff_get_type                  (void) G_GNUC_CONST;
 
 GgitDiff      *ggit_diff_new_tree_to_tree          (GgitRepository        *repository,
                                                     GgitTree              *old_tree,

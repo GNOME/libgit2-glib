@@ -96,13 +96,6 @@ typedef struct _GgitCredSshKeyFromAgent GgitCredSshKeyFromAgent;
 typedef struct _GgitCredPlaintext GgitCredPlaintext;
 
 /**
- * GgitDiff:
- *
- * Represents a diff list.
- */
-typedef struct _GgitDiff GgitDiff;
-
-/**
  * GgitDiffBinary:
  *
  * Represents a diff binary.

@@ -35,13 +35,18 @@
 #include "ggit-diff-find-options.h"
 #include "ggit-diff-format-email-options.h"
 
-#define GGIT_DIFF_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_DIFF, GgitDiffPrivate))
 
-struct _GgitDiffPrivate
+/**
+ * GgitDiff:
+ *
+ * Represents a diff list.
+ */
+
+typedef struct _GgitDiffPrivate
 {
 	GgitRepository *repository;
 	gchar *encoding;
-};
+} GgitDiffPrivate;
 
 typedef struct {
 	GgitDiff *diff;
@@ -55,7 +60,7 @@ typedef struct {
 	GgitDiffLineCallback line_cb;
 } CallbackWrapperData;
 
-G_DEFINE_TYPE (GgitDiff, ggit_diff, GGIT_TYPE_NATIVE)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitDiff, ggit_diff, GGIT_TYPE_NATIVE)
 
 enum
 {
@@ -78,7 +83,10 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 
 	if (data->diff != NULL)
 	{
+		GgitDiffPrivate *priv;
 		GgitDiffFile *file;
+
+		priv = ggit_diff_get_instance_private (data->diff);
 
 		if (ggit_diff_delta_get_status (gdelta) == GGIT_DELTA_DELETED)
 		{
@@ -96,7 +104,7 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 			path = ggit_diff_file_get_path (file);
 
 			data->encoding =
-				ggit_repository_get_attribute (data->diff->priv->repository,
+				ggit_repository_get_attribute (priv->repository,
 			                                       path,
 			                                       "encoding",
 			                                       GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX,
@@ -172,7 +180,10 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 	}
 	else if (data->diff != NULL)
 	{
-		encoding = data->diff->priv->encoding;
+		GgitDiffPrivate *priv;
+
+		priv = ggit_diff_get_instance_private (data->diff);
+		encoding = priv->encoding;
 	}
 
 	gdelta = _ggit_diff_delta_wrap (delta);
@@ -199,7 +210,10 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 static void
 ggit_diff_finalize (GObject *object)
 {
-	GgitDiffPrivate *priv = GGIT_DIFF (object)->priv;
+	GgitDiff *diff = GGIT_DIFF (object);
+	GgitDiffPrivate *priv;
+
+	priv = ggit_diff_get_instance_private (diff);
 
 	g_free (priv->encoding);
 
@@ -212,12 +226,15 @@ ggit_diff_set_property (GObject      *object,
                         const GValue *value,
                         GParamSpec   *pspec)
 {
-	GgitDiff *self = GGIT_DIFF (object);
+	GgitDiff *diff = GGIT_DIFF (object);
+	GgitDiffPrivate *priv;
+
+	priv = ggit_diff_get_instance_private (diff);
 
 	switch (prop_id)
 	{
 		case PROP_REPOSITORY:
-			self->priv->repository = g_value_dup_object (value);
+			priv->repository = g_value_dup_object (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -231,12 +248,15 @@ ggit_diff_get_property (GObject    *object,
                         GValue     *value,
                         GParamSpec *pspec)
 {
-	GgitDiff *self = GGIT_DIFF (object);
+	GgitDiff *diff = GGIT_DIFF (object);
+	GgitDiffPrivate *priv;
+
+	priv = ggit_diff_get_instance_private (diff);
 
 	switch (prop_id)
 	{
 		case PROP_REPOSITORY:
-			g_value_set_object (value, self->priv->repository);
+			g_value_set_object (value, priv->repository);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -247,8 +267,11 @@ ggit_diff_get_property (GObject    *object,
 static void
 ggit_diff_constructed (GObject *object)
 {
-	GgitDiffPrivate *priv = GGIT_DIFF (object)->priv;
+	GgitDiff *diff = GGIT_DIFF (object);
+	GgitDiffPrivate *priv;
 	GgitConfig *config = NULL;
+
+	priv = ggit_diff_get_instance_private (diff);
 
 	if (priv->repository != NULL)
 	{
@@ -290,14 +313,11 @@ ggit_diff_class_init (GgitDiffClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (GgitDiffPrivate));
 }
 
 static void
 ggit_diff_init (GgitDiff *self)
 {
-	self->priv = GGIT_DIFF_GET_PRIVATE (self);
 }
 
 static GgitDiff *

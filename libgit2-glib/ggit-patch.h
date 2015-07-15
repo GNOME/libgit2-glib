@@ -26,6 +26,7 @@
 #include <git2.h>
 #include "ggit-types.h"
 #include "ggit-blob.h"
+#include "ggit-diff.h"
 
 G_BEGIN_DECLS
 
