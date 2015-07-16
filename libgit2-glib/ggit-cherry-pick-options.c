@@ -23,17 +23,19 @@
 #include "ggit-checkout-options.h"
 #include "ggit-merge-options.h"
 
-#define GGIT_CHERRY_PICK_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_CHERRY_PICK_OPTIONS, GgitCherryPickOptionsPrivate))
+/**
+ * GgitCherryPickOptions:
+ *
+ * Represents the options used when doign a cherry-pick.
+ */
 
-struct _GgitCherryPickOptionsPrivate
+typedef struct _GgitCherryPickOptionsPrivate
 {
 	git_cherrypick_options options;
 
 	GgitCheckoutOptions *checkout_options;
 	GgitMergeOptions *merge_options;
-};
-
-G_DEFINE_TYPE (GgitCherryPickOptions, ggit_cherry_pick_options, G_TYPE_OBJECT)
+} GgitCherryPickOptionsPrivate;
 
 enum
 {
@@ -43,15 +45,19 @@ enum
 	PROP_MERGE_OPTIONS
 };
 
+G_DEFINE_TYPE_WITH_PRIVATE (GgitCherryPickOptions, ggit_cherry_pick_options, G_TYPE_OBJECT)
+
 static void
 ggit_cherry_pick_options_finalize (GObject *object)
 {
 	GgitCherryPickOptions *options;
+	GgitCherryPickOptionsPrivate *priv;
 
 	options = GGIT_CHERRY_PICK_OPTIONS (object);
+	priv = ggit_cherry_pick_options_get_instance_private (options);
 
-	g_clear_object (&options->priv->checkout_options);
-	g_clear_object (&options->priv->merge_options);
+	g_clear_object (&priv->checkout_options);
+	g_clear_object (&priv->merge_options);
 
 	G_OBJECT_CLASS (ggit_cherry_pick_options_parent_class)->finalize (object);
 }
@@ -62,19 +68,22 @@ ggit_cherry_pick_options_set_property (GObject      *object,
                                        const GValue *value,
                                        GParamSpec   *pspec)
 {
-	GgitCherryPickOptions *self = GGIT_CHERRY_PICK_OPTIONS (object);
+	GgitCherryPickOptions *options = GGIT_CHERRY_PICK_OPTIONS (object);
+	GgitCherryPickOptionsPrivate *priv;
+
+	priv = ggit_cherry_pick_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_MAINLINE:
-		self->priv->options.mainline = g_value_get_uint (value);
+		priv->options.mainline = g_value_get_uint (value);
 		break;
 	case PROP_CHECKOUT_OPTIONS:
-		ggit_cherry_pick_options_set_checkout_options (self,
+		ggit_cherry_pick_options_set_checkout_options (options,
 		                                               g_value_get_object (value));
 		break;
 	case PROP_MERGE_OPTIONS:
-		ggit_cherry_pick_options_set_merge_options (self,
+		ggit_cherry_pick_options_set_merge_options (options,
 		                                            g_value_get_object (value));
 		break;
 	default:
@@ -89,18 +98,21 @@ ggit_cherry_pick_options_get_property (GObject    *object,
                                        GValue     *value,
                                        GParamSpec *pspec)
 {
-	GgitCherryPickOptions *self = GGIT_CHERRY_PICK_OPTIONS (object);
+	GgitCherryPickOptions *options = GGIT_CHERRY_PICK_OPTIONS (object);
+	GgitCherryPickOptionsPrivate *priv;
+
+	priv = ggit_cherry_pick_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_MAINLINE:
-		g_value_set_uint (value, self->priv->options.mainline);
+		g_value_set_uint (value, priv->options.mainline);
 		break;
 	case PROP_CHECKOUT_OPTIONS:
-		g_value_set_object (value, self->priv->checkout_options);
+		g_value_set_object (value, priv->checkout_options);
 		break;
 	case PROP_MERGE_OPTIONS:
-		g_value_set_object (value, self->priv->merge_options);
+		g_value_set_object (value, priv->merge_options);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -118,8 +130,6 @@ ggit_cherry_pick_options_class_init (GgitCherryPickOptionsClass *klass)
 
 	object_class->get_property = ggit_cherry_pick_options_get_property;
 	object_class->set_property = ggit_cherry_pick_options_set_property;
-
-	g_type_class_add_private (object_class, sizeof (GgitCherryPickOptionsPrivate));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_MAINLINE,
@@ -152,11 +162,13 @@ ggit_cherry_pick_options_class_init (GgitCherryPickOptionsClass *klass)
 }
 
 static void
-ggit_cherry_pick_options_init (GgitCherryPickOptions *self)
+ggit_cherry_pick_options_init (GgitCherryPickOptions *options)
 {
-	self->priv = GGIT_CHERRY_PICK_OPTIONS_GET_PRIVATE (self);
+	GgitCherryPickOptionsPrivate *priv;
 
-	git_cherrypick_init_options (&self->priv->options, GIT_CHERRYPICK_OPTIONS_VERSION);
+	priv = ggit_cherry_pick_options_get_instance_private (options);
+
+	git_cherrypick_init_options (&priv->options, GIT_CHERRYPICK_OPTIONS_VERSION);
 }
 
 /**
@@ -178,14 +190,18 @@ _ggit_cherry_pick_options_get_cherry_pick_options (GgitCherryPickOptions *option
 {
 	if (options != NULL)
 	{
+		GgitCherryPickOptionsPrivate *priv;
+
+		priv = ggit_cherry_pick_options_get_instance_private (options);
+
 		// Make sure to synchronize the wrapped checkout options with the internal checkout options
-		if (options->priv->checkout_options)
+		if (priv->checkout_options)
 		{
-			options->priv->options.checkout_opts =
-				*_ggit_checkout_options_get_checkout_options (options->priv->checkout_options);
+			priv->options.checkout_opts =
+				*_ggit_checkout_options_get_checkout_options (priv->checkout_options);
 		}
 
-		return &options->priv->options;
+		return &priv->options;
 	}
 	else
 	{
@@ -205,9 +221,13 @@ _ggit_cherry_pick_options_get_cherry_pick_options (GgitCherryPickOptions *option
 guint
 ggit_cherry_pick_options_get_mainline (GgitCherryPickOptions *options)
 {
+	GgitCherryPickOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options), 0);
 
-	return options->priv->options.mainline;
+	priv = ggit_cherry_pick_options_get_instance_private (options);
+
+	return priv->options.mainline;
 }
 
 /**
@@ -222,9 +242,13 @@ void
 ggit_cherry_pick_options_set_mainline (GgitCherryPickOptions *options,
                                        guint                  mainline)
 {
+	GgitCherryPickOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options));
 
-	options->priv->options.mainline = mainline;
+	priv = ggit_cherry_pick_options_get_instance_private (options);
+
+	priv->options.mainline = mainline;
 	g_object_notify (G_OBJECT (options), "mainline");
 }
 
@@ -240,9 +264,13 @@ ggit_cherry_pick_options_set_mainline (GgitCherryPickOptions *options,
 GgitCheckoutOptions *
 ggit_cherry_pick_options_get_checkout_options (GgitCherryPickOptions *options)
 {
+	GgitCherryPickOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options), NULL);
 
-	return options->priv->checkout_options;
+	priv = ggit_cherry_pick_options_get_instance_private (options);
+
+	return priv->checkout_options;
 }
 
 /**
@@ -257,21 +285,25 @@ void
 ggit_cherry_pick_options_set_checkout_options (GgitCherryPickOptions *options,
                                                GgitCheckoutOptions   *checkout_options)
 {
+	GgitCherryPickOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options));
 	g_return_if_fail (checkout_options == NULL || GGIT_IS_CHECKOUT_OPTIONS (checkout_options));
 
-	if (options->priv->checkout_options)
-	{
-		g_object_unref (options->priv->checkout_options);
-		options->priv->checkout_options = NULL;
+	priv = ggit_cherry_pick_options_get_instance_private (options);
 
-		git_checkout_init_options (&options->priv->options.checkout_opts, GIT_CHECKOUT_OPTIONS_VERSION);
+	if (priv->checkout_options)
+	{
+		g_object_unref (priv->checkout_options);
+		priv->checkout_options = NULL;
+
+		git_checkout_init_options (&priv->options.checkout_opts, GIT_CHECKOUT_OPTIONS_VERSION);
 	}
 
 	if (checkout_options)
 	{
-		options->priv->checkout_options = g_object_ref (checkout_options);
-		options->priv->options.checkout_opts = *_ggit_checkout_options_get_checkout_options (options->priv->checkout_options);
+		priv->checkout_options = g_object_ref (checkout_options);
+		priv->options.checkout_opts = *_ggit_checkout_options_get_checkout_options (priv->checkout_options);
 	}
 
 	g_object_notify (G_OBJECT (options), "checkout-options");
@@ -289,9 +321,13 @@ ggit_cherry_pick_options_set_checkout_options (GgitCherryPickOptions *options,
 GgitMergeOptions *
 ggit_cherry_pick_options_get_merge_options (GgitCherryPickOptions *options)
 {
+	GgitCherryPickOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options), NULL);
 
-	return options->priv->merge_options;
+	priv = ggit_cherry_pick_options_get_instance_private (options);
+
+	return priv->merge_options;
 
 }
 
@@ -307,20 +343,24 @@ void
 ggit_cherry_pick_options_set_merge_options (GgitCherryPickOptions *options,
                                             GgitMergeOptions      *merge_options)
 {
+	GgitCherryPickOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_CHERRY_PICK_OPTIONS (options));
 
-	if (options->priv->merge_options)
-	{
-		ggit_merge_options_free (options->priv->merge_options);
-		options->priv->merge_options = NULL;
+	priv = ggit_cherry_pick_options_get_instance_private (options);
 
-		git_merge_init_options (&options->priv->options.merge_opts, GIT_MERGE_OPTIONS_VERSION);
+	if (priv->merge_options)
+	{
+		ggit_merge_options_free (priv->merge_options);
+		priv->merge_options = NULL;
+
+		git_merge_init_options (&priv->options.merge_opts, GIT_MERGE_OPTIONS_VERSION);
 	}
 
 	if (merge_options)
 	{
-		options->priv->merge_options = ggit_merge_options_copy (merge_options);
-		options->priv->options.merge_opts = *_ggit_merge_options_get_merge_options (options->priv->merge_options);
+		priv->merge_options = ggit_merge_options_copy (merge_options);
+		priv->options.merge_opts = *_ggit_merge_options_get_merge_options (priv->merge_options);
 	}
 
 	g_object_notify (G_OBJECT (options), "merge-options");

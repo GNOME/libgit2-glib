@@ -342,13 +342,6 @@ typedef struct _GgitTreeBuilder GgitTreeBuilder;
 typedef struct _GgitBlameOptions GgitBlameOptions;
 
 /**
- * GgitCherryPickOptions:
- *
- * Represents the options used when doign a cherry-pick.
- */
-typedef struct _GgitCherryPickOptions GgitCherryPickOptions;
-
-/**
  * GgitRevertOptions:
  *
  * Represents the options used when reverting.

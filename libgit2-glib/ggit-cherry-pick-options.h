@@ -29,30 +29,13 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CHERRY_PICK_OPTIONS		(ggit_cherry_pick_options_get_type ())
-#define GGIT_CHERRY_PICK_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CHERRY_PICK_OPTIONS, GgitCherryPickOptions))
-#define GGIT_CHERRY_PICK_OPTIONS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CHERRY_PICK_OPTIONS, GgitCherryPickOptions const))
-#define GGIT_CHERRY_PICK_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CHERRY_PICK_OPTIONS, GgitCherryPickOptionsClass))
-#define GGIT_IS_CHERRY_PICK_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CHERRY_PICK_OPTIONS))
-#define GGIT_IS_CHERRY_PICK_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CHERRY_PICK_OPTIONS))
-#define GGIT_CHERRY_PICK_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CHERRY_PICK_OPTIONS, GgitCherryPickOptionsClass))
-
-typedef struct _GgitCherryPickOptionsClass	GgitCherryPickOptionsClass;
-typedef struct _GgitCherryPickOptionsPrivate	GgitCherryPickOptionsPrivate;
-
-struct _GgitCherryPickOptions
-{
-	GObject parent;
-
-	GgitCherryPickOptionsPrivate *priv;
-};
+#define GGIT_TYPE_CHERRY_PICK_OPTIONS (ggit_cherry_pick_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCherryPickOptions, ggit_cherry_pick_options, GGIT, CHERRY_PICK_OPTIONS, GObject)
 
 struct _GgitCherryPickOptionsClass
 {
 	GObjectClass parent_class;
 };
-
-GType                  ggit_cherry_pick_options_get_type (void) G_GNUC_CONST;
 
 const git_cherrypick_options *
                       _ggit_cherry_pick_options_get_cherry_pick_options (
