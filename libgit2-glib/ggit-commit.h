@@ -29,6 +29,7 @@
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-tree.h>
 #include <libgit2-glib/ggit-commit-parents.h>
+#include <libgit2-glib/ggit-signature.h>
 
 G_BEGIN_DECLS
 

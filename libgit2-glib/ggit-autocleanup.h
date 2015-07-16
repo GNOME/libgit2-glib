@@ -70,7 +70,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRemote, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRemoteCallbacks, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRepository, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRevisionWalker, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSignature, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSubmoduleUpdateOptions, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitTreeBuilder, g_object_unref)
 

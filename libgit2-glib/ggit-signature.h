@@ -27,38 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_SIGNATURE		(ggit_signature_get_type ())
-#define GGIT_SIGNATURE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_SIGNATURE, GgitSignature))
-#define GGIT_SIGNATURE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_SIGNATURE, GgitSignatureClass))
-#define GGIT_IS_SIGNATURE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_SIGNATURE))
-#define GGIT_IS_SIGNATURE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_SIGNATURE))
-#define GGIT_SIGNATURE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_SIGNATURE, GgitSignatureClass))
-
-typedef struct _GgitSignatureClass	GgitSignatureClass;
-typedef struct _GgitSignaturePrivate	GgitSignaturePrivate;
-
-struct _GgitSignature
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/* priv padding */
-	GgitSignaturePrivate *priv;
-};
-
-/**
- * GgitSignatureClass:
- * @parent_class: The parent class.
- *
- * The class structure for #GgitSignatureClass.
- */
-struct _GgitSignatureClass
-{
-	/*< private >*/
-	GgitNativeClass parent_class;
-};
-
-GType                 ggit_signature_get_type          (void) G_GNUC_CONST;
+#define GGIT_TYPE_SIGNATURE (ggit_signature_get_type ())
+G_DECLARE_FINAL_TYPE (GgitSignature, ggit_signature, GGIT, SIGNATURE, GgitNative)
 
 GgitSignature        *_ggit_signature_wrap             (const git_signature *signature,
                                                         const gchar         *encoding,

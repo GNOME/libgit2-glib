@@ -286,13 +286,6 @@ typedef struct _GgitRepository GgitRepository;
 typedef struct _GgitRevisionWalker GgitRevisionWalker;
 
 /**
- * GgitSignature:
- *
- * Represents an action signature.
- */
-typedef struct _GgitSignature GgitSignature;
-
-/**
  * GgitStatusOptions:
  *
  * Represents the options used when creating getting file status.

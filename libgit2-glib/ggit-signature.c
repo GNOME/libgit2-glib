@@ -24,9 +24,12 @@
 #include "ggit-signature.h"
 #include "ggit-convert.h"
 
-#define GGIT_SIGNATURE_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_SIGNATURE, GgitSignaturePrivate))
-
-struct _GgitSignaturePrivate
+/**
+ * GgitSignature:
+ *
+ * Represents an action signature.
+ */
+struct _GgitSignature
 {
 	gchar *encoding;
 
@@ -49,9 +52,9 @@ ggit_signature_finalize (GObject *object)
 
 	signature = GGIT_SIGNATURE (object);
 
-	g_free (signature->priv->name_utf8);
-	g_free (signature->priv->email_utf8);
-	g_free (signature->priv->encoding);
+	g_free (signature->name_utf8);
+	g_free (signature->email_utf8);
+	g_free (signature->encoding);
 
 	G_OBJECT_CLASS (ggit_signature_parent_class)->finalize (object);
 }
@@ -62,13 +65,13 @@ ggit_signature_set_property (GObject      *object,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-	GgitSignature *self = GGIT_SIGNATURE (object);
+	GgitSignature *signature = GGIT_SIGNATURE (object);
 
 	switch (prop_id)
 	{
 		case PROP_ENCODING:
-			g_free (self->priv->encoding);
-			self->priv->encoding = g_value_dup_string (value);
+			g_free (signature->encoding);
+			signature->encoding = g_value_dup_string (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -82,12 +85,12 @@ ggit_signature_get_property (GObject    *object,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-	GgitSignature *self = GGIT_SIGNATURE (object);
+	GgitSignature *signature = GGIT_SIGNATURE (object);
 
 	switch (prop_id)
 	{
 		case PROP_ENCODING:
-			g_value_set_string (value, self->priv->encoding);
+			g_value_set_string (value, signature->encoding);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -105,8 +108,6 @@ ggit_signature_class_init (GgitSignatureClass *klass)
 	object_class->get_property = ggit_signature_get_property;
 	object_class->set_property = ggit_signature_set_property;
 
-	g_type_class_add_private (object_class, sizeof (GgitSignaturePrivate));
-
 	g_object_class_install_property (object_class,
 	                                 PROP_ENCODING,
 	                                 g_param_spec_string ("encoding",
@@ -118,9 +119,8 @@ ggit_signature_class_init (GgitSignatureClass *klass)
 }
 
 static void
-ggit_signature_init (GgitSignature *self)
+ggit_signature_init (GgitSignature *signature)
 {
-	self->priv = GGIT_SIGNATURE_GET_PRIVATE (self);
 }
 
 GgitSignature *
@@ -252,7 +252,7 @@ ggit_signature_copy (GgitSignature *signature)
 	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 
 	git_signature_dup (&ret, _ggit_native_get (signature));
-	return _ggit_signature_wrap (ret, signature->priv->encoding, TRUE);
+	return _ggit_signature_wrap (ret, signature->encoding, TRUE);
 }
 
 static gchar *
@@ -285,11 +285,11 @@ ggit_signature_get_name (GgitSignature *signature)
 
 	s = _ggit_native_get (signature);
 
-	signature->priv->name_utf8 = ensure_utf8 (signature->priv->name_utf8,
-	                                          signature->priv->encoding,
+	signature->name_utf8 = ensure_utf8 (signature->name_utf8,
+	                                          signature->encoding,
 	                                          s->name);
 
-	return signature->priv->name_utf8;
+	return signature->name_utf8;
 }
 
 /**
@@ -309,11 +309,11 @@ ggit_signature_get_email (GgitSignature *signature)
 
 	s = _ggit_native_get (signature);
 
-	signature->priv->email_utf8 = ensure_utf8 (signature->priv->email_utf8,
-	                                           signature->priv->encoding,
+	signature->email_utf8 = ensure_utf8 (signature->email_utf8,
+	                                           signature->encoding,
 	                                           s->email);
 
-	return signature->priv->email_utf8;
+	return signature->email_utf8;
 }
 
 /**

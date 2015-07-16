@@ -24,6 +24,7 @@
 #include <glib-object.h>
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-signature.h>
 #include <git2.h>
 
 G_BEGIN_DECLS
