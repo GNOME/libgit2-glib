@@ -40,6 +40,7 @@
 #include "ggit-revert-options.h"
 #include "ggit-cherry-pick-options.h"
 #include "ggit-merge-options.h"
+#include "ggit-index-entry.h"
 
 
 typedef struct _GgitRepositoryPrivate

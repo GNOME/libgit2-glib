@@ -37,6 +37,7 @@
 #include <libgit2-glib/ggit-note.h>
 #include <libgit2-glib/ggit-blame.h>
 #include <libgit2-glib/ggit-cherry-pick-options.h>
+#include <libgit2-glib/ggit-commit.h>
 
 G_BEGIN_DECLS
 

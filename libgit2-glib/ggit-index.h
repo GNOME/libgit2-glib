@@ -25,43 +25,12 @@
 #include <gio/gio.h>
 #include <git2.h>
 #include <libgit2-glib/ggit-types.h>
-#include <libgit2-glib/ggit-index-entry.h>
-#include <libgit2-glib/ggit-index-entry-resolve-undo.h>
 #include "ggit-native.h"
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_INDEX			(ggit_index_get_type ())
-#define GGIT_INDEX(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_INDEX, GgitIndex))
-#define GGIT_INDEX_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_INDEX, GgitIndexClass))
-#define GGIT_IS_INDEX(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_INDEX))
-#define GGIT_IS_INDEX_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_INDEX))
-#define GGIT_INDEX_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_INDEX, GgitIndexClass))
-
-typedef struct _GgitIndexClass		GgitIndexClass;
-typedef struct _GgitIndexPrivate	GgitIndexPrivate;
-
-struct _GgitIndex
-{
-	/*< private >*/
-	GgitNative parent;
-
-	GgitIndexPrivate *priv;
-};
-
-/**
- * GgitIndexClass:
- * @parent_class: The parent class.
- *
- * The class structure for #GgitIndexClass.
- */
-struct _GgitIndexClass
-{
-	/*< private >*/
-	GgitNativeClass parent_class;
-};
-
-GType                     ggit_index_get_type                 (void) G_GNUC_CONST;
+#define GGIT_TYPE_INDEX (ggit_index_get_type ())
+G_DECLARE_FINAL_TYPE (GgitIndex, ggit_index, GGIT, INDEX, GgitNative)
 
 git_index                *_ggit_index_get_index               (GgitIndex  *idx);
 GgitIndex                *_ggit_index_wrap                    (git_index  *idx);

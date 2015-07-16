@@ -159,13 +159,6 @@ typedef struct _GgitBlameHunk GgitBlameHunk;
 typedef struct _GgitFetchOptions GgitFetchOptions;
 
 /**
- * GgitIndex:
- *
- * Represents an index object.
- */
-typedef struct _GgitIndex GgitIndex;
-
-/**
  * GgitIndexEntries:
  *
  * Represents the entries in an index object.

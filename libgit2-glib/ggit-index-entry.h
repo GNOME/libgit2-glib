@@ -26,6 +26,7 @@
 #include <libgit2-glib/ggit-oid.h>
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-commit.h>
+#include <libgit2-glib/ggit-index.h>
 #include <git2.h>
 
 G_BEGIN_DECLS

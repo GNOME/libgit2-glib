@@ -22,11 +22,18 @@
 #include <git2.h>
 #include "ggit-error.h"
 #include "ggit-repository.h"
+#include "ggit-index-entry.h"
+#include "ggit-index-entry-resolve-undo.h"
 
-#define GGIT_INDEX_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_INDEX, GgitIndexPrivate))
-
-struct _GgitIndexPrivate
+/**
+ * GgitIndex:
+ *
+ * Represents an index object.
+ */
+struct _GgitIndex
 {
+	GgitNative parent_instance;
+
 	GFile *file;
 };
 
@@ -46,12 +53,12 @@ G_DEFINE_TYPE_EXTENDED (GgitIndex, ggit_index, GGIT_TYPE_NATIVE,
 static void
 ggit_index_dispose (GObject *object)
 {
-	GgitIndexPrivate *priv = GGIT_INDEX (object)->priv;
+	GgitIndex *index = GGIT_INDEX (object);
 
-	if (priv->file)
+	if (index->file)
 	{
-		g_object_unref (priv->file);
-		priv->file = NULL;
+		g_object_unref (index->file);
+		index->file = NULL;
 	}
 
 	G_OBJECT_CLASS (ggit_index_parent_class)->dispose (object);
@@ -63,7 +70,7 @@ ggit_index_set_property (GObject      *object,
                          const GValue *value,
                          GParamSpec   *pspec)
 {
-	GgitIndex *self = GGIT_INDEX (object);
+	GgitIndex *index = GGIT_INDEX (object);
 
 	switch (prop_id)
 	{
@@ -75,7 +82,7 @@ ggit_index_set_property (GObject      *object,
 
 			if (f != NULL)
 			{
-				self->priv->file = g_file_dup (f);
+				index->file = g_file_dup (f);
 			}
 
 			break;
@@ -92,12 +99,12 @@ ggit_index_get_property (GObject    *object,
                          GValue     *value,
                          GParamSpec *pspec)
 {
-	GgitIndex *self = GGIT_INDEX (object);
+	GgitIndex *index = GGIT_INDEX (object);
 
 	switch (prop_id)
 	{
 		case PROP_FILE:
-			g_value_set_object (value, self->priv->file);
+			g_value_set_object (value, index->file);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -110,7 +117,7 @@ ggit_index_initable_init (GInitable     *initable,
                           GCancellable  *cancellable,
                           GError       **error)
 {
-	GgitIndexPrivate *priv;
+	GgitIndex *index = GGIT_INDEX (initable);
 	gchar *path = NULL;
 	git_index *idx;
 	gint err;
@@ -123,11 +130,9 @@ ggit_index_initable_init (GInitable     *initable,
 		return FALSE;
 	}
 
-	priv = GGIT_INDEX (initable)->priv;
-
-	if (priv->file != NULL)
+	if (index->file != NULL)
 	{
-		path = g_file_get_path (priv->file);
+		path = g_file_get_path (index->file);
 	}
 
 	if (path == NULL)
@@ -170,8 +175,6 @@ ggit_index_class_init (GgitIndexClass *klass)
 	object_class->get_property = ggit_index_get_property;
 	object_class->set_property = ggit_index_set_property;
 
-	g_type_class_add_private (object_class, sizeof (GgitIndexPrivate));
-
 	g_object_class_install_property (object_class,
 	                                 PROP_FILE,
 	                                 g_param_spec_object ("file",
@@ -186,8 +189,6 @@ ggit_index_class_init (GgitIndexClass *klass)
 static void
 ggit_index_init (GgitIndex *index)
 {
-	index->priv = GGIT_INDEX_GET_PRIVATE (index);
-
 	_ggit_native_set_destroy_func (index, (GDestroyNotify) git_index_free);
 }
 
