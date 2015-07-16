@@ -26,13 +26,6 @@
 G_BEGIN_DECLS
 
 /**
- * GgitBlobOutputStream:
- *
- * Represents a blob stream object.
- */
-typedef struct _GgitBlobOutputStream GgitBlobOutputStream;
-
-/**
  * GgitBranchEnumerator:
  *
  * Represents a branch enumerator.
