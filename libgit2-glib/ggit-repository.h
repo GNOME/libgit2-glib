@@ -48,14 +48,11 @@ G_BEGIN_DECLS
 #define GGIT_REPOSITORY_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REPOSITORY, GgitRepositoryClass))
 
 typedef struct _GgitRepositoryClass	GgitRepositoryClass;
-typedef struct _GgitRepositoryPrivate	GgitRepositoryPrivate;
 
 struct _GgitRepository
 {
 	/*< private >*/
 	GgitNative parent;
-
-	GgitRepositoryPrivate *priv;
 };
 
 /**

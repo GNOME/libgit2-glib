@@ -41,9 +41,8 @@
 #include "ggit-cherry-pick-options.h"
 #include "ggit-merge-options.h"
 
-#define GGIT_REPOSITORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REPOSITORY, GgitRepositoryPrivate))
 
-struct _GgitRepositoryPrivate
+typedef struct _GgitRepositoryPrivate
 {
 	gchar *url;
 	GFile *location;
@@ -53,7 +52,7 @@ struct _GgitRepositoryPrivate
 
 	guint is_bare : 1;
 	guint init : 1;
-};
+} GgitRepositoryPrivate;
 
 enum
 {
@@ -71,6 +70,7 @@ static void ggit_repository_initable_iface_init (GInitableIface  *iface);
 
 G_DEFINE_TYPE_EXTENDED (GgitRepository, ggit_repository, GGIT_TYPE_NATIVE,
                         0,
+                        G_ADD_PRIVATE (GgitRepository)
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_repository_initable_iface_init))
 
@@ -154,8 +154,11 @@ ggit_repository_path_is_ignored (GgitRepository  *repository,
 static void
 ggit_repository_finalize (GObject *object)
 {
-	GgitRepositoryPrivate *priv = GGIT_REPOSITORY (object)->priv;
+	GgitRepository *repository = GGIT_REPOSITORY (object);
+	GgitRepositoryPrivate *priv;
 	git_repository *repo;
+
+	priv = ggit_repository_get_instance_private (repository);
 
 	g_free (priv->url);
 	g_clear_object (&priv->location);
@@ -183,7 +186,9 @@ ggit_repository_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
 	GgitRepository *repository = GGIT_REPOSITORY (object);
-	GgitRepositoryPrivate *priv = repository->priv;
+	GgitRepositoryPrivate *priv;
+
+	priv = ggit_repository_get_instance_private (repository);
 
 	switch (prop_id)
 	{
@@ -226,7 +231,7 @@ set_workdir (GgitRepository *repository,
 {
 	GgitRepositoryPrivate *priv;
 
-	priv = repository->priv;
+	priv = ggit_repository_get_instance_private (repository);
 
 	g_clear_object (&priv->workdir);
 
@@ -258,7 +263,7 @@ ggit_repository_set_property (GObject      *object,
 	GgitRepositoryPrivate *priv;
 
 	repository = GGIT_REPOSITORY (object);
-	priv = repository->priv;
+	priv = ggit_repository_get_instance_private (repository);
 
 	switch (prop_id)
 	{
@@ -373,14 +378,11 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 	                                                     GGIT_TYPE_CLONE_OPTIONS,
 	                                                     G_PARAM_READWRITE |
 	                                                     G_PARAM_CONSTRUCT_ONLY));
-
-	g_type_class_add_private (object_class, sizeof (GgitRepositoryPrivate));
 }
 
 static void
 ggit_repository_init (GgitRepository *repository)
 {
-	repository->priv = GGIT_REPOSITORY_GET_PRIVATE (repository);
 }
 
 static gboolean
@@ -388,6 +390,7 @@ ggit_repository_initable_init (GInitable    *initable,
                                GCancellable *cancellable,
                                GError      **error)
 {
+	GgitRepository *repository = GGIT_REPOSITORY (initable);
 	GgitRepositoryPrivate *priv;
 	gboolean success = TRUE;
 	gint err;
@@ -401,7 +404,7 @@ ggit_repository_initable_init (GInitable    *initable,
 		return FALSE;
 	}
 
-	priv = GGIT_REPOSITORY (initable)->priv;
+	priv = ggit_repository_get_instance_private (repository);
 
 	if (priv->location != NULL)
 	{
@@ -475,6 +478,7 @@ _ggit_repository_wrap (git_repository *repository,
                        gboolean        owned)
 {
 	GgitRepository *ret;
+	GgitRepositoryPrivate *priv;
 
 	ret = repository_from_registry (repository);
 
@@ -487,7 +491,9 @@ _ggit_repository_wrap (git_repository *repository,
 	                    "native", repository,
 	                    NULL);
 
-	ret->priv->workdir = ggit_repository_get_workdir (ret);
+	priv = ggit_repository_get_instance_private (ret);
+
+	priv->workdir = ggit_repository_get_workdir (ret);
 
 	if (owned)
 	{
@@ -1097,6 +1103,7 @@ ggit_repository_file_status (GgitRepository  *repository,
                              GFile           *location,
                              GError         **error)
 {
+	GgitRepositoryPrivate *priv;
 	GgitStatusFlags status_flags;
 	gint ret;
 	gchar *path;
@@ -1105,7 +1112,9 @@ ggit_repository_file_status (GgitRepository  *repository,
 	g_return_val_if_fail (G_IS_FILE (location), GGIT_STATUS_IGNORED);
 	g_return_val_if_fail (error == NULL || *error == NULL, GGIT_STATUS_IGNORED);
 
-	path = g_file_get_relative_path (repository->priv->workdir, location);
+	priv = ggit_repository_get_instance_private (repository);
+
+	path = g_file_get_relative_path (priv->workdir, location);
 
 	g_return_val_if_fail (path != NULL, GGIT_STATUS_IGNORED);
 
@@ -2891,6 +2900,7 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
                                              GgitOId         *id,
                                              GError         **error)
 {
+	GgitRepositoryPrivate *priv;
 	gchar *path = NULL;
 	GgitIndexEntry *ret;
 
@@ -2898,10 +2908,11 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
 	g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
+	priv = ggit_repository_get_instance_private (repository);
+
 	if (file != NULL)
 	{
-		path = g_file_get_relative_path (repository->priv->workdir,
-		                                 file);
+		path = g_file_get_relative_path (priv->workdir, file);
 
 		if (!path)
 		{
@@ -2952,18 +2963,20 @@ ggit_repository_create_index_entry_for_path (GgitRepository  *repository,
                                              GgitOId         *id,
                                              GError         **error)
 {
+	GgitRepositoryPrivate *priv;
 	GFile *f;
 	GgitIndexEntry *ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
+	priv = ggit_repository_get_instance_private (repository);
+
 	if (path)
 	{
 		if (!g_path_is_absolute (path))
 		{
-			f = g_file_resolve_relative_path (repository->priv->workdir,
-				                          path);
+			f = g_file_resolve_relative_path (priv->workdir, path);
 		}
 		else
 		{
@@ -3003,6 +3016,7 @@ ggit_repository_blame_file (GgitRepository    *repository,
                             GgitBlameOptions  *blame_options,
                             GError           **error)
 {
+	GgitRepositoryPrivate *priv;
 	git_blame *blame;
 	gchar *path;
 	int ret;
@@ -3011,7 +3025,9 @@ ggit_repository_blame_file (GgitRepository    *repository,
 	g_return_val_if_fail (G_IS_FILE (file), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	path = g_file_get_relative_path (repository->priv->workdir, file);
+	priv = ggit_repository_get_instance_private (repository);
+
+	path = g_file_get_relative_path (priv->workdir, file);
 
 	ret = git_blame_file (&blame,
 	                      _ggit_native_get (repository),
