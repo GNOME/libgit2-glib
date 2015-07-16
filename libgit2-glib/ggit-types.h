@@ -40,13 +40,6 @@ typedef struct _GgitBranchEnumerator GgitBranchEnumerator;
 typedef struct _GgitCloneOptions GgitCloneOptions;
 
 /**
- * GgitCommitParents:
- *
- * Represents the parents of a commit object.
- */
-typedef struct _GgitCommitParents GgitCommitParents;
-
-/**
  * GgitConfigEntry:
  *
  * Represents a git configuration entry.

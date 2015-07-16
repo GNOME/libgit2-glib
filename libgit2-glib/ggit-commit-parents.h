@@ -1,5 +1,5 @@
 /*
- * ggit-commit.h
+ * ggit-commit-parents.h
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2014 - Jesse van den Kieboom
@@ -25,42 +25,14 @@
 #include <glib-object.h>
 
 #include <libgit2-glib/ggit-types.h>
-#include <libgit2-glib/ggit-commit.h>
 
 G_BEGIN_DECLS
 
+typedef struct _GgitCommit GgitCommit;
+
 #define GGIT_TYPE_COMMIT_PARENTS    (ggit_commit_parents_get_type ())
-#define GGIT_COMMIT_PARENTS(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_COMMIT_PARENTS, GgitCommitParents))
-#define GGIT_COMMIT_PARENTS_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_COMMIT_PARENTS, GgitCommitParentsClass))
-#define GGIT_IS_COMMIT_PARENTS(obj)   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_COMMIT_PARENTS))
-#define GGIT_IS_COMMIT_PARENTS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_COMMIT_PARENTS))
-#define GGIT_COMMIT_PARENTS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_COMMIT_PARENTS, GgitCommitParentsClass))
+G_DECLARE_FINAL_TYPE (GgitCommitParents, ggit_commit_parents, GGIT, COMMIT_PARENTS, GObject)
 
-typedef struct _GgitCommitParentsClass   GgitCommitParentsClass;
-typedef struct _GgitCommitParentsPrivate GgitCommitParentsPrivate;
-
-struct _GgitCommitParents
-{
-  /*< private >*/
-  GObject parent;
-
-  /* priv padding */
-  GgitCommitParentsPrivate *priv;
-};
-
-/**
- * GgitCommitParentsClass:
- * @parent_class: The parent class.
- *
- * The class structure for #GgitCommitParentClass.
- */
-struct _GgitCommitParentsClass
-{
-  /*< private >*/
-  GObjectClass parent_class;
-};
-
-GType                ggit_commit_parents_get_type     (void) G_GNUC_CONST;
 GgitCommitParents   *ggit_commit_parents_new          (GgitCommit        *commit);
 
 guint                ggit_commit_parents_get_size     (GgitCommitParents *parents);

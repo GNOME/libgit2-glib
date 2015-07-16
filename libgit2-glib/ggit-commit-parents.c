@@ -1,5 +1,5 @@
 /*
- * ggit-commit.c
+ * ggit-commit-parents.c
  * This file is part of libgit2-glib
  *
  * Copyright (C) 2014 - Jesse van den Kieboom
@@ -24,10 +24,15 @@
 #include "ggit-commit.h"
 #include "ggit-oid.h"
 
-#define GGIT_COMMIT_PARENTS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_COMMIT_PARENTS, GgitCommitParentsPrivate))
-
-struct _GgitCommitParentsPrivate
+/**
+ * GgitCommitParents:
+ *
+ * Represents the parents of a commit object.
+ */
+struct _GgitCommitParents
 {
+	GObject parent_instance;
+
 	GgitCommit *commit;
 };
 
@@ -51,7 +56,7 @@ ggit_commit_parents_get_property (GObject    *object,
 	switch (prop_id)
 	{
 		case PROP_COMMIT:
-			g_value_set_object (value, parents->priv->commit);
+			g_value_set_object (value, parents->commit);
 			break;
 		case PROP_SIZE:
 			g_value_set_uint (value, ggit_commit_parents_get_size (parents));
@@ -68,12 +73,12 @@ ggit_commit_parents_set_property (GObject      *object,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-	GgitCommitParentsPrivate *priv = GGIT_COMMIT_PARENTS (object)->priv;
+	GgitCommitParents *parents = GGIT_COMMIT_PARENTS (object);
 
 	switch (prop_id)
 	{
 		case PROP_COMMIT:
-			priv->commit = g_value_dup_object (value);
+			parents->commit = g_value_dup_object (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -92,7 +97,7 @@ ggit_commit_parents_finalize (GObject *object)
 {
 	GgitCommitParents *parents = GGIT_COMMIT_PARENTS (object);
 
-	g_object_unref (parents->priv->commit);
+	g_object_unref (parents->commit);
 
 	G_OBJECT_CLASS (ggit_commit_parents_parent_class)->finalize (object);
 }
@@ -126,14 +131,11 @@ ggit_commit_parents_class_init (GgitCommitParentsClass *klass)
 	                                                    0,
 	                                                    G_PARAM_READABLE |
 	                                                    G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (GgitCommitParentsPrivate));
 }
 
 static void
 ggit_commit_parents_init (GgitCommitParents *self)
 {
-	self->priv = GGIT_COMMIT_PARENTS_GET_PRIVATE (self);
 }
 
 /**
@@ -152,7 +154,7 @@ ggit_commit_parents_get_size (GgitCommitParents *parents)
 
 	g_return_val_if_fail (GGIT_IS_COMMIT_PARENTS (parents), 0);
 
-	c = _ggit_native_get (parents->priv->commit);
+	c = _ggit_native_get (parents->commit);
 	return (guint)git_commit_parentcount (c);
 }
 
@@ -175,7 +177,7 @@ ggit_commit_parents_get (GgitCommitParents *parents,
 
 	g_return_val_if_fail (GGIT_IS_COMMIT_PARENTS (parents), NULL);
 
-	c = _ggit_native_get (parents->priv->commit);
+	c = _ggit_native_get (parents->commit);
 
 	if (git_commit_parent (&p, c, idx) == GIT_OK)
 	{
@@ -204,7 +206,7 @@ ggit_commit_parents_get_id (GgitCommitParents *parents,
 
 	g_return_val_if_fail (GGIT_IS_COMMIT_PARENTS (parents), NULL);
 
-	c = _ggit_native_get (parents->priv->commit);
+	c = _ggit_native_get (parents->commit);
 
 	oid = git_commit_parent_id (c, idx);
 	return _ggit_oid_wrap (oid);
