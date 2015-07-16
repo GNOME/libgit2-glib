@@ -215,13 +215,6 @@ typedef struct _GgitOId GgitOId;
 typedef struct _GgitPatch GgitPatch;
 
 /**
- * GgitPushOptions:
- *
- * Represents a git push options.
- */
-typedef struct _GgitPushOptions GgitPushOptions;
-
-/**
  * GgitRefSpec:
  *
  * Reprensents a git reference specification.

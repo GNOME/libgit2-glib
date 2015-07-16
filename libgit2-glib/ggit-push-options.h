@@ -28,30 +28,13 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_PUSH_OPTIONS			(ggit_push_options_get_type ())
-#define GGIT_PUSH_OPTIONS(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_PUSH_OPTIONS, GgitPushOptions))
-#define GGIT_PUSH_OPTIONS_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_PUSH_OPTIONS, GgitPushOptions const))
-#define GGIT_PUSH_OPTIONS_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_PUSH_OPTIONS, GgitPushOptionsClass))
-#define GGIT_IS_PUSH_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_PUSH_OPTIONS))
-#define GGIT_IS_PUSH_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_PUSH_OPTIONS))
-#define GGIT_PUSH_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_PUSH_OPTIONS, GgitPushOptionsClass))
-
-typedef struct _GgitPushOptionsClass	GgitPushOptionsClass;
-typedef struct _GgitPushOptionsPrivate	GgitPushOptionsPrivate;
-
-struct _GgitPushOptions
-{
-	GObject parent;
-
-	GgitPushOptionsPrivate *priv;
-};
+#define GGIT_TYPE_PUSH_OPTIONS (ggit_push_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitPushOptions, ggit_push_options, GGIT, PUSH_OPTIONS, GObject)
 
 struct _GgitPushOptionsClass
 {
 	GObjectClass parent_class;
 };
-
-GType                  ggit_push_options_get_type (void) G_GNUC_CONST;
 
 const git_push_options *
                       _ggit_push_options_get_push_options (

@@ -1,13 +1,37 @@
+/*
+ * ggit-push-options.c
+ * This file is part of libgit2-glib
+ *
+ * Copyright (C) 2014 - Jesse van den Kieboom
+ *
+ * libgit2-glib is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * libgit2-glib is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "ggit-push-options.h"
 
-#define GGIT_PUSH_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_PUSH_OPTIONS, GgitPushOptionsPrivate))
+/**
+ * GgitPushOptions:
+ *
+ * Represents a git push options.
+ */
 
-struct _GgitPushOptionsPrivate
+typedef struct _GgitPushOptionsPrivate
 {
 	git_push_options options;
-};
+} GgitPushOptionsPrivate;
 
-G_DEFINE_TYPE (GgitPushOptions, ggit_push_options, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitPushOptions, ggit_push_options, G_TYPE_OBJECT)
 
 enum
 {
@@ -21,12 +45,15 @@ ggit_push_options_set_property (GObject      *object,
                                     const GValue *value,
                                     GParamSpec   *pspec)
 {
-	GgitPushOptions *self = GGIT_PUSH_OPTIONS (object);
+	GgitPushOptions *options = GGIT_PUSH_OPTIONS (object);
+	GgitPushOptionsPrivate *priv;
+
+	priv = ggit_push_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_PARALLELISM:
-		self->priv->options.pb_parallelism = g_value_get_int (value);
+		priv->options.pb_parallelism = g_value_get_int (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -40,12 +67,15 @@ ggit_push_options_get_property (GObject    *object,
                                     GValue     *value,
                                     GParamSpec *pspec)
 {
-	GgitPushOptions *self = GGIT_PUSH_OPTIONS (object);
+	GgitPushOptions *options = GGIT_PUSH_OPTIONS (object);
+	GgitPushOptionsPrivate *priv;
+
+	priv = ggit_push_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_PARALLELISM:
-		g_value_set_int (value, self->priv->options.pb_parallelism);
+		g_value_set_int (value, priv->options.pb_parallelism);
 		break;
 	}
 }
@@ -58,8 +88,6 @@ ggit_push_options_class_init (GgitPushOptionsClass *klass)
 
 	object_class->get_property = ggit_push_options_get_property;
 	object_class->set_property = ggit_push_options_set_property;
-
-	g_type_class_add_private (object_class, sizeof (GgitPushOptionsPrivate));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_PARALLELISM,
@@ -75,11 +103,13 @@ ggit_push_options_class_init (GgitPushOptionsClass *klass)
 }
 
 static void
-ggit_push_options_init (GgitPushOptions *self)
+ggit_push_options_init (GgitPushOptions *options)
 {
-	self->priv = GGIT_PUSH_OPTIONS_GET_PRIVATE (self);
+	GgitPushOptionsPrivate *priv;
 
-	git_push_init_options (&self->priv->options, GIT_PUSH_OPTIONS_VERSION);
+	priv = ggit_push_options_get_instance_private (options);
+
+	git_push_init_options (&priv->options, GIT_PUSH_OPTIONS_VERSION);
 }
 
 /**
@@ -101,7 +131,11 @@ _ggit_push_options_get_push_options (GgitPushOptions *options)
 {
 	if (options != NULL)
 	{
-		return &options->priv->options;
+		GgitPushOptionsPrivate *priv;
+
+		priv = ggit_push_options_get_instance_private (options);
+
+		return &priv->options;
 	}
 	else
 	{
@@ -123,9 +157,13 @@ _ggit_push_options_get_push_options (GgitPushOptions *options)
 gint
 ggit_push_options_get_parallelism (GgitPushOptions *options)
 {
+	GgitPushOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_PUSH_OPTIONS (options), 0);
 
-	return options->priv->options.pb_parallelism;
+	priv = ggit_push_options_get_instance_private (options);
+
+	return priv->options.pb_parallelism;
 }
 
 /**
@@ -142,9 +180,15 @@ void
 ggit_push_options_set_parallelism (GgitPushOptions *options,
                                    gint             parallelism)
 {
+	GgitPushOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_PUSH_OPTIONS (options));
 	g_return_if_fail (parallelism >= 0);
 
-	options->priv->options.pb_parallelism = parallelism;
+	priv = ggit_push_options_get_instance_private (options);
+
+	priv->options.pb_parallelism = parallelism;
 	g_object_notify (G_OBJECT (options), "parallelism");
 }
+
+/* ex:set ts=8 noet: */
