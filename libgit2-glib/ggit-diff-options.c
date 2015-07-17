@@ -24,9 +24,13 @@
 #include "ggit-utils.h"
 #include "ggit-enum-types.h"
 
-#define GGIT_DIFF_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptionsPrivate))
+/**
+ * GgitDiffOptions:
+ *
+ * Represents the options used when creating a #GgitDiff.
+ */
 
-struct _GgitDiffOptionsPrivate
+typedef struct _GgitDiffOptionsPrivate
 {
 	git_diff_options diff_options;
 
@@ -34,9 +38,9 @@ struct _GgitDiffOptionsPrivate
 	gchar *new_prefix;
 
 	gchar **pathspec;
-};
+} GgitDiffOptionsPrivate;
 
-G_DEFINE_TYPE (GgitDiffOptions, ggit_diff_options, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitDiffOptions, ggit_diff_options, G_TYPE_OBJECT)
 
 enum
 {
@@ -52,13 +56,14 @@ enum
 static void
 ggit_diff_options_finalize (GObject *object)
 {
-	GgitDiffOptions *options;
+	GgitDiffOptions *options = GGIT_DIFF_OPTIONS (object);
+	GgitDiffOptionsPrivate *priv;
 
-	options = GGIT_DIFF_OPTIONS (object);
+	priv = ggit_diff_options_get_instance_private (options);
 
-	g_free (options->priv->old_prefix);
-	g_free (options->priv->new_prefix);
-	g_strfreev (options->priv->pathspec);
+	g_free (priv->old_prefix);
+	g_free (priv->new_prefix);
+	g_strfreev (priv->pathspec);
 
 	G_OBJECT_CLASS (ggit_diff_options_parent_class)->finalize (object);
 }
@@ -69,29 +74,32 @@ ggit_diff_options_set_property (GObject      *object,
                                 const GValue *value,
                                 GParamSpec   *pspec)
 {
-	GgitDiffOptions *self = GGIT_DIFF_OPTIONS (object);
+	GgitDiffOptions *options = GGIT_DIFF_OPTIONS (object);
+	GgitDiffOptionsPrivate *priv;
+
+	priv = ggit_diff_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_FLAGS:
-		self->priv->diff_options.flags = g_value_get_flags (value);
+		priv->diff_options.flags = g_value_get_flags (value);
 		break;
 	case PROP_N_CONTEXT_LINES:
-		self->priv->diff_options.context_lines = g_value_get_int (value);
+		priv->diff_options.context_lines = g_value_get_int (value);
 		break;
 	case PROP_N_INTERHUNK_LINES:
-		self->priv->diff_options.interhunk_lines = g_value_get_int (value);
+		priv->diff_options.interhunk_lines = g_value_get_int (value);
 		break;
 	case PROP_OLD_PREFIX:
-		ggit_diff_options_set_old_prefix (self,
+		ggit_diff_options_set_old_prefix (options,
 		                                  g_value_get_string (value));
 		break;
 	case PROP_NEW_PREFIX:
-		ggit_diff_options_set_new_prefix (self,
+		ggit_diff_options_set_new_prefix (options,
 		                                  g_value_get_string (value));
 		break;
 	case PROP_PATHSPEC:
-		ggit_diff_options_set_pathspec (self,
+		ggit_diff_options_set_pathspec (options,
 		                                g_value_get_boxed (value));
 		break;
 	default:
@@ -106,27 +114,30 @@ ggit_diff_options_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-	GgitDiffOptions *self = GGIT_DIFF_OPTIONS (object);
+	GgitDiffOptions *options = GGIT_DIFF_OPTIONS (object);
+	GgitDiffOptionsPrivate *priv;
+
+	priv = ggit_diff_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_FLAGS:
-		g_value_set_flags (value, (GgitDiffOption)self->priv->diff_options.flags);
+		g_value_set_flags (value, (GgitDiffOption)priv->diff_options.flags);
 		break;
 	case PROP_N_CONTEXT_LINES:
-		g_value_set_int (value, self->priv->diff_options.context_lines);
+		g_value_set_int (value, priv->diff_options.context_lines);
 		break;
 	case PROP_N_INTERHUNK_LINES:
-		g_value_set_int (value, self->priv->diff_options.interhunk_lines);
+		g_value_set_int (value, priv->diff_options.interhunk_lines);
 		break;
 	case PROP_OLD_PREFIX:
-		g_value_set_string (value, self->priv->old_prefix);
+		g_value_set_string (value, priv->old_prefix);
 		break;
 	case PROP_NEW_PREFIX:
-		g_value_set_string (value, self->priv->new_prefix);
+		g_value_set_string (value, priv->new_prefix);
 		break;
 	case PROP_PATHSPEC:
-		g_value_set_boxed (value, self->priv->pathspec);
+		g_value_set_boxed (value, priv->pathspec);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -141,11 +152,8 @@ ggit_diff_options_class_init (GgitDiffOptionsClass *klass)
 	git_diff_options defopts = GIT_DIFF_OPTIONS_INIT;
 
 	object_class->finalize = ggit_diff_options_finalize;
-
 	object_class->get_property = ggit_diff_options_get_property;
 	object_class->set_property = ggit_diff_options_set_property;
-
-	g_type_class_add_private (object_class, sizeof (GgitDiffOptionsPrivate));
 
 	/**
 	 * GgitDiffOptions:flags: (type GgitDiffOption):
@@ -219,11 +227,13 @@ ggit_diff_options_class_init (GgitDiffOptionsClass *klass)
 }
 
 static void
-ggit_diff_options_init (GgitDiffOptions *self)
+ggit_diff_options_init (GgitDiffOptions *options)
 {
-	self->priv = GGIT_DIFF_OPTIONS_GET_PRIVATE (self);
+	GgitDiffOptionsPrivate *priv;
 
-	git_diff_init_options (&self->priv->diff_options, GIT_DIFF_OPTIONS_VERSION);
+	priv = ggit_diff_options_get_instance_private (options);
+
+	git_diff_init_options (&priv->diff_options, GIT_DIFF_OPTIONS_VERSION);
 }
 
 /**
@@ -243,6 +253,8 @@ ggit_diff_options_new (void)
 const git_diff_options *
 _ggit_diff_options_get_diff_options (GgitDiffOptions *diff_options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	/* NULL is common for diff_options as it specifies to use the default
 	 * so handle a NULL diff_options here instead of in every caller.
 	 */
@@ -251,7 +263,9 @@ _ggit_diff_options_get_diff_options (GgitDiffOptions *diff_options)
 		return NULL;
 	}
 
-	return (const git_diff_options *)&diff_options->priv->diff_options;
+	priv = ggit_diff_options_get_instance_private (diff_options);
+
+	return (const git_diff_options *)&priv->diff_options;
 }
 
 /**
@@ -266,9 +280,13 @@ _ggit_diff_options_get_diff_options (GgitDiffOptions *diff_options)
 GgitDiffOption
 ggit_diff_options_get_flags (GgitDiffOptions *options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_OPTIONS (options), 0);
 
-	return (GgitDiffOption)options->priv->diff_options.flags;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	return (GgitDiffOption)priv->diff_options.flags;
 }
 
 /**
@@ -283,9 +301,13 @@ void
 ggit_diff_options_set_flags (GgitDiffOptions *options,
                              GgitDiffOption   flags)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_OPTIONS (options));
 
-	options->priv->diff_options.flags = flags;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	priv->diff_options.flags = flags;
 	g_object_notify (G_OBJECT (options), "flags");
 }
 
@@ -301,9 +323,13 @@ ggit_diff_options_set_flags (GgitDiffOptions *options,
 gint
 ggit_diff_options_get_n_context_lines (GgitDiffOptions *options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_OPTIONS (options), 0);
 
-	return (GgitDiffOption)options->priv->diff_options.context_lines;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	return (GgitDiffOption)priv->diff_options.context_lines;
 }
 
 /**
@@ -318,9 +344,13 @@ void
 ggit_diff_options_set_n_context_lines (GgitDiffOptions *options,
                                        gint             n)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_OPTIONS (options));
 
-	options->priv->diff_options.context_lines = n;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	priv->diff_options.context_lines = n;
 	g_object_notify (G_OBJECT (options), "n-context-lines");
 }
 
@@ -336,9 +366,13 @@ ggit_diff_options_set_n_context_lines (GgitDiffOptions *options,
 gint
 ggit_diff_options_get_n_interhunk_lines (GgitDiffOptions *options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_OPTIONS (options), 0);
 
-	return (GgitDiffOption)options->priv->diff_options.interhunk_lines;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	return (GgitDiffOption)priv->diff_options.interhunk_lines;
 }
 
 /**
@@ -353,9 +387,13 @@ void
 ggit_diff_options_set_n_interhunk_lines (GgitDiffOptions *options,
                                          gint             n)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_OPTIONS (options));
 
-	options->priv->diff_options.interhunk_lines = n;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	priv->diff_options.interhunk_lines = n;
 	g_object_notify (G_OBJECT (options), "n-interhunk-lines");
 }
 
@@ -371,9 +409,13 @@ ggit_diff_options_set_n_interhunk_lines (GgitDiffOptions *options,
 const gchar *
 ggit_diff_options_get_old_prefix (GgitDiffOptions *options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_OPTIONS (options), NULL);
 
-	return options->priv->old_prefix;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	return priv->old_prefix;
 }
 
 /**
@@ -388,12 +430,16 @@ void
 ggit_diff_options_set_old_prefix (GgitDiffOptions *options,
                                   const gchar     *prefix)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_OPTIONS (options));
 
-	g_free (options->priv->old_prefix);
-	options->priv->old_prefix = g_strdup (prefix);
+	priv = ggit_diff_options_get_instance_private (options);
 
-	options->priv->diff_options.old_prefix = options->priv->old_prefix;
+	g_free (priv->old_prefix);
+	priv->old_prefix = g_strdup (prefix);
+
+	priv->diff_options.old_prefix = priv->old_prefix;
 	g_object_notify (G_OBJECT (options), "old-prefix");
 }
 
@@ -409,9 +455,13 @@ ggit_diff_options_set_old_prefix (GgitDiffOptions *options,
 const gchar *
 ggit_diff_options_get_new_prefix (GgitDiffOptions *options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_OPTIONS (options), NULL);
 
-	return options->priv->new_prefix;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	return priv->new_prefix;
 }
 
 /**
@@ -426,12 +476,16 @@ void
 ggit_diff_options_set_new_prefix (GgitDiffOptions *options,
                                   const gchar     *prefix)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_OPTIONS (options));
 
-	g_free (options->priv->new_prefix);
-	options->priv->new_prefix = g_strdup (prefix);
+	priv = ggit_diff_options_get_instance_private (options);
 
-	options->priv->diff_options.new_prefix = options->priv->new_prefix;
+	g_free (priv->new_prefix);
+	priv->new_prefix = g_strdup (prefix);
+
+	priv->diff_options.new_prefix = priv->new_prefix;
 	g_object_notify (G_OBJECT (options), "new-prefix");
 }
 
@@ -447,9 +501,13 @@ ggit_diff_options_set_new_prefix (GgitDiffOptions *options,
 const gchar **
 ggit_diff_options_get_pathspec (GgitDiffOptions *options)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_OPTIONS (options), NULL);
 
-	return (const gchar **)options->priv->pathspec;
+	priv = ggit_diff_options_get_instance_private (options);
+
+	return (const gchar **)priv->pathspec;
 }
 
 /**
@@ -464,20 +522,24 @@ void
 ggit_diff_options_set_pathspec (GgitDiffOptions  *options,
                                 const gchar     **pathspec)
 {
+	GgitDiffOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_OPTIONS (options));
 
-	g_strfreev (options->priv->pathspec);
-	options->priv->pathspec = g_strdupv ((gchar **)pathspec);
+	priv = ggit_diff_options_get_instance_private (options);
 
-	options->priv->diff_options.pathspec.strings = options->priv->pathspec;
+	g_strfreev (priv->pathspec);
+	priv->pathspec = g_strdupv ((gchar **)pathspec);
 
-	if (options->priv->pathspec != NULL)
+	priv->diff_options.pathspec.strings = priv->pathspec;
+
+	if (priv->pathspec != NULL)
 	{
-		options->priv->diff_options.pathspec.count = g_strv_length (options->priv->pathspec);
+		priv->diff_options.pathspec.count = g_strv_length (priv->pathspec);
 	}
 	else
 	{
-		options->priv->diff_options.pathspec.count = 0;
+		priv->diff_options.pathspec.count = 0;
 	}
 
 	g_object_notify (G_OBJECT (options), "pathspec");

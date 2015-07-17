@@ -124,13 +124,6 @@ typedef struct _GgitDiffHunk GgitDiffHunk;
 typedef struct _GgitDiffLine GgitDiffLine;
 
 /**
- * GgitDiffOptions:
- *
- * Represents the options used when creating a #GgitDiff.
- */
-typedef struct _GgitDiffOptions GgitDiffOptions;
-
-/**
  * GgitDiffSimilarityMetric:
  *
  * Represents a similarity metric.

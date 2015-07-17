@@ -28,23 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_DIFF_OPTIONS			(ggit_diff_options_get_type ())
-#define GGIT_DIFF_OPTIONS(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptions))
-#define GGIT_DIFF_OPTIONS_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptions const))
-#define GGIT_DIFF_OPTIONS_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptionsClass))
-#define GGIT_IS_DIFF_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF_OPTIONS))
-#define GGIT_IS_DIFF_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF_OPTIONS))
-#define GGIT_DIFF_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF_OPTIONS, GgitDiffOptionsClass))
-
-typedef struct _GgitDiffOptionsClass	GgitDiffOptionsClass;
-typedef struct _GgitDiffOptionsPrivate	GgitDiffOptionsPrivate;
-
-struct _GgitDiffOptions
-{
-	GObject parent;
-
-	GgitDiffOptionsPrivate *priv;
-};
+#define GGIT_TYPE_DIFF_OPTIONS (ggit_diff_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitDiffOptions, ggit_diff_options, GGIT, DIFF_OPTIONS, GObject)
 
 struct _GgitDiffOptionsClass
 {
@@ -54,7 +39,6 @@ struct _GgitDiffOptionsClass
 const git_diff_options *
                  _ggit_diff_options_get_diff_options     (GgitDiffOptions  *options);
 
-GType            ggit_diff_options_get_type              (void) G_GNUC_CONST;
 GgitDiffOptions *ggit_diff_options_new                   (void);
 
 GgitDiffOption   ggit_diff_options_get_flags             (GgitDiffOptions  *options);
