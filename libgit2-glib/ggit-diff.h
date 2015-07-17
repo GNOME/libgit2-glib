@@ -27,6 +27,7 @@
 #include "ggit-blob.h"
 #include "ggit-tree.h"
 #include "ggit-index.h"
+#include "ggit-diff-find-options.h"
 
 G_BEGIN_DECLS
 

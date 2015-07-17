@@ -28,30 +28,13 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_DIFF_FIND_OPTIONS		(ggit_diff_find_options_get_type ())
-#define GGIT_DIFF_FIND_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_FIND_OPTIONS, GgitDiffFindOptions))
-#define GGIT_DIFF_FIND_OPTIONS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_FIND_OPTIONS, GgitDiffFindOptions const))
-#define GGIT_DIFF_FIND_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF_FIND_OPTIONS, GgitDiffFindOptionsClass))
-#define GGIT_IS_DIFF_FIND_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF_FIND_OPTIONS))
-#define GGIT_IS_DIFF_FIND_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF_FIND_OPTIONS))
-#define GGIT_DIFF_FIND_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF_FIND_OPTIONS, GgitDiffFindOptionsClass))
-
-typedef struct _GgitDiffFindOptionsClass	GgitDiffFindOptionsClass;
-typedef struct _GgitDiffFindOptionsPrivate	GgitDiffFindOptionsPrivate;
-
-struct _GgitDiffFindOptions
-{
-	GObject parent;
-
-	GgitDiffFindOptionsPrivate *priv;
-};
+#define GGIT_TYPE_DIFF_FIND_OPTIONS (ggit_diff_find_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitDiffFindOptions, ggit_diff_find_options, GGIT, DIFF_FIND_OPTIONS, GObject)
 
 struct _GgitDiffFindOptionsClass
 {
 	GObjectClass parent_class;
 };
-
-GType                ggit_diff_find_options_get_type  (void) G_GNUC_CONST;
 
 const git_diff_find_options *
                      _ggit_diff_find_options_get_diff_find_options (

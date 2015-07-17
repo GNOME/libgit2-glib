@@ -110,13 +110,6 @@ typedef struct _GgitDiffDelta GgitDiffDelta;
 typedef struct _GgitDiffFile GgitDiffFile;
 
 /**
- * GgitDiffFindOptions:
- *
- * Represents options for finding diff similarity.
- */
-typedef struct _GgitDiffFindOptions GgitDiffFindOptions;
-
-/**
  * GgitDiffHunk:
  *
  * Represents the hunk of a diff.

@@ -22,16 +22,20 @@
 #include "ggit-diff-similarity-metric.h"
 #include "ggit-enum-types.h"
 
-#define GGIT_DIFF_FIND_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_DIFF_FIND_OPTIONS, GgitDiffFindOptionsPrivate))
+/**
+ * GgitDiffFindOptions:
+ *
+ * Represents options for finding diff similarity.
+ */
 
-struct _GgitDiffFindOptionsPrivate
+typedef struct _GgitDiffFindOptionsPrivate
 {
 	git_diff_find_options diff_find_options;
 
 	GgitDiffSimilarityMetric *metric;
-};
+} GgitDiffFindOptionsPrivate;
 
-G_DEFINE_TYPE (GgitDiffFindOptions, ggit_diff_find_options, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitDiffFindOptions, ggit_diff_find_options, G_TYPE_OBJECT)
 
 enum
 {
@@ -47,13 +51,14 @@ enum
 static void
 ggit_diff_find_options_finalize (GObject *object)
 {
-	GgitDiffFindOptions *options;
+	GgitDiffFindOptions *options = GGIT_DIFF_FIND_OPTIONS (object);
+	GgitDiffFindOptionsPrivate *priv;
 
-	options = GGIT_DIFF_FIND_OPTIONS (object);
+	priv = ggit_diff_find_options_get_instance_private (options);
 
-	if (options->priv->metric)
+	if (priv->metric)
 	{
-		ggit_diff_similarity_metric_free (options->priv->metric);
+		ggit_diff_similarity_metric_free (priv->metric);
 	}
 
 	G_OBJECT_CLASS (ggit_diff_find_options_parent_class)->finalize (object);
@@ -65,32 +70,31 @@ ggit_diff_find_options_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-	GgitDiffFindOptions *self = GGIT_DIFF_FIND_OPTIONS (object);
+	GgitDiffFindOptions *options = GGIT_DIFF_FIND_OPTIONS (object);
+	GgitDiffFindOptionsPrivate *priv;
+
+	priv = ggit_diff_find_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_FLAGS:
-		self->priv->diff_find_options.flags =
+		priv->diff_find_options.flags =
 			(GgitDiffFindFlags)g_value_get_flags (value);
 		break;
 	case PROP_RENAME_THRESHOLD:
-		self->priv->diff_find_options.rename_threshold =
-			g_value_get_uint (value);
+		priv->diff_find_options.rename_threshold = g_value_get_uint (value);
 		break;
 	case PROP_RENAME_FROM_REWRITE_THRESHOLD:
-		self->priv->diff_find_options.rename_from_rewrite_threshold =
-			g_value_get_uint (value);
+		priv->diff_find_options.rename_from_rewrite_threshold = g_value_get_uint (value);
 		break;
 	case PROP_COPY_THRESHOLD:
-		self->priv->diff_find_options.copy_threshold =
-			g_value_get_uint (value);
+		priv->diff_find_options.copy_threshold = g_value_get_uint (value);
 		break;
 	case PROP_RENAME_LIMIT:
-		self->priv->diff_find_options.rename_limit =
-			g_value_get_uint (value);
+		priv->diff_find_options.rename_limit = g_value_get_uint (value);
 		break;
 	case PROP_SIMILARITY_METRIC:
-		ggit_diff_find_options_set_metric (self,
+		ggit_diff_find_options_set_metric (options,
 		                                   g_value_get_boxed (value));
 		break;
 	default:
@@ -105,27 +109,30 @@ ggit_diff_find_options_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-	GgitDiffFindOptions *self = GGIT_DIFF_FIND_OPTIONS (object);
+	GgitDiffFindOptions *options = GGIT_DIFF_FIND_OPTIONS (object);
+	GgitDiffFindOptionsPrivate *priv;
+
+	priv = ggit_diff_find_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_FLAGS:
-		g_value_set_flags (value, self->priv->diff_find_options.flags);
+		g_value_set_flags (value, priv->diff_find_options.flags);
 		break;
 	case PROP_RENAME_THRESHOLD:
-		g_value_set_uint (value, self->priv->diff_find_options.rename_threshold);
+		g_value_set_uint (value, priv->diff_find_options.rename_threshold);
 		break;
 	case PROP_RENAME_FROM_REWRITE_THRESHOLD:
-		g_value_set_uint (value, self->priv->diff_find_options.rename_from_rewrite_threshold);
+		g_value_set_uint (value, priv->diff_find_options.rename_from_rewrite_threshold);
 		break;
 	case PROP_COPY_THRESHOLD:
-		g_value_set_uint (value, self->priv->diff_find_options.copy_threshold);
+		g_value_set_uint (value, priv->diff_find_options.copy_threshold);
 		break;
 	case PROP_RENAME_LIMIT:
-		g_value_set_uint (value, self->priv->diff_find_options.rename_limit);
+		g_value_set_uint (value, priv->diff_find_options.rename_limit);
 		break;
 	case PROP_SIMILARITY_METRIC:
-		g_value_set_boxed (value, self->priv->diff_find_options.metric);
+		g_value_set_boxed (value, priv->diff_find_options.metric);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -140,11 +147,8 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 	git_diff_find_options defopt = GIT_DIFF_FIND_OPTIONS_INIT;
 
 	object_class->finalize = ggit_diff_find_options_finalize;
-
 	object_class->get_property = ggit_diff_find_options_get_property;
 	object_class->set_property = ggit_diff_find_options_set_property;
-
-	g_type_class_add_private (object_class, sizeof (GgitDiffFindOptionsPrivate));
 
 	/**
 	 * GgitDiffFindOptions:flags: (type GgitDiffFindFlags):
@@ -216,11 +220,13 @@ ggit_diff_find_options_class_init (GgitDiffFindOptionsClass *klass)
 }
 
 static void
-ggit_diff_find_options_init (GgitDiffFindOptions *self)
+ggit_diff_find_options_init (GgitDiffFindOptions *options)
 {
-	self->priv = GGIT_DIFF_FIND_OPTIONS_GET_PRIVATE (self);
+	GgitDiffFindOptionsPrivate *priv;
 
-	git_diff_find_init_options (&self->priv->diff_find_options,
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	git_diff_find_init_options (&priv->diff_find_options,
 	                            GIT_DIFF_FIND_OPTIONS_VERSION);
 
 }
@@ -228,6 +234,8 @@ ggit_diff_find_options_init (GgitDiffFindOptions *self)
 const git_diff_find_options *
 _ggit_diff_find_options_get_diff_find_options (GgitDiffFindOptions *diff_find_options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	/* NULL is common for diff_find_options as it specifies to use the default
 	 * so handle a NULL diff_find_options here instead of in every caller.
 	 */
@@ -236,7 +244,9 @@ _ggit_diff_find_options_get_diff_find_options (GgitDiffFindOptions *diff_find_op
 		return NULL;
 	}
 
-	return (const git_diff_find_options *)&diff_find_options->priv->diff_find_options;
+	priv = ggit_diff_find_options_get_instance_private (diff_find_options);
+
+	return (const git_diff_find_options *)&priv->diff_find_options;
 }
 /**
  * ggit_diff_find_options_new:
@@ -246,7 +256,7 @@ _ggit_diff_find_options_get_diff_find_options (GgitDiffFindOptions *diff_find_op
  * Returns: a newly allocated #GgitDiffFindOptions.
  */
 GgitDiffFindOptions *
-ggit_diff_find_options_new ()
+ggit_diff_find_options_new (void)
 {
 	return g_object_new (GGIT_TYPE_DIFF_FIND_OPTIONS, NULL);
 }
@@ -263,9 +273,13 @@ ggit_diff_find_options_new ()
 GgitDiffFindFlags
 ggit_diff_find_options_get_flags (GgitDiffFindOptions *options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), 0);
 
-	return (GgitDiffFindFlags)options->priv->diff_find_options.flags;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	return (GgitDiffFindFlags)priv->diff_find_options.flags;
 }
 
 /**
@@ -280,9 +294,13 @@ void
 ggit_diff_find_options_set_flags (GgitDiffFindOptions *options,
                                   GgitDiffFindFlags    flags)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options));
 
-	options->priv->diff_find_options.flags = flags;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	priv->diff_find_options.flags = flags;
 	g_object_notify (G_OBJECT (options), "flags");
 }
 
@@ -298,9 +316,13 @@ ggit_diff_find_options_set_flags (GgitDiffFindOptions *options,
 guint
 ggit_diff_find_options_get_rename_threshold (GgitDiffFindOptions *options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), 0);
 
-	return options->priv->diff_find_options.rename_threshold;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	return priv->diff_find_options.rename_threshold;
 }
 
 /**
@@ -315,9 +337,13 @@ void
 ggit_diff_find_options_set_rename_threshold (GgitDiffFindOptions *options,
                                              guint                threshold)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options));
 
-	options->priv->diff_find_options.rename_threshold = threshold;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	priv->diff_find_options.rename_threshold = threshold;
 	g_object_notify (G_OBJECT (options), "rename-threshold");
 }
 
@@ -333,9 +359,13 @@ ggit_diff_find_options_set_rename_threshold (GgitDiffFindOptions *options,
 guint
 ggit_diff_find_options_get_rename_from_rewrite_threshold (GgitDiffFindOptions *options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), 0);
 
-	return options->priv->diff_find_options.rename_from_rewrite_threshold;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	return priv->diff_find_options.rename_from_rewrite_threshold;
 }
 
 /**
@@ -350,9 +380,13 @@ void
 ggit_diff_find_options_set_rename_from_rewrite_threshold (GgitDiffFindOptions *options,
                                                           guint                threshold)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options));
 
-	options->priv->diff_find_options.rename_from_rewrite_threshold = threshold;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	priv->diff_find_options.rename_from_rewrite_threshold = threshold;
 	g_object_notify (G_OBJECT (options), "rename-from-rewrite-threshold");
 }
 
@@ -368,9 +402,13 @@ ggit_diff_find_options_set_rename_from_rewrite_threshold (GgitDiffFindOptions *o
 guint
 ggit_diff_find_options_get_copy_threshold (GgitDiffFindOptions *options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), 0);
 
-	return options->priv->diff_find_options.copy_threshold;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	return priv->diff_find_options.copy_threshold;
 }
 
 /**
@@ -385,9 +423,13 @@ void
 ggit_diff_find_options_set_copy_threshold (GgitDiffFindOptions *options,
                                            guint                threshold)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options));
 
-	options->priv->diff_find_options.copy_threshold = threshold;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	priv->diff_find_options.copy_threshold = threshold;
 	g_object_notify (G_OBJECT (options), "copy-threshold");
 }
 
@@ -403,9 +445,13 @@ ggit_diff_find_options_set_copy_threshold (GgitDiffFindOptions *options,
 gsize
 ggit_diff_find_options_get_rename_limit (GgitDiffFindOptions *options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), 0);
 
-	return options->priv->diff_find_options.rename_limit;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	return priv->diff_find_options.rename_limit;
 }
 
 /**
@@ -420,9 +466,13 @@ void
 ggit_diff_find_options_set_rename_limit (GgitDiffFindOptions *options,
                                          gsize                limit)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options));
 
-	options->priv->diff_find_options.rename_limit = limit;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	priv->diff_find_options.rename_limit = limit;
 	g_object_notify (G_OBJECT (options), "rename-limit");
 }
 
@@ -438,9 +488,13 @@ ggit_diff_find_options_set_rename_limit (GgitDiffFindOptions *options,
 GgitDiffSimilarityMetric *
 ggit_diff_find_options_get_metric (GgitDiffFindOptions *options)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options), 0);
 
-	return options->priv->metric;
+	priv = ggit_diff_find_options_get_instance_private (options);
+
+	return priv->metric;
 }
 
 /**
@@ -455,23 +509,27 @@ void
 ggit_diff_find_options_set_metric (GgitDiffFindOptions      *options,
                                    GgitDiffSimilarityMetric *metric)
 {
+	GgitDiffFindOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_DIFF_FIND_OPTIONS (options));
 
-	if (options->priv->metric)
-	{
-		ggit_diff_similarity_metric_free (options->priv->metric);
+	priv = ggit_diff_find_options_get_instance_private (options);
 
-		options->priv->metric = NULL;
-		options->priv->diff_find_options.metric = NULL;
+	if (priv->metric)
+	{
+		ggit_diff_similarity_metric_free (priv->metric);
+
+		priv->metric = NULL;
+		priv->diff_find_options.metric = NULL;
 	}
 
 	if (metric)
 	{
-		options->priv->metric =
+		priv->metric =
 			ggit_diff_similarity_metric_copy (metric);
 
-		options->priv->diff_find_options.metric =
-			_ggit_diff_similarity_metric_get_similarity_metric (options->priv->metric);
+		priv->diff_find_options.metric =
+			_ggit_diff_similarity_metric_get_similarity_metric (priv->metric);
 	}
 
 	g_object_notify (G_OBJECT (options), "metric");
