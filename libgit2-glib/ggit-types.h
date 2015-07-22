@@ -236,13 +236,6 @@ typedef struct _GgitRemote GgitRemote;
 typedef struct _GgitRemoteHead GgitRemoteHead;
 
 /**
- * GgitRemoteCallbacks:
- *
- * Represents a git remote callbacks.
- */
-typedef struct _GgitRemoteCallbacks GgitRemoteCallbacks;
-
-/**
  * GgitRepository:
  *
  * Represents an existing git repository including all of it's

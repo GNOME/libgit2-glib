@@ -24,12 +24,16 @@
 #include "ggit-oid.h"
 #include "ggit-enum-types.h"
 
-#define GGIT_REMOTE_CALLBACKS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksPrivate))
+/**
+ * GgitRemoteCallbacks:
+ *
+ * Represents a git remote callbacks.
+ */
 
-struct _GgitRemoteCallbacksPrivate
+typedef struct _GgitRemoteCallbacksPrivate
 {
 	git_remote_callbacks native;
-};
+} GgitRemoteCallbacksPrivate;
 
 enum
 {
@@ -42,7 +46,6 @@ enum
 
 static guint signals[NUM_SIGNALS] = {0,};
 
-
 /**
  * GgitRemoteCallbacksClass::credentials:
  * @callbacks: a #GgitRemoteCallbacks.
@@ -54,14 +57,17 @@ static guint signals[NUM_SIGNALS] = {0,};
  * Returns: (transfer full) (nullable): a #GgitCred or %NULL in case of an error.
  */
 
-G_DEFINE_TYPE (GgitRemoteCallbacks, ggit_remote_callbacks, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitRemoteCallbacks, ggit_remote_callbacks, G_TYPE_OBJECT)
 
 static void
 ggit_remote_callbacks_finalize (GObject *object)
 {
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (object);
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (object);
+	GgitRemoteCallbacksPrivate *priv;
 
-	self->priv->native.payload = NULL;
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	priv->native.payload = NULL;
 
 	G_OBJECT_CLASS (ggit_remote_callbacks_parent_class)->finalize (object);
 }
@@ -118,8 +124,6 @@ ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
 		              G_TYPE_NONE,
 		              1,
 		              GGIT_TYPE_REMOTE_COMPLETION_TYPE);
-
-	g_type_class_add_private (object_class, sizeof (GgitRemoteCallbacksPrivate));
 }
 
 static int
@@ -129,8 +133,8 @@ credentials_wrap (git_cred     **cred,
                   unsigned int   allowed_types,
                   void          *data)
 {
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
-	GgitRemoteCallbacksClass *cls = GGIT_REMOTE_CALLBACKS_GET_CLASS (self);
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksClass *cls = GGIT_REMOTE_CALLBACKS_GET_CLASS (callbacks);
 
 	*cred = NULL;
 
@@ -139,7 +143,7 @@ credentials_wrap (git_cred     **cred,
 		GgitCred *mcred = NULL;
 		GError *error = NULL;
 
-		mcred = cls->credentials (self,
+		mcred = cls->credentials (callbacks,
 		                          url,
 		                          username_from_url,
 		                          allowed_types,
@@ -175,28 +179,31 @@ credentials_wrap (git_cred     **cred,
 
 
 static int
-progress_wrap (const char *str, int len, void *data)
+progress_wrap (const char *str,
+               int         len,
+               void       *data)
 {
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
 	gchar *message;
 
 	message = g_strndup (str, len);
 
-	g_signal_emit (self, signals[PROGRESS], 0, message);
+	g_signal_emit (callbacks, signals[PROGRESS], 0, message);
 
 	g_free (message);
 	return GIT_OK;
 }
 
 static int
-transfer_progress_wrap (const git_transfer_progress *stats, void *data)
+transfer_progress_wrap (const git_transfer_progress *stats,
+                        void                        *data)
 {
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
 	GgitTransferProgress *p;
 
 	p = _ggit_transfer_progress_wrap (stats);
 
-	g_signal_emit (self, signals[TRANSFER_PROGRESS], 0, p);
+	g_signal_emit (callbacks, signals[TRANSFER_PROGRESS], 0, p);
 	ggit_transfer_progress_free (p);
 
 	return GIT_OK;
@@ -208,14 +215,14 @@ update_tips_wrap (const char    *refname,
                   const git_oid *b,
                   void          *data)
 {
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
 	GgitOId *na;
 	GgitOId *nb;
 
 	na = _ggit_oid_wrap (a);
 	nb = _ggit_oid_wrap (b);
 
-	g_signal_emit (self, signals[UPDATE_TIPS], 0, refname, na, nb);
+	g_signal_emit (callbacks, signals[UPDATE_TIPS], 0, refname, na, nb);
 
 	ggit_oid_free (na);
 	ggit_oid_free (nb);
@@ -224,39 +231,46 @@ update_tips_wrap (const char    *refname,
 }
 
 static int
-completion_wrap (git_remote_completion_type type, void *data)
+completion_wrap (git_remote_completion_type  type,
+                 void                       *data)
 {
-	GgitRemoteCallbacks *self = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
 	GgitRemoteCompletionType rt = (GgitRemoteCompletionType)type;
 
-	g_signal_emit (self, signals[COMPLETION], 0, rt);
+	g_signal_emit (callbacks, signals[COMPLETION], 0, rt);
 
 	return GIT_OK;
 }
 
 static void
-ggit_remote_callbacks_init (GgitRemoteCallbacks *self)
+ggit_remote_callbacks_init (GgitRemoteCallbacks *callbacks)
 {
+	GgitRemoteCallbacksPrivate *priv;
+
 	git_remote_callbacks gcallbacks = GIT_REMOTE_CALLBACKS_INIT;
 
-	self->priv = GGIT_REMOTE_CALLBACKS_GET_PRIVATE (self);
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
 
-	self->priv->native = gcallbacks;
+	priv->native = gcallbacks;
 
-	self->priv->native.sideband_progress = progress_wrap;
-	self->priv->native.transfer_progress = transfer_progress_wrap;
-	self->priv->native.update_tips = update_tips_wrap;
-	self->priv->native.completion = completion_wrap;
+	priv->native.sideband_progress = progress_wrap;
+	priv->native.transfer_progress = transfer_progress_wrap;
+	priv->native.update_tips = update_tips_wrap;
+	priv->native.completion = completion_wrap;
 
-	self->priv->native.credentials = credentials_wrap;
+	priv->native.credentials = credentials_wrap;
 
-	self->priv->native.payload = self;
+	priv->native.payload = callbacks;
 }
 
 git_remote_callbacks *
-_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *self)
+_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *callbacks)
 {
-	return &self->priv->native;
+	GgitRemoteCallbacksPrivate *priv;
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	return &priv->native;
 }
 
 /* ex:set ts=8 noet: */

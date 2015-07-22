@@ -28,23 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REMOTE_CALLBACKS		(ggit_remote_callbacks_get_type ())
-#define GGIT_REMOTE_CALLBACKS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacks))
-#define GGIT_REMOTE_CALLBACKS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacks const))
-#define GGIT_REMOTE_CALLBACKS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksClass))
-#define GGIT_IS_REMOTE_CALLBACKS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REMOTE_CALLBACKS))
-#define GGIT_IS_REMOTE_CALLBACKS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REMOTE_CALLBACKS))
-#define GGIT_REMOTE_CALLBACKS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REMOTE_CALLBACKS, GgitRemoteCallbacksClass))
-
-typedef struct _GgitRemoteCallbacksClass	GgitRemoteCallbacksClass;
-typedef struct _GgitRemoteCallbacksPrivate	GgitRemoteCallbacksPrivate;
-
-struct _GgitRemoteCallbacks
-{
-	GObject parent;
-
-	GgitRemoteCallbacksPrivate *priv;
-};
+#define GGIT_TYPE_REMOTE_CALLBACKS (ggit_remote_callbacks_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitRemoteCallbacks, ggit_remote_callbacks, GGIT, REMOTE_CALLBACKS, GObject)
 
 struct _GgitRemoteCallbacksClass
 {
@@ -74,8 +59,6 @@ struct _GgitRemoteCallbacksClass
 
 
 };
-
-GType                  ggit_remote_callbacks_get_type   (void) G_GNUC_CONST;
 
 git_remote_callbacks *_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *remote_cbs);
 
