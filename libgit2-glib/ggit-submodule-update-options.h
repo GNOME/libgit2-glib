@@ -29,30 +29,13 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS		(ggit_submodule_update_options_get_type ())
-#define GGIT_SUBMODULE_UPDATE_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, GgitSubmoduleUpdateOptions))
-#define GGIT_SUBMODULE_UPDATE_OPTIONS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, GgitSubmoduleUpdateOptions const))
-#define GGIT_SUBMODULE_UPDATE_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, GgitSubmoduleUpdateOptionsClass))
-#define GGIT_IS_SUBMODULE_UPDATE_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS))
-#define GGIT_IS_SUBMODULE_UPDATE_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS))
-#define GGIT_SUBMODULE_UPDATE_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, GgitSubmoduleUpdateOptionsClass))
-
-typedef struct _GgitSubmoduleUpdateOptionsClass		GgitSubmoduleUpdateOptionsClass;
-typedef struct _GgitSubmoduleUpdateOptionsPrivate	GgitSubmoduleUpdateOptionsPrivate;
-
-struct _GgitSubmoduleUpdateOptions
-{
-	GObject parent;
-
-	GgitSubmoduleUpdateOptionsPrivate *priv;
-};
+#define GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS (ggit_submodule_update_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitSubmoduleUpdateOptions, ggit_submodule_update_options, GGIT, SUBMODULE_UPDATE_OPTIONS, GObject)
 
 struct _GgitSubmoduleUpdateOptionsClass
 {
 	GObjectClass parent_class;
 };
-
-GType                  ggit_submodule_update_options_get_type              (void) G_GNUC_CONST;
 
 const git_submodule_update_options *
                       _ggit_submodule_update_options_get_submodule_update_options (GgitSubmoduleUpdateOptions  *options);

@@ -64,7 +64,6 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCredSshKeyFromAgent, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitDiffFormatEmailOptions, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRemote, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRepository, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSubmoduleUpdateOptions, g_object_unref)
 
 #endif /* GLIB_CHECK_VERSION (2, 44, 0) */
 #endif /* __GI_SCANNER__ */

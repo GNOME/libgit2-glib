@@ -258,13 +258,6 @@ typedef struct _GgitStatusOptions GgitStatusOptions;
 typedef struct _GgitSubmodule GgitSubmodule;
 
 /**
- * GgitSubmoduleUpdateOptions:
- *
- * Represents options for a submodule update.
- */
-typedef struct _GgitSubmoduleUpdateOptions GgitSubmoduleUpdateOptions;
-
-/**
  * GgitTransferProgress:
  *
  * Represents transfering progress.

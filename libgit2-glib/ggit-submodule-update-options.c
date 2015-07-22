@@ -23,17 +23,21 @@
 #include "ggit-checkout-options.h"
 #include "ggit-fetch-options.h"
 
-#define GGIT_SUBMODULE_UPDATE_OPTIONS_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, GgitSubmoduleUpdateOptionsPrivate))
+/**
+ * GgitSubmoduleUpdateOptions:
+ *
+ * Represents options for a submodule update.
+ */
 
-struct _GgitSubmoduleUpdateOptionsPrivate
+typedef struct _GgitSubmoduleUpdateOptionsPrivate
 {
 	git_submodule_update_options options;
 
 	GgitCheckoutOptions *checkout_options;
 	GgitFetchOptions *fetch_options;
-};
+} GgitSubmoduleUpdateOptionsPrivate;
 
-G_DEFINE_TYPE (GgitSubmoduleUpdateOptions, ggit_submodule_update_options, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitSubmoduleUpdateOptions, ggit_submodule_update_options, G_TYPE_OBJECT)
 
 enum
 {
@@ -46,12 +50,13 @@ enum
 static void
 ggit_submodule_update_options_finalize (GObject *object)
 {
-	GgitSubmoduleUpdateOptions *options;
+	GgitSubmoduleUpdateOptions *options = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
+	GgitSubmoduleUpdateOptionsPrivate *priv;
 
-	options = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
+	priv = ggit_submodule_update_options_get_instance_private (options);
 
-	g_clear_object (&options->priv->checkout_options);
-	g_clear_pointer (&options->priv->fetch_options, ggit_fetch_options_free);
+	g_clear_object (&priv->checkout_options);
+	g_clear_pointer (&priv->fetch_options, ggit_fetch_options_free);
 
 	G_OBJECT_CLASS (ggit_submodule_update_options_parent_class)->finalize (object);
 }
@@ -62,20 +67,20 @@ ggit_submodule_update_options_set_property (GObject      *object,
                                             const GValue *value,
                                             GParamSpec   *pspec)
 {
-	GgitSubmoduleUpdateOptions *self = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
+	GgitSubmoduleUpdateOptions *options = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
 
 	switch (prop_id)
 	{
 	case PROP_CHECKOUT_OPTIONS:
-		ggit_submodule_update_options_set_checkout_options (self,
+		ggit_submodule_update_options_set_checkout_options (options,
 		                                                    g_value_get_object (value));
 		break;
 	case PROP_FETCH_OPTIONS:
-		ggit_submodule_update_options_set_fetch_options (self,
+		ggit_submodule_update_options_set_fetch_options (options,
 		                                                 g_value_get_boxed (value));
 		break;
 	case PROP_CLONE_CHECKOUT_STRATEGY:
-		ggit_submodule_update_options_set_clone_checkout_strategy (self,
+		ggit_submodule_update_options_set_clone_checkout_strategy (options,
 		                                                           g_value_get_flags (value));
 		break;
 	default:
@@ -90,19 +95,22 @@ ggit_submodule_update_options_get_property (GObject    *object,
                                             GValue     *value,
                                             GParamSpec *pspec)
 {
-	GgitSubmoduleUpdateOptions *self = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
+	GgitSubmoduleUpdateOptions *options = GGIT_SUBMODULE_UPDATE_OPTIONS (object);
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
+	priv = ggit_submodule_update_options_get_instance_private (options);
 
 	switch (prop_id)
 	{
 	case PROP_CHECKOUT_OPTIONS:
-		g_value_set_object (value, self->priv->checkout_options);
+		g_value_set_object (value, priv->checkout_options);
 		break;
 	case PROP_FETCH_OPTIONS:
-		g_value_set_boxed (value, self->priv->fetch_options);
+		g_value_set_boxed (value, priv->fetch_options);
 		break;
 	case PROP_CLONE_CHECKOUT_STRATEGY:
 		g_value_set_flags (value,
-		                   ggit_submodule_update_options_get_clone_checkout_strategy (self));
+		                   ggit_submodule_update_options_get_clone_checkout_strategy (options));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -116,11 +124,8 @@ ggit_submodule_update_options_class_init (GgitSubmoduleUpdateOptionsClass *klass
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = ggit_submodule_update_options_finalize;
-
 	object_class->get_property = ggit_submodule_update_options_get_property;
 	object_class->set_property = ggit_submodule_update_options_set_property;
-
-	g_type_class_add_private (object_class, sizeof (GgitSubmoduleUpdateOptionsPrivate));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_CHECKOUT_OPTIONS,
@@ -152,11 +157,13 @@ ggit_submodule_update_options_class_init (GgitSubmoduleUpdateOptionsClass *klass
 }
 
 static void
-ggit_submodule_update_options_init (GgitSubmoduleUpdateOptions *self)
+ggit_submodule_update_options_init (GgitSubmoduleUpdateOptions *options)
 {
-	self->priv = GGIT_SUBMODULE_UPDATE_OPTIONS_GET_PRIVATE (self);
+	GgitSubmoduleUpdateOptionsPrivate *priv;
 
-	git_submodule_update_init_options (&self->priv->options, GIT_SUBMODULE_UPDATE_OPTIONS_VERSION);
+	priv = ggit_submodule_update_options_get_instance_private (options);
+
+	git_submodule_update_init_options (&priv->options, GIT_SUBMODULE_UPDATE_OPTIONS_VERSION);
 }
 
 /**
@@ -178,15 +185,19 @@ _ggit_submodule_update_options_get_submodule_update_options (GgitSubmoduleUpdate
 {
 	if (options != NULL)
 	{
+		GgitSubmoduleUpdateOptionsPrivate *priv;
+
+		priv = ggit_submodule_update_options_get_instance_private (options);
+
 		/* Make sure to synchronize the wrapped checkout options
 		 * with the internal checkout options */
-		if (options->priv->checkout_options)
+		if (priv->checkout_options)
 		{
-			options->priv->options.checkout_opts =
-				*_ggit_checkout_options_get_checkout_options (options->priv->checkout_options);
+			priv->options.checkout_opts =
+				*_ggit_checkout_options_get_checkout_options (priv->checkout_options);
 		}
 
-		return &options->priv->options;
+		return &priv->options;
 	}
 	else
 	{
@@ -206,9 +217,13 @@ _ggit_submodule_update_options_get_submodule_update_options (GgitSubmoduleUpdate
 GgitCheckoutOptions *
 ggit_submodule_update_options_get_checkout_options (GgitSubmoduleUpdateOptions *options)
 {
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), NULL);
 
-	return options->priv->checkout_options;
+	priv = ggit_submodule_update_options_get_instance_private (options);
+
+	return priv->checkout_options;
 }
 
 /**
@@ -223,21 +238,25 @@ void
 ggit_submodule_update_options_set_checkout_options (GgitSubmoduleUpdateOptions *options,
                                                     GgitCheckoutOptions        *checkout_options)
 {
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
 	g_return_if_fail (checkout_options == NULL || GGIT_IS_CHECKOUT_OPTIONS (checkout_options));
 
-	if (options->priv->checkout_options)
-	{
-		g_object_unref (options->priv->checkout_options);
-		options->priv->checkout_options = NULL;
+	priv = ggit_submodule_update_options_get_instance_private (options);
 
-		git_checkout_init_options (&options->priv->options.checkout_opts, GIT_CHECKOUT_OPTIONS_VERSION);
+	if (priv->checkout_options)
+	{
+		g_object_unref (priv->checkout_options);
+		priv->checkout_options = NULL;
+
+		git_checkout_init_options (&priv->options.checkout_opts, GIT_CHECKOUT_OPTIONS_VERSION);
 	}
 
 	if (checkout_options)
 	{
-		options->priv->checkout_options = g_object_ref (checkout_options);
-		options->priv->options.checkout_opts = *_ggit_checkout_options_get_checkout_options (options->priv->checkout_options);
+		priv->checkout_options = g_object_ref (checkout_options);
+		priv->options.checkout_opts = *_ggit_checkout_options_get_checkout_options (priv->checkout_options);
 	}
 
 	g_object_notify (G_OBJECT (options), "checkout-options");
@@ -255,9 +274,13 @@ ggit_submodule_update_options_set_checkout_options (GgitSubmoduleUpdateOptions *
 GgitFetchOptions *
 ggit_submodule_update_options_get_fetch_options (GgitSubmoduleUpdateOptions *options)
 {
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), NULL);
 
-	return options->priv->fetch_options;
+	priv = ggit_submodule_update_options_get_instance_private (options);
+
+	return priv->fetch_options;
 
 }
 
@@ -272,20 +295,24 @@ void
 ggit_submodule_update_options_set_fetch_options (GgitSubmoduleUpdateOptions *options,
                                                  GgitFetchOptions           *fetch_options)
 {
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
 
-	if (options->priv->fetch_options)
-	{
-		ggit_fetch_options_free (options->priv->fetch_options);
-		options->priv->fetch_options = NULL;
+	priv = ggit_submodule_update_options_get_instance_private (options);
 
-		git_fetch_init_options (&options->priv->options.fetch_opts, GIT_FETCH_OPTIONS_VERSION);
+	if (priv->fetch_options)
+	{
+		ggit_fetch_options_free (priv->fetch_options);
+		priv->fetch_options = NULL;
+
+		git_fetch_init_options (&priv->options.fetch_opts, GIT_FETCH_OPTIONS_VERSION);
 	}
 
 	if (fetch_options)
 	{
-		options->priv->fetch_options = ggit_fetch_options_copy (fetch_options);
-		options->priv->options.fetch_opts = *_ggit_fetch_options_get_fetch_options (options->priv->fetch_options);
+		priv->fetch_options = ggit_fetch_options_copy (fetch_options);
+		priv->options.fetch_opts = *_ggit_fetch_options_get_fetch_options (priv->fetch_options);
 	}
 
 	g_object_notify (G_OBJECT (options), "fetch-options");
@@ -302,9 +329,13 @@ ggit_submodule_update_options_set_fetch_options (GgitSubmoduleUpdateOptions *opt
 GgitCheckoutStrategy
 ggit_submodule_update_options_get_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options)
 {
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), GGIT_CHECKOUT_NONE);
 
-	return options->priv->options.clone_checkout_strategy;
+	priv = ggit_submodule_update_options_get_instance_private (options);
+
+	return priv->options.clone_checkout_strategy;
 }
 
 /**
@@ -319,11 +350,15 @@ void
 ggit_submodule_update_options_set_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options,
                                                            GgitCheckoutStrategy        checkout_strategy)
 {
+	GgitSubmoduleUpdateOptionsPrivate *priv;
+
 	g_return_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
 
-	if (options->priv->options.clone_checkout_strategy != checkout_strategy)
+	priv = ggit_submodule_update_options_get_instance_private (options);
+
+	if (priv->options.clone_checkout_strategy != checkout_strategy)
 	{
-		options->priv->options.clone_checkout_strategy = checkout_strategy;
+		priv->options.clone_checkout_strategy = checkout_strategy;
 
 		g_object_notify (G_OBJECT (options), "clone-checkout-strategy");
 	}
