@@ -29,6 +29,7 @@
 #include "ggit-index.h"
 #include "ggit-diff-find-options.h"
 #include "ggit-diff-options.h"
+#include "ggit-diff-format-email-options.h"
 
 G_BEGIN_DECLS
 

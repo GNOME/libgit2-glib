@@ -286,13 +286,6 @@ typedef struct _GgitBlameOptions GgitBlameOptions;
 typedef struct _GgitRevertOptions GgitRevertOptions;
 
 /**
- * GgitFormatEmailOptions:
- *
- * Represents the options used when formatting a diff for e-mail.
- */
-typedef struct _GgitDiffFormatEmailOptions GgitDiffFormatEmailOptions;
-
-/**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
  * @GGIT_BRANCH_REMOTE: specifies a remote branch.

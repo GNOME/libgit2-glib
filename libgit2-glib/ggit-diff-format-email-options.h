@@ -29,30 +29,13 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS		(ggit_diff_format_email_options_get_type ())
-#define GGIT_DIFF_FORMAT_EMAIL_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS, GgitDiffFormatEmailOptions))
-#define GGIT_DIFF_FORMAT_EMAIL_OPTIONS_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS, GgitDiffFormatEmailOptions const))
-#define GGIT_DIFF_FORMAT_EMAIL_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS, GgitDiffFormatEmailOptionsClass))
-#define GGIT_IS_DIFF_FORMAT_EMAIL_OPTIONS(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS))
-#define GGIT_IS_DIFF_FORMAT_EMAIL_OPTIONS_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS))
-#define GGIT_DIFF_FORMAT_EMAIL_OPTIONS_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS, GgitDiffFormatEmailOptionsClass))
-
-typedef struct _GgitDiffFormatEmailOptionsClass	GgitDiffFormatEmailOptionsClass;
-typedef struct _GgitDiffFormatEmailOptionsPrivate	GgitDiffFormatEmailOptionsPrivate;
-
-struct _GgitDiffFormatEmailOptions
-{
-	GObject parent;
-
-	GgitDiffFormatEmailOptionsPrivate *priv;
-};
+#define GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS (ggit_diff_format_email_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitDiffFormatEmailOptions, ggit_diff_format_email_options, GGIT, DIFF_FORMAT_EMAIL_OPTIONS, GObject)
 
 struct _GgitDiffFormatEmailOptionsClass
 {
 	GObjectClass parent_class;
 };
-
-GType                  ggit_diff_format_email_options_get_type (void) G_GNUC_CONST;
 
 const git_diff_format_email_options *
               _ggit_diff_format_email_options_get_diff_format_email_options (
