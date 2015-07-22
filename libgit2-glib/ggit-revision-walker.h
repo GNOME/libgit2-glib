@@ -28,23 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REVISION_WALKER		(ggit_revision_walker_get_type ())
-#define GGIT_REVISION_WALKER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalker))
-#define GGIT_REVISION_WALKER_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalkerClass))
-#define GGIT_IS_REVISION_WALKER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REVISION_WALKER))
-#define GGIT_IS_REVISION_WALKER_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REVISION_WALKER))
-#define GGIT_REVISION_WALKER_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalkerClass))
-
-typedef struct _GgitRevisionWalkerClass		GgitRevisionWalkerClass;
-typedef struct _GgitRevisionWalkerPrivate	GgitRevisionWalkerPrivate;
-
-struct _GgitRevisionWalker
-{
-	/*< private >*/
-	GgitNative parent;
-
-	GgitRevisionWalkerPrivate *priv;
-};
+#define GGIT_TYPE_REVISION_WALKER (ggit_revision_walker_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitRevisionWalker, ggit_revision_walker, GGIT, REVISION_WALKER, GgitNative)
 
 /**
  * GgitRevisionWalkerClass:
@@ -57,8 +42,6 @@ struct _GgitRevisionWalkerClass
 	/*< private >*/
 	GgitNativeClass parent_class;
 };
-
-GType                   ggit_revision_walker_get_type       (void) G_GNUC_CONST;
 
 GgitRevisionWalker     *ggit_revision_walker_new            (GgitRepository  *repository,
                                                              GError         **error);

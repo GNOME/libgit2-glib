@@ -244,13 +244,6 @@ typedef struct _GgitRemoteHead GgitRemoteHead;
 typedef struct _GgitRepository GgitRepository;
 
 /**
- * GgitRevisionWalker:
- *
- * Represents a revision walker.
- */
-typedef struct _GgitRevisionWalker GgitRevisionWalker;
-
-/**
  * GgitStatusOptions:
  *
  * Represents the options used when creating getting file status.

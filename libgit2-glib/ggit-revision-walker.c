@@ -27,12 +27,16 @@
 #include "ggit-repository.h"
 #include "ggit-revision-walker.h"
 
-#define GGIT_REVISION_WALKER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_REVISION_WALKER, GgitRevisionWalkerPrivate))
+/**
+ * GgitRevisionWalker:
+ *
+ * Represents a revision walker.
+ */
 
-struct _GgitRevisionWalkerPrivate
+typedef struct _GgitRevisionWalkerPrivate
 {
 	GgitRepository *repository;
-};
+} GgitRevisionWalkerPrivate;
 
 enum
 {
@@ -44,6 +48,7 @@ static void ggit_revision_walker_initable_iface_init (GInitableIface  *iface);
 
 G_DEFINE_TYPE_EXTENDED (GgitRevisionWalker, ggit_revision_walker, GGIT_TYPE_NATIVE,
                         0,
+                        G_ADD_PRIVATE (GgitRevisionWalker)
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_revision_walker_initable_iface_init))
 
@@ -53,7 +58,10 @@ ggit_revision_walker_get_property (GObject    *object,
                                    GValue     *value,
                                    GParamSpec *pspec)
 {
-	GgitRevisionWalkerPrivate *priv = GGIT_REVISION_WALKER (object)->priv;
+	GgitRevisionWalker *walker = GGIT_REVISION_WALKER (object);
+	GgitRevisionWalkerPrivate *priv;
+
+	priv = ggit_revision_walker_get_instance_private (walker);
 
 	switch (prop_id)
 	{
@@ -72,7 +80,10 @@ ggit_revision_walker_set_property (GObject      *object,
                                    const GValue *value,
                                    GParamSpec   *pspec)
 {
-	GgitRevisionWalkerPrivate *priv = GGIT_REVISION_WALKER (object)->priv;
+	GgitRevisionWalker *walker = GGIT_REVISION_WALKER (object);
+	GgitRevisionWalkerPrivate *priv;
+
+	priv = ggit_revision_walker_get_instance_private (walker);
 
 	switch (prop_id)
 	{
@@ -102,14 +113,11 @@ ggit_revision_walker_class_init (GgitRevisionWalkerClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT |
 	                                                      G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (GgitRevisionWalkerPrivate));
 }
 
 static void
 ggit_revision_walker_init (GgitRevisionWalker *revwalk)
 {
-	revwalk->priv = GGIT_REVISION_WALKER_GET_PRIVATE (revwalk);
 }
 
 static gboolean
@@ -117,6 +125,7 @@ ggit_revision_walker_initable_init (GInitable    *initable,
                                     GCancellable *cancellable,
                                     GError      **error)
 {
+	GgitRevisionWalker *walker = GGIT_REVISION_WALKER (initable);
 	GgitRevisionWalkerPrivate *priv;
 	git_revwalk *revwalk;
 	gboolean success = TRUE;
@@ -129,7 +138,7 @@ ggit_revision_walker_initable_init (GInitable    *initable,
 		return FALSE;
 	}
 
-	priv = GGIT_REVISION_WALKER (initable)->priv;
+	priv = ggit_revision_walker_get_instance_private (walker);
 
 	err = git_revwalk_new (&revwalk,
 	                       _ggit_repository_get_repository (priv->repository));
@@ -551,9 +560,13 @@ ggit_revision_walker_set_sort_mode (GgitRevisionWalker *walker,
 GgitRepository *
 ggit_revision_walker_get_repository (GgitRevisionWalker *walker)
 {
+	GgitRevisionWalkerPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_REVISION_WALKER (walker), NULL);
 
-	return walker->priv->repository;
+	priv = ggit_revision_walker_get_instance_private (walker);
+
+	return priv->repository;
 }
 
 /* ex:set ts=8 noet: */
