@@ -26,17 +26,8 @@
 G_DEFINE_TYPE (GgitCred, ggit_cred, GGIT_TYPE_NATIVE)
 
 static void
-ggit_cred_finalize (GObject *object)
-{
-	G_OBJECT_CLASS (ggit_cred_parent_class)->finalize (object);
-}
-
-static void
 ggit_cred_class_init (GgitCredClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = ggit_cred_finalize;
 }
 
 static void
