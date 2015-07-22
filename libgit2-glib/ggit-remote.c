@@ -40,11 +40,13 @@ struct _GgitRemoteHead
 	gint ref_count;
 };
 
-struct _GgitRemotePrivate
-{
-};
+/**
+ * GgitRemote:
+ *
+ * Represents a git remote.
+ */
 
-G_DEFINE_TYPE_WITH_PRIVATE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
+G_DEFINE_TYPE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
 G_DEFINE_BOXED_TYPE (GgitRemoteHead, ggit_remote_head, ggit_remote_head_ref, ggit_remote_head_unref)
 
 static GgitRemoteHead *
@@ -168,9 +170,8 @@ ggit_remote_class_init (GgitRemoteClass *klass)
 }
 
 static void
-ggit_remote_init (GgitRemote *self)
+ggit_remote_init (GgitRemote *remote)
 {
-	self->priv = ggit_remote_get_instance_private (self);
 }
 
 /**

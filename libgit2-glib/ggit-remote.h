@@ -30,25 +30,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_REMOTE		(ggit_remote_get_type ())
-#define GGIT_REMOTE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE, GgitRemote))
-#define GGIT_REMOTE_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_REMOTE, GgitRemote const))
-#define GGIT_REMOTE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_REMOTE, GgitRemoteClass))
-#define GGIT_IS_REMOTE(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_REMOTE))
-#define GGIT_IS_REMOTE_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_REMOTE))
-#define GGIT_REMOTE_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_REMOTE, GgitRemoteClass))
-
-typedef struct _GgitRemoteClass		GgitRemoteClass;
-typedef struct _GgitRemotePrivate	GgitRemotePrivate;
-
-struct _GgitRemote
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/*< priv padding >*/
-	GgitRemotePrivate *priv;
-};
+#define GGIT_TYPE_REMOTE (ggit_remote_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitRemote, ggit_remote, GGIT, REMOTE, GgitNative)
 
 struct _GgitRemoteClass
 {
@@ -59,7 +42,6 @@ struct _GgitRemoteClass
 #define GGIT_TYPE_REMOTE_HEAD   (ggit_remote_head_get_type ())
 #define GGIT_REMOTE_HEAD(obj)        ((GgitRemoteHead *)obj)
 
-GType              ggit_remote_get_type                 (void) G_GNUC_CONST;
 GType              ggit_remote_head_get_type            (void) G_GNUC_CONST;
 
 GgitRemoteHead    *ggit_remote_head_ref                 (GgitRemoteHead *remote_head);

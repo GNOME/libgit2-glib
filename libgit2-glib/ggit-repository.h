@@ -39,6 +39,7 @@
 #include <libgit2-glib/ggit-cherry-pick-options.h>
 #include <libgit2-glib/ggit-commit.h>
 #include <libgit2-glib/ggit-tree-builder.h>
+#include <libgit2-glib/ggit-remote.h>
 
 G_BEGIN_DECLS
 
