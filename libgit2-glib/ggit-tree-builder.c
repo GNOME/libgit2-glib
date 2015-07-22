@@ -25,23 +25,28 @@
 #include "ggit-tree-entry.h"
 #include "ggit-repository.h"
 
-#define GGIT_TREE_BUILDER_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilderPrivate))
+/**
+ * GgitTreeBuilder:
+ *
+ * Represents a tree object.
+ */
 
-struct _GgitTreeBuilderPrivate
+typedef struct _GgitTreeBuilderPrivate
 {
 	GgitRepository *repository;
-};
+} GgitTreeBuilderPrivate;
 
-G_DEFINE_TYPE (GgitTreeBuilder, ggit_tree_builder, GGIT_TYPE_NATIVE)
+G_DEFINE_TYPE_WITH_PRIVATE (GgitTreeBuilder, ggit_tree_builder, GGIT_TYPE_NATIVE)
 
 static void
 ggit_tree_builder_dispose (GObject *object)
 {
-	GgitTreeBuilder *builder;
+	GgitTreeBuilder *builder = GGIT_TREE_BUILDER (object);
+	GgitTreeBuilderPrivate *priv;
 
-	builder = GGIT_TREE_BUILDER (object);
+	priv = ggit_tree_builder_get_instance_private (builder);
 
-	g_clear_object (&builder->priv->repository);
+	g_clear_object (&priv->repository);
 
 	G_OBJECT_CLASS (ggit_tree_builder_parent_class)->dispose (object);
 }
@@ -49,19 +54,14 @@ ggit_tree_builder_dispose (GObject *object)
 static void
 ggit_tree_builder_class_init (GgitTreeBuilderClass *klass)
 {
-	GObjectClass *object_class;
-
-	object_class = G_OBJECT_CLASS (klass);
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->dispose = ggit_tree_builder_dispose;
-
-	g_type_class_add_private (object_class, sizeof (GgitTreeBuilderPrivate));
 }
 
 static void
 ggit_tree_builder_init (GgitTreeBuilder *self)
 {
-	self->priv = GGIT_TREE_BUILDER_GET_PRIVATE (self);
 }
 
 GgitTreeBuilder *
@@ -70,6 +70,8 @@ _ggit_tree_builder_wrap (git_treebuilder *builder,
                          gboolean         owned)
 {
 	GgitTreeBuilder *gbuilder;
+	GgitTreeBuilderPrivate *priv;
+
 
 	g_return_val_if_fail (builder != NULL, NULL);
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
@@ -78,9 +80,11 @@ _ggit_tree_builder_wrap (git_treebuilder *builder,
 	                         "native", builder,
 	                         NULL);
 
+	priv = ggit_tree_builder_get_instance_private (gbuilder);
+
 	if (repository)
 	{
-		gbuilder->priv->repository = g_object_ref (repository);
+		priv->repository = g_object_ref (repository);
 	}
 
 	if (owned)

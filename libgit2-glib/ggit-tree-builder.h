@@ -28,24 +28,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_TREE_BUILDER			(ggit_tree_builder_get_type ())
-#define GGIT_TREE_BUILDER(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilder))
-#define GGIT_TREE_BUILDER_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilderClass))
-#define GGIT_IS_TREE_BUILDER(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_TREE_BUILDER))
-#define GGIT_IS_TREE_BUILDER_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_TREE_BUILDER))
-#define GGIT_TREE_BUILDER_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_TREE_BUILDER, GgitTreeBuilderClass))
-
-typedef struct _GgitTreeBuilderClass	GgitTreeBuilderClass;
-typedef struct _GgitTreeBuilderPrivate  GgitTreeBuilderPrivate;
-
-struct _GgitTreeBuilder
-{
-	/*< private >*/
-	GgitNative parent;
-
-	/* priv */
-	GgitTreeBuilderPrivate *priv;
-};
+#define GGIT_TYPE_TREE_BUILDER (ggit_tree_builder_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitTreeBuilder, ggit_tree_builder, GGIT, TREE_BUILDER, GgitNative)
 
 /**
  * GgitTreeBuilderClass:
@@ -58,8 +42,6 @@ struct _GgitTreeBuilderClass
 	/*< private >*/
 	GgitNativeClass parent_class;
 };
-
-GType            ggit_tree_builder_get_type  (void) G_GNUC_CONST;
 
 GgitTreeBuilder *_ggit_tree_builder_wrap     (git_treebuilder *builder,
                                               GgitRepository  *repository,

@@ -286,13 +286,6 @@ typedef struct _GgitTransferProgress GgitTransferProgress;
 typedef struct _GgitTreeEntry GgitTreeEntry;
 
 /**
- * GgitTreeBuilder:
- *
- * Represents a tree object.
- */
-typedef struct _GgitTreeBuilder GgitTreeBuilder;
-
-/**
  * GgitBlameOptions:
  *
  * Represents blame options.
