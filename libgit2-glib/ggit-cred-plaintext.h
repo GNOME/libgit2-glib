@@ -24,7 +24,6 @@
 
 #include <glib-object.h>
 #include <libgit2-glib/ggit-cred.h>
-#include <libgit2-glib/ggit-autocleanup.h>
 
 G_BEGIN_DECLS
 

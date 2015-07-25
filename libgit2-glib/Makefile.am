@@ -17,7 +17,6 @@ libgit2_glib_1_0_la_LDFLAGS =				\
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 H_FILES =					\
-	ggit-autocleanup.h			\
 	ggit-blame.h				\
 	ggit-blame-options.h			\
 	ggit-blob.h				\
