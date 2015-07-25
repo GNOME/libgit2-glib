@@ -36,14 +36,11 @@ G_BEGIN_DECLS
 #define GGIT_CRED_PLAINTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED_PLAINTEXT, GgitCredPlaintextClass))
 
 typedef struct _GgitCredPlaintextClass		GgitCredPlaintextClass;
-typedef struct _GgitCredPlaintextPrivate	GgitCredPlaintextPrivate;
 
 struct _GgitCredPlaintext
 {
 	/*< private >*/
 	GgitCred parent;
-
-	GgitCredPlaintextPrivate *priv;
 };
 
 struct _GgitCredPlaintextClass

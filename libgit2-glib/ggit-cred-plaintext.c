@@ -24,12 +24,11 @@
 #include "ggit-error.h"
 #include "ggit-cred-plaintext.h"
 
-
-struct _GgitCredPlaintextPrivate
+typedef struct _GgitCredPlaintextPrivate
 {
 	gchar *username;
 	gchar *password;
-};
+} GgitCredPlaintextPrivate;
 
 enum
 {
@@ -42,13 +41,17 @@ static void ggit_cred_plaintext_initable_iface_init (GInitableIface  *iface);
 
 G_DEFINE_TYPE_EXTENDED (GgitCredPlaintext, ggit_cred_plaintext, GGIT_TYPE_CRED,
                         0,
+                        G_ADD_PRIVATE (GgitCredPlaintext)
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_cred_plaintext_initable_iface_init))
 
 static void
 ggit_cred_plaintext_finalize (GObject *object)
 {
-	GgitCredPlaintextPrivate *priv = GGIT_CRED_PLAINTEXT (object)->priv;
+	GgitCredPlaintext *cred = GGIT_CRED_PLAINTEXT (object);
+	GgitCredPlaintextPrivate *priv;
+
+	priv = ggit_cred_plaintext_get_instance_private (cred);
 
 	g_free (priv->username);
 	g_free (priv->password);
@@ -62,7 +65,10 @@ ggit_cred_plaintext_get_property (GObject    *object,
                                   GValue     *value,
                                   GParamSpec *pspec)
 {
-	GgitCredPlaintextPrivate *priv = GGIT_CRED_PLAINTEXT (object)->priv;
+	GgitCredPlaintext *cred = GGIT_CRED_PLAINTEXT (object);
+	GgitCredPlaintextPrivate *priv;
+
+	priv = ggit_cred_plaintext_get_instance_private (cred);
 
 	switch (prop_id)
 	{
@@ -84,7 +90,10 @@ ggit_cred_plaintext_set_property (GObject      *object,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-	GgitCredPlaintextPrivate *priv = GGIT_CRED_PLAINTEXT (object)->priv;
+	GgitCredPlaintext *cred = GGIT_CRED_PLAINTEXT (object);
+	GgitCredPlaintextPrivate *priv;
+
+	priv = ggit_cred_plaintext_get_instance_private (cred);
 
 	switch (prop_id)
 	{
@@ -128,16 +137,11 @@ ggit_cred_plaintext_class_init (GgitCredPlaintextClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (GgitCredPlaintextPrivate));
 }
 
 static void
 ggit_cred_plaintext_init (GgitCredPlaintext *cred)
 {
-	cred->priv = G_TYPE_INSTANCE_GET_PRIVATE(cred,
-	                                         GGIT_TYPE_CRED_PLAINTEXT,
-	                                         GgitCredPlaintextPrivate);
 }
 
 static gboolean
@@ -145,6 +149,7 @@ ggit_cred_plaintext_initable_init (GInitable    *initable,
                                    GCancellable *cancellable,
                                    GError      **error)
 {
+	GgitCredPlaintext *gcred = GGIT_CRED_PLAINTEXT (initable);
 	GgitCredPlaintextPrivate *priv;
 	git_cred *cred;
 	gint ret;
@@ -156,7 +161,7 @@ ggit_cred_plaintext_initable_init (GInitable    *initable,
 		return FALSE;
 	}
 
-	priv = GGIT_CRED_PLAINTEXT (initable)->priv;
+	priv = ggit_cred_plaintext_get_instance_private (gcred);
 
 	ret = git_cred_userpass_plaintext_new (&cred, priv->username, priv->password);
 
@@ -194,17 +199,25 @@ ggit_cred_plaintext_new (const gchar  *username,
 const gchar *
 ggit_cred_plaintext_get_username (GgitCredPlaintext *cred)
 {
+	GgitCredPlaintextPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CRED_PLAINTEXT (cred), NULL);
 
-	return cred->priv->username;
+	priv = ggit_cred_plaintext_get_instance_private (cred);
+
+	return priv->username;
 }
 
 const gchar *
 ggit_cred_plaintext_get_password (GgitCredPlaintext *cred)
 {
+	GgitCredPlaintextPrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CRED_PLAINTEXT (cred), NULL);
 
-	return cred->priv->password;
+	priv = ggit_cred_plaintext_get_instance_private (cred);
+
+	return priv->password;
 }
 
 /* ex:set ts=8 noet: */
