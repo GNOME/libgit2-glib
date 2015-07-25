@@ -24,32 +24,18 @@
 
 #include <glib-object.h>
 #include <libgit2-glib/ggit-cred.h>
+#include <libgit2-glib/ggit-autocleanup.h>
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CRED_PLAINTEXT		(ggit_cred_plaintext_get_type ())
-#define GGIT_CRED_PLAINTEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED_PLAINTEXT, GgitCredPlaintext))
-#define GGIT_CRED_PLAINTEXT_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED_PLAINTEXT, GgitCredPlaintext const))
-#define GGIT_CRED_PLAINTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CRED_PLAINTEXT, GgitCredPlaintextClass))
-#define GGIT_IS_CRED_PLAINTEXT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CRED_PLAINTEXT))
-#define GGIT_IS_CRED_PLAINTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CRED_PLAINTEXT))
-#define GGIT_CRED_PLAINTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED_PLAINTEXT, GgitCredPlaintextClass))
-
-typedef struct _GgitCredPlaintextClass		GgitCredPlaintextClass;
-
-struct _GgitCredPlaintext
-{
-	/*< private >*/
-	GgitCred parent;
-};
+#define GGIT_TYPE_CRED_PLAINTEXT (ggit_cred_plaintext_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCredPlaintext, ggit_cred_plaintext, GGIT, CRED_PLAINTEXT, GgitCred)
 
 struct _GgitCredPlaintextClass
 {
 	/*< private >*/
 	GgitCredClass parent_class;
 };
-
-GType                ggit_cred_plaintext_get_type      (void) G_GNUC_CONST;
 
 GgitCredPlaintext   *ggit_cred_plaintext_new           (const gchar  *username,
                                                         const gchar  *password,

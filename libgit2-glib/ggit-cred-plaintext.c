@@ -24,6 +24,12 @@
 #include "ggit-error.h"
 #include "ggit-cred-plaintext.h"
 
+/**
+ * GgitCredPlaintext:
+ *
+ * Represents a plain text credential.
+ */
+
 typedef struct _GgitCredPlaintextPrivate
 {
 	gchar *username;

@@ -58,7 +58,6 @@ G_BEGIN_DECLS
 #if GLIB_CHECK_VERSION (2, 44, 0)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCred, g_object_unref)
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCredPlaintext, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCredSshInteractive, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRepository, g_object_unref)
 

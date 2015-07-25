@@ -68,13 +68,6 @@ typedef struct _GgitCredSshInteractive GgitCredSshInteractive;
 typedef struct _GgitCredSshInteractivePrompt GgitCredSshInteractivePrompt;
 
 /**
- * GgitCredPlaintext:
- *
- * Represents a plain text credential.
- */
-typedef struct _GgitCredPlaintext GgitCredPlaintext;
-
-/**
  * GgitDiffBinary:
  *
  * Represents a diff binary.
