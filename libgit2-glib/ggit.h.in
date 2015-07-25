@@ -43,6 +43,7 @@
 #include <libgit2-glib/ggit-diff-similarity-metric.h>
 #include <libgit2-glib/ggit-enum-types.h>
 #include <libgit2-glib/ggit-error.h>
+#include <libgit2-glib/ggit-fetch-options.h>
 #include <libgit2-glib/ggit-index-entry.h>
 #include <libgit2-glib/ggit-index-entry-resolve-undo.h>
 #include <libgit2-glib/ggit-index.h>

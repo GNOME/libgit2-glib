@@ -27,23 +27,8 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CRED			(ggit_cred_get_type ())
-#define GGIT_CRED(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED, GgitCred))
-#define GGIT_CRED_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED, GgitCred const))
-#define GGIT_CRED_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CRED, GgitCredClass))
-#define GGIT_IS_CRED(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CRED))
-#define GGIT_IS_CRED_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CRED))
-#define GGIT_CRED_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED, GgitCredClass))
-
-typedef struct _GgitCredClass	GgitCredClass;
-
-struct _GgitCred
-{
-	/*< private >*/
-	GgitNative parent;
-
-	gpointer *priv;
-};
+#define GGIT_TYPE_CRED (ggit_cred_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCred, ggit_cred, GGIT, CRED, GgitNative)
 
 struct _GgitCredClass
 {
@@ -51,7 +36,22 @@ struct _GgitCredClass
 	GgitNativeClass parent_class;
 };
 
-GType               ggit_cred_get_type           (void) G_GNUC_CONST;
+/**
+ * GgitCredAcquireCallback:
+ * @url: the resource for which we are demanding a credential.
+ * @username_from_url: (allow-none): The username that was embedded in a "user@host"
+ *                                   remote url, or NULL if not included.
+ * @allowed_types: a bitmask stating which cred types are OK to return.
+ * @cred: (transfer full): newly created credential object.
+ * @user_data: (closure): user-supplied data.
+ *
+ * Signature of a function which acquires a credential object.
+ */
+typedef gint (* GgitCredAcquireCallback) (const gchar *url,
+                                          const gchar *username_from_url,
+                                          guint        allowed_types,
+                                          GgitCred   **cred,
+                                          gpointer     user_data);
 
 G_END_DECLS
 

@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 #include <git2.h>
-#include <libgit2-glib/ggit-types.h>
+#include <libgit2-glib/ggit-cred.h>
 
 G_BEGIN_DECLS
 

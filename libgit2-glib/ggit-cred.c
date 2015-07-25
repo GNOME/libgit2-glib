@@ -23,6 +23,12 @@
 
 // NOTE: this is a simple wrap around GgitNative to have a common point for git_cred types
 
+/**
+ * GgitCred:
+ *
+ * Represents a git credential.
+ */
+
 G_DEFINE_TYPE (GgitCred, ggit_cred, GGIT_TYPE_NATIVE)
 
 static void
