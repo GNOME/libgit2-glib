@@ -57,7 +57,7 @@ ggit_cherry_pick_options_finalize (GObject *object)
 	priv = ggit_cherry_pick_options_get_instance_private (options);
 
 	g_clear_object (&priv->checkout_options);
-	g_clear_object (&priv->merge_options);
+	g_clear_pointer (&priv->merge_options, ggit_merge_options_free);
 
 	G_OBJECT_CLASS (ggit_cherry_pick_options_parent_class)->finalize (object);
 }
@@ -84,7 +84,7 @@ ggit_cherry_pick_options_set_property (GObject      *object,
 		break;
 	case PROP_MERGE_OPTIONS:
 		ggit_cherry_pick_options_set_merge_options (options,
-		                                            g_value_get_object (value));
+		                                            g_value_get_boxed (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -112,7 +112,7 @@ ggit_cherry_pick_options_get_property (GObject    *object,
 		g_value_set_object (value, priv->checkout_options);
 		break;
 	case PROP_MERGE_OPTIONS:
-		g_value_set_object (value, priv->merge_options);
+		g_value_set_boxed (value, priv->merge_options);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -127,7 +127,6 @@ ggit_cherry_pick_options_class_init (GgitCherryPickOptionsClass *klass)
 	git_cherrypick_options defopts = GIT_CHERRYPICK_OPTIONS_INIT;
 
 	object_class->finalize = ggit_cherry_pick_options_finalize;
-
 	object_class->get_property = ggit_cherry_pick_options_get_property;
 	object_class->set_property = ggit_cherry_pick_options_set_property;
 
