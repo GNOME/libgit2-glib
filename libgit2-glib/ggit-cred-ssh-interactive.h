@@ -27,24 +27,11 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CRED_SSH_INTERACTIVE		(ggit_cred_ssh_interactive_get_type ())
-#define GGIT_CRED_SSH_INTERACTIVE(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED_SSH_INTERACTIVE, GgitCredSshInteractive))
-#define GGIT_CRED_SSH_INTERACTIVE_CONST(obj)	(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED_SSH_INTERACTIVE, GgitCredSshInteractive const))
-#define GGIT_CRED_SSH_INTERACTIVE_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CRED_SSH_INTERACTIVE, GgitCredSshInteractiveClass))
-#define GGIT_IS_CRED_SSH_INTERACTIVE(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CRED_SSH_INTERACTIVE))
-#define GGIT_IS_CRED_SSH_INTERACTIVE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CRED_SSH_INTERACTIVE))
-#define GGIT_CRED_SSH_INTERACTIVE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED_SSH_INTERACTIVE, GgitCredSshInteractiveClass))
+#define GGIT_TYPE_CRED_SSH_INTERACTIVE (ggit_cred_ssh_interactive_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCredSshInteractive, ggit_cred_ssh_interactive, GGIT, CRED_SSH_INTERACTIVE, GgitCred)
 
 #define GGIT_TYPE_CRED_SSH_INTERACTIVE_PROMPT	(ggit_cred_ssh_interactive_prompt_get_type ())
 #define GGIT_CRED_SSH_INTERACTIVE_PROMPT(obj)	((GgitCredSshInteractivePrompt*)obj)
-
-typedef struct _GgitCredSshInteractiveClass	GgitCredSshInteractiveClass;
-
-struct _GgitCredSshInteractive
-{
-	/*< private >*/
-	GgitCred parent;
-};
 
 struct _GgitCredSshInteractiveClass
 {
@@ -56,8 +43,6 @@ struct _GgitCredSshInteractiveClass
 	                GgitCredSshInteractivePrompt **prompts,
 	                gsize                          num_prompts);
 };
-
-GType         ggit_cred_ssh_interactive_get_type      (void) G_GNUC_CONST;
 
 GgitCredSshInteractive *
               ggit_cred_ssh_interactive_new           (const gchar             *username,

@@ -38,6 +38,12 @@ struct _GgitCredSshInteractivePrompt
 	gboolean is_masked;
 };
 
+/**
+ * GgitCredSshInteractive:
+ *
+ * Represents a ssh interactive credential.
+ */
+
 typedef struct _GgitCredSshInteractivePrivate
 {
 	gchar *username;

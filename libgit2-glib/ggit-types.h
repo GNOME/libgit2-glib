@@ -47,13 +47,6 @@ typedef struct _GgitCloneOptions GgitCloneOptions;
 typedef struct _GgitConfigEntry GgitConfigEntry;
 
 /**
- * GgitCredSshInteractive:
- *
- * Represents a ssh interactive credential.
- */
-typedef struct _GgitCredSshInteractive GgitCredSshInteractive;
-
-/**
  * GgitCredSshInteractivePrompt:
  *
  * Represents a ssh interactive prompt.
