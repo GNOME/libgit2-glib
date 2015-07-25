@@ -138,12 +138,12 @@ ggit_submodule_update_options_class_init (GgitSubmoduleUpdateOptionsClass *klass
 
 	g_object_class_install_property (object_class,
 	                                 PROP_FETCH_OPTIONS,
-	                                 g_param_spec_object ("fetch-options",
-	                                                      "Fetch options",
-	                                                      "Fetch options",
-	                                                      GGIT_TYPE_FETCH_OPTIONS,
-	                                                      G_PARAM_READWRITE |
-	                                                      G_PARAM_STATIC_STRINGS));
+	                                 g_param_spec_boxed ("fetch-options",
+	                                                     "Fetch options",
+	                                                     "Fetch options",
+	                                                     GGIT_TYPE_FETCH_OPTIONS,
+	                                                     G_PARAM_READWRITE |
+	                                                     G_PARAM_STATIC_STRINGS));
 
 	g_object_class_install_property (object_class,
 	                                 PROP_CLONE_CHECKOUT_STRATEGY,
