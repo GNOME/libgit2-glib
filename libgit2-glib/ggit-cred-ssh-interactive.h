@@ -39,14 +39,11 @@ G_BEGIN_DECLS
 #define GGIT_CRED_SSH_INTERACTIVE_PROMPT(obj)	((GgitCredSshInteractivePrompt*)obj)
 
 typedef struct _GgitCredSshInteractiveClass	GgitCredSshInteractiveClass;
-typedef struct _GgitCredSshInteractivePrivate	GgitCredSshInteractivePrivate;
 
 struct _GgitCredSshInteractive
 {
 	/*< private >*/
 	GgitCred parent;
-
-	GgitCredSshInteractivePrivate *priv;
 };
 
 struct _GgitCredSshInteractiveClass

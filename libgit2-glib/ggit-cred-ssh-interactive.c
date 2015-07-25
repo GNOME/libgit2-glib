@@ -38,10 +38,10 @@ struct _GgitCredSshInteractivePrompt
 	gboolean is_masked;
 };
 
-struct _GgitCredSshInteractivePrivate
+typedef struct _GgitCredSshInteractivePrivate
 {
 	gchar *username;
-};
+} GgitCredSshInteractivePrivate;
 
 enum
 {
@@ -67,13 +67,17 @@ G_DEFINE_TYPE_EXTENDED (GgitCredSshInteractive,
                         ggit_cred_ssh_interactive,
                         GGIT_TYPE_CRED,
                         0,
+                        G_ADD_PRIVATE (GgitCredSshInteractive)
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE,
                                                ggit_cred_ssh_interactive_initable_iface_init))
 
 static void
 ggit_cred_ssh_interactive_finalize (GObject *object)
 {
-	GgitCredSshInteractivePrivate *priv = GGIT_CRED_SSH_INTERACTIVE (object)->priv;
+	GgitCredSshInteractive *cred = GGIT_CRED_SSH_INTERACTIVE (object);
+	GgitCredSshInteractivePrivate *priv;
+
+	priv = ggit_cred_ssh_interactive_get_instance_private (cred);
 
 	g_free (priv->username);
 
@@ -86,7 +90,10 @@ ggit_cred_ssh_interactive_get_property (GObject    *object,
                                         GValue     *value,
                                         GParamSpec *pspec)
 {
-	GgitCredSshInteractivePrivate *priv = GGIT_CRED_SSH_INTERACTIVE (object)->priv;
+	GgitCredSshInteractive *cred = GGIT_CRED_SSH_INTERACTIVE (object);
+	GgitCredSshInteractivePrivate *priv;
+
+	priv = ggit_cred_ssh_interactive_get_instance_private (cred);
 
 	switch (prop_id)
 	{
@@ -105,7 +112,10 @@ ggit_cred_ssh_interactive_set_property (GObject      *object,
                                         const GValue *value,
                                         GParamSpec   *pspec)
 {
-	GgitCredSshInteractivePrivate *priv = GGIT_CRED_SSH_INTERACTIVE (object)->priv;
+	GgitCredSshInteractive *cred = GGIT_CRED_SSH_INTERACTIVE (object);
+	GgitCredSshInteractivePrivate *priv;
+
+	priv = ggit_cred_ssh_interactive_get_instance_private (cred);
 
 	switch (prop_id)
 	{
@@ -136,16 +146,11 @@ ggit_cred_ssh_interactive_class_init (GgitCredSshInteractiveClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (GgitCredSshInteractivePrivate));
 }
 
 static void
 ggit_cred_ssh_interactive_init (GgitCredSshInteractive *cred)
 {
-	cred->priv = G_TYPE_INSTANCE_GET_PRIVATE(cred,
-	                                         GGIT_TYPE_CRED_SSH_INTERACTIVE,
-	                                         GgitCredSshInteractivePrivate);
 }
 
 static void
@@ -209,6 +214,7 @@ ggit_cred_ssh_interactive_initable_init (GInitable     *initable,
                                          GCancellable  *cancellable,
                                          GError       **error)
 {
+	GgitCredSshInteractive *gcred = GGIT_CRED_SSH_INTERACTIVE (initable);
 	GgitCredSshInteractivePrivate *priv;
 	git_cred *cred;
 	gint ret;
@@ -220,7 +226,7 @@ ggit_cred_ssh_interactive_initable_init (GInitable     *initable,
 		return FALSE;
 	}
 
-	priv = GGIT_CRED_SSH_INTERACTIVE (initable)->priv;
+	priv = ggit_cred_ssh_interactive_get_instance_private (gcred);
 
 	ret = git_cred_ssh_interactive_new (&cred, priv->username,
 	                                    callback_wrapper,
@@ -258,9 +264,13 @@ ggit_cred_ssh_interactive_new (const gchar  *username,
 const gchar *
 ggit_cred_ssh_interactive_get_username (GgitCredSshInteractive *cred)
 {
+	GgitCredSshInteractivePrivate *priv;
+
 	g_return_val_if_fail (GGIT_IS_CRED_SSH_INTERACTIVE (cred), NULL);
 
-	return cred->priv->username;
+	priv = ggit_cred_ssh_interactive_get_instance_private (cred);
+
+	return priv->username;
 }
 
 GgitCredSshInteractivePrompt *
