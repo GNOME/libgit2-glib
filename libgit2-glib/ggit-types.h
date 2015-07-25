@@ -68,13 +68,6 @@ typedef struct _GgitCredSshInteractive GgitCredSshInteractive;
 typedef struct _GgitCredSshInteractivePrompt GgitCredSshInteractivePrompt;
 
 /**
- * GgitCredSshKeyFromAgent:
- *
- * Represents a ssh key agent credential.
- */
-typedef struct _GgitCredSshKeyFromAgent GgitCredSshKeyFromAgent;
-
-/**
  * GgitCredPlaintext:
  *
  * Represents a plain text credential.

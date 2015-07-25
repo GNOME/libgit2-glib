@@ -24,35 +24,12 @@
 
 #include <glib-object.h>
 #include <libgit2-glib/ggit-cred.h>
+#include <libgit2-glib/ggit-autocleanup.h>
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT		(ggit_cred_ssh_key_from_agent_get_type ())
-#define GGIT_CRED_SSH_KEY_FROM_AGENT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT, GgitCredSshKeyFromAgent))
-#define GGIT_CRED_SSH_KEY_FROM_AGENT_CONST(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT, GgitCredSshKeyFromAgent const))
-#define GGIT_CRED_SSH_KEY_FROM_AGENT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT, GgitCredSshKeyFromAgentClass))
-#define GGIT_IS_CRED_SSH_KEY_FROM_AGENT(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT))
-#define GGIT_IS_CRED_SSH_KEY_FROM_AGENT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT))
-#define GGIT_CRED_SSH_KEY_FROM_AGENT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT, GgitCredSshKeyFromAgentClass))
-
-typedef struct _GgitCredSshKeyFromAgentClass		GgitCredSshKeyFromAgentClass;
-typedef struct _GgitCredSshKeyFromAgentPrivate		GgitCredSshKeyFromAgentPrivate;
-
-struct _GgitCredSshKeyFromAgent
-{
-	/*< private >*/
-	GgitCred parent;
-
-	GgitCredSshKeyFromAgentPrivate *priv;
-};
-
-struct _GgitCredSshKeyFromAgentClass
-{
-	/*< private >*/
-	GgitCredClass parent_class;
-};
-
-GType           ggit_cred_ssh_key_from_agent_get_type      (void) G_GNUC_CONST;
+#define GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT (ggit_cred_ssh_key_from_agent_get_type ())
+G_DECLARE_FINAL_TYPE (GgitCredSshKeyFromAgent, ggit_cred_ssh_key_from_agent, GGIT, CRED_SSH_KEY_FROM_AGENT, GgitCred)
 
 GgitCredSshKeyFromAgent *
                 ggit_cred_ssh_key_from_agent_new           (const gchar  *username,

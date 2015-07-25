@@ -28,9 +28,16 @@
 #include "ggit-error.h"
 #include "ggit-cred-ssh-key-from-agent.h"
 
+/**
+ * GgitCredSshKeyFromAgent:
+ *
+ * Represents a ssh key agent credential.
+ */
 
-struct _GgitCredSshKeyFromAgentPrivate
+struct _GgitCredSshKeyFromAgent
 {
+	GgitCred parent_instance;
+
 	gchar *username;
 };
 
@@ -52,9 +59,9 @@ G_DEFINE_TYPE_EXTENDED (GgitCredSshKeyFromAgent,
 static void
 ggit_cred_ssh_key_from_agent_finalize (GObject *object)
 {
-	GgitCredSshKeyFromAgentPrivate *priv = GGIT_CRED_SSH_KEY_FROM_AGENT (object)->priv;
+	GgitCredSshKeyFromAgent *cred = GGIT_CRED_SSH_KEY_FROM_AGENT (object);
 
-	g_free (priv->username);
+	g_free (cred->username);
 
 	G_OBJECT_CLASS (ggit_cred_ssh_key_from_agent_parent_class)->finalize (object);
 }
@@ -65,12 +72,12 @@ ggit_cred_ssh_key_from_agent_get_property (GObject    *object,
                                            GValue     *value,
                                            GParamSpec *pspec)
 {
-	GgitCredSshKeyFromAgentPrivate *priv = GGIT_CRED_SSH_KEY_FROM_AGENT (object)->priv;
+	GgitCredSshKeyFromAgent *cred = GGIT_CRED_SSH_KEY_FROM_AGENT (object);
 
 	switch (prop_id)
 	{
 		case PROP_USERNAME:
-			g_value_set_string (value, priv->username);
+			g_value_set_string (value, cred->username);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -84,12 +91,12 @@ ggit_cred_ssh_key_from_agent_set_property (GObject      *object,
                                            const GValue *value,
                                            GParamSpec   *pspec)
 {
-	GgitCredSshKeyFromAgentPrivate *priv = GGIT_CRED_SSH_KEY_FROM_AGENT (object)->priv;
+	GgitCredSshKeyFromAgent *cred = GGIT_CRED_SSH_KEY_FROM_AGENT (object);
 
 	switch (prop_id)
 	{
 		case PROP_USERNAME:
-			priv->username = g_value_dup_string (value);
+			cred->username = g_value_dup_string (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -115,16 +122,11 @@ ggit_cred_ssh_key_from_agent_class_init (GgitCredSshKeyFromAgentClass *klass)
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_CONSTRUCT_ONLY |
 	                                                      G_PARAM_STATIC_STRINGS));
-
-	g_type_class_add_private (object_class, sizeof (GgitCredSshKeyFromAgentPrivate));
 }
 
 static void
 ggit_cred_ssh_key_from_agent_init (GgitCredSshKeyFromAgent *cred)
 {
-	cred->priv = G_TYPE_INSTANCE_GET_PRIVATE(cred,
-	                                         GGIT_TYPE_CRED_SSH_KEY_FROM_AGENT,
-	                                         GgitCredSshKeyFromAgentPrivate);
 }
 
 static gboolean
@@ -132,7 +134,7 @@ ggit_cred_ssh_key_from_agent_initable_init (GInitable     *initable,
                                             GCancellable  *cancellable,
                                             GError       **error)
 {
-	GgitCredSshKeyFromAgentPrivate *priv;
+	GgitCredSshKeyFromAgent *gcred = GGIT_CRED_SSH_KEY_FROM_AGENT (initable);
 	git_cred *cred;
 	gint ret;
 
@@ -143,9 +145,7 @@ ggit_cred_ssh_key_from_agent_initable_init (GInitable     *initable,
 		return FALSE;
 	}
 
-	priv = GGIT_CRED_SSH_KEY_FROM_AGENT (initable)->priv;
-
-	ret = git_cred_ssh_key_from_agent (&cred, priv->username);
+	ret = git_cred_ssh_key_from_agent (&cred, gcred->username);
 
 	if (ret != GIT_OK)
 	{
@@ -198,7 +198,7 @@ ggit_cred_ssh_key_from_agent_get_username (GgitCredSshKeyFromAgent *cred)
 {
 	g_return_val_if_fail (GGIT_IS_CRED_SSH_KEY_FROM_AGENT (cred), NULL);
 
-	return cred->priv->username;
+	return cred->username;
 }
 
 /* ex:set ts=8 noet: */
