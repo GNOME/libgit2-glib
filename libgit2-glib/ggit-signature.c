@@ -31,6 +31,8 @@
  */
 struct _GgitSignature
 {
+	GgitNative parent_instance;
+
 	gchar *encoding;
 
 	gchar *name_utf8;
