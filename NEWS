@@ -1,3 +1,8 @@
+News in 0.23.0
+--------------
+* Fix api breaks made in libgit2
+* Misc bugfixing
+
 News in 0.22.8
 --------------
 * Include passed in cflags for ssh check

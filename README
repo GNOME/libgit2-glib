@@ -15,13 +15,13 @@ see the file 'COPYING' for more information.
 Installation
 ============
 
-libgit2-glib requires libgit2-0.22.x, glib 2.26.x, gio 2.26.x and
+libgit2-glib requires libgit2-0.23.x, glib 2.44.x, gio 2.26.x and
 gobject-introspection 0.9.x.
 
 Simple install procedure:
 
-  % tar Jxf libgit2-glib-0.22.8.tar.xz		# unpack the sources
-  % cd libgit2-glib-0.22.8			# change to the toplevel directory
+  % tar Jxf libgit2-glib-0.23.0.tar.xz		# unpack the sources
+  % cd libgit2-glib-0.23.0			# change to the toplevel directory
   % ./configure					# run the `configure' script
   % make					# build libgit2-glib
   [ Become root if necessary ]
