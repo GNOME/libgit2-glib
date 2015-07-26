@@ -21,8 +21,6 @@
 #include "ggit-object-factory.h"
 #include "ggit-object-factory-base.h"
 
-#define GGIT_OBJECT_FACTORY_GET_PRIVATE(object)(G_TYPE_INSTANCE_GET_PRIVATE((object), GGIT_TYPE_OBJECT_FACTORY, GgitObjectFactoryPrivate))
-
 typedef struct
 {
 	GType type;
