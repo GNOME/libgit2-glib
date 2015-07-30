@@ -159,4 +159,37 @@ ggit_fetch_options_set_remote_callbacks (GgitFetchOptions    *options,
 	}
 }
 
+/**
+ * ggit_fetch_options_get_download_tags:
+ * @options: a #GgitFetchOptions.
+ *
+ * Get how tags are being handled when fetching/downloading.
+ *
+ * Returns: a #GgitRemoteDownloadTagsType.
+ *
+ **/
+GgitRemoteDownloadTagsType
+ggit_fetch_options_get_download_tags (GgitFetchOptions *options)
+{
+	g_return_if_fail (options != NULL);
+	return (GgitRemoteDownloadTagsType)options->fetch_options.download_tags;
+}
+
+/**
+ * ggit_fetch_options_set_download_tags:
+ * @options: a #GgitFetchOptions.
+ * @download_tags: a #GgitRemoteDownloadTagsType.
+ *
+ * Set how tags are being handled when fetching/downloading.
+ *
+ **/
+void
+ggit_fetch_options_set_download_tags (GgitFetchOptions            *options,
+                                      GgitRemoteDownloadTagsType   download_tags)
+{
+	g_return_if_fail (options != NULL);
+
+	options->fetch_options.download_tags = (git_remote_autotag_option_t)download_tags;
+}
+
 /* ex:set ts=8 noet: */

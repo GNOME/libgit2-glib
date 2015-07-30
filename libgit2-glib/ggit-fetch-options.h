@@ -44,6 +44,10 @@ GgitRemoteCallbacks       *ggit_fetch_options_get_remote_callbacks (GgitFetchOpt
 void                       ggit_fetch_options_set_remote_callbacks (GgitFetchOptions       *options,
                                                                     GgitRemoteCallbacks    *callbacks);
 
+GgitRemoteDownloadTagsType ggit_fetch_options_get_download_tags    (GgitFetchOptions           *options);
+void                       ggit_fetch_options_set_download_tags    (GgitFetchOptions           *options,
+                                                                    GgitRemoteDownloadTagsType  download_tags);
+
 G_END_DECLS
 
 #endif /* __GGIT_FETCH_OPTIONS_H__ */
