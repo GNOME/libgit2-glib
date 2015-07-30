@@ -105,6 +105,9 @@ gboolean     ggit_config_match_foreach (GgitConfig               *config,
                                         gpointer                  user_data,
                                         GError                  **error);
 
+GgitConfig  *ggit_config_snapshot      (GgitConfig               *config,
+                                        GError                  **error);
+
 GgitConfig  *_ggit_config_wrap         (git_config               *config);
 
 G_END_DECLS

@@ -782,4 +782,37 @@ ggit_config_match_foreach (GgitConfig               *config,
 	                             error);
 }
 
+/**
+ * ggit_config_snapshot:
+ * @config: a #GgitConfig.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a snapshot of the current state of the configuration,
+ * which allows you to look into a consistent view of the configuration
+ * for looking up complex values (e.g. a remote, submodule).
+ *
+ * Returns: (transfer full): a new #GgitConfig, or %NULL if an error occurred.
+ *
+ **/
+GgitConfig *
+ggit_config_snapshot (GgitConfig  *config,
+                      GError     **error)
+{
+	git_config *retconf;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_config_snapshot (&retconf, _ggit_native_get (config));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_config_wrap (retconf);
+}
+
 /* ex:set ts=8 noet: */
