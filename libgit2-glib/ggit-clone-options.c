@@ -73,7 +73,7 @@ ggit_clone_options_copy (GgitCloneOptions *clone_options)
 
 	if (clone_options->fetch_options)
 	{
-		new_clone_options->fetch_options = g_object_ref (clone_options->fetch_options);
+		new_clone_options->fetch_options = ggit_fetch_options_copy (clone_options->fetch_options);
 		gnew_clone_options.fetch_opts = *_ggit_fetch_options_get_fetch_options (new_clone_options->fetch_options);
 	}
 
@@ -219,7 +219,7 @@ ggit_clone_options_set_fetch_options (GgitCloneOptions *options,
 
 	if (fetch_options != NULL)
 	{
-		options->fetch_options = g_object_ref (fetch_options);
+		options->fetch_options = ggit_fetch_options_copy (fetch_options);
 		options->clone_options.fetch_opts = *_ggit_fetch_options_get_fetch_options (fetch_options);
 	}
 	else
