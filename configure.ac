@@ -40,6 +40,8 @@ AM_MAINTAINER_MODE([enable])
 
 AM_SILENT_RULES([yes])
 
+AX_CHECK_ENABLE_DEBUG([no])
+
 # Initialize libtool
 LT_PREREQ([2.2])
 LT_INIT([disable-static])
