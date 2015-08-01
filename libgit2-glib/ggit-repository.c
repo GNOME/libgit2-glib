@@ -2021,11 +2021,15 @@ submodule_wrapper_callback (git_submodule *submodule,
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Gathers file statuses and run a callback for each one.
+ * Gathers submodules and run a callback for each one.
  *
- * To the callback is passed the path of the file, the status and the data pointer
- * passed to this function. If the callback returns something other than
- * 0, the iteration will stop and @error will be set.
+ * To the callback is passed the submodule instance and name. If the callback
+ * returns something other than 0, the iteration will stop and @error
+ * will be set.
+ *
+ * NOTE: the submodule instance passed to the callback is only valid during
+ * the call to ggit_repository_submodule_foreach and may not be used after the
+ * call has finished.
  *
  * Returns: %TRUE if there was no error, %FALSE otherwise
  */
