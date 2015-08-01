@@ -30,6 +30,7 @@ struct _GgitSubmodule
 {
 	git_submodule *submodule;
 	gint ref_count;
+	gboolean valid;
 };
 
 G_DEFINE_BOXED_TYPE (GgitSubmodule, ggit_submodule, ggit_submodule_ref, ggit_submodule_unref)
@@ -42,8 +43,16 @@ _ggit_submodule_wrap (const git_submodule *submodule)
 	glib_submodule = g_slice_new (GgitSubmodule);
 	glib_submodule->submodule = (git_submodule *)submodule;
 	glib_submodule->ref_count = 1;
+	glib_submodule->valid = TRUE;
 
 	return glib_submodule;
+}
+
+void
+_ggit_submodule_invalidate (GgitSubmodule *submodule)
+{
+	g_return_if_fail (submodule != NULL);
+	submodule->valid = FALSE;
 }
 
 /**
@@ -59,6 +68,7 @@ GgitSubmodule *
 ggit_submodule_ref (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	g_atomic_int_inc (&submodule->ref_count);
 
@@ -103,6 +113,7 @@ ggit_submodule_open (GgitSubmodule  *submodule,
 	gint ret;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_submodule_open (&repo, submodule->submodule);
@@ -128,6 +139,7 @@ GgitRepository *
 ggit_submodule_get_owner (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	return _ggit_repository_wrap (git_submodule_owner (submodule->submodule),
 	                              FALSE);
@@ -145,6 +157,7 @@ const gchar *
 ggit_submodule_get_name (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	return git_submodule_name (submodule->submodule);
 }
@@ -163,6 +176,7 @@ const gchar *
 ggit_submodule_get_path (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	return git_submodule_path (submodule->submodule);
 }
@@ -180,6 +194,7 @@ const gchar *
 ggit_submodule_get_url (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	return git_submodule_url (submodule->submodule);
 }
@@ -198,6 +213,7 @@ ggit_submodule_get_index_id (GgitSubmodule *submodule)
 	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	if (git_submodule_index_id (submodule->submodule))
 	{
@@ -221,6 +237,7 @@ ggit_submodule_get_head_id (GgitSubmodule *submodule)
 	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	if (git_submodule_head_id (submodule->submodule))
 	{
@@ -248,6 +265,7 @@ ggit_submodule_get_workdir_id (GgitSubmodule *submodule)
 	GgitOId *oid = NULL;
 
 	g_return_val_if_fail (submodule != NULL, NULL);
+	g_return_val_if_fail (submodule->valid, NULL);
 
 	if (git_submodule_wd_id (submodule->submodule))
 	{
@@ -269,6 +287,7 @@ GgitSubmoduleIgnore
 ggit_submodule_get_ignore (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
+	g_return_val_if_fail (submodule->valid, 0);
 
 	return (GgitSubmoduleIgnore)git_submodule_ignore (submodule->submodule);
 }
@@ -285,6 +304,7 @@ GgitSubmoduleUpdate
 ggit_submodule_get_update (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, 0);
+	g_return_val_if_fail (submodule->valid, 0);
 
 	return (GgitSubmoduleUpdate)git_submodule_update_strategy (submodule->submodule);
 }
@@ -301,6 +321,7 @@ gboolean
 ggit_submodule_get_fetch_recurse (GgitSubmodule *submodule)
 {
 	g_return_val_if_fail (submodule != NULL, FALSE);
+	g_return_val_if_fail (submodule->valid, FALSE);
 
 	return git_submodule_fetch_recurse_submodules (submodule->submodule);
 }
@@ -324,6 +345,7 @@ ggit_submodule_init (GgitSubmodule  *submodule,
 	gint ret;
 
 	g_return_if_fail (submodule != NULL);
+	g_return_if_fail (submodule->valid);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_submodule_init (submodule->submodule, overwrite);
@@ -351,6 +373,7 @@ ggit_submodule_sync (GgitSubmodule  *submodule,
 	gint ret;
 
 	g_return_if_fail (submodule != NULL);
+	g_return_if_fail (submodule->valid);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_submodule_sync (submodule->submodule);
@@ -378,6 +401,7 @@ ggit_submodule_reload (GgitSubmodule  *submodule,
 	gint ret;
 
 	g_return_if_fail (submodule != NULL);
+	g_return_if_fail (submodule->valid);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_submodule_reload (submodule->submodule, force ? 1 : 0);

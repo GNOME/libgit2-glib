@@ -2009,6 +2009,7 @@ submodule_wrapper_callback (git_submodule *submodule,
 
 	ret = wrapper_data->callback (gsubmodule, name, wrapper_data->user_data);
 
+	_ggit_submodule_invalidate (gsubmodule);
 	ggit_submodule_unref (gsubmodule);
 
 	return ret;

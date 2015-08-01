@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 GType                   ggit_submodule_get_type              (void) G_GNUC_CONST;
 
 GgitSubmodule         *_ggit_submodule_wrap                  (const git_submodule *submodule);
+void                   _ggit_submodule_invalidate            (GgitSubmodule       *submodule);
 
 GgitSubmodule          *ggit_submodule_ref                   (GgitSubmodule       *submodule);
 void                    ggit_submodule_unref                 (GgitSubmodule       *submodule);
