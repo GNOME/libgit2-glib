@@ -171,7 +171,7 @@ ggit_fetch_options_set_remote_callbacks (GgitFetchOptions    *options,
 GgitRemoteDownloadTagsType
 ggit_fetch_options_get_download_tags (GgitFetchOptions *options)
 {
-	g_return_if_fail (options != NULL);
+	g_return_val_if_fail (options != NULL, GGIT_REMOTE_DOWNLOAD_TAGS_UNSPECIFIED);
 	return (GgitRemoteDownloadTagsType)options->fetch_options.download_tags;
 }
 
