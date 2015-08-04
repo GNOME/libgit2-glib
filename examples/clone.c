@@ -66,7 +66,9 @@ chomp (gchar *s)
 	}
 }
 
+#ifdef GIT_SSH
 static gboolean tried_ssh_key = FALSE;
+#endif
 
 static GgitCred *
 cloner_credentials (GgitRemoteCallbacks  *callbacks,
@@ -82,11 +84,13 @@ cloner_credentials (GgitRemoteCallbacks  *callbacks,
 
 	g_return_val_if_fail (error != NULL && *error == NULL, NULL);
 
+#ifdef GIT_SSH
 	if ((allowed_types & GGIT_CREDTYPE_SSH_KEY) != 0 && !tried_ssh_key)
 	{
 		tried_ssh_key = TRUE;
 		return GGIT_CRED (ggit_cred_ssh_key_from_agent_new (username_from_url, error));
 	}
+#endif
 
 	g_printf ("Username: ");
 
