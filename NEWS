@@ -1,3 +1,9 @@
+News in 0.23.2
+--------------
+* Add ggit_config_snapshot
+* Allow to enable debug builds
+* Misc bugfixing
+
 News in 0.23.0
 --------------
 * Fix api breaks made in libgit2
