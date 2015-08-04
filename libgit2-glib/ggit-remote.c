@@ -40,12 +40,6 @@ struct _GgitRemoteHead
 	gint ref_count;
 };
 
-/**
- * GgitRemote:
- *
- * Represents a git remote.
- */
-
 G_DEFINE_TYPE (GgitRemote, ggit_remote, GGIT_TYPE_NATIVE)
 G_DEFINE_BOXED_TYPE (GgitRemoteHead, ggit_remote_head, ggit_remote_head_ref, ggit_remote_head_unref)
 

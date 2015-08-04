@@ -164,11 +164,7 @@ ggit_repository_finalize (GObject *object)
 	g_free (priv->url);
 	g_clear_object (&priv->location);
 	g_clear_object (&priv->workdir);
-
-	if (priv->clone_options != NULL)
-	{
-		ggit_clone_options_free (priv->clone_options);
-	}
+	g_clear_object (&priv->clone_options);
 
 	repo = _ggit_native_get (object);
 
@@ -217,7 +213,7 @@ ggit_repository_get_property (GObject    *object,
 			                    ggit_repository_get_head (repository, NULL));
 			break;
 		case PROP_CLONE_OPTIONS:
-			g_value_set_boxed (value, priv->clone_options);
+			g_value_set_object (value, priv->clone_options);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -296,7 +292,7 @@ ggit_repository_set_property (GObject      *object,
 			priv->init = g_value_get_boolean (value);
 			break;
 		case PROP_CLONE_OPTIONS:
-			priv->clone_options = g_value_dup_boxed (value);
+			priv->clone_options = g_value_dup_object (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -373,12 +369,12 @@ ggit_repository_class_init (GgitRepositoryClass *klass)
 
 	g_object_class_install_property (object_class,
 	                                 PROP_CLONE_OPTIONS,
-	                                 g_param_spec_boxed ("clone-options",
-	                                                     "Clone options",
-	                                                     "Clone options",
-	                                                     GGIT_TYPE_CLONE_OPTIONS,
-	                                                     G_PARAM_READWRITE |
-	                                                     G_PARAM_CONSTRUCT_ONLY));
+	                                 g_param_spec_object ("clone-options",
+	                                                      "Clone options",
+	                                                      "Clone options",
+	                                                      GGIT_TYPE_CLONE_OPTIONS,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
@@ -427,7 +423,7 @@ ggit_repository_initable_init (GInitable    *initable,
 		err = git_clone (&repo,
 		                 priv->url,
 		                 path,
-		                 _ggit_clone_options_get_clone_options (priv->clone_options));
+		                 _ggit_clone_options_get_native (priv->clone_options));
 	}
 	else
 	{

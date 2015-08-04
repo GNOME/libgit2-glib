@@ -19,88 +19,208 @@
  */
 
 #include <git2.h>
+#include <gio/gio.h>
 
 #include "ggit-clone-options.h"
 #include "ggit-transfer-progress.h"
 #include "ggit-native.h"
+#include "ggit-remote.h"
+#include "ggit-repository.h"
 
-struct _GgitCloneOptions
+typedef struct _GgitCloneOptionsPrivate
 {
-	git_clone_options clone_options;
+	git_clone_options native;
 	GgitFetchOptions *fetch_options;
-};
+} GgitCloneOptionsPrivate;
 
-G_DEFINE_BOXED_TYPE (GgitCloneOptions, ggit_clone_options,
-                     ggit_clone_options_copy, ggit_clone_options_free)
+/**
+ * GgitCloneOptionsClass::create_repository:
+ * @options: a #GgitCloneOptions.
+ * @path: the repository path.
+ * @is_bare: whether a bare repository should be created.
+ * @error: a #GError for error reporting.
+ *
+ * Returns: (transfer full) (nullable): a #GgitRepository or %NULL in case of an error.
+ */
+
+/**
+ * GgitCloneOptionsClass::create_remote:
+ * @options: a #GgitCloneOptions.
+ * @repository: the repository.
+ * @name: the remote name.
+ * @url: the remote url.
+ * @error: a #GError for error reporting.
+ *
+ * Returns: (transfer full) (nullable): a #GgitRemote or %NULL in case of an error.
+ */
+
+G_DEFINE_TYPE_WITH_PRIVATE (GgitCloneOptions, ggit_clone_options, G_TYPE_OBJECT)
 
 const git_clone_options *
-_ggit_clone_options_get_clone_options (GgitCloneOptions *clone_options)
+_ggit_clone_options_get_native (GgitCloneOptions *options)
 {
+	GgitCloneOptionsPrivate *priv;
+
 	/* NULL is common for clone_options as it specifies to use the default
 	 * so handle a NULL clone_options here instead of in every caller.
 	 */
-	if (clone_options == NULL)
+	if (options == NULL)
 	{
 		return NULL;
 	}
 
-	return (const git_clone_options *)&clone_options->clone_options;
+	g_return_val_if_fail (GGIT_IS_CLONE_OPTIONS (options), NULL);
+
+	priv = ggit_clone_options_get_instance_private (options);
+
+	return (const git_clone_options *)&priv->native;
 }
 
-/**
- * ggit_clone_options_copy:
- * @clone_options: a #GgitCloneOptions.
- *
- * Copies @clone_options into a newly allocated #GgitCloneOptions.
- *
- * Returns: (transfer full): a newly allocated #GgitCloneOptions.
- */
-GgitCloneOptions *
-ggit_clone_options_copy (GgitCloneOptions *clone_options)
+static void
+ggit_clone_options_finalize (GObject *object)
 {
-	GgitCloneOptions *new_clone_options;
-	git_clone_options *gclone_options;
-	git_clone_options gnew_clone_options = GIT_CLONE_OPTIONS_INIT;
+	GgitCloneOptions *options = GGIT_CLONE_OPTIONS (object);
+	GgitCloneOptionsPrivate *priv;
 
-	g_return_val_if_fail (clone_options != NULL, NULL);
+	priv = ggit_clone_options_get_instance_private (options);
 
-	gclone_options = &clone_options->clone_options;
+	g_free ((gchar *)priv->native.checkout_branch);
 
-	new_clone_options = g_slice_new0 (GgitCloneOptions);
+	ggit_fetch_options_free (priv->fetch_options);
 
-	gnew_clone_options.bare = gclone_options->bare;
-	gnew_clone_options.checkout_branch = g_strdup (gclone_options->checkout_branch);
+	priv->native.repository_cb = NULL;
+	priv->native.repository_cb_payload = NULL;
 
-	if (clone_options->fetch_options)
+	priv->native.remote_cb = NULL;
+	priv->native.remote_cb_payload = NULL;
+
+	G_OBJECT_CLASS (ggit_clone_options_parent_class)->finalize (object);
+}
+
+static GgitRepository *
+create_repository_default (GgitCloneOptions  *options,
+                           const gchar       *path,
+                           gboolean           is_bare,
+                           GError           **error)
+{
+	GFile *location;
+	GgitRepository *ret;
+
+	location = g_file_new_for_path (path);
+	ret = ggit_repository_init_repository (location, is_bare, error);
+	g_object_unref (location);
+
+	return ret;
+}
+
+static GgitRemote *
+create_remote_default (GgitCloneOptions  *options,
+                       GgitRepository    *repository,
+                       const gchar       *name,
+                       const gchar       *url,
+                       GError           **error)
+{
+	return ggit_remote_new (repository, name, url, error);
+}
+
+static void
+ggit_clone_options_class_init (GgitCloneOptionsClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = ggit_clone_options_finalize;
+
+	klass->create_repository = create_repository_default;
+	klass->create_remote = create_remote_default;
+}
+
+static gint
+create_repository_wrapper (git_repository **out,
+                           const char      *path,
+                           gint             is_bare,
+                           void            *payload)
+{
+	GgitCloneOptions *options = GGIT_CLONE_OPTIONS (payload);
+	GgitCloneOptionsClass *cls = GGIT_CLONE_OPTIONS_GET_CLASS (options);
+	GError *error = NULL;
+	GgitRepository *repository;
+
+	repository = cls->create_repository(options, path, is_bare ? TRUE : FALSE, &error);
+
+	if (error != NULL)
 	{
-		new_clone_options->fetch_options = ggit_fetch_options_copy (clone_options->fetch_options);
-		gnew_clone_options.fetch_opts = *_ggit_fetch_options_get_fetch_options (new_clone_options->fetch_options);
+		giterr_set_str (GIT_ERROR, error->message);
+		g_error_free (error);
+
+		if (repository != NULL)
+		{
+			g_object_unref (repository);
+		}
+
+		return GIT_ERROR;
 	}
 
-	new_clone_options->clone_options = gnew_clone_options;
+	if (repository != NULL)
+	{
+		*out = _ggit_native_release (repository);
+		g_object_unref (repository);
+	}
 
-	return new_clone_options;
+	return GIT_OK;
 }
 
-/**
- * ggit_clone_options_free:
- * @clone_options: a #GgitCloneOptions.
- *
- * Frees @clone_options.
- */
-void
-ggit_clone_options_free (GgitCloneOptions *clone_options)
+static gint
+create_remote_wrapper (git_remote     **out,
+                       git_repository  *repo,
+                       const char      *name,
+                       const char      *url,
+                       void            *payload)
 {
-	git_clone_options *gclone_options;
+	GgitCloneOptions *options = GGIT_CLONE_OPTIONS (payload);
+	GgitCloneOptionsClass *cls = GGIT_CLONE_OPTIONS_GET_CLASS (options);
+	GgitRepository *repository = _ggit_repository_wrap (repo, FALSE);
+	GError *error = NULL;
+	GgitRemote *remote;
 
-	g_return_if_fail (clone_options != NULL);
+	remote = cls->create_remote(options, repository, name, url, &error);
+	g_object_unref (repository);
 
-	gclone_options = &clone_options->clone_options;
-	g_free ((gchar *)gclone_options->checkout_branch);
+	if (error)
+	{
+		giterr_set_str (GIT_ERROR, error->message);
+		g_error_free (error);
 
-	ggit_fetch_options_free (clone_options->fetch_options);
+		if (remote != NULL)
+		{
+			g_object_unref (remote);
+		}
 
-	g_slice_free (GgitCloneOptions, clone_options);
+		return GIT_ERROR;
+	}
+
+	if (remote != NULL)
+	{
+		*out = _ggit_native_release (GGIT_NATIVE (remote));
+		g_object_unref (remote);
+	}
+
+	return GIT_OK;
+}
+
+static void
+ggit_clone_options_init (GgitCloneOptions *options)
+{
+	git_clone_options native = GIT_CLONE_OPTIONS_INIT;
+	GgitCloneOptionsPrivate *priv;
+
+	native.repository_cb = create_repository_wrapper;
+	native.repository_cb_payload = options;
+
+	native.remote_cb = create_remote_wrapper;
+	native.remote_cb_payload = options;
+
+	priv = ggit_clone_options_get_instance_private (options);
+	priv->native = native;
 }
 
 /**
@@ -113,13 +233,7 @@ ggit_clone_options_free (GgitCloneOptions *clone_options)
 GgitCloneOptions *
 ggit_clone_options_new (void)
 {
-	GgitCloneOptions *clone_options;
-	git_clone_options gclone_options = GIT_CLONE_OPTIONS_INIT;
-
-	clone_options = g_slice_new0 (GgitCloneOptions);
-	clone_options->clone_options = gclone_options;
-
-	return clone_options;
+	return GGIT_CLONE_OPTIONS (g_object_new (GGIT_TYPE_CLONE_OPTIONS, NULL));
 }
 
 /**
@@ -133,9 +247,12 @@ ggit_clone_options_new (void)
 gboolean
 ggit_clone_options_get_is_bare (GgitCloneOptions *options)
 {
-	g_return_val_if_fail (options != NULL, FALSE);
+	GgitCloneOptionsPrivate *priv;
 
-	return options->clone_options.bare;
+	g_return_val_if_fail (GGIT_IS_CLONE_OPTIONS (options), FALSE);
+
+	priv = ggit_clone_options_get_instance_private (options);
+	return priv->native.bare ? TRUE : FALSE;
 }
 
 /**
@@ -149,9 +266,12 @@ void
 ggit_clone_options_set_is_bare (GgitCloneOptions *options,
                                 gboolean          bare)
 {
-	g_return_if_fail (options != NULL);
+	GgitCloneOptionsPrivate *priv;
 
-	options->clone_options.bare = bare;
+	g_return_if_fail (GGIT_IS_CLONE_OPTIONS (options));
+
+	priv = ggit_clone_options_get_instance_private (options);
+	priv->native.bare = (gint)bare;
 }
 
 /**
@@ -165,9 +285,12 @@ ggit_clone_options_set_is_bare (GgitCloneOptions *options,
 const gchar *
 ggit_clone_options_get_checkout_branch (GgitCloneOptions *options)
 {
-	g_return_val_if_fail (options != NULL, NULL);
+	GgitCloneOptionsPrivate *priv;
 
-	return options->clone_options.checkout_branch;
+	g_return_val_if_fail (GGIT_IS_CLONE_OPTIONS (options), NULL);
+
+	priv = ggit_clone_options_get_instance_private (options);
+	return priv->native.checkout_branch;
 }
 
 /**
@@ -182,9 +305,12 @@ void
 ggit_clone_options_set_checkout_branch (GgitCloneOptions *options,
                                         const gchar      *checkout_branch)
 {
-	g_return_if_fail (options != NULL);
+	GgitCloneOptionsPrivate *priv;
 
-	options->clone_options.checkout_branch = g_strdup (checkout_branch);
+	g_return_if_fail (GGIT_IS_CLONE_OPTIONS (options));
+
+	priv = ggit_clone_options_get_instance_private (options);
+	priv->native.checkout_branch = g_strdup (checkout_branch);
 }
 
 /**
@@ -198,8 +324,12 @@ ggit_clone_options_set_checkout_branch (GgitCloneOptions *options,
 GgitFetchOptions *
 ggit_clone_options_get_fetch_options (GgitCloneOptions *options)
 {
-	g_return_val_if_fail (options != NULL, NULL);
-	return options->fetch_options;
+	GgitCloneOptionsPrivate *priv;
+
+	g_return_val_if_fail (GGIT_IS_CLONE_OPTIONS (options), NULL);
+
+	priv = ggit_clone_options_get_instance_private (options);
+	return priv->fetch_options;
 }
 
 /**
@@ -213,20 +343,69 @@ void
 ggit_clone_options_set_fetch_options (GgitCloneOptions *options,
                                       GgitFetchOptions *fetch_options)
 {
-	g_return_if_fail (options != NULL);
+	GgitCloneOptionsPrivate *priv;
 
-	g_clear_object (&options->fetch_options);
+	g_return_if_fail (GGIT_IS_CLONE_OPTIONS (options));
+
+	priv = ggit_clone_options_get_instance_private (options);
+
+	g_clear_object (&priv->fetch_options);
 
 	if (fetch_options != NULL)
 	{
-		options->fetch_options = ggit_fetch_options_copy (fetch_options);
-		options->clone_options.fetch_opts = *_ggit_fetch_options_get_fetch_options (fetch_options);
+		priv->fetch_options = ggit_fetch_options_copy (fetch_options);
+		priv->native.fetch_opts = *_ggit_fetch_options_get_fetch_options (fetch_options);
 	}
 	else
 	{
 		git_fetch_options i = GIT_FETCH_OPTIONS_INIT;
-		options->clone_options.fetch_opts = i;
+		priv->native.fetch_opts = i;
 	}
 }
+
+/**
+ * ggit_clone_options_get_local:
+ * @options: a #GgitCloneOptions.
+ *
+ * Get setting for bypassing the git-aware transport when cloning. The
+ * default auto setting bypasses the git-aware transport for local paths,
+ * but use a normal fetch for file:// URIs.
+ *
+ * Returns: the local clone setting.
+ *
+ **/
+GgitCloneLocal
+ggit_clone_options_get_local (GgitCloneOptions *options)
+{
+	GgitCloneOptionsPrivate *priv;
+
+	g_return_val_if_fail (GGIT_IS_CLONE_OPTIONS (options), 0);
+
+	priv = ggit_clone_options_get_instance_private (options);
+	return (GgitCloneLocal)priv->native.local;
+}
+
+/**
+ * ggit_clone_options_set_local:
+ * @options: a #GgitCloneOptions.
+ * @local: the local clone setting.
+ *
+ * Set setting for bypassing the git-aware transport when cloning. The
+ * default auto setting bypasses the git-aware transport for local paths,
+ * but use a normal fetch for file:// URIs.
+ *
+ **/
+void
+ggit_clone_options_set_local (GgitCloneOptions *options,
+                              GgitCloneLocal    local)
+{
+	GgitCloneOptionsPrivate *priv;
+
+	g_return_if_fail (GGIT_IS_CLONE_OPTIONS (options));
+
+	priv = ggit_clone_options_get_instance_private (options);
+	priv->native.local = (git_clone_local_t)local;
+}
+
 
 /* ex:set ts=8 noet: */

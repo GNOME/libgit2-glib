@@ -201,6 +201,13 @@ typedef struct _GgitReflogEntry GgitReflogEntry;
 typedef struct _GgitRemoteHead GgitRemoteHead;
 
 /**
+ * GgitRemote:
+ *
+ * Represents a git remote.
+ */
+typedef struct _GgitRemote GgitRemote;
+
+/**
  * GgitRepository:
  *
  * Represents an existing git repository including all of it's
@@ -938,6 +945,14 @@ typedef enum
 	GGIT_DIRECTION_FETCH = 0,
 	GGIT_DIRECTION_PUSH  = 1
 } GgitDirection;
+
+typedef enum
+{
+	GGIT_CLONE_LOCAL_AUTO     = 0,
+	GGIT_CLONE_LOCAL_LOCAL    = 1,
+	GGIT_CLONE_LOCAL_NO_LOCAL = 2,
+	GGIT_CLONE_LOCAL_NO_LINKS = 3
+} GgitCloneLocal;
 
 /**
  * GgitConfigCallback:

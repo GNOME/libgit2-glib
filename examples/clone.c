@@ -66,6 +66,8 @@ chomp (gchar *s)
 	}
 }
 
+static gboolean tried_ssh_key = FALSE;
+
 static GgitCred *
 cloner_credentials (GgitRemoteCallbacks  *callbacks,
                     const gchar          *url,
@@ -79,6 +81,12 @@ cloner_credentials (GgitRemoteCallbacks  *callbacks,
 	GgitCred *cred;
 
 	g_return_val_if_fail (error != NULL && *error == NULL, NULL);
+
+	if ((allowed_types & GGIT_CREDTYPE_SSH_KEY) != 0 && !tried_ssh_key)
+	{
+		tried_ssh_key = TRUE;
+		return GGIT_CRED (ggit_cred_ssh_key_from_agent_new (username_from_url, error));
+	}
 
 	g_printf ("Username: ");
 
@@ -186,6 +194,6 @@ int main(int argc, char **argv)
 		g_object_unref (cloned_repo);
 	}
 
-	ggit_clone_options_free (options);
+	g_object_unref (options);
 	return 0;
 }

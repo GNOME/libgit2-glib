@@ -30,15 +30,28 @@
 
 G_BEGIN_DECLS
 
-#define GGIT_TYPE_CLONE_OPTIONS       (ggit_clone_options_get_type ())
-#define GGIT_CLONE_OPTIONS(obj)       ((GgitCloneOptions *)obj)
+#define GGIT_TYPE_CLONE_OPTIONS (ggit_clone_options_get_type ())
+G_DECLARE_DERIVABLE_TYPE (GgitCloneOptions, ggit_clone_options, GGIT, CLONE_OPTIONS, GObject)
 
-GType                      ggit_clone_options_get_type            (void) G_GNUC_CONST;
+struct _GgitCloneOptionsClass
+{
+	GObjectClass parent_class;
 
-const git_clone_options  *_ggit_clone_options_get_clone_options   (GgitCloneOptions        *clone_options);
+	/* virtual methods */
+	GgitRepository *(*create_repository) (GgitCloneOptions  *options,
+	                                      const gchar       *path,
+	                                      gboolean           is_bare,
+	                                      GError            **error);
 
-GgitCloneOptions          *ggit_clone_options_copy                (GgitCloneOptions        *clone_options);
-void                       ggit_clone_options_free                (GgitCloneOptions        *clone_options);
+	GgitRemote     *(*create_remote)     (GgitCloneOptions  *options,
+	                                      GgitRepository    *repository,
+	                                      const gchar       *name,
+	                                      const gchar       *url,
+	                                      GError            **error);
+
+};
+
+const git_clone_options  *_ggit_clone_options_get_native          (GgitCloneOptions        *options);
 
 GgitCloneOptions          *ggit_clone_options_new                 (void);
 
@@ -52,11 +65,13 @@ const gchar               *ggit_clone_options_get_checkout_branch (GgitCloneOpti
 void                       ggit_clone_options_set_checkout_branch (GgitCloneOptions        *options,
                                                                    const gchar             *checkout_branch);
 
-GgitFetchOptions          *ggit_clone_options_get_fetch_options   (GgitCloneOptions       *options);
-void                       ggit_clone_options_set_fetch_options   (GgitCloneOptions       *options,
-                                                                   GgitFetchOptions       *fetch_options);
+GgitCloneLocal             ggit_clone_options_get_local           (GgitCloneOptions        *options);
+void                       ggit_clone_options_set_local           (GgitCloneOptions        *options,
+                                                                   GgitCloneLocal           local);
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitCloneOptions, ggit_clone_options_free)
+GgitFetchOptions          *ggit_clone_options_get_fetch_options   (GgitCloneOptions        *options);
+void                       ggit_clone_options_set_fetch_options   (GgitCloneOptions        *options,
+                                                                   GgitFetchOptions        *fetch_options);
 
 G_END_DECLS
 
