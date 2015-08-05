@@ -98,6 +98,10 @@ GgitRef            *ggit_repository_lookup_reference  (GgitRepository        *re
                                                        const gchar           *name,
                                                        GError               **error);
 
+GgitRef            *ggit_repository_lookup_reference_dwim  (GgitRepository        *repository,
+                                                            const gchar           *short_name,
+                                                            GError               **error);
+
 GgitRef            *ggit_repository_create_reference  (GgitRepository        *repository,
                                                        const gchar           *name,
                                                        GgitOId               *oid,

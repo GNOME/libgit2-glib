@@ -735,6 +735,45 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_lookup_reference_dwim:
+ * @repository: a #GgitRepository.
+ * @short_name: the short name for the reference (e.g. master, v0.1.0, ...).
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a reference by its short name in @repository applying the git precendence
+ * rules to the given shorthand to determine which reference the user is referring to.
+ * The returned #GgitRef must be freed with g_object_unref().
+ *
+ * Returns: (transfer full): the searched reference.
+ */
+GgitRef *
+ggit_repository_lookup_reference_dwim (GgitRepository  *repository,
+                                       const gchar     *short_name,
+                                       GError         **error)
+{
+	GgitRef *ref = NULL;
+	git_reference *reference;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (short_name != NULL, NULL);
+
+	ret = git_reference_dwim (&reference, _ggit_native_get (repository),
+	                          short_name);
+
+	if (ret == GIT_OK)
+	{
+		ref = _ggit_ref_wrap (reference, FALSE);
+	}
+	else
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	return ref;
+}
+
+/**
  * ggit_repository_create_reference:
  * @repository: a #GgitRepository.
  * @name: the name for the new #GgitRef.
