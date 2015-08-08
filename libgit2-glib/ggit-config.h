@@ -85,6 +85,11 @@ gboolean     ggit_config_set_string    (GgitConfig               *config,
                                         const gchar              *value,
                                         GError                  **error);
 
+GgitConfigEntry *
+             ggit_config_get_entry     (GgitConfig               *config,
+                                        const gchar              *name,
+                                        GError                  **error);
+
 gboolean     ggit_config_delete_entry  (GgitConfig               *config,
                                         const gchar              *name,
                                         GError                  **error);

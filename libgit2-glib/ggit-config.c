@@ -557,6 +557,41 @@ ggit_config_set_string (GgitConfig   *config,
 }
 
 /**
+ * ggit_config_get_entry:
+ * @config: a #GgitConfig.
+ * @name: the configuration name.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Get #GgitConfigEntry of a config variable.
+ *
+ * Returns: (transfer full): the entry of @name, or %NULL if such a value
+ *                           does not exist.
+ *
+ **/
+GgitConfigEntry *
+ggit_config_get_entry (GgitConfig   *config,
+                       const gchar  *name,
+                       GError      **error)
+{
+	git_config_entry *entry;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_config_get_entry (&entry, _ggit_native_get (config), name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_config_entry_wrap (entry);
+}
+
+/**
  * ggit_config_delete_entry:
  * @config: a #GgitConfig.
  * @name: the configuration value.
