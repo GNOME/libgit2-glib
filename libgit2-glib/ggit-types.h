@@ -410,6 +410,7 @@ typedef enum {
  * @GGIT_DIFF_SHOW_UNMODIFIED: show unmodified files.
  * @GGIT_DIFF_PATIENCE: generate using the "patience diff" algorithm.
  * @GGIT_DIFF_MINIMAL: take extra time to find minimal diff.
+ * @GGIT_DIFF_SHOW_BINARY: include deflate/delta information for binary files.
  *
  * How the diff should be generated.
  */
@@ -441,7 +442,8 @@ typedef enum {
 	GGIT_DIFF_SHOW_UNMODIFIED            = 1u << 26,
 
 	GGIT_DIFF_PATIENCE                   = 1u << 28,
-	GGIT_DIFF_MINIMAL                    = 1u << 29
+	GGIT_DIFF_MINIMAL                    = 1u << 29,
+	GGIT_DIFF_SHOW_BINARY                = 1u << 30
 } GgitDiffOption;
 
 /**
