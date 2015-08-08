@@ -227,6 +227,39 @@ ggit_config_find_system (void)
 }
 
 /**
+ * ggit_config_open_level:
+ * @config: a #GgitConfig.
+ * @level: the level to open.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Open a specific level config derived from a multi-level one.
+ *
+ * Returns: (transfer full): the configuration at @level, or %NULL.
+ *
+ **/
+GgitConfig *
+ggit_config_open_level (GgitConfig       *config,
+                        GgitConfigLevel   level,
+                        GError          **error)
+{
+	gint ret;
+	git_config *out;
+
+	g_return_val_if_fail (GGIT_IS_CONFIG (config), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_config_open_level (&out, _ggit_native_get (config), (git_config_level_t)level);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_config_wrap (out);
+}
+
+/**
  * ggit_config_add_file:
  * @config: a #GgitConfig.
  * @file: a #GFile.
