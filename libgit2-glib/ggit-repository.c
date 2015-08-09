@@ -891,6 +891,7 @@ ggit_repository_get_head (GgitRepository  *repository,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_repository_head (&reference, _ggit_native_get (repository));
 
@@ -3646,5 +3647,96 @@ ggit_repository_note_foreach (GgitRepository    *repository,
 
 	return TRUE;
 }
+
+/**
+ * ggit_repository_merge_trees:
+ * @repository: a #GgitRepository.
+ * @ancestor_tree: the common ancestor between the trees, or %NULL.
+ * @our_tree: the tree that reflects the destination tree.
+ * @their_tree: the tree that reflects the source tree.
+ * @merge_options: the merge options.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Merge two trees creating a #GgitIndex reflecting the result of the merge.
+ *
+ * Returns: (transfer full): a new #GgitIndex or %NULL if an error occurred.
+ *
+ **/
+GgitIndex *
+ggit_repository_merge_trees (GgitRepository    *repository,
+                             GgitTree          *ancestor_tree,
+                             GgitTree          *our_tree,
+                             GgitTree          *their_tree,
+                             GgitMergeOptions  *merge_options,
+                             GError           **error)
+{
+	git_index *out;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (ancestor_tree == NULL || GGIT_IS_TREE (ancestor_tree), NULL);
+	g_return_val_if_fail (GGIT_IS_TREE (our_tree), NULL);
+	g_return_val_if_fail (GGIT_IS_TREE (their_tree), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_merge_trees (&out,
+	                       _ggit_native_get (repository),
+	                       _ggit_native_get (ancestor_tree),
+	                       _ggit_native_get (our_tree),
+	                       _ggit_native_get (their_tree),
+	                       _ggit_merge_options_get_merge_options (merge_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_index_wrap (out);
+}
+
+/**
+ * ggit_repository_merge_commits:
+ * @repository: a #GgitRepository.
+ * @our_commit: the commit that reflects the destination tree.
+ * @their_commit: the commit that reflects the source tree.
+ * @merge_options: the merge options.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Merge two commits creating a #GgitIndex reflecting the result of the merge.
+ *
+ * Returns: (transfer full): a new #GgitIndex or %NULL if an error occurred.
+ *
+ **/
+GgitIndex *
+ggit_repository_merge_commits (GgitRepository    *repository,
+                               GgitCommit        *our_commit,
+                               GgitCommit        *their_commit,
+                               GgitMergeOptions  *merge_options,
+                               GError           **error)
+{
+	git_index *out;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (GGIT_IS_COMMIT (our_commit), NULL);
+	g_return_val_if_fail (GGIT_IS_COMMIT (their_commit), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_merge_commits (&out,
+	                         _ggit_native_get (repository),
+	                         _ggit_native_get (our_commit),
+	                         _ggit_native_get (their_commit),
+	                         _ggit_merge_options_get_merge_options (merge_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_index_wrap (out);
+}
+
 
 /* ex:set ts=8 noet: */

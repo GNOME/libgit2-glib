@@ -458,8 +458,21 @@ gboolean            ggit_repository_note_foreach       (GgitRepository          
                                                         GgitNoteCallback         callback,
                                                         gpointer                 user_data,
                                                         GError                 **error);
-gboolean           ggit_repository_path_is_ignored     (GgitRepository          *repository,
+gboolean            ggit_repository_path_is_ignored    (GgitRepository          *repository,
                                                         const gchar             *path,
+                                                        GError                 **error);
+
+GgitIndex          *ggit_repository_merge_trees        (GgitRepository          *repository,
+                                                        GgitTree                *ancestor_tree,
+                                                        GgitTree                *our_tree,
+                                                        GgitTree                *their_tree,
+                                                        GgitMergeOptions        *merge_options,
+                                                        GError                 **error);
+
+GgitIndex          *ggit_repository_merge_commits      (GgitRepository          *repository,
+                                                        GgitCommit              *our_commit,
+                                                        GgitCommit              *their_commit,
+                                                        GgitMergeOptions        *merge_options,
                                                         GError                 **error);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRepository, g_object_unref)
