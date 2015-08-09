@@ -35,16 +35,43 @@ G_BEGIN_DECLS
 GType                  ggit_merge_options_get_type                (void) G_GNUC_CONST;
 
 const git_merge_options *
-                      _ggit_merge_options_get_merge_options       (GgitMergeOptions   *merge_options);
+                      _ggit_merge_options_get_merge_options       (GgitMergeOptions         *merge_options);
 
-GgitMergeOptions      *ggit_merge_options_copy                    (GgitMergeOptions   *merge_options);
-void                   ggit_merge_options_free                    (GgitMergeOptions   *merge_options);
+GgitMergeOptions      *ggit_merge_options_copy                    (GgitMergeOptions         *merge_options);
+void                   ggit_merge_options_free                    (GgitMergeOptions         *merge_options);
 
-GgitMergeOptions      *ggit_merge_options_new                     (GgitMergeTreeFlags        tree_flags,
-                                                                   guint                     rename_threshold,
-                                                                   guint                     target_limit,
-                                                                   GgitDiffSimilarityMetric *metric,
+GgitMergeOptions      *ggit_merge_options_new                     (void);
+
+void                   ggit_merge_options_set_tree_flags          (GgitMergeOptions         *merge_options,
+                                                                   GgitMergeTreeFlags        tree_flags);
+
+GgitMergeTreeFlags     ggit_merge_options_get_tree_flags          (GgitMergeOptions         *merge_options);
+
+void                   ggit_merge_options_set_rename_threshold    (GgitMergeOptions         *merge_options,
+                                                                   guint                     rename_threshold);
+
+guint                  ggit_merge_options_get_rename_threshold    (GgitMergeOptions         *merge_options);
+
+void                   ggit_merge_options_set_target_limit        (GgitMergeOptions         *merge_options,
+                                                                   guint                     target_limit);
+
+guint                  ggit_merge_options_get_target_limit        (GgitMergeOptions         *merge_options);
+
+void                   ggit_merge_options_set_similarity_metric   (GgitMergeOptions         *merge_options,
+                                                                   GgitDiffSimilarityMetric *metric);
+
+GgitDiffSimilarityMetric *
+                       ggit_merge_options_get_similarity_metric   (GgitMergeOptions         *merge_options);
+
+void                   ggit_merge_options_set_file_favor          (GgitMergeOptions         *merge_options,
                                                                    GgitMergeFileFavor        file_favor);
+
+GgitMergeFileFavor     ggit_merge_options_get_file_favor          (GgitMergeOptions         *merge_options);
+
+void                   ggit_merge_options_set_file_flags          (GgitMergeOptions         *merge_options,
+                                                                   GgitMergeFileFlags        file_flags);
+
+GgitMergeFileFlags     ggit_merge_options_get_file_flags          (GgitMergeOptions         *merge_options);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitMergeOptions, ggit_merge_options_free)
 

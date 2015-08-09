@@ -23,6 +23,7 @@
 
 struct _GgitMergeOptions
 {
+	GgitDiffSimilarityMetric *metric;
 	git_merge_options merge_options;
 };
 
@@ -76,43 +77,241 @@ ggit_merge_options_free (GgitMergeOptions *merge_options)
 {
 	g_return_if_fail (merge_options != NULL);
 
+	if (merge_options->metric != NULL)
+	{
+		ggit_diff_similarity_metric_free (merge_options->metric);
+		merge_options->metric = NULL;
+	}
+
 	g_slice_free (GgitMergeOptions, merge_options);
 }
 
 /**
  * ggit_merge_options_new:
- * @tree_flags: flags to consider when merging.
- * @rename_threshold: similarity to consider a file renamed (default 50).
- * @target_limit: maximum similarity sources to examine
- *                (overrides the `merge.renameLimit` config) (default 200).
- * @metric: (allow-none): a #GgitDiffSimilarityMetric or %NULL to use internal metric.
- * @file_favor: a #GgitMergeFileFavor.
  *
  * Creates a new #GgitMergeOptions.
  *
  * Returns: a newly allocated #GgitMergeOptions.
  */
 GgitMergeOptions *
-ggit_merge_options_new (GgitMergeTreeFlags        tree_flags,
-                        guint                     rename_threshold,
-                        guint                     target_limit,
-                        GgitDiffSimilarityMetric *metric,
-                        GgitMergeFileFavor        file_favor)
+ggit_merge_options_new ()
 {
 	GgitMergeOptions *merge_options;
 	git_merge_options gmerge_options = GIT_MERGE_OPTIONS_INIT;
 
 	merge_options = g_slice_new (GgitMergeOptions);
-
-	gmerge_options.tree_flags = (git_merge_tree_flag_t)tree_flags;
-	gmerge_options.rename_threshold = rename_threshold;
-	gmerge_options.target_limit = target_limit;
-	gmerge_options.metric = _ggit_diff_similarity_metric_get_similarity_metric (metric);
-	gmerge_options.file_favor = (git_merge_file_favor_t)file_favor;
-
 	merge_options->merge_options = gmerge_options;
 
 	return merge_options;
+}
+
+/**
+ * ggit_merge_options_set_tree_flags:
+ * @merge_options: a #GgitMergeOptions.
+ * @tree_flags: the tree flags.
+ *
+ * Set the tree flags to use for merging.
+ *
+ **/
+void
+ggit_merge_options_set_tree_flags (GgitMergeOptions   *merge_options,
+                                   GgitMergeTreeFlags  tree_flags)
+{
+	g_return_if_fail (merge_options != NULL);
+	merge_options->merge_options.tree_flags = (git_merge_tree_flag_t)tree_flags;
+}
+
+/**
+ * ggit_merge_options_get_tree_flags:
+ * @merge_options: a #GgitMergeOptions.
+ *
+ * Get the tree flags to use for merging.
+ *
+ * Returns: the tree flags.
+ *
+ **/
+GgitMergeTreeFlags
+ggit_merge_options_get_tree_flags (GgitMergeOptions *merge_options)
+{
+	g_return_val_if_fail (merge_options != NULL, 0);
+	return (GgitMergeTreeFlags)merge_options->merge_options.tree_flags;
+}
+
+/**
+ * ggit_merge_options_set_rename_threshold:
+ * @merge_options: a #GgitMergeOptions.
+ * @rename_threshold: similarity to consider a file renamed.
+ *
+ * Set the rename threshold (defaults to 50). If %GGIT_MERGE_TREE_FIND_RENAMES
+ * is enabled, added files will be compared with deleted files to
+ * determine their similarity. Files that are more similar than the rename
+ * threshold (percentage-wise) will be treated as a rename.
+ *
+ **/
+void
+ggit_merge_options_set_rename_threshold (GgitMergeOptions *merge_options,
+                                         guint             rename_threshold)
+{
+	g_return_if_fail (merge_options != NULL);
+	merge_options->merge_options.rename_threshold = rename_threshold;
+}
+
+/**
+ * ggit_merge_options_get_rename_threshold:
+ * @merge_options: a #GgitMergeOptions.
+ *
+ * Get the rename threshold (defaults to 50). If %GGIT_MERGE_TREE_FIND_RENAMES
+ * is enabled, added files will be compared with deleted files to
+ * determine their similarity. Files that are more similar than the rename
+ * threshold (percentage-wise) will be treated as a rename.
+ *
+ * Returns: the rename threshold.
+ *
+ **/
+guint
+ggit_merge_options_get_rename_threshold (GgitMergeOptions *merge_options)
+{
+	g_return_val_if_fail (merge_options != NULL, 0);
+	return merge_options->merge_options.rename_threshold;
+}
+
+/**
+ * ggit_merge_options_set_target_limit:
+ * @merge_options: a #GgitMergeOptions.
+ * @target_limit: maximum similarity source to examine for renames.
+ *
+ * Set the maximum number of similarity sources to examine for renames (defaults to 200).
+ * If the number of rename candidates (add / delete pairs) is greater than
+ * this value, inexact rename detection is aborted.
+ *
+ **/
+void
+ggit_merge_options_set_target_limit (GgitMergeOptions *merge_options,
+                                     guint             target_limit)
+{
+	g_return_if_fail (merge_options != NULL);
+	merge_options->merge_options.target_limit = target_limit;
+}
+
+/**
+ * ggit_merge_options_get_target_limit:
+ * @merge_options: a #GgitMergeOptions.
+ *
+ * Get the maximum number of similarity sources to examine for renames (defaults to 200).
+ * If the number of rename candidates (add / delete pairs) is greater than
+ * this value, inexact rename detection is aborted.
+ *
+ * Returns: the target limit.
+ *
+ **/
+guint
+ggit_merge_options_get_target_limit (GgitMergeOptions *merge_options)
+{
+	g_return_val_if_fail (merge_options != NULL, 0);
+	return merge_options->merge_options.target_limit;
+}
+
+/**
+ * ggit_merge_options_set_similarity_metric:
+ * @merge_options: a #GgitMergeOptions.
+ * @metric: a #GgitSimilarityMetric.
+ *
+ * Set the similarity metric, or %NULL for the default similarity metric.
+ *
+ **/
+void
+ggit_merge_options_set_similarity_metric (GgitMergeOptions         *merge_options,
+                                          GgitDiffSimilarityMetric *metric)
+{
+	g_return_if_fail (merge_options != NULL);
+
+	if (merge_options->metric)
+	{
+		ggit_diff_similarity_metric_free (merge_options->metric);
+	}
+
+	merge_options->metric = metric != NULL ? ggit_diff_similarity_metric_copy (metric) : NULL;
+	merge_options->merge_options.metric = _ggit_diff_similarity_metric_get_similarity_metric (metric);
+}
+
+/**
+ * ggit_merge_options_get_similarity_metric:
+ * @merge_options: a #GgitMergeOptions.
+ *
+ * Get the similarity metric.
+ *
+ * Returns: (transfer none): the similarity metric, or %NULL.
+ *
+ **/
+GgitDiffSimilarityMetric *
+ggit_merge_options_get_similarity_metric (GgitMergeOptions *merge_options)
+{
+	g_return_val_if_fail (merge_options != NULL, NULL);
+	return merge_options->metric;
+}
+
+/**
+ * ggit_merge_options_set_file_favor:
+ * @merge_options: a #GgitMergeOptions.
+ * @file_favor: the file favor.
+ *
+ * Set flags for handling conflicting content.
+ *
+ **/
+void
+ggit_merge_options_set_file_favor (GgitMergeOptions   *merge_options,
+                                   GgitMergeFileFavor  file_favor)
+{
+	g_return_if_fail (merge_options != NULL);
+	merge_options->merge_options.file_favor = (git_merge_file_favor_t)file_favor;
+}
+
+/**
+ * ggit_merge_options_get_file_favor:
+ * @merge_options: a #GgitMergeOptions.
+ *
+ * Get flags for handling conflicting content.
+ *
+ * Returns: the file favor.
+ *
+ **/
+GgitMergeFileFavor
+ggit_merge_options_get_file_favor (GgitMergeOptions *merge_options)
+{
+	g_return_val_if_fail (merge_options != NULL, 0);
+	return (GgitMergeFileFavor)merge_options->merge_options.file_favor;
+}
+
+/**
+ * ggit_merge_options_set_file_flags:
+ * @merge_options: a #GgitMergeOptions.
+ * @file_flags: the file flags.
+ *
+ * Set file merging flags.
+ *
+ **/
+void
+ggit_merge_options_set_file_flags (GgitMergeOptions   *merge_options,
+                                   GgitMergeFileFlags  file_flags)
+{
+	g_return_if_fail (merge_options != NULL);
+	merge_options->merge_options.file_flags = (git_merge_file_flags_t)file_flags;
+}
+
+/**
+ * ggit_merge_options_get_file_flags:
+ * @merge_options: a #GgitMergeOptions.
+ *
+ * Get file merging flags.
+ *
+ * Returns: the file merging flags.
+ *
+ **/
+GgitMergeFileFlags
+ggit_merge_options_get_file_flags (GgitMergeOptions *merge_options)
+{
+	g_return_val_if_fail (merge_options != NULL, 0);
+	return (GgitMergeFileFlags)merge_options->merge_options.file_flags;
 }
 
 /* ex:set ts=8 noet: */
