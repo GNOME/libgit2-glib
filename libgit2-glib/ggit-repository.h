@@ -264,6 +264,10 @@ void                ggit_repository_add_remote_fetch  (GgitRepository        *re
 GgitRef            *ggit_repository_get_head          (GgitRepository        *repository,
                                                        GError               **error);
 
+gboolean            ggit_repository_set_head          (GgitRepository        *repository,
+                                                       const gchar           *ref_name,
+                                                       GError               **error);
+
 GFile              *ggit_repository_discover          (GFile                 *location,
                                                        GError               **error);
 

@@ -907,6 +907,37 @@ ggit_repository_get_head (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_set_head:
+ * @repository: a #GgitRepository.
+ * @ref_name: canonical name of the reference HEAD should point to.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Returns: %TRUE if head was successfully set, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_repository_set_head (GgitRepository   *repository,
+                          const gchar      *ref_name,
+                          GError          **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (ref_name != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_repository_set_head (_ggit_native_get (repository), ref_name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
  * ggit_repository_discover:
  * @location: the base location where the lookup starts.
  * @error: a #GError for error reporting, or %NULL.
