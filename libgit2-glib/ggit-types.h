@@ -548,6 +548,30 @@ typedef enum {
 } GgitMergeFileFavor;
 
 /**
+ * GgitMergeFileFlags:
+ * GGIT_MERGE_FILE_DEFAULT: Defaults.
+ * GGIT_MERGE_FILE_STYLE_MERGE: Create standard conflicted merge files.
+ * GGIT_MERGE_FILE_STYLE_DIFF3: Create diff3-style files.
+ * GGIT_MERGE_FILE_SIMPLIFY_ALNUM: Condense non-alphanumeric regions for simplified diff file.
+ * GGIT_MERGE_FILE_IGNORE_WHITESPACE: Ignore all whitespace.
+ * GGIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE: Ignore changes in amount of whitespace.
+ * GGIT_MERGE_FILE_IGNORE_WHITESPACE_EOL: Ignore whitespace at end of line.
+ * GGIT_MERGE_FILE_DIFF_PATIENCE: Use the "patience diff" algorithm.
+ * GGIT_MERGE_FILE_DIFF_MINIMAL: Take extra time to find minimal diff.
+ */
+typedef enum {
+	GGIT_MERGE_FILE_DEFAULT                  = 0,
+	GGIT_MERGE_FILE_STYLE_MERGE              = (1 << 0),
+	GGIT_MERGE_FILE_STYLE_DIFF3              = (1 << 1),
+	GGIT_MERGE_FILE_SIMPLIFY_ALNUM           = (1 << 2),
+	GGIT_MERGE_FILE_IGNORE_WHITESPACE        = (1 << 3),
+	GGIT_MERGE_FILE_IGNORE_WHITESPACE_CHANGE = (1 << 4),
+	GGIT_MERGE_FILE_IGNORE_WHITESPACE_EOL    = (1 << 5),
+	GGIT_MERGE_FILE_DIFF_PATIENCE            = (1 << 6),
+	GGIT_MERGE_FILE_DIFF_MINIMAL             = (1 << 7),
+} GgitMergeFileFlags;
+
+/**
  * GgitMergeTreeFlags:
  * @GGIT_MERGE_TREE_FIND_RENAMES: detect renames.
  */
