@@ -546,6 +546,23 @@ ggit_index_get_owner (GgitIndex *idx)
 }
 
 /**
+ * ggit_index_has_conflicts:
+ * @idx: a #GgitIndex.
+ *
+ * Get whether the index has any conflicts.
+ *
+ * Returns: %TRUE if the index has any conflicts, %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_index_has_conflicts (GgitIndex *idx)
+{
+	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
+
+	return git_index_has_conflicts (_ggit_native_get (idx));
+}
+
+/**
  * ggit_index_write_tree:
  * @idx: a #GgitIndex.
  * @error: a #GError for error reporting, or %NULL.

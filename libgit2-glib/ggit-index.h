@@ -67,6 +67,8 @@ gboolean                  ggit_index_add_path                 (GgitIndex       *
 
 GgitRepository           *ggit_index_get_owner                (GgitIndex  *idx);
 
+gboolean                  ggit_index_has_conflicts            (GgitIndex  *idx);
+
 GgitIndexEntries         *ggit_index_get_entries              (GgitIndex  *idx);
 GgitIndexEntriesResolveUndo *
                           ggit_index_get_entries_resolve_undo (GgitIndex  *idx);
