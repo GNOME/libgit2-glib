@@ -173,6 +173,13 @@ typedef struct _GgitOId GgitOId;
 typedef struct _GgitPatch GgitPatch;
 
 /**
+ * GgitRef:
+ *
+ * Reprensents a git reference.
+ */
+typedef struct _GgitRef GgitRef;
+
+/**
  * GgitRefSpec:
  *
  * Reprensents a git reference specification.
@@ -1117,6 +1124,19 @@ typedef gint (* GgitNoteCallback) (GgitOId *blob_id,
  */
 typedef gint (* GgitReferencesNameCallback) (const gchar *name,
                                              gpointer     user_data);
+
+/**
+ * GgitReferencesCallback:
+ * @reference: (transfer full): the reference.
+ * @user_data: (closure): user-supplied data.
+ *
+ * The type of the callback functions for retrieving the references
+ * in a #GgitRepository. See ggit_repository_references_foreach().
+ *
+ * Returns: 0 to go for the next references or a #GgitError in case there was an error.
+ */
+typedef gint (* GgitReferencesCallback) (GgitRef  *reference,
+                                         gpointer  user_data);
 
 /**
  * GgitRemoteListCallback:

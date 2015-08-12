@@ -1246,6 +1246,66 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
 	return TRUE;
 }
 
+typedef struct
+{
+	GgitReferencesCallback callback;
+	gpointer user_data;
+} ReferenceForeachInfo;
+
+static gint
+references_foreach_wrapper (git_reference *reference,
+                            gpointer       payload)
+{
+	ReferenceForeachInfo *info = (ReferenceForeachInfo *)payload;
+
+	return info->callback(_ggit_ref_wrap (reference, TRUE), info->user_data);
+}
+
+/**
+ * ggit_repository_references_foreach:
+ * @repository: a #GgitRepository.
+ * @callback: (scope call): a #GgitReferencesCallback.
+ * @user_data: callback user data.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gathers references and run a callback for each one.
+ *
+ * To the callback is passed the reference and the data pointer
+ * passed to this function. If the callback returns something other than
+ * 0, the iteration will stop and @error will be set.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ *
+ */
+gboolean
+ggit_repository_references_foreach (GgitRepository          *repository,
+                                    GgitReferencesCallback   callback,
+                                    gpointer                 user_data,
+                                    GError                 **error)
+{
+	gint ret;
+	ReferenceForeachInfo info;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (callback != NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	info.callback = callback;
+	info.user_data = user_data;
+
+	ret = git_reference_foreach (_ggit_native_get (repository),
+	                             references_foreach_wrapper,
+	                             &info);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /**
  * ggit_repository_references_foreach_name:
  * @repository: a #GgitRepository.
@@ -1253,7 +1313,7 @@ ggit_repository_file_status_foreach (GgitRepository     *repository,
  * @user_data: callback user data.
  * @error: a #GError for error reporting, or %NULL.
  *
- * Gathers references and run a callback for each one.
+ * Gathers reference names and run a callback for each one.
  *
  * To the callback is passed the name of the reference and the data pointer
  * passed to this function. If the callback returns something other than

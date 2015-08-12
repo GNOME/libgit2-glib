@@ -31,12 +31,6 @@
 
 /* FIXME: we should have a ref superclass and direct and symbolic subclasses */
 
-/**
- * GgitRef:
- *
- * Reprensents a git reference.
- */
-
 G_DEFINE_TYPE (GgitRef, ggit_ref, GGIT_TYPE_NATIVE)
 
 static void
