@@ -812,6 +812,23 @@ ggit_index_entry_set_commit (GgitIndexEntry    *entry,
 	g_object_unref (sig);
 }
 
+/**
+ * ggit_index_entry_is_conflict:
+ * @entry: a #GgitIndexEntry.
+ *
+ * Get whether the entry represents a conflict.
+ *
+ * Returns: %TRUE if the entry is a conflict, or %FALSE otherwise.
+ *
+ **/
+gboolean
+ggit_index_entry_is_conflict (GgitIndexEntry *entry)
+{
+	g_return_if_fail (entry != NULL);
+
+	return git_index_entry_is_conflict (entry->entry);
+}
+
 const git_index_entry *
 _ggit_index_entry_get_native (GgitIndexEntry *entry)
 {

@@ -105,6 +105,8 @@ gboolean          ggit_index_entry_stat               (GgitIndexEntry    *entry,
 void              ggit_index_entry_set_commit         (GgitIndexEntry    *entry,
                                                        GgitCommit        *commit);
 
+gboolean          ggit_index_entry_is_conflict        (GgitIndexEntry    *entry);
+
 const git_index_entry
                  *_ggit_index_entry_get_native        (GgitIndexEntry    *entry);
 
