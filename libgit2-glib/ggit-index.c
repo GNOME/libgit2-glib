@@ -596,4 +596,43 @@ ggit_index_write_tree (GgitIndex  *idx,
 	return _ggit_oid_wrap (&oid);
 }
 
+/**
+ * ggit_index_write_tree_to:
+ * @idx: a #GgitIndex.
+ * @repository: a #GgitRepository.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Write a new tree object to @repository containing a representation of the current
+ * state of the index. The index must not contain any files in conflict. You can use
+ * the resulting tree to for instance create a commit.
+ *
+ * Returns: a #GgitOId or %NULL in case of an error.
+ *
+ **/
+GgitOId *
+ggit_index_write_tree_to (GgitIndex       *idx,
+                          GgitRepository  *repository,
+                          GError         **error)
+{
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_INDEX (idx), NULL);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_index_write_tree_to (&oid,
+	                               _ggit_native_get (idx),
+	                               _ggit_native_get (repository));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
 /* ex:set ts=8 noet: */
+

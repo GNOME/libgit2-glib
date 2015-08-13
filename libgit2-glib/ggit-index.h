@@ -48,6 +48,10 @@ gboolean                  ggit_index_write                    (GgitIndex  *idx,
 GgitOId                  *ggit_index_write_tree               (GgitIndex  *idx,
                                                                GError    **error);
 
+GgitOId                  *ggit_index_write_tree_to            (GgitIndex       *idx,
+                                                               GgitRepository  *repository,
+                                                               GError         **error);
+
 gboolean                  ggit_index_remove                   (GgitIndex  *idx,
                                                                GFile      *file,
                                                                gint        stage,
