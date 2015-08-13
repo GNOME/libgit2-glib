@@ -59,8 +59,7 @@ ggit_merge_options_copy (GgitMergeOptions *merge_options)
 
 	g_return_val_if_fail (merge_options != NULL, NULL);
 
-	new_merge_options = g_slice_new (GgitMergeOptions);
-
+	new_merge_options = g_slice_new0 (GgitMergeOptions);
 	new_merge_options->merge_options = merge_options->merge_options;
 
 	return new_merge_options;
@@ -99,7 +98,7 @@ ggit_merge_options_new ()
 	GgitMergeOptions *merge_options;
 	git_merge_options gmerge_options = GIT_MERGE_OPTIONS_INIT;
 
-	merge_options = g_slice_new (GgitMergeOptions);
+	merge_options = g_slice_new0 (GgitMergeOptions);
 	merge_options->merge_options = gmerge_options;
 
 	return merge_options;
