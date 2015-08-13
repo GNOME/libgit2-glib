@@ -586,6 +586,33 @@ typedef enum {
 	GGIT_MERGE_TREE_FIND_RENAMES = (1 << 0)
 } GgitMergeTreeFlags;
 
+/**
+ * GgitRebaseOperationType:
+ * @GGIT_REBASE_OPERATION_PICK: The given commit is to be cherry-picked.
+ * The client should commit the changes and continue if there are no conflicts.
+ * @GGIT_REBASE_OPERATION_REWORD: The given commit is to be cherry-picked,
+ * but the client should prompt the user to provide an updated commit message.
+ * @GGIT_REBASE_OPERATION_EDIT: The given commit is to be cherry-picked,
+ * but the client should stop to allow the user to edit the changes before
+ * committing them.
+ * @GGIT_REBASE_OPERATION_SQUASH: The given commit is to be squashed into
+ * the previous commit. The commit message will be merged with the previous message.
+ * @GGIT_REBASE_OPERATION_FIXUP: The given commit is to be squashed into the
+ * previous commit. The commit message from this commit will be discarded.
+ * @GGIT_REBASE_OPERATION_EXEC: No commit will be cherry-picked.
+ * The client should run the given command and (if successful) continue.
+ *
+ * Type of rebase operation in-progress.
+ */
+typedef enum {
+	GGIT_REBASE_OPERATION_PICK = 0,
+	GGIT_REBASE_OPERATION_REWORD,
+	GGIT_REBASE_OPERATION_EDIT,
+	GGIT_REBASE_OPERATION_SQUASH,
+	GGIT_REBASE_OPERATION_FIXUP,
+	GGIT_REBASE_OPERATION_EXEC
+} GgitRebaseOperationType;
+
 /* NOTE: keep in sync with git2/refs.h */
 /**
  * GgitRemoteDownloadTagsType:
