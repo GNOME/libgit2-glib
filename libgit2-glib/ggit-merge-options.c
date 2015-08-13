@@ -62,6 +62,9 @@ ggit_merge_options_copy (GgitMergeOptions *merge_options)
 	new_merge_options = g_slice_new0 (GgitMergeOptions);
 	new_merge_options->merge_options = merge_options->merge_options;
 
+	new_merge_options->merge_options.metric = NULL;
+	ggit_merge_options_set_similarity_metric (new_merge_options, merge_options->metric);
+
 	return new_merge_options;
 }
 
