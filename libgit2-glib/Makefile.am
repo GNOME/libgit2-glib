@@ -59,6 +59,8 @@ H_FILES =					\
 	ggit-oid.h				\
 	ggit-patch.h				\
 	ggit-push-options.h			\
+	ggit-rebase-options.h			\
+	ggit-rebase-options.c			\
 	ggit-ref.h				\
 	ggit-ref-spec.h				\
 	ggit-reflog.h				\

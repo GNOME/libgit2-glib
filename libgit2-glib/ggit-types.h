@@ -173,6 +173,13 @@ typedef struct _GgitOId GgitOId;
 typedef struct _GgitPatch GgitPatch;
 
 /**
+ * GgitRebaseOptions:
+ *
+ * Represents the options used when rebasing.
+ */
+typedef struct _GgitRebaseOptions GgitRebaseOptions;
+
+/**
  * GgitRef:
  *
  * Reprensents a git reference.
