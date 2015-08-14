@@ -824,7 +824,7 @@ ggit_index_entry_set_commit (GgitIndexEntry    *entry,
 gboolean
 ggit_index_entry_is_conflict (GgitIndexEntry *entry)
 {
-	g_return_if_fail (entry != NULL);
+	g_return_val_if_fail (entry != NULL, FALSE);
 
 	return git_index_entry_is_conflict (entry->entry);
 }
