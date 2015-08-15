@@ -26,6 +26,13 @@
 G_BEGIN_DECLS
 
 /**
+ * GgitAnnotatedCommit:
+ *
+ * Represents an annotated commit object.
+ */
+typedef struct _GgitAnnotatedCommit GgitAnnotatedCommit;
+
+/**
  * GgitBranchEnumerator:
  *
  * Represents a branch enumerator.

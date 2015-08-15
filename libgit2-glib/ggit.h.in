@@ -21,6 +21,7 @@
 #ifndef __GGIT_H__
 #define __GGIT_H__
 
+#include <libgit2-glib/ggit-annotated-commit.h>
 #include <libgit2-glib/ggit-blob.h>
 #include <libgit2-glib/ggit-blob-output-stream.h>
 #include <libgit2-glib/ggit-branch-enumerator.h>

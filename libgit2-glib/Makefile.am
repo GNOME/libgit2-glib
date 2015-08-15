@@ -17,6 +17,7 @@ libgit2_glib_1_0_la_LDFLAGS =				\
 libgit2_glib_1_0_la_LIBADD = $(LIBGIT2_GLIB_LIBS)
 
 H_FILES =					\
+	ggit-annotated-commit.h			\
 	ggit-blame.h				\
 	ggit-blame-options.h			\
 	ggit-blob.h				\
@@ -60,7 +61,6 @@ H_FILES =					\
 	ggit-patch.h				\
 	ggit-push-options.h			\
 	ggit-rebase-options.h			\
-	ggit-rebase-options.c			\
 	ggit-ref.h				\
 	ggit-ref-spec.h				\
 	ggit-reflog.h				\
@@ -85,6 +85,7 @@ BUILT_H_FILES = ggit.h
 BUILT_H_FILES_ENUMS = ggit-enum-types.h
 
 C_FILES =					\
+	ggit-annotated-commit.c			\
 	ggit-blame.c				\
 	ggit-blame-options.c			\
 	ggit-blob.c				\
@@ -128,6 +129,7 @@ C_FILES =					\
 	ggit-oid.c				\
 	ggit-patch.c				\
 	ggit-push-options.c			\
+	ggit-rebase-options.c			\
 	ggit-ref.c				\
 	ggit-ref-spec.c				\
 	ggit-reflog.c				\
