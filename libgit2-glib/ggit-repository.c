@@ -2581,8 +2581,8 @@ ggit_repository_stash_foreach (GgitRepository     *repository,
  * @repository: a #GgitRepository.
  * @local: the commit for local.
  * @upstream: the commit for upstream.
- * @ahead: number of unique from commits in @upstream.
- * @behind: number of unique from commits in @local.
+ * @ahead: (out): number of unique from commits in @upstream.
+ * @behind: (out): number of unique from commits in @local.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Count the number of unique commits between two commit objects.
