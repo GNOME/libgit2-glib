@@ -200,6 +200,13 @@ _ggit_cherry_pick_options_get_cherry_pick_options (GgitCherryPickOptions *option
 				*_ggit_checkout_options_get_checkout_options (priv->checkout_options);
 		}
 
+		// Make sure to synchronize the wrapped merge options with the internal merge options
+		if (priv->merge_options)
+		{
+			priv->options.merge_opts =
+				*_ggit_merge_options_get_merge_options (priv->merge_options);
+		}
+
 		return &priv->options;
 	}
 	else
