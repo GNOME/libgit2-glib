@@ -453,16 +453,26 @@ ggit_ref_lookup (GgitRef  *ref,
 	git_object *obj;
 	git_reference *r;
 	gint ret;
+	GgitRef *lref;
 
 	g_return_val_if_fail (GGIT_IS_REF (ref), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-	r = _ggit_native_get (ref);
+	lref = ggit_ref_resolve (ref, error);
+
+	if (lref == NULL)
+	{
+		return NULL;
+	}
+
+	r = _ggit_native_get (lref);
 
 	ret = git_object_lookup (&obj,
 	                         git_reference_owner (r),
 	                         git_reference_target (r),
 	                         GIT_OBJ_ANY);
+
+	g_object_unref (lref);
 
 	if (ret != GIT_OK)
 	{
