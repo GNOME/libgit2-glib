@@ -60,6 +60,7 @@ H_FILES =					\
 	ggit-oid.h				\
 	ggit-patch.h				\
 	ggit-push-options.h			\
+	ggit-rebase-operation.h			\
 	ggit-rebase-options.h			\
 	ggit-ref.h				\
 	ggit-ref-spec.h				\
@@ -129,6 +130,7 @@ C_FILES =					\
 	ggit-oid.c				\
 	ggit-patch.c				\
 	ggit-push-options.c			\
+	ggit-rebase-operation.c			\
 	ggit-rebase-options.c			\
 	ggit-ref.c				\
 	ggit-ref-spec.c				\

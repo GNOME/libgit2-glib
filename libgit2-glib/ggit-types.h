@@ -180,6 +180,13 @@ typedef struct _GgitOId GgitOId;
 typedef struct _GgitPatch GgitPatch;
 
 /**
+ * GgitRebaseOperation:
+ *
+ * Represents a rebase operation.
+ */
+typedef struct _GgitRebaseOperation GgitRebaseOperation;
+
+/**
  * GgitRebaseOptions:
  *
  * Represents the options used when rebasing.
