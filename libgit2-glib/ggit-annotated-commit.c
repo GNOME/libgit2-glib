@@ -74,8 +74,8 @@ ggit_annotated_commit_ref (GgitAnnotatedCommit *annotated_commit)
  * ggit_annotated_commit_unref:
  * @annotated_commit: a #GgitAnnotatedCommit.
  *
- * Atomically decrements the reference count of @entry by one.
- * If the reference count drops to 0, @entry is freed.
+ * Atomically decrements the reference count of @annotated_commit by one.
+ * If the reference count drops to 0, @annotated_commit is freed.
  */
 void
 ggit_annotated_commit_unref (GgitAnnotatedCommit *annotated_commit)
