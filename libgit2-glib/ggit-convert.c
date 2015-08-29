@@ -125,19 +125,18 @@ ggit_convert_utf8 (const gchar *str,
 		}
 	}
 
-	if (from_charset != NULL &&
-	    g_ascii_strcasecmp (from_charset, "UTF-8") == 0)
-	{
-		gchar *ret = g_strndup (str, size);
-		utf8_validate_fallback (ret, size);
-
-		return ret;
-	}
-	else if (from_charset)
+	if (from_charset != NULL)
 	{
 		gchar *ret;
 
-		if (convert_and_check (str, size, from_charset, &ret))
+		if (g_ascii_strcasecmp (from_charset, "UTF-8") == 0)
+		{
+			ret = g_strndup (str, size);
+			utf8_validate_fallback (ret, size);
+
+			return ret;
+		}
+		else if (convert_and_check (str, size, from_charset, &ret))
 		{
 			return ret;
 		}
