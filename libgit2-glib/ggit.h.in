@@ -58,6 +58,7 @@
 #include <libgit2-glib/ggit-patch.h>
 #include <libgit2-glib/ggit-rebase-operation.h>
 #include <libgit2-glib/ggit-rebase-options.h>
+#include <libgit2-glib/ggit-rebase.h>
 #include <libgit2-glib/ggit-ref.h>
 #include <libgit2-glib/ggit-reflog-entry.h>
 #include <libgit2-glib/ggit-reflog.h>

@@ -62,6 +62,7 @@ H_FILES =					\
 	ggit-push-options.h			\
 	ggit-rebase-operation.h			\
 	ggit-rebase-options.h			\
+	ggit-rebase.h				\
 	ggit-ref.h				\
 	ggit-ref-spec.h				\
 	ggit-reflog.h				\
@@ -132,6 +133,7 @@ C_FILES =					\
 	ggit-push-options.c			\
 	ggit-rebase-operation.c			\
 	ggit-rebase-options.c			\
+	ggit-rebase.c				\
 	ggit-ref.c				\
 	ggit-ref-spec.c				\
 	ggit-reflog.c				\
