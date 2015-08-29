@@ -40,6 +40,7 @@
 #include <libgit2-glib/ggit-commit.h>
 #include <libgit2-glib/ggit-tree-builder.h>
 #include <libgit2-glib/ggit-remote.h>
+#include <libgit2-glib/ggit-rebase.h>
 
 G_BEGIN_DECLS
 
@@ -479,6 +480,17 @@ GgitIndex          *ggit_repository_merge_commits      (GgitRepository          
                                                         GgitCommit              *their_commit,
                                                         GgitMergeOptions        *merge_options,
                                                         GError                 **error);
+
+GgitRebase         *ggit_repository_rebase_init        (GgitRepository       *repository,
+                                                        GgitAnnotatedCommit  *branch,
+                                                        GgitAnnotatedCommit  *upstream,
+                                                        GgitAnnotatedCommit  *onto,
+                                                        GgitRebaseOptions    *options,
+                                                        GError              **error);
+
+GgitRebase         *ggit_repository_rebase_open        (GgitRepository     *repository,
+                                                        GgitRebaseOptions  *options,
+                                                        GError            **error);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitRepository, g_object_unref)
 

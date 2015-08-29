@@ -41,6 +41,8 @@
 #include "ggit-cherry-pick-options.h"
 #include "ggit-merge-options.h"
 #include "ggit-index-entry.h"
+#include "ggit-annotated-commit.h"
+#include "ggit-rebase-options.h"
 
 
 typedef struct _GgitRepositoryPrivate
@@ -3798,5 +3800,88 @@ ggit_repository_merge_commits (GgitRepository    *repository,
 	return _ggit_index_wrap (out);
 }
 
+/**
+ * ggit_repository_rebase_init:
+ * @repository: a #GgitRepository.
+ * @branch: (allow-none): the terminal commit to rebase, or %NULL to rebase the
+ * current branch.
+ * @upstream: (allow-none): the commit to begin rebasing from, or %NULL to
+ * rebase all reachable commits.
+ * @onto: (allow-none): the branch to rebase onto, or %NULL to rebase onto
+ * the given upstream.
+ * @options: a #GgitRebaseOptions to specify how rebase is performed, or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Initializes a rebase operation to rebase the changes in @branch
+ * relative to @upstream onto another branch. To begin the rebase
+ * process, call git_rebase_next(). When you have finished with this
+ * object, call g_object_unref().
+ *
+ * Returns: (transfer full): a newly allocated #GgitRebase.
+ */
+GgitRebase *
+ggit_repository_rebase_init (GgitRepository       *repository,
+                             GgitAnnotatedCommit  *branch,
+                             GgitAnnotatedCommit  *upstream,
+                             GgitAnnotatedCommit  *onto,
+                             GgitRebaseOptions    *options,
+                             GError              **error)
+{
+	git_rebase *rebase;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_rebase_init (&rebase,
+	                       _ggit_native_get (repository),
+	                       branch != NULL ? _ggit_annotated_commit_get_annotated_commit (branch) : NULL,
+	                       upstream != NULL ? _ggit_annotated_commit_get_annotated_commit (upstream) : NULL,
+	                       onto != NULL ? _ggit_annotated_commit_get_annotated_commit (onto) : NULL,
+	                       options != NULL ? _ggit_rebase_options_get_rebase_options (options) : NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_rebase_wrap (rebase);
+}
+
+/**
+ * ggit_repository_rebase_open:
+ * @repository: a #GgitRepository.
+ * @options: a #GgitRebaseOptions to specify how rebase is performed, or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Opens an existing rebase that was previously started by either an
+ * invocation of ggit_rebase_init() or by another client.
+ *
+ * Returns: (transfer full): a newly allocated #GgitRebase.
+ */
+GgitRebase *
+ggit_repository_rebase_open (GgitRepository     *repository,
+                             GgitRebaseOptions  *options,
+                             GError            **error)
+{
+	git_rebase *rebase;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_rebase_open (&rebase,
+	                       _ggit_native_get (repository),
+	                       options != NULL ? _ggit_rebase_options_get_rebase_options (options) : NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_rebase_wrap (rebase);
+}
 
 /* ex:set ts=8 noet: */
