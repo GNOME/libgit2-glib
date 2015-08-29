@@ -96,6 +96,7 @@ ggit_diff_line_unref (GgitDiffLine *line)
 
 	if (g_atomic_int_dec_and_test (&line->ref_count))
 	{
+		g_bytes_unref (line->content);
 		g_free (line->text);
 		g_slice_free (GgitDiffLine, line);
 	}
