@@ -31,12 +31,11 @@ struct _GgitDiffLine {
 	gint old_lineno;
 	gint new_lineno;
 	gint num_lines;
-	gsize content_len;
 	gint64 content_offset;
-	const gchar *content;
+	GBytes *content;
 
 	gchar *text;
-	const gchar *encoding;
+	gchar *encoding;
 };
 
 G_DEFINE_BOXED_TYPE (GgitDiffLine, ggit_diff_line,
@@ -56,10 +55,9 @@ _ggit_diff_line_wrap (const git_diff_line *line,
 	gline->origin = (GgitDiffLineType)line->origin;
 	gline->old_lineno = line->old_lineno;
 	gline->new_lineno = line->new_lineno;
-	gline->content_len = line->content_len;
 	gline->content_offset = line->content_offset;
-	gline->content = line->content;
-	gline->encoding = encoding;
+	gline->content = g_bytes_new (line->content, line->content_len);
+	gline->encoding = g_strdup (encoding);
 	gline->text = NULL;
 
 	return gline;
@@ -184,10 +182,10 @@ ggit_diff_line_get_content (GgitDiffLine *line,
 
 	if (length)
 	{
-		*length = line->content_len;
+		*length = g_bytes_get_size (line->content);
 	}
 
-	return (const guint8 *)line->content;
+	return g_bytes_get_data (line->content, NULL);
 }
 
 /**
@@ -206,8 +204,12 @@ ggit_diff_line_get_text (GgitDiffLine *line)
 
 	if (line->text == NULL)
 	{
-		line->text = ggit_convert_utf8 (line->content,
-		                                line->content_len,
+		const gchar *content;
+		gsize content_len;
+
+		content = g_bytes_get_data (line->content, &content_len);
+		line->text = ggit_convert_utf8 (content,
+		                                content_len,
 		                                line->encoding);
 	}
 
