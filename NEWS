@@ -1,3 +1,9 @@
+News in 0.23.6
+--------------
+* Fix corrupted memory on diff
+* Bind more api
+* Misc bugfixing
+
 News in 0.23.4
 --------------
 * Bind more api
