@@ -335,7 +335,7 @@ ggit_signature_get_time (GgitSignature *signature)
 	GTimeZone *tz;
 	GDateTime *ret;
 
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 
 	s = _ggit_native_get (signature);
 
@@ -365,7 +365,7 @@ ggit_signature_get_time_zone (GgitSignature *signature)
 	gchar *time_zone_id;
 	GTimeZone *time_zone;
 
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), 0);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 
 	s = _ggit_native_get (signature);
 
