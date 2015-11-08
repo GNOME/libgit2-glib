@@ -102,7 +102,7 @@ ggit_diff_binary_file_unref (GgitDiffBinaryFile *file)
 GgitDiffBinaryType
 ggit_diff_binary_file_get_binary_type (GgitDiffBinaryFile *file)
 {
-	g_return_val_if_fail (file != NULL, GIT_DIFF_BINARY_NONE);
+	g_return_val_if_fail (file != NULL, GGIT_DIFF_BINARY_NONE);
 
 	return file->type;
 }
