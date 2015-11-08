@@ -927,7 +927,7 @@ ggit_repository_set_head (GgitRepository   *repository,
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (ref_name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_repository_set_head (_ggit_native_get (repository), ref_name);
 
