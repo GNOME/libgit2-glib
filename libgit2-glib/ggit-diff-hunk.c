@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "ggit-diff-hunk.h"
+#include "ggit-convert.h"
 
 struct _GgitDiffHunk {
 	gint ref_count;
@@ -52,7 +53,7 @@ _ggit_diff_hunk_wrap (const git_diff_hunk *hunk)
 	ghunk->new_start = hunk->new_start;
 	ghunk->new_lines = hunk->new_lines;
 
-	ghunk->header = g_strndup (hunk->header, hunk->header_len);
+	ghunk->header = ggit_convert_utf8 (hunk->header, hunk->header_len, NULL);
 	return ghunk;
 }
 
