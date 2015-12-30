@@ -164,6 +164,11 @@ ggit_tag_get_tagger (GgitTag *tag)
 	t = _ggit_native_get (tag);
 	signature = git_tag_tagger (t);
 
+	if (signature == NULL)
+	{
+		return NULL;
+	}
+
 	return _ggit_signature_wrap ((git_signature *)signature, NULL, FALSE);
 }
 
