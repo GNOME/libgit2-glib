@@ -22,7 +22,11 @@ if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
 fi
 
 aclocal --install || exit 1
-gtkdocize --copy || exit 1
+
+type gtkdocize >/dev/null 2>&1 && {
+	gtkdocize --copy || exit 1
+}
+
 autoreconf --verbose --force --install -Wno-portability || exit 1
 
 cd $olddir
