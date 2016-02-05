@@ -273,7 +273,7 @@ ggit_checkout_options_class_init (GgitCheckoutOptionsClass *klass)
 	object_class->constructed = ggit_checkout_options_constructed;
 
 	/**
-	 * GgitCheckoutOptions:strategy: (type GgitCheckoutStrategy):
+	 * GgitCheckoutOptions::strategy: (type GgitCheckoutStrategy):
 	 *
 	 * The checkout strategy.
 	 */

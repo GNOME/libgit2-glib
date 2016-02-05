@@ -11,11 +11,14 @@
 
   <reference>
     <title>API reference</title>
+    <xi:include href="xml/ggit-annotated-commit.xml"/>
+    <xi:include href="xml/ggit-blame-options.xml"/>
     <xi:include href="xml/ggit-blob.xml"/>
     <xi:include href="xml/ggit-blob-output-stream.xml"/>
     <xi:include href="xml/ggit-branch.xml"/>
     <xi:include href="xml/ggit-clone-options.xml"/>
     <xi:include href="xml/ggit-commit.xml"/>
+    <xi:include href="xml/ggit-commit-parents.xml"/>
     <xi:include href="xml/ggit-config.xml"/>
     <xi:include href="xml/ggit-config-entry.xml"/>
     <xi:include href="xml/ggit-cred.xml"/>
@@ -31,7 +34,7 @@
     <xi:include href="xml/ggit-index-entry.xml"/>
     <xi:include href="xml/ggit-index-entry-resolve-undo.xml"/>
     <xi:include href="xml/ggit-main.xml"/>
-    <xi:include href="xml/ggit-merge-tree-options.xml"/>
+    <xi:include href="xml/ggit-merge-options.xml"/>
     <xi:include href="xml/ggit-message.xml"/>
     <xi:include href="xml/ggit-native.xml"/>
     <xi:include href="xml/ggit-object.xml"/>
@@ -39,7 +42,7 @@
     <xi:include href="xml/ggit-object-factory-base.xml"/>
     <xi:include href="xml/ggit-oid.xml"/>
     <xi:include href="xml/ggit-patch.xml"/>
-    <xi:include href="xml/ggit-push.xml"/>
+    <xi:include href="xml/ggit-push-options.xml"/>
     <xi:include href="xml/ggit-ref.xml"/>
     <xi:include href="xml/ggit-reflog.xml"/>
     <xi:include href="xml/ggit-reflog-entry.xml"/>
