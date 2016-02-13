@@ -288,8 +288,8 @@ ggit_signature_get_name (GgitSignature *signature)
 	s = _ggit_native_get (signature);
 
 	signature->name_utf8 = ensure_utf8 (signature->name_utf8,
-	                                          signature->encoding,
-	                                          s->name);
+	                                    signature->encoding,
+	                                    s->name);
 
 	return signature->name_utf8;
 }
@@ -312,8 +312,8 @@ ggit_signature_get_email (GgitSignature *signature)
 	s = _ggit_native_get (signature);
 
 	signature->email_utf8 = ensure_utf8 (signature->email_utf8,
-	                                           signature->encoding,
-	                                           s->email);
+	                                     signature->encoding,
+	                                     s->email);
 
 	return signature->email_utf8;
 }
