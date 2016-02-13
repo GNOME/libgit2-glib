@@ -332,17 +332,22 @@ ggit_signature_get_time (GgitSignature *signature)
 {
 	git_signature *s;
 	GDateTime *utc;
-	GTimeZone *tz;
-	GDateTime *ret;
+	GDateTime *ret = NULL;
 
 	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
 
 	s = _ggit_native_get (signature);
 
 	utc = g_date_time_new_from_unix_utc (s->when.time);
-	tz = ggit_signature_get_time_zone (signature);
-	ret = g_date_time_to_timezone (utc, tz);
-	g_date_time_unref (utc);
+
+	if (utc != NULL)
+	{
+		GTimeZone *tz;
+
+		tz = ggit_signature_get_time_zone (signature);
+		ret = g_date_time_to_timezone (utc, tz);
+		g_date_time_unref (utc);
+	}
 
 	return ret;
 }
