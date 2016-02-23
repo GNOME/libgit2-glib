@@ -224,16 +224,18 @@ GgitSignature *
 ggit_commit_get_committer (GgitCommit *commit)
 {
 	git_commit *c;
-	const git_signature *signature;
+	const git_signature *committer;
+	git_signature *signature;
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
 	c = _ggit_native_get (commit);
-	signature = git_commit_committer (c);
+	committer = git_commit_committer (c);
+	git_signature_dup (&signature, committer);
 
-	return _ggit_signature_wrap ((git_signature *)signature,
+	return _ggit_signature_wrap (signature,
 	                             ggit_commit_get_message_encoding (commit),
-	                             FALSE);
+	                             TRUE);
 }
 
 /**
@@ -249,16 +251,17 @@ GgitSignature *
 ggit_commit_get_author (GgitCommit *commit)
 {
 	git_commit *c;
-	const git_signature *signature;
+	const git_signature *author;
+	git_signature *signature;
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 
 	c = _ggit_native_get (commit);
-	signature = git_commit_author (c);
+	author = git_commit_author (c);
 
-	return _ggit_signature_wrap ((git_signature *)signature,
+	return _ggit_signature_wrap (signature,
 	                             ggit_commit_get_message_encoding (commit),
-	                             FALSE);
+	                             TRUE);
 }
 
 /**
