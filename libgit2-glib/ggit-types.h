@@ -336,10 +336,12 @@ typedef enum
 
 /**
  * GgitConfigLevel:
+ * @GGIT_CONFIG_LEVEL_PROGRAMDATA: System-wide on Windows, for compatibility with portable git.
  * @GGIT_CONFIG_LEVEL_SYSTEM: System-wide configuration file.
  * @GGIT_CONFIG_LEVEL_XDG: XDG compatible configuration file (.config/git/config).
  * @GGIT_CONFIG_LEVEL_GLOBAL: User-specific configuration file, also called Global configuration file.
  * @GGIT_CONFIG_LEVEL_LOCAL: Repository specific configuration file.
+ * @GGIT_CONFIG_LEVEL_APP: Application specific configuration file; freely defined by applications.
  * @GGIT_CONFIG_LEVEL_HIGHEST: Represents the highest level of a config file.
  *
  * Priority level of a config file.
@@ -348,11 +350,13 @@ typedef enum
  */
 typedef enum
 {
-	GGIT_CONFIG_LEVEL_SYSTEM  = 1,
-	GGIT_CONFIG_LEVEL_XDG     = 2,
-	GGIT_CONFIG_LEVEL_GLOBAL  = 3,
-	GGIT_CONFIG_LEVEL_LOCAL   = 4,
-	GGIT_CONFIG_LEVEL_HIGHEST = -1
+	GGIT_CONFIG_LEVEL_PROGRAMDATA = 1,
+	GGIT_CONFIG_LEVEL_SYSTEM      = 2,
+	GGIT_CONFIG_LEVEL_XDG         = 3,
+	GGIT_CONFIG_LEVEL_GLOBAL      = 4,
+	GGIT_CONFIG_LEVEL_LOCAL       = 5,
+	GGIT_CONFIG_LEVEL_APP         = 6,
+	GGIT_CONFIG_LEVEL_HIGHEST     = -1
 } GgitConfigLevel;
 
 /**
