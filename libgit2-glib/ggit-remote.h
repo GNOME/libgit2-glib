@@ -74,6 +74,7 @@ const gchar       *ggit_remote_get_url                  (GgitRemote       *remot
 void               ggit_remote_connect                  (GgitRemote           *remote,
                                                          GgitDirection         direction,
                                                          GgitRemoteCallbacks  *callbacks,
+                                                         const gchar * const  *custom_headers,
                                                          GError              **error);
 
 gboolean           ggit_remote_get_connected            (GgitRemote       *remote);

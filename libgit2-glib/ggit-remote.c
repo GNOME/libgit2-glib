@@ -294,6 +294,7 @@ ggit_remote_get_url (GgitRemote *remote)
  * @remote: a #GgitRemote.
  * @direction: whether you want to receive or send data.
  * @callbacks: the callbacks to use for this connection.
+ * @custom_headers: extra HTTP headers to use in this connection.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Opens a connection to a remote.
@@ -305,16 +306,21 @@ void
 ggit_remote_connect (GgitRemote           *remote,
                      GgitDirection         direction,
                      GgitRemoteCallbacks  *callbacks,
+                     const gchar * const  *custom_headers,
                      GError              **error)
 {
 	gint ret;
+	git_strarray headers;
 
 	g_return_if_fail (GGIT_IS_REMOTE (remote));
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	ggit_utils_get_git_strarray_from_str_array (custom_headers, &headers);
+
 	ret = git_remote_connect (_ggit_native_get (remote),
 	                          (git_direction)direction,
-	                          _ggit_remote_callbacks_get_native (callbacks));
+	                          _ggit_remote_callbacks_get_native (callbacks),
+	                          &headers);
 
 	if (ret != GIT_OK)
 	{
