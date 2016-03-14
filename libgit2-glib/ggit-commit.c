@@ -258,6 +258,7 @@ ggit_commit_get_author (GgitCommit *commit)
 
 	c = _ggit_native_get (commit);
 	author = git_commit_author (c);
+	git_signature_dup (&signature, author);
 
 	return _ggit_signature_wrap (signature,
 	                             ggit_commit_get_message_encoding (commit),
