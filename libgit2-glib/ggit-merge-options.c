@@ -110,33 +110,33 @@ ggit_merge_options_new ()
 /**
  * ggit_merge_options_set_tree_flags:
  * @merge_options: a #GgitMergeOptions.
- * @tree_flags: the tree flags.
+ * @flags: the flags.
  *
- * Set the tree flags to use for merging.
+ * Set the flags to use for merging.
  *
  **/
 void
-ggit_merge_options_set_tree_flags (GgitMergeOptions   *merge_options,
-                                   GgitMergeTreeFlags  tree_flags)
+ggit_merge_options_set_flags (GgitMergeOptions   *merge_options,
+                              GgitMergeFlags      flags)
 {
 	g_return_if_fail (merge_options != NULL);
-	merge_options->merge_options.tree_flags = (git_merge_tree_flag_t)tree_flags;
+	merge_options->merge_options.flags = (git_merge_flag_t)flags;
 }
 
 /**
- * ggit_merge_options_get_tree_flags:
+ * ggit_merge_options_get_flags:
  * @merge_options: a #GgitMergeOptions.
  *
  * Get the tree flags to use for merging.
  *
- * Returns: the tree flags.
+ * Returns: the flags.
  *
  **/
-GgitMergeTreeFlags
-ggit_merge_options_get_tree_flags (GgitMergeOptions *merge_options)
+GgitMergeFlags
+ggit_merge_options_get_flags (GgitMergeOptions *merge_options)
 {
 	g_return_val_if_fail (merge_options != NULL, 0);
-	return (GgitMergeTreeFlags)merge_options->merge_options.tree_flags;
+	return (GgitMergeFlags)merge_options->merge_options.flags;
 }
 
 /**
@@ -297,7 +297,7 @@ ggit_merge_options_set_file_flags (GgitMergeOptions   *merge_options,
                                    GgitMergeFileFlags  file_flags)
 {
 	g_return_if_fail (merge_options != NULL);
-	merge_options->merge_options.file_flags = (git_merge_file_flags_t)file_flags;
+	merge_options->merge_options.file_flags = (git_merge_file_flag_t)file_flags;
 }
 
 /**

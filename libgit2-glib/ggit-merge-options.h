@@ -42,10 +42,10 @@ void                   ggit_merge_options_free                    (GgitMergeOpti
 
 GgitMergeOptions      *ggit_merge_options_new                     (void);
 
-void                   ggit_merge_options_set_tree_flags          (GgitMergeOptions         *merge_options,
-                                                                   GgitMergeTreeFlags        tree_flags);
+void                   ggit_merge_options_set_flags               (GgitMergeOptions         *merge_options,
+                                                                   GgitMergeFlags            flags);
 
-GgitMergeTreeFlags     ggit_merge_options_get_tree_flags          (GgitMergeOptions         *merge_options);
+GgitMergeFlags         ggit_merge_options_get_flags               (GgitMergeOptions         *merge_options);
 
 void                   ggit_merge_options_set_rename_threshold    (GgitMergeOptions         *merge_options,
                                                                    guint                     rename_threshold);

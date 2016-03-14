@@ -600,12 +600,25 @@ typedef enum {
 } GgitMergeFileFlags;
 
 /**
- * GgitMergeTreeFlags:
- * @GGIT_MERGE_TREE_FIND_RENAMES: detect renames.
+ * GgitMergeFlags:
+ * @GGIT_MERGE_FIND_RENAMES: detect renames that occur between the common
+ * ancestor and the "ours" side or the common ancestor and the "theirs" side.
+ * This will enable the ability to merge between a modified and renamed file.
+ * @GGIT_MERGE_FAIL_ON_CONFLICT: If a conflict occurs, exit immediately instead
+ * of attempting to continue resolving conflicts.  The merge operation will
+ * fail with @GGIT_EMERGECONFLICT and no index will be returned.
+ * @GGIT_MERGE_SKIP_REUC: do not write the REUC extension on the generated index.
+ * @GGIT_MERGE_NO_RECURSIVE: If the commits being merged have multiple merge bases,
+ * do not build a recursive merge base (by merging the multiple merge bases),
+ * instead simply use the first base.  This flag provides a similar
+ * merge base to `git-merge-resolve`.
  */
 typedef enum {
-	GGIT_MERGE_TREE_FIND_RENAMES = (1 << 0)
-} GgitMergeTreeFlags;
+	GGIT_MERGE_FIND_RENAMES     = (1 << 0),
+	GGIT_MERGE_FAIL_ON_CONFLICT = (1 << 1),
+	GGIT_MERGE_SKIP_REUC        = (1 << 2),
+	GGIT_MERGE_NO_RECURSIVE     = (1 << 3)
+} GgitMergeFlags;
 
 /**
  * GgitRebaseOperationType:
