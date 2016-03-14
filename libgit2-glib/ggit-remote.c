@@ -294,7 +294,7 @@ ggit_remote_get_url (GgitRemote *remote)
  * @remote: a #GgitRemote.
  * @direction: whether you want to receive or send data.
  * @callbacks: the callbacks to use for this connection.
- * @custom_headers: extra HTTP headers to use in this connection.
+ * @custom_headers: (allow-none): extra HTTP headers to use in this connection.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Opens a connection to a remote.
