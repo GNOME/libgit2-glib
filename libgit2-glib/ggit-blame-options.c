@@ -175,8 +175,10 @@ ggit_blame_options_set_newest_commit (GgitBlameOptions *blame_options,
 	{
 		blame_options->blame_options.newest_commit = zero;
 	}
-
-	blame_options->blame_options.newest_commit = *_ggit_oid_get_oid (oid);
+	else
+	{
+		blame_options->blame_options.newest_commit = *_ggit_oid_get_oid (oid);
+	}
 }
 
 /**
@@ -224,8 +226,10 @@ ggit_blame_options_set_oldest_commit (GgitBlameOptions *blame_options,
 	{
 		blame_options->blame_options.oldest_commit = zero;
 	}
-
-	blame_options->blame_options.oldest_commit = *_ggit_oid_get_oid (oid);
+	else
+	{
+		blame_options->blame_options.oldest_commit = *_ggit_oid_get_oid (oid);
+	}
 }
 
 /**
