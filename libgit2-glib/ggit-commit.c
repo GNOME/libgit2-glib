@@ -357,7 +357,6 @@ ggit_commit_get_nth_ancestor (GgitCommit  *commit,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
-	g_return_val_if_fail (n >= 0, NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_commit_nth_gen_ancestor (&ancestor, _ggit_native_get (commit), n);
