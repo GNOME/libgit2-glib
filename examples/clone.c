@@ -37,8 +37,8 @@ cloner_transfer_progress (GgitRemoteCallbacks   *callbacks,
 	totobjs = ggit_transfer_progress_get_total_objects (stats);
 	indexobjs = ggit_transfer_progress_get_indexed_objects (stats);
 
-	guint network_percent = recvobjs * 100 / totobjs;
-	guint index_percent = indexobjs * 100 / totobjs;
+	guint network_percent = totobjs > 0 ? recvobjs * 100 / totobjs : 0;
+	guint index_percent = totobjs > 0 ? indexobjs * 100 / totobjs : 0;
 	guint kbytes = ggit_transfer_progress_get_received_bytes (stats) / 1024;
 
 	g_printf ("\rnet %3d%% (%4d kb, %5d/%5d)  /  idx %3d%% (%5d/%5d)",
@@ -151,7 +151,9 @@ cloner_class_init (ClonerClass *klass)
 	cb_klass->credentials = cloner_credentials;
 }
 
-int main(int argc, char **argv)
+int
+main(int    argc,
+     char **argv)
 {
 	GgitRepository *cloned_repo = NULL;
 	GgitCloneOptions *options = NULL;
