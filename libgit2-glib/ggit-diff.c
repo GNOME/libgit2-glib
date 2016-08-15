@@ -54,6 +54,9 @@ typedef struct {
 
 	gpointer user_data;
 
+	GHashTable *cached_deltas;
+	GHashTable *cached_hunks;
+
 	GgitDiffFileCallback file_cb;
 	GgitDiffBinaryCallback binary_cb;
 	GgitDiffHunkCallback hunk_cb;
@@ -68,6 +71,50 @@ enum
 	PROP_REPOSITORY
 };
 
+static GgitDiffDelta *
+wrap_diff_delta_cached (CallbackWrapperData  *data,
+                        const git_diff_delta *delta)
+{
+	GgitDiffDelta *gdelta;
+
+	if (!delta)
+	{
+		return NULL;
+	}
+
+	gdelta = g_hash_table_lookup (data->cached_deltas, delta);
+
+	if (!gdelta)
+	{
+		gdelta = _ggit_diff_delta_wrap (delta);
+		g_hash_table_insert (data->cached_deltas, (gpointer) delta, gdelta);
+	}
+
+	return gdelta;
+}
+
+static GgitDiffHunk *
+wrap_diff_hunk_cached (CallbackWrapperData *data,
+                       const git_diff_hunk *hunk)
+{
+	GgitDiffHunk *ghunk;
+
+	if (!hunk)
+	{
+		return NULL;
+	}
+
+	ghunk = g_hash_table_lookup (data->cached_hunks, hunk);
+
+	if (!ghunk)
+	{
+		ghunk = _ggit_diff_hunk_wrap (hunk);
+		g_hash_table_insert (data->cached_hunks, (gpointer) hunk, ghunk);
+	}
+
+	return ghunk;
+}
+
 static gint
 ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
                                  gfloat                progress,
@@ -77,7 +124,7 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 	GgitDiffDelta *gdelta;
 	gint ret;
 
-	gdelta = _ggit_diff_delta_wrap (delta);
+	gdelta = wrap_diff_delta_cached (data, delta);
 
 	data->encoding = NULL;
 
@@ -114,8 +161,6 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 
 	ret = data->file_cb (gdelta, progress, data->user_data);
 
-	ggit_diff_delta_unref (gdelta);
-
 	return ret;
 }
 
@@ -129,12 +174,11 @@ ggit_diff_binary_callback_wrapper (const git_diff_delta  *delta,
 	GgitDiffBinary *gbinary;
 	gint ret;
 
-	gdelta = _ggit_diff_delta_wrap (delta);
+	gdelta = wrap_diff_delta_cached (data, delta);
 	gbinary = _ggit_diff_binary_wrap (binary);
 
 	ret = data->binary_cb (gdelta, gbinary, data->user_data);
 
-	ggit_diff_delta_unref (gdelta);
 	ggit_diff_binary_unref (gbinary);
 
 	return ret;
@@ -150,13 +194,10 @@ ggit_diff_hunk_callback_wrapper (const git_diff_delta *delta,
 	GgitDiffHunk *ghunk;
 	gint ret;
 
-	gdelta = _ggit_diff_delta_wrap (delta);
-	ghunk = _ggit_diff_hunk_wrap (hunk);
+	gdelta = wrap_diff_delta_cached (data, delta);
+	ghunk = wrap_diff_hunk_cached (data, hunk);
 
 	ret = data->hunk_cb (gdelta, ghunk, data->user_data);
-
-	ggit_diff_hunk_unref (ghunk);
-	ggit_diff_delta_unref (gdelta);
 
 	return ret;
 }
@@ -169,7 +210,7 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 {
 	CallbackWrapperData *data = user_data;
 	GgitDiffDelta *gdelta;
-	GgitDiffHunk *ghunk;
+	GgitDiffHunk *ghunk = NULL;
 	GgitDiffLine *gline;
 	gint ret;
 	const gchar *encoding = NULL;
@@ -186,8 +227,9 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 		encoding = priv->encoding;
 	}
 
-	gdelta = _ggit_diff_delta_wrap (delta);
-	ghunk = hunk == NULL ? NULL : _ggit_diff_hunk_wrap (hunk);
+	gdelta = wrap_diff_delta_cached (data, delta);
+	ghunk = wrap_diff_hunk_cached (data, hunk);
+
 	gline = line == NULL ? NULL : _ggit_diff_line_wrap (line, encoding);
 
 	ret = data->line_cb (gdelta, ghunk, gline, data->user_data);
@@ -196,13 +238,6 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 	{
 		ggit_diff_line_unref (gline);
 	}
-
-	if (ghunk != NULL)
-	{
-		ggit_diff_hunk_unref (ghunk);
-	}
-
-	ggit_diff_delta_unref (gdelta);
 
 	return ret;
 }
@@ -575,6 +610,9 @@ ggit_diff_foreach (GgitDiff              *diff,
 	wrapper_data.diff = diff;
 	wrapper_data.encoding = NULL;
 
+	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
+	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
+
 	if (file_cb != NULL)
 	{
 		real_file_cb = ggit_diff_file_callback_wrapper;
@@ -603,6 +641,9 @@ ggit_diff_foreach (GgitDiff              *diff,
 	                        real_file_cb, real_binary_cb,
 	                        real_hunk_cb, real_line_cb,
 	                        &wrapper_data);
+
+	g_hash_table_destroy (wrapper_data.cached_deltas);
+	g_hash_table_destroy (wrapper_data.cached_hunks);
 
 	if (ret != GIT_OK)
 	{
