@@ -709,6 +709,29 @@ ggit_diff_get_num_deltas (GgitDiff *diff)
 }
 
 /**
+ * ggit_diff_get_delta:
+ * @diff: a #GgitDiff.
+ * @index: the index.
+ *
+ * Get the delta at the specified index.
+ *
+ * Returns: (transfer full): a #GgitDiffDelta.
+ *
+ **/
+GgitDiffDelta *
+ggit_diff_get_delta (GgitDiff *diff,
+                     gint      index)
+{
+	const git_diff_delta *delta;
+
+	g_return_val_if_fail (GGIT_IS_DIFF (diff), NULL);
+
+	delta = git_diff_get_delta (_ggit_native_get (diff), (size_t)index);
+
+	return _ggit_diff_delta_wrap (delta);
+}
+
+/**
  * ggit_diff_blobs:
  * @old_blob: (allow-none): a #GgitBlob to diff from.
  * @old_as_path: (allow-none): treat @old_blob as if it had this filename, or %NULL,

@@ -90,6 +90,9 @@ gchar         *ggit_diff_format_email              (GgitDiff              *diff,
 
 gint           ggit_diff_get_num_deltas            (GgitDiff              *diff);
 
+GgitDiffDelta *ggit_diff_get_delta                 (GgitDiff              *diff,
+                                                    gint                   index);
+
 void           ggit_diff_blobs                     (GgitBlob              *old_blob,
                                                     const gchar           *old_as_path,
                                                     GgitBlob              *new_blob,
