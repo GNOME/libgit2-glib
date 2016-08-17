@@ -596,7 +596,7 @@ ggit_diff_foreach (GgitDiff              *diff,
                    GError               **error)
 {
 	gint ret;
-	CallbackWrapperData wrapper_data;
+	CallbackWrapperData wrapper_data = { 0 };
 	git_diff_file_cb real_file_cb = NULL;
 	git_diff_binary_cb real_binary_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
@@ -669,7 +669,7 @@ ggit_diff_print (GgitDiff              *diff,
                  GError               **error)
 {
 	gint ret;
-	CallbackWrapperData wrapper_data;
+	CallbackWrapperData wrapper_data = { 0 };
 
 	g_return_if_fail (GGIT_IS_DIFF (diff));
 	g_return_if_fail (print_cb != NULL);
@@ -813,7 +813,7 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 {
 	gint ret;
 	const git_diff_options *gdiff_options;
-	CallbackWrapperData wrapper_data;
+	CallbackWrapperData wrapper_data = { 0 };
 	git_diff_file_cb real_file_cb = NULL;
 	git_diff_binary_cb real_binary_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
@@ -903,7 +903,7 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 {
 	gint ret;
 	const git_diff_options *gdiff_options;
-	CallbackWrapperData wrapper_data;
+	CallbackWrapperData wrapper_data = { 0 };
 	git_diff_file_cb real_file_cb = NULL;
 	git_diff_binary_cb real_binary_cb = NULL;
 	git_diff_hunk_cb real_hunk_cb = NULL;
