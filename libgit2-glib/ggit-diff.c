@@ -767,7 +767,7 @@ ggit_diff_get_delta (GgitDiff *diff,
 
 	g_return_val_if_fail (GGIT_IS_DIFF (diff), NULL);
 
-	delta = git_diff_get_delta (_ggit_native_get (diff), (size_t)index);
+	delta = git_diff_get_delta (_ggit_native_get (diff), index);
 
 	return _ggit_diff_delta_wrap (delta);
 }
