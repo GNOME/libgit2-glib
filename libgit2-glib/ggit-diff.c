@@ -741,7 +741,7 @@ ggit_diff_format_email (GgitDiff                    *diff,
  * Returns: the number of deltas.
  *
  **/
-gint
+gsize
 ggit_diff_get_num_deltas (GgitDiff *diff)
 {
 	g_return_val_if_fail (GGIT_IS_DIFF (diff), 0);
@@ -761,7 +761,7 @@ ggit_diff_get_num_deltas (GgitDiff *diff)
  **/
 GgitDiffDelta *
 ggit_diff_get_delta (GgitDiff *diff,
-                     gint      index)
+                     gsize     index)
 {
 	const git_diff_delta *delta;
 

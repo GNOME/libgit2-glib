@@ -88,10 +88,10 @@ gchar         *ggit_diff_format_email              (GgitDiff              *diff,
                                                     GgitDiffFormatEmailOptions *options,
                                                     GError               **error);
 
-gint           ggit_diff_get_num_deltas            (GgitDiff              *diff);
+gsize          ggit_diff_get_num_deltas            (GgitDiff              *diff);
 
 GgitDiffDelta *ggit_diff_get_delta                 (GgitDiff              *diff,
-                                                    gint                   index);
+                                                    gsize                  index);
 
 void           ggit_diff_blobs                     (GgitBlob              *old_blob,
                                                     const gchar           *old_as_path,
