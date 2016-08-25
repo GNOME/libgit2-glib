@@ -20,8 +20,8 @@ gobject-introspection 0.9.x.
 
 Simple install procedure:
 
-  % tar Jxf libgit2-glib-0.24.1.tar.xz		# unpack the sources
-  % cd libgit2-glib-0.24.1			# change to the toplevel directory
+  % tar Jxf libgit2-glib-0.24.3.tar.xz		# unpack the sources
+  % cd libgit2-glib-0.24.3			# change to the toplevel directory
   % ./configure					# run the `configure' script
   % make					# build libgit2-glib
   [ Become root if necessary ]

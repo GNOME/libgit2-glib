@@ -1,3 +1,8 @@
+News in 0.24.3
+--------------
+* Reduce memory allocations during diff generation
+* Fix ctime in index entry
+
 News in 0.24.1
 --------------
 * Fix several crashes
