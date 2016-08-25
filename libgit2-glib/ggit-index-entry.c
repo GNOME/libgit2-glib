@@ -721,8 +721,8 @@ ggit_index_entry_stat (GgitIndexEntry  *entry,
 	                          G_FILE_ATTRIBUTE_STANDARD_SIZE ","
 	                          G_FILE_ATTRIBUTE_TIME_MODIFIED ","
 	                          G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC ","
-	                          G_FILE_ATTRIBUTE_TIME_CREATED ","
-	                          G_FILE_ATTRIBUTE_TIME_CREATED_USEC ","
+	                          G_FILE_ATTRIBUTE_TIME_CHANGED ","
+	                          G_FILE_ATTRIBUTE_TIME_CHANGED_USEC ","
 	                          G_FILE_ATTRIBUTE_UNIX_DEVICE ","
 	                          G_FILE_ATTRIBUTE_UNIX_INODE ","
 	                          G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE ","
@@ -749,11 +749,11 @@ ggit_index_entry_stat (GgitIndexEntry  *entry,
 
 	entry->entry->ctime.seconds =
 		g_file_info_get_attribute_uint64 (info,
-		                                  G_FILE_ATTRIBUTE_TIME_CREATED);
+		                                  G_FILE_ATTRIBUTE_TIME_CHANGED);
 
 	entry->entry->ctime.nanoseconds =
 		g_file_info_get_attribute_uint32 (info,
-		                                  G_FILE_ATTRIBUTE_TIME_CREATED_USEC) * 1e3;
+		                                  G_FILE_ATTRIBUTE_TIME_CHANGED_USEC) * 1e3;
 
 	entry->entry->dev =
 		g_file_info_get_attribute_uint32 (info,
