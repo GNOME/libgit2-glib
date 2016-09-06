@@ -1,3 +1,7 @@
+News in 0.24.4
+--------------
+* Do not stat index entry when restoring from blob
+
 News in 0.24.3
 --------------
 * Reduce memory allocations during diff generation
