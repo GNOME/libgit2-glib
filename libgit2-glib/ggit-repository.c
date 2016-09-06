@@ -3063,7 +3063,7 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
 	ret = _ggit_index_entry_new (path, id);
 	g_free (path);
 
-	if (file)
+	if (file && !id)
 	{
 		ggit_index_entry_stat (ret, file, NULL);
 	}
@@ -3079,7 +3079,7 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
  * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new index entry. When @path is not %NULL, the path of the returned
- * entry (#ggit_index_entry_get_path) is set @path. The specified path can be
+ * entry (#ggit_index_entry_get_path) is set to @path. The specified path can be
  * either absolute or relative. In the case of
  * an absolute path, the path must reside within the working directory of
  * @repository. The file related fields of the returned entry are also queried
