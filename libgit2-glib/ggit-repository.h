@@ -272,6 +272,11 @@ gboolean            ggit_repository_set_head          (GgitRepository        *re
 GFile              *ggit_repository_discover          (GFile                 *location,
                                                        GError               **error);
 
+GFile              *ggit_repository_discover_full     (GFile        *location,
+                                                       gboolean      across_fs,
+                                                       const gchar **ceiling_dirs,
+                                                       GError      **error);
+
 gboolean            ggit_repository_is_head_detached  (GgitRepository        *repository,
                                                        GError               **error);
 

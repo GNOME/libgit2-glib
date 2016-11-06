@@ -956,24 +956,57 @@ GFile *
 ggit_repository_discover (GFile   *location,
                           GError **error)
 {
+	g_return_val_if_fail (G_IS_FILE (location), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	return ggit_repository_discover_full (location, FALSE, NULL, error);
+}
+
+/**
+ * ggit_repository_discover_full:
+ * @location: the base location where the lookup starts.
+ * @across_fs: indictaes whether lookup will work across filesystem devices.
+ * @ceiling_dirs: (array zero-terminated=1) (allow-none): a list of absolute paths
+ *   at which lookup will stop when reached, or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Looks for a git repository.
+ *
+ * The lookup starts from @path and walks up the parent directories
+ * and stops when a repository is found.
+ *
+ * Returns: (transfer full): the repository location.
+ */
+GFile *
+ggit_repository_discover_full (GFile        *location,
+                               gboolean      across_fs,
+                               const gchar **ceiling_dirs,
+                               GError      **error)
+{
 	gchar *path;
 	gint ret;
 	git_buf buf = {0,};
 	GFile *rep = NULL;
+	gchar *dirs_path = NULL;
+	gchar path_sep[2] = { GIT_PATH_LIST_SEPARATOR, 0 };
 
 	g_return_val_if_fail (G_IS_FILE (location), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	path = g_file_get_path (location);
-
 	g_return_val_if_fail (path != NULL, NULL);
+
+	if (ceiling_dirs != NULL) {
+		dirs_path = g_strjoinv (path_sep, (gchar **)ceiling_dirs);
+	}
 
 	ret = git_repository_discover (&buf,
 	                               path,
-	                               0,
-	                               "");
+	                               across_fs ? 1 : 0,
+	                               dirs_path);
 
 	g_free (path);
+	g_free (dirs_path);
 
 	if (ret == GIT_OK)
 	{
