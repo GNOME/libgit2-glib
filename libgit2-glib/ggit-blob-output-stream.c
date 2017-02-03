@@ -26,20 +26,6 @@
 #include <git2.h>
 #include <string.h>
 
-/*
- * BLOB_CHUNKING_STATE_IDLE: stream's thread is waiting for data
- * BLOB_CHUNKING_STATE_SENDING: have data, outside thread is waiting for result
- * BLOB_CHUNKING_STATE_CANCELLED: cancelled, stream's thread to exit and set error result
- * BLOB_CHUNKING_STATE_CLOSED: closed by outside thread or error, exit and set result
- */
-typedef enum
-{
-	BLOB_CHUNKING_STATE_IDLE,
-	BLOB_CHUNKING_STATE_SENDING,
-	BLOB_CHUNKING_STATE_CANCELLED,
-	BLOB_CHUNKING_STATE_CLOSED
-} BlobChunkingState;
-
 /**
  * GgitBlobOutputStream:
  *
@@ -49,20 +35,12 @@ typedef enum
 typedef struct _GgitBlobOutputStreamPrivate
 {
 	GgitRepository *repository;
-	GThread *thread;
 
-	GMutex mutex;
-	GCond cond;
-
-	gssize written;
-
-	const gchar *writebuf;
-	gsize bufsize;
+	git_writestream *stream;
+	gboolean something_written;
 
 	gint ret;
 	GgitOId *oid;
-
-	BlobChunkingState state;
 } GgitBlobOutputStreamPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GgitBlobOutputStream, ggit_blob_output_stream, G_TYPE_OUTPUT_STREAM)
@@ -85,24 +63,39 @@ ggit_blob_output_stream_close (GOutputStream  *object,
 
 	if (g_cancellable_set_error_if_cancelled (cancellable, error))
 	{
-		g_mutex_lock (&priv->mutex);
-
-		if (priv->state != BLOB_CHUNKING_STATE_CANCELLED)
-		{
-			priv->state = BLOB_CHUNKING_STATE_CANCELLED;
-			g_cond_signal (&priv->cond);
-		}
-
-		g_mutex_unlock (&priv->mutex);
 		return FALSE;
 	}
 
-	g_mutex_lock (&priv->mutex);
-	priv->state = BLOB_CHUNKING_STATE_CLOSED;
-	g_cond_signal (&priv->cond);
-	g_mutex_unlock (&priv->mutex);
+	if (priv->ret != GIT_OK)
+	{
+		return TRUE;
+	}
 
-	g_thread_join (priv->thread);
+	if (priv->something_written)
+	{
+		git_oid oid;
+
+		if (git_blob_create_fromstream_commit (&oid, priv->stream) == GIT_OK)
+		{
+			priv->oid = _ggit_oid_wrap (&oid);
+		}
+		else
+		{
+			g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+			             "Could not create object id");
+			return FALSE;
+		}
+	}
+	else
+	{
+		if (priv->stream->close (priv->stream) != GIT_OK)
+		{
+			g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+			             "Could not close write stream");
+			return FALSE;
+		}
+	}
+
 	return TRUE;
 }
 
@@ -128,56 +121,43 @@ ggit_blob_output_stream_write (GOutputStream  *object,
 {
 	GgitBlobOutputStream *stream = GGIT_BLOB_OUTPUT_STREAM (object);
 	GgitBlobOutputStreamPrivate *priv;
-	gssize written;
 
 	priv = ggit_blob_output_stream_get_instance_private (stream);
 
-	g_mutex_lock (&priv->mutex);
-
-	while (priv->state == BLOB_CHUNKING_STATE_SENDING)
+	if (g_cancellable_set_error_if_cancelled (cancellable, error))
 	{
-		g_cond_wait (&priv->cond, &priv->mutex);
+		return -1;
 	}
 
-	if (priv->state == BLOB_CHUNKING_STATE_CLOSED)
+	if (priv->ret != GIT_OK)
 	{
-		g_mutex_unlock (&priv->mutex);
+		g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+		             "Could not create write stream");
+		return -1;
+	}
+
+	if (count == 0)
+	{
 		return 0;
 	}
 
-	if (g_cancellable_is_cancelled (cancellable))
+	if (count > 0)
 	{
-		priv->state = BLOB_CHUNKING_STATE_CANCELLED;
+		gint ret = 0;
+
+		ret = priv->stream->write (priv->stream, buffer, count);
+
+		if (ret == GIT_OK)
+		{
+			priv->something_written = TRUE;
+			return count;
+		}
 	}
 
-	if (priv->state == BLOB_CHUNKING_STATE_IDLE)
-	{
-		priv->writebuf = buffer;
-		priv->bufsize = count;
-		priv->written = 0;
-		priv->state = BLOB_CHUNKING_STATE_SENDING;
-	}
+	g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+	             "Could not write the blob");
 
-	g_cond_signal (&priv->cond);
-
-	while (priv->state == BLOB_CHUNKING_STATE_SENDING)
-	{
-		g_cond_wait (&priv->cond, &priv->mutex);
-	}
-
-	if (priv->state == BLOB_CHUNKING_STATE_CANCELLED)
-	{
-		g_cancellable_set_error_if_cancelled (cancellable, error);
-		written = -1;
-	}
-	else
-	{
-		written = priv->written;
-	}
-
-	g_mutex_unlock (&priv->mutex);
-
-	return written;
+	return -1;
 }
 
 static void
@@ -189,12 +169,15 @@ ggit_blob_output_stream_finalize (GObject *object)
 	stream = GGIT_BLOB_OUTPUT_STREAM (object);
 	priv = ggit_blob_output_stream_get_instance_private (stream);
 
-	g_mutex_clear (&priv->mutex);
-	g_cond_clear (&priv->cond);
 
 	if (priv->oid)
 	{
 		ggit_oid_free (priv->oid);
+	}
+	else
+	{
+		/* NOTE: if we have an oid the stream is already freed */
+		priv->stream->free (priv->stream);
 	}
 
 	g_clear_object (&priv->repository);
@@ -240,6 +223,22 @@ ggit_blob_output_stream_get_property (GObject    *object,
 }
 
 static void
+ggit_blob_output_stream_constructed (GObject *object)
+{
+	GgitBlobOutputStream *stream;
+	GgitBlobOutputStreamPrivate *priv;
+
+	stream = GGIT_BLOB_OUTPUT_STREAM (object);
+	priv = ggit_blob_output_stream_get_instance_private (stream);
+
+	priv->ret = git_blob_create_fromstream (&priv->stream,
+	                                        _ggit_native_get (priv->repository),
+	                                       NULL);
+
+	G_OBJECT_CLASS (ggit_blob_output_stream_parent_class)->constructed (object);
+}
+
+static void
 ggit_blob_output_stream_class_init (GgitBlobOutputStreamClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -248,6 +247,7 @@ ggit_blob_output_stream_class_init (GgitBlobOutputStreamClass *klass)
 	object_class->finalize = ggit_blob_output_stream_finalize;
 	object_class->get_property = ggit_blob_output_stream_get_property;
 	object_class->set_property = ggit_blob_output_stream_set_property;
+	object_class->constructed = ggit_blob_output_stream_constructed;
 
 	stream_class->write_fn = ggit_blob_output_stream_write;
 	stream_class->close_fn = ggit_blob_output_stream_close;
@@ -264,123 +264,17 @@ ggit_blob_output_stream_class_init (GgitBlobOutputStreamClass *klass)
 	                                                      G_PARAM_STATIC_STRINGS));
 }
 
-static int
-blob_chunk_cb (char   *content,
-               size_t  maxlen,
-               void   *payload)
-{
-	GgitBlobOutputStream *stream = payload;
-	GgitBlobOutputStreamPrivate *priv;
-	int written = 0;
-
-	priv = ggit_blob_output_stream_get_instance_private (stream);
-
-	g_mutex_lock (&priv->mutex);
-
-	while (priv->state == BLOB_CHUNKING_STATE_IDLE)
-	{
-		g_cond_wait (&priv->cond, &priv->mutex);
-	}
-
-	if (priv->state == BLOB_CHUNKING_STATE_CLOSED)
-	{
-		g_mutex_unlock (&priv->mutex);
-		return 0;
-	}
-
-	if (priv->state == BLOB_CHUNKING_STATE_CANCELLED)
-	{
-		g_mutex_unlock (&priv->mutex);
-		return -1;
-	}
-
-	/* state must be BLOB_CHUNKING_STATE_SENDING */
-
-	if (priv->bufsize > maxlen)
-	{
-		priv->written = maxlen;
-	}
-	else
-	{
-		priv->written = priv->bufsize;
-	}
-
-	if (priv->written > 0)
-	{
-		memcpy (content, priv->writebuf, priv->written);
-		written = priv->written;
-	}
-
-	priv->state = BLOB_CHUNKING_STATE_IDLE;
-	g_cond_signal (&priv->cond);
-	g_mutex_unlock (&priv->mutex);
-
-	return written;
-}
-
-static gpointer
-chunk_blob_in_thread (gpointer data)
-{
-	GgitBlobOutputStream *stream = data;
-	GgitBlobOutputStreamPrivate *priv;
-	git_oid oid;
-	gint ret;
-
-	priv = ggit_blob_output_stream_get_instance_private (stream);
-
-	ret = git_blob_create_fromchunks (&oid,
-	                                  _ggit_native_get (priv->repository),
-	                                  NULL,
-	                                  blob_chunk_cb,
-	                                  data);
-
-	g_mutex_lock (&priv->mutex);
-	priv->ret = ret;
-
-	if (ret == GIT_OK)
-	{
-		priv->state = BLOB_CHUNKING_STATE_CLOSED;
-		priv->oid = _ggit_oid_wrap (&oid);
-	}
-	else
-	{
-		priv->state = BLOB_CHUNKING_STATE_CANCELLED;
-	}
-
-	g_cond_signal (&priv->cond);
-
-	g_mutex_unlock (&priv->mutex);
-
-	return NULL;
-}
-
 static void
 ggit_blob_output_stream_init (GgitBlobOutputStream *stream)
 {
-	GgitBlobOutputStreamPrivate *priv;
-
-	priv = ggit_blob_output_stream_get_instance_private (stream);
-
-	g_mutex_init (&priv->mutex);
-	g_cond_init (&priv->cond);
-
-	priv->state = BLOB_CHUNKING_STATE_IDLE;
-
-	priv->thread = g_thread_new ("ggit-blob-output-stream",
-	                             chunk_blob_in_thread,
-	                             stream);
 }
 
 GgitBlobOutputStream *
 _ggit_blob_output_stream_new (GgitRepository  *repository)
 {
-	GgitBlobOutputStream *s;
-
-	s = g_object_new (GGIT_TYPE_BLOB_OUTPUT_STREAM,
-	                  "repository", repository,
-	                  NULL);
-
-	return s;
+	return g_object_new (GGIT_TYPE_BLOB_OUTPUT_STREAM,
+	                     "repository", repository,
+	                     NULL);
 }
 
 /**
