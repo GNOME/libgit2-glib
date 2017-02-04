@@ -625,6 +625,20 @@ typedef enum {
 } GgitMergeFlags;
 
 /**
+ * GgitProxyType:
+ * @GGIT_PROXY_NONE: Do not attempt to connect through a proxy.
+ * @GGIT_PROXY_AUTO: Try to auto-detect the proxy from the git configuration.
+ * @GGIT_PROXY_SPECIFIED: Connect via the URL given in the options.
+ *
+ * The type of proxy to use.
+ */
+typedef enum {
+	GGIT_PROXY_NONE,
+	GGIT_PROXY_AUTO,
+	GGIT_PROXY_SPECIFIED
+} GgitProxyType;
+
+/**
  * GgitRebaseOperationType:
  * @GGIT_REBASE_OPERATION_PICK: The given commit is to be cherry-picked.
  * The client should commit the changes and continue if there are no conflicts.
