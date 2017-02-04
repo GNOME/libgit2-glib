@@ -27,6 +27,7 @@
 #include <libgit2-glib/ggit-types.h>
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-remote-callbacks.h>
+#include <libgit2-glib/ggit-proxy-options.h>
 
 G_BEGIN_DECLS
 
@@ -74,6 +75,7 @@ const gchar       *ggit_remote_get_url                  (GgitRemote       *remot
 void               ggit_remote_connect                  (GgitRemote           *remote,
                                                          GgitDirection         direction,
                                                          GgitRemoteCallbacks  *callbacks,
+                                                         GgitProxyOptions     *proxy_options,
                                                          const gchar * const  *custom_headers,
                                                          GError              **error);
 

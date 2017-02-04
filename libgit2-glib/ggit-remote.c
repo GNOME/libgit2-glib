@@ -294,6 +294,7 @@ ggit_remote_get_url (GgitRemote *remote)
  * @remote: a #GgitRemote.
  * @direction: whether you want to receive or send data.
  * @callbacks: the callbacks to use for this connection.
+ * @proxy_options: (allow-none): the proxy options.
  * @custom_headers: (allow-none): extra HTTP headers to use in this connection.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -306,6 +307,7 @@ void
 ggit_remote_connect (GgitRemote           *remote,
                      GgitDirection         direction,
                      GgitRemoteCallbacks  *callbacks,
+                     GgitProxyOptions     *proxy_options,
                      const gchar * const  *custom_headers,
                      GError              **error)
 {
@@ -320,6 +322,7 @@ ggit_remote_connect (GgitRemote           *remote,
 	ret = git_remote_connect (_ggit_native_get (remote),
 	                          (git_direction)direction,
 	                          _ggit_remote_callbacks_get_native (callbacks),
+	                          proxy_options != NULL ? _ggit_proxy_options_get_proxy_options (proxy_options) : NULL,
 	                          &headers);
 
 	if (ret != GIT_OK)

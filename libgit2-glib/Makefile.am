@@ -59,6 +59,7 @@ H_FILES =					\
 	ggit-object-factory-base.h		\
 	ggit-oid.h				\
 	ggit-patch.h				\
+	ggit-proxy-options.h			\
 	ggit-push-options.h			\
 	ggit-rebase-operation.h			\
 	ggit-rebase-options.h			\
@@ -130,6 +131,7 @@ C_FILES =					\
 	ggit-object-factory-base.c		\
 	ggit-oid.c				\
 	ggit-patch.c				\
+	ggit-proxy-options.c			\
 	ggit-push-options.c			\
 	ggit-rebase-operation.c			\
 	ggit-rebase-options.c			\
