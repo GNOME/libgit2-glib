@@ -96,7 +96,7 @@ ggit_merge_options_free (GgitMergeOptions *merge_options)
  * Returns: a newly allocated #GgitMergeOptions.
  */
 GgitMergeOptions *
-ggit_merge_options_new ()
+ggit_merge_options_new (void)
 {
 	GgitMergeOptions *merge_options;
 	git_merge_options gmerge_options = GIT_MERGE_OPTIONS_INIT;

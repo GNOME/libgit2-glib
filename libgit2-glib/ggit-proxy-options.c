@@ -94,7 +94,7 @@ ggit_proxy_options_init (GgitProxyOptions *options)
  *
  **/
 GgitProxyOptions *
-ggit_proxy_options_new ()
+ggit_proxy_options_new (void)
 {
 	return g_object_new (GGIT_TYPE_PROXY_OPTIONS, NULL);
 }

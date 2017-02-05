@@ -179,7 +179,7 @@ ggit_cherry_pick_options_init (GgitCherryPickOptions *options)
  *
  **/
 GgitCherryPickOptions *
-ggit_cherry_pick_options_new ()
+ggit_cherry_pick_options_new (void)
 {
 	return g_object_new (GGIT_TYPE_CHERRY_PICK_OPTIONS, NULL);
 }

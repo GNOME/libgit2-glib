@@ -234,7 +234,7 @@ ggit_diff_format_email_options_init (GgitDiffFormatEmailOptions *options)
  *
  **/
 GgitDiffFormatEmailOptions *
-ggit_diff_format_email_options_new ()
+ggit_diff_format_email_options_new (void)
 {
 	return g_object_new (GGIT_TYPE_DIFF_FORMAT_EMAIL_OPTIONS, NULL);
 }

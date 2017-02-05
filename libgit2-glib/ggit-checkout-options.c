@@ -409,7 +409,7 @@ ggit_checkout_options_init (GgitCheckoutOptions *options)
  *
  **/
 GgitCheckoutOptions *
-ggit_checkout_options_new ()
+ggit_checkout_options_new (void)
 {
 	return g_object_new (GGIT_TYPE_CHECKOUT_OPTIONS, NULL);
 }

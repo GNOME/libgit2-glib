@@ -121,7 +121,7 @@ ggit_push_options_init (GgitPushOptions *options)
  *
  **/
 GgitPushOptions *
-ggit_push_options_new ()
+ggit_push_options_new (void)
 {
 	return g_object_new (GGIT_TYPE_PUSH_OPTIONS, NULL);
 }
