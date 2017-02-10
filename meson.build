@@ -162,7 +162,7 @@ gobject = dependency('gobject-2.0', version: '>= 2.44')
 gio = dependency('gio-2.0', version: '>=2.44')
 build_gobject = gobject.found()
 
-libgit2 = dependency('libgit2', version: '>=0.25.0')
+libgit2 = dependency('libgit2', version: ['>=0.25.0', '<0.26.0'])
 
 build_gir = build_gobject
 if get_option('enable-introspection')
