@@ -9,6 +9,7 @@ headers = [
   'ggit-checkout-options.h',
   'ggit-cherry-pick-options.h',
   'ggit-clone-options.h',
+  'ggit-config.h',
   'ggit-commit.h',
   'ggit-commit-parents.h',
   'ggit-config-entry.h',
