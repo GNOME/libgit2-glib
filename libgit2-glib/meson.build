@@ -145,7 +145,7 @@ sources = [
 configure_file(input : 'ggit.h.in',
                output : 'ggit.h',
                configuration : ggit_h_data,
-               install_dir: get_option('includedir') + '/libgit2-glib-1.0')
+               install_dir: join_paths(get_option('includedir'), 'libgit2-glib-1.0'))
 
 enum_types = gnome.mkenums('ggit-enum-types',
   sources : headers,
