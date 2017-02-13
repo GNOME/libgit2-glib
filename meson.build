@@ -157,12 +157,16 @@ extra_args= []
 core_inc = include_directories('.')
 
 # Required dependencies
-glib = dependency('glib-2.0', version: '>=2.44')
-gobject = dependency('gobject-2.0', version: '>= 2.44')
-gio = dependency('gio-2.0', version: '>=2.44')
+git2_req = '0.25.0'
+glib_req = '2.44.0'
+conf.set('GIT2_REQUIRED', git2_req)
+conf.set('GLIB_REQUIRED', glib_req)
+glib = dependency('glib-2.0', version: '>=' + glib_req)
+gobject = dependency('gobject-2.0', version: '>=' + glib_req)
+gio = dependency('gio-2.0', version: '>=' + glib_req)
 build_gobject = gobject.found()
 
-libgit2 = dependency('libgit2', version: ['>=0.25.0', '<0.26.0'])
+libgit2 = dependency('libgit2', version: '>=' + git2_req)
 
 build_gir = build_gobject
 if get_option('enable-introspection')
