@@ -1,3 +1,8 @@
+News in 0.25.0
+--------------
+* Port to libgit2 0.25.x
+* Add initial version of meson build system
+
 News in 0.24.4
 --------------
 * Do not stat index entry when restoring from blob
