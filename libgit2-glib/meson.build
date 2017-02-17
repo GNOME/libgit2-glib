@@ -166,7 +166,7 @@ else
   libgit2_glib_link_args = [ '-Wl,-Bsymbolic-functions' ]
 endif
 
-libgit2_glib = shared_library('libgit2-glib-@0@'.format(libgit2_glib_api_version),
+libgit2_glib = shared_library('git2-glib-@0@'.format(libgit2_glib_api_version),
   include_directories: core_inc,
   sources: sources + enum_types + private_headers,
   version: libversion,
