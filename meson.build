@@ -51,10 +51,7 @@ conf.set('libdir', libgit2_glib_libdir)
 conf.set('includedir', libgit2_glib_includedir)
 
 # Version macros
-conf.set('LIBGIT2_GLIB_MAJOR_VERSION', libgit2_glib_major_version)
-conf.set('LIBGIT2_GLIB_MINOR_VERSION', libgit2_glib_minor_version)
-conf.set('LIBGIT2_GLIB_MICRO_VERSION', libgit2_glib_micro_version)
-conf.set('LIBGIT2_GLIB_VERSION', libgit2_glib_version)
+conf.set('VERSION', libgit2_glib_version)
 
 # Compiler flags
 if cc.get_id() == 'msvc'
