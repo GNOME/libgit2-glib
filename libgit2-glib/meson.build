@@ -143,6 +143,17 @@ sources = [
   'ggit-utils.c',
 ]
 
+if enable_ssh
+  headers += [
+    'ggit-cred-ssh-interactive.h',
+    'ggit-cred-ssh-key-from-agent.h',
+  ]
+  sources += [
+    'ggit-cred-ssh-interactive.c',
+    'ggit-cred-ssh-key-from-agent.c',
+  ]
+endif
+
 configure_file(input : 'ggit.h.in',
                output : 'ggit.h',
                configuration : ggit_h_data,

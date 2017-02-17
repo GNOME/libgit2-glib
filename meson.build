@@ -182,8 +182,9 @@ ggit_h_data = configuration_data()
 ggit_h_data.set('GGIT_SSH_INCLUDES', '')
 
 # Check for libgit2 ssh support
-enable_ssh = get_option('enable-ssh')
-if enable_ssh != 'no'
+enable_ssh_opt = get_option('enable-ssh')
+enable_ssh = false
+if enable_ssh_opt != 'no'
   have_libgit2_ssh = cc.compiles('''
     #include <git2.h>
     int
@@ -195,7 +196,7 @@ if enable_ssh != 'no'
   ''',
   name: 'libgit2 supports SSH')
 
-  if enable_ssh == 'yes' and not have_libgit2_ssh
+  if enable_ssh_opt == 'yes' and not have_libgit2_ssh
     error('libgit2 ssh support was requested, but not found')
   endif
 
@@ -206,6 +207,7 @@ if enable_ssh != 'no'
 '''
     ggit_h_data.set('GGIT_SSH_INCLUDES', ssh_includes)
     extra_args += [ '-DGIT_SSH=1' ]
+    enable_ssh = true
   endif
 endif
 
