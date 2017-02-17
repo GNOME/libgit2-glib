@@ -12,7 +12,7 @@ libgit2_glib_major_version = version_array[0].to_int()
 libgit2_glib_minor_version = version_array[1].to_int()
 libgit2_glib_micro_version = version_array[2].to_int()
 
-libgit2_glib_api_version = '@0@.0'.format(libgit2_glib_major_version)
+libgit2_glib_api_version = '1.0'
 
 # The interface age is reset every time we add new API; this
 # should only happen during development cycles, otherwise the
@@ -209,8 +209,8 @@ endif
 gnome = import('gnome')
 
 # Generate the pkg-config files
-configure_file(input: 'libgit2-glib-1.0.pc.in',
-               output: 'libgit2-glib-1.0.pc',
+configure_file(input: 'libgit2-glib-@0@.pc.in'.format(libgit2_glib_api_version),
+               output: 'libgit2-glib-@0@.pc'.format(libgit2_glib_api_version),
                configuration: conf,
                install: true,
                install_dir: join_paths(libgit2_glib_libdir, 'pkgconfig'))
