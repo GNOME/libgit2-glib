@@ -34,6 +34,9 @@ libversion = '@0@.@1@.@2@'.format(soversion, current, revision)
 libgit2_glib_prefix = get_option('prefix')
 libgit2_glib_libdir = join_paths(libgit2_glib_prefix, get_option('libdir'))
 libgit2_glib_includedir = join_paths(libgit2_glib_prefix, get_option('includedir'))
+libgit2_glib_includedir_real = join_paths(libgit2_glib_includedir,
+                                          'libgit2-glib-@0@'.format(libgit2_glib_api_version),
+                                          'libgit2-glib')
 libgit2_glib_datadir = join_paths(libgit2_glib_prefix, get_option('datadir'))
 
 cc = meson.get_compiler('c')

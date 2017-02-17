@@ -146,16 +146,16 @@ sources = [
 configure_file(input : 'ggit.h.in',
                output : 'ggit.h',
                configuration : ggit_h_data,
-               install_dir: join_paths(get_option('includedir'), 'libgit2-glib-@0@'.format(libgit2_glib_api_version)))
+               install_dir: libgit2_glib_includedir_real)
 
 enum_types = gnome.mkenums('ggit-enum-types',
   sources : headers,
   h_template : 'ggit-enum-types.h.template',
   c_template : 'ggit-enum-types.c.template',
   install_header : true,
-  install_dir : get_option('includedir'))
+  install_dir: libgit2_glib_includedir_real)
 
-install_headers(headers, subdir: 'libgit2-glib-@0@'.format(libgit2_glib_api_version))
+install_headers(headers, subdir: libgit2_glib_includedir_real)
 
 pkgconfig_files = [ 'libgit2-glib-@0@'.format(libgit2_glib_api_version) ]
 platform_deps = [ glib, gobject, gio, libgit2 ]
