@@ -189,7 +189,7 @@ libgit2_glib = shared_library('git2-glib-@0@'.format(libgit2_glib_api_version),
   link_args: libgit2_glib_link_args)
 
 # Internal dependency, for tests and benchmarks
-libgit2_glib_inc = include_directories([ meson.current_source_dir(), meson.current_build_dir(), meson.build_root(), meson.source_root() ])
+libgit2_glib_inc = include_directories([ '.', '..' ])
 libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
                                       include_directories: [ libgit2_glib_inc ],
                                       dependencies: platform_deps,
