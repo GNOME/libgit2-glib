@@ -536,7 +536,7 @@ ggit_diff_format_email_options_set_author (GgitDiffFormatEmailOptions *options,
 	if (author)
 	{
 		priv->author = ggit_signature_copy (author);
-		priv->options.author = _ggit_native_get (author);
+		priv->options.author = _ggit_native_get (priv->author);
 	}
 
 	g_object_notify (G_OBJECT (options), "author");
