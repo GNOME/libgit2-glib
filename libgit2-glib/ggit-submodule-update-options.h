@@ -50,10 +50,6 @@ GgitFetchOptions      *ggit_submodule_update_options_get_fetch_options     (Ggit
 void                   ggit_submodule_update_options_set_fetch_options     (GgitSubmoduleUpdateOptions *options,
                                                                             GgitFetchOptions           *fetch_options);
 
-GgitCheckoutStrategy   ggit_submodule_update_options_get_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options);
-void                   ggit_submodule_update_options_set_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options,
-                                                                                  GgitCheckoutStrategy        checkout_strategy);
-
 G_END_DECLS
 
 #endif /* __GGIT_SUBMODULE_UPDATE_OPTIONS_H__ */

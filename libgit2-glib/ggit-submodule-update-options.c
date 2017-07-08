@@ -44,7 +44,6 @@ enum
 	PROP_0,
 	PROP_CHECKOUT_OPTIONS,
 	PROP_FETCH_OPTIONS,
-	PROP_CLONE_CHECKOUT_STRATEGY,
 };
 
 static void
@@ -79,10 +78,6 @@ ggit_submodule_update_options_set_property (GObject      *object,
 		ggit_submodule_update_options_set_fetch_options (options,
 		                                                 g_value_get_boxed (value));
 		break;
-	case PROP_CLONE_CHECKOUT_STRATEGY:
-		ggit_submodule_update_options_set_clone_checkout_strategy (options,
-		                                                           g_value_get_flags (value));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		break;
@@ -107,10 +102,6 @@ ggit_submodule_update_options_get_property (GObject    *object,
 		break;
 	case PROP_FETCH_OPTIONS:
 		g_value_set_boxed (value, priv->fetch_options);
-		break;
-	case PROP_CLONE_CHECKOUT_STRATEGY:
-		g_value_set_flags (value,
-		                   ggit_submodule_update_options_get_clone_checkout_strategy (options));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -142,16 +133,6 @@ ggit_submodule_update_options_class_init (GgitSubmoduleUpdateOptionsClass *klass
 	                                                     "Fetch options",
 	                                                     "Fetch options",
 	                                                     GGIT_TYPE_FETCH_OPTIONS,
-	                                                     G_PARAM_READWRITE |
-	                                                     G_PARAM_STATIC_STRINGS));
-
-	g_object_class_install_property (object_class,
-	                                 PROP_CLONE_CHECKOUT_STRATEGY,
-	                                 g_param_spec_flags ("clone-checkout-strategy",
-	                                                     "Clone Checkout Strategy",
-	                                                     "Clone checkout strategy",
-	                                                     GGIT_TYPE_CHECKOUT_STRATEGY,
-	                                                     GGIT_CHECKOUT_NONE,
 	                                                     G_PARAM_READWRITE |
 	                                                     G_PARAM_STATIC_STRINGS));
 }
@@ -316,52 +297,6 @@ ggit_submodule_update_options_set_fetch_options (GgitSubmoduleUpdateOptions *opt
 	}
 
 	g_object_notify (G_OBJECT (options), "fetch-options");
-}
-
-/**
- * ggit_submodule_update_options_get_clone_checkout_strategy:
- * @options: a #GgitSubmoduleUpdateOptions.
- *
- * Gets the clone checkout strategy.
- *
- * Returns: the clone checkout strategy.
- */
-GgitCheckoutStrategy
-ggit_submodule_update_options_get_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options)
-{
-	GgitSubmoduleUpdateOptionsPrivate *priv;
-
-	g_return_val_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), GGIT_CHECKOUT_NONE);
-
-	priv = ggit_submodule_update_options_get_instance_private (options);
-
-	return priv->options.clone_checkout_strategy;
-}
-
-/**
- * ggit_submodule_update_options_set_clone_checkout_strategy:
- * @options: a #GgitSubmoduleUpdateOptions.
- * @checkout_strategy: a #GgitCheckoutStrategy.
- *
- * Sets the clone checkout strategy. Use %GGIT_CHECKOUT_SAFE_CREATE to create
- * all files in the working directory for the newly cloned repository.
- */
-void
-ggit_submodule_update_options_set_clone_checkout_strategy (GgitSubmoduleUpdateOptions *options,
-                                                           GgitCheckoutStrategy        checkout_strategy)
-{
-	GgitSubmoduleUpdateOptionsPrivate *priv;
-
-	g_return_if_fail (GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
-
-	priv = ggit_submodule_update_options_get_instance_private (options);
-
-	if (priv->options.clone_checkout_strategy != checkout_strategy)
-	{
-		priv->options.clone_checkout_strategy = checkout_strategy;
-
-		g_object_notify (G_OBJECT (options), "clone-checkout-strategy");
-	}
 }
 
 /* ex:set ts=8 noet: */
