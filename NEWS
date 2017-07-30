@@ -1,3 +1,7 @@
+News in 0.26.0
+--------------
+* Port to libgit2 0.26.x
+
 News in 0.25.0
 --------------
 * Port to libgit2 0.25.x
