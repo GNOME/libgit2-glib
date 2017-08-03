@@ -43,6 +43,8 @@
 #include "ggit-index-entry.h"
 #include "ggit-annotated-commit.h"
 #include "ggit-rebase-options.h"
+#include "ggit-blob.h"
+#include "ggit-tag.h"
 
 
 typedef struct _GgitRepositoryPrivate
@@ -1934,6 +1936,150 @@ ggit_repository_lookup_branch (GgitRepository *repository,
 	}
 
 	return _ggit_branch_wrap (branch);
+}
+
+/**
+ * ggit_repository_lookup_blob:
+ * @repository: a #GgitRepository.
+ * @oid: a #GgitOId.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a branch by its name in a repository.
+ *
+ * Returns: (transfer full) (allow-none): a #GgitBlog pointer.
+ */
+GgitBlob *
+ggit_repository_lookup_blob (GgitRepository *repository,
+                             GgitOId        *oid,
+                             GError         **error)
+{
+	gint ret;
+	git_blob *blob;
+	const git_oid *id;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	id = (const git_oid *)_ggit_oid_get_oid (oid);
+	ret = git_blob_lookup (&blob,
+	                       _ggit_native_get (repository),
+	                       id);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_blob_wrap (blob, TRUE);
+}
+
+/**
+ * ggit_repository_lookup_commit:
+ * @repository: a #GgitRepository.
+ * @oid: a #GgitOId.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a branch by its name in a repository.
+ *
+ * Returns: (transfer full) (allow-none): a #GgitCommit pointer.
+ */
+GgitCommit *
+ggit_repository_lookup_commit (GgitRepository *repository,
+                               GgitOId        *oid,
+                               GError         **error)
+{
+	gint ret;
+	git_commit *commit;
+	const git_oid *id;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	id = (const git_oid *)_ggit_oid_get_oid (oid);
+	ret = git_commit_lookup (&commit,
+	                         _ggit_native_get (repository),
+	                         id);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_commit_wrap (commit, TRUE);
+}
+
+/**
+ * ggit_repository_lookup_tag:
+ * @repository: a #GgitRepository.
+ * @oid: a #GgitOId.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a branch by its name in a repository.
+ *
+ * Returns: (transfer full) (allow-none): a #GgitTag pointer.
+ */
+GgitTag *
+ggit_repository_lookup_tag (GgitRepository *repository,
+                            GgitOId        *oid,
+                            GError         **error)
+{
+	gint ret;
+	git_tag *tag;
+	const git_oid *id;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	id = (const git_oid *)_ggit_oid_get_oid (oid);
+	ret = git_tag_lookup (&tag,
+	                      _ggit_native_get (repository),
+	                      id);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_tag_wrap (tag, TRUE);
+}
+
+/**
+ * ggit_repository_lookup_tree:
+ * @repository: a #GgitRepository.
+ * @oid: a #GgitOId.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Lookups a branch by its name in a repository.
+ *
+ * Returns: (transfer full) (allow-none): a #GgitTree pointer.
+ */
+GgitTree *
+ggit_repository_lookup_tree (GgitRepository *repository,
+                             GgitOId        *oid,
+                             GError         **error)
+{
+	gint ret;
+	git_tree *tree;
+	const git_oid *id;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	id = (const git_oid *)_ggit_oid_get_oid (oid);
+	ret = git_tree_lookup (&tree,
+	                       _ggit_native_get (repository),
+	                       id);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_tree_wrap (tree, TRUE);
 }
 
 /**

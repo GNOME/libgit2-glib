@@ -41,6 +41,8 @@
 #include <libgit2-glib/ggit-tree-builder.h>
 #include <libgit2-glib/ggit-remote.h>
 #include <libgit2-glib/ggit-rebase.h>
+#include <libgit2-glib/ggit-blob.h>
+#include <libgit2-glib/ggit-tag.h>
 
 G_BEGIN_DECLS
 
@@ -238,6 +240,22 @@ GgitBranchEnumerator *ggit_repository_enumerate_branches (GgitRepository        
 GgitBranch         *ggit_repository_lookup_branch     (GgitRepository        *repository,
                                                        const gchar           *branch_name,
                                                        GgitBranchType         branch_type,
+                                                       GError               **error);
+
+GgitBlob           *ggit_repository_lookup_blob       (GgitRepository        *repository,
+                                                       GgitOId               *oid,
+                                                             GError         **error);
+
+GgitCommit         *ggit_repository_lookup_commit     (GgitRepository        *repository,
+                                                       GgitOId               *oid,
+                                                       GError               **error);
+
+GgitTag            *ggit_repository_lookup_tag        (GgitRepository        *repository,
+                                                       GgitOId               *oid,
+                                                       GError               **error);
+
+GgitTree           *ggit_repository_lookup_tree       (GgitRepository        *repository,
+                                                       GgitOId               *oid,
                                                        GError               **error);
 
 GgitRemote         *ggit_repository_lookup_remote     (GgitRepository        *repository,
