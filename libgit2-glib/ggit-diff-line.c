@@ -70,7 +70,7 @@ _ggit_diff_line_wrap (const git_diff_line *line,
  * Atomically increments the reference count of @line by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitDiffLine.
+ * Returns: (transfer none) (allow-none): a #GgitDiffLine or %NULL.
  **/
 GgitDiffLine *
 ggit_diff_line_ref (GgitDiffLine *line)
@@ -195,7 +195,7 @@ ggit_diff_line_get_content (GgitDiffLine *line,
  *
  * Get the content of the diff line as UTF-8 encoded text.
  *
- * Returns: the content in utf-8 encoding.
+ * Returns: (transfer none) (allow-none): the content in utf-8 encoding or %NULL.
  *
  **/
 const gchar *
