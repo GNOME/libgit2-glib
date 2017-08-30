@@ -55,7 +55,7 @@ _ggit_diff_binary_wrap (const git_diff_binary *binary)
  * Atomically increments the reference count of @binary by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitDiffBinary.
+ * Returns: (transfer none) (nullable): a #GgitDiffBinary or %NULL.
  **/
 GgitDiffBinary *
 ggit_diff_binary_ref (GgitDiffBinary *binary)
@@ -93,7 +93,7 @@ ggit_diff_binary_unref (GgitDiffBinary *binary)
  *
  * Gets the #GgitDiffBinaryFile old file for @binary.
  *
- * Returns: (transfer none): the contents of the old file.
+ * Returns: (transfer none) (nullable): the contents of the old file or %NULL.
  */
 GgitDiffBinaryFile *
 ggit_diff_binary_get_old_file (GgitDiffBinary *binary)
@@ -109,7 +109,7 @@ ggit_diff_binary_get_old_file (GgitDiffBinary *binary)
  *
  * Gets the #GgitDiffBinaryFile new file for @binary.
  *
- * Returns: (transfer none): the contents of the new file.
+ * Returns: (transfer none) (nullable): the contents of the new file or %NULL.
  */
 GgitDiffBinaryFile *
 ggit_diff_binary_get_new_file (GgitDiffBinary *binary)
