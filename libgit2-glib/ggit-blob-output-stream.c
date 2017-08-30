@@ -286,7 +286,7 @@ _ggit_blob_output_stream_new (GgitRepository  *repository)
  * stream has been properly closed. If an error occurred while writing the blob,
  * the %NULL is returned and @error is set accordingly.
  *
- * Returns: (transfer full): a #GgitOId or %NULL.
+ * Returns: (transfer full) (nullable): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
