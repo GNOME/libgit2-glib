@@ -58,7 +58,7 @@ ggit_branch_enumerator_unref (GgitBranchEnumerator *enumerator)
  *
  * Get an iterator for the enumerator.
  *
- * Returns: (transfer none): a #GgitBranchEnumerator.
+ * Returns: (transfer none) (allow-none): a #GgitBranchEnumerator.
  *
  **/
 GgitBranchEnumerator *
@@ -112,7 +112,7 @@ ggit_branch_enumerator_next (GgitBranchEnumerator *enumerator)
  * returned GgitRef will be of type GgitBranch if the ref represents a local
  * branch.
  *
- * Returns: (transfer full): the branch ref.
+ * Returns: (transfer full) (allow-none): the branch ref.
  */
 GgitRef *
 ggit_branch_enumerator_get (GgitBranchEnumerator *enumerator)
