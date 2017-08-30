@@ -1402,7 +1402,7 @@ ggit_repository_get_config (GgitRepository  *repository,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_repository_config (&config,
 	                             _ggit_native_get (repository));
@@ -1434,7 +1434,7 @@ ggit_repository_get_index (GgitRepository  *repository,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_repository_index (&idx,
 	                            _ggit_native_get (repository));
@@ -1572,10 +1572,10 @@ ggit_repository_create_tag_lightweight (GgitRepository   *repository,
 	git_oid oid;
 	gint ret;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (tag_name != NULL, FALSE);
-	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (tag_name != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	force = flags & GGIT_CREATE_FORCE;
 
@@ -1620,12 +1620,12 @@ ggit_repository_create_tag_annotation (GgitRepository  *repository,
 	git_oid oid;
 	gint ret;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (tag_name != NULL, FALSE);
-	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
-	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), FALSE);
-	g_return_val_if_fail (message != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (tag_name != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), NULL);
+	g_return_val_if_fail (GGIT_IS_SIGNATURE (signature), NULL);
+	g_return_val_if_fail (message != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_tag_annotation_create (&oid,
 	                                 _ggit_native_get (repository),
@@ -1660,8 +1660,8 @@ ggit_repository_list_tags (GgitRepository  *repository,
 	git_strarray tag_names;
 	gchar **tags;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_tag_list (&tag_names,
 	                    _ggit_native_get (repository));
@@ -1699,8 +1699,8 @@ ggit_repository_list_tags_match (GgitRepository  *repository,
 	git_strarray tag_names;
 	gchar **tags;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_tag_list_match (&tag_names,
 	                          pattern ? pattern : "",
@@ -1843,10 +1843,10 @@ ggit_repository_create_branch (GgitRepository   *repository,
 	git_reference *reference;
 	gint ret;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (branch_name != NULL, FALSE);
-	g_return_val_if_fail (GGIT_IS_OBJECT (target), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (branch_name != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_OBJECT (target), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	force = flags & GGIT_CREATE_FORCE;
 
@@ -1920,9 +1920,9 @@ ggit_repository_lookup_branch (GgitRepository *repository,
 	gint ret;
 	git_reference *branch;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (branch_name != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (branch_name != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_branch_lookup (&branch,
 	                         _ggit_native_get (repository),
@@ -1957,8 +1957,8 @@ ggit_repository_lookup_blob (GgitRepository *repository,
 	git_blob *blob;
 	const git_oid *id;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	id = (const git_oid *)_ggit_oid_get_oid (oid);
 	ret = git_blob_lookup (&blob,
@@ -1993,8 +1993,8 @@ ggit_repository_lookup_commit (GgitRepository *repository,
 	git_commit *commit;
 	const git_oid *id;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	id = (const git_oid *)_ggit_oid_get_oid (oid);
 	ret = git_commit_lookup (&commit,
@@ -2029,8 +2029,8 @@ ggit_repository_lookup_tag (GgitRepository *repository,
 	git_tag *tag;
 	const git_oid *id;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	id = (const git_oid *)_ggit_oid_get_oid (oid);
 	ret = git_tag_lookup (&tag,
@@ -2065,8 +2065,8 @@ ggit_repository_lookup_tree (GgitRepository *repository,
 	git_tree *tree;
 	const git_oid *id;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	id = (const git_oid *)_ggit_oid_get_oid (oid);
 	ret = git_tree_lookup (&tree,
@@ -2172,8 +2172,8 @@ ggit_repository_list_remotes (GgitRepository  *repository,
 	git_strarray remote_names;
 	gchar **remotes;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_remote_list (&remote_names,
 	                       _ggit_native_get (repository));
@@ -3632,7 +3632,7 @@ ggit_repository_cherry_pick_commit (GgitRepository    *repository,
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (GGIT_IS_COMMIT (commit), NULL);
 	g_return_val_if_fail (GGIT_IS_COMMIT (our_commit), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_cherrypick_commit (&idx,
 	                             _ggit_native_get (repository),
@@ -3669,7 +3669,7 @@ ggit_repository_get_default_notes_ref (GgitRepository  *repository,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_note_default_ref (&buf, _ggit_native_get (repository));
 
@@ -3718,7 +3718,7 @@ ggit_repository_create_note (GgitRepository  *repository,
 	g_return_val_if_fail (GGIT_IS_SIGNATURE (committer), NULL);
 	g_return_val_if_fail (id != NULL, NULL);
 	g_return_val_if_fail (note != NULL, NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_note_create (&oid,
 	                       _ggit_native_get (repository),
@@ -3791,7 +3791,7 @@ ggit_repository_remove_note (GgitRepository  *repository,
  *
  * Reads the note for an object.
  *
- * Returns: (transfer full): the read note or %NULL in case of an error.
+ * Returns: (transfer full) (allow-none): the read note or %NULL in case of an error.
  */
 GgitNote *
 ggit_repository_read_note (GgitRepository  *repository,
@@ -3802,9 +3802,9 @@ ggit_repository_read_note (GgitRepository  *repository,
 	gint ret;
 	git_note *note;
 
-	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (id != NULL, FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (id != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_note_read (&note,
 	                     _ggit_native_get (repository),
@@ -3814,7 +3814,7 @@ ggit_repository_read_note (GgitRepository  *repository,
 	if (ret != GIT_OK)
 	{
 		_ggit_error_set (error, ret);
-		return FALSE;
+		return NULL;
 	}
 
 	return _ggit_note_wrap (note);
