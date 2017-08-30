@@ -32,6 +32,8 @@ _ggit_branch_enumerator_wrap (git_branch_iterator *iter)
 GgitBranchEnumerator *
 ggit_branch_enumerator_ref (GgitBranchEnumerator *enumerator)
 {
+	g_return_val_if_fail (enumerator != NULL, NULL);
+
 	g_atomic_int_inc (&enumerator->ref_count);
 	return enumerator;
 }
