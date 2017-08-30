@@ -67,7 +67,7 @@ _ggit_tree_wrap (git_tree *tree,
  *
  * Get the #GgitOId of the tree.
  *
- * Returns: (transfer full): a #GgitOId.
+ * Returns: (transfer full) (nullable): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
@@ -92,7 +92,7 @@ ggit_tree_get_id (GgitTree *tree)
  *
  * Get a tree entry by index.
  *
- * Returns: (transfer full): a #GgitTreeEntry.
+ * Returns: (transfer full) (nullable): a #GgitTreeEntry or %NULL.
  *
  **/
 GgitTreeEntry *
@@ -139,7 +139,7 @@ ggit_tree_size (GgitTree *tree)
  *
  * Get a tree entry by name.
  *
- * Returns: (transfer full): a #GgitTreeEntry.
+ * Returns: (transfer full) (nullable): a #GgitTreeEntry or %NULL.
  *
  **/
 GgitTreeEntry *
@@ -174,7 +174,7 @@ ggit_tree_get_by_name (GgitTree    *tree,
  * Retrieves a tree entry contained in a tree or in any of its subtrees,
  * given its relative path.
  *
- * Returns: (transfer full): a #GgitTreeEntry.
+ * Returns: (transfer full) (nullable): a #GgitTreeEntry or %NULL.
  *
  **/
 GgitTreeEntry *
