@@ -64,7 +64,7 @@ _ggit_diff_hunk_wrap (const git_diff_hunk *hunk)
  * Atomically increments the reference count of @hunk by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitDiffHunk.
+ * Returns: (transfer none) (allow-none): a #GgitDiffHunk or %NULL.
  **/
 GgitDiffHunk *
 ggit_diff_hunk_ref (GgitDiffHunk *hunk)
