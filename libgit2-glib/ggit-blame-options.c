@@ -49,7 +49,7 @@ _ggit_blame_options_get_blame_options (GgitBlameOptions *blame_options)
  *
  * Copies @blame_options into a newly allocated #GgitBlameOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitBlameOptions.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitBlameOptions or %NULL.
  */
 GgitBlameOptions *
 ggit_blame_options_copy (GgitBlameOptions *blame_options)
@@ -138,7 +138,7 @@ ggit_blame_set_flags (GgitBlameOptions *blame_options,
  * Get the id of the newest commit to consider in the blame. The default
  * value of %NULL indicates to use HEAD.
  *
- * Returns: (transfer full): a #GgitOId or %NULL.
+ * Returns: (transfer full) (allow-none): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
@@ -188,7 +188,7 @@ ggit_blame_options_set_newest_commit (GgitBlameOptions *blame_options,
  * Get the id of the oldest commit to consider in the blame. Teh default value
  * of %NULL indicates to used HEAD.
  *
- * Returns: (transfer full): a #GgitOId.
+ * Returns: (transfer full) (allow-none): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
