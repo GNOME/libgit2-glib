@@ -230,7 +230,7 @@ ggit_diff_format_email_options_init (GgitDiffFormatEmailOptions *options)
  *
  * Create a new checkout options object.
  *
- * Returns: a #GgitDiffFormatEmailOptions.
+ * Returns: (transfer full) (nullable): a #GgitDiffFormatEmailOptions or %NULL.
  *
  **/
 GgitDiffFormatEmailOptions *
@@ -391,7 +391,7 @@ ggit_diff_format_email_options_set_total_patches (GgitDiffFormatEmailOptions *op
  *
  * Get the object id.
  *
- * Returns: (transfer none): a #GgitOId.
+ * Returns: (transfer none) (nullable): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
@@ -446,7 +446,7 @@ ggit_diff_format_email_options_set_id (GgitDiffFormatEmailOptions *options,
  *
  * Get the summary.
  *
- * Returns: the summary.
+ * Returns: (transfer none) (nullable): the summary.
  *
  **/
 const gchar *
@@ -492,7 +492,7 @@ ggit_diff_format_email_options_set_summary (GgitDiffFormatEmailOptions *options,
  *
  * Get the author.
  *
- * Returns: (transfer none): a #GgitSignature.
+ * Returns: (transfer none) (nullable): a #GgitSignature or %NULL.
  *
  **/
 GgitSignature *
