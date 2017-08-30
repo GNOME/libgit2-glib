@@ -53,7 +53,7 @@ _ggit_diff_similarity_metric_get_similarity_metric (GgitDiffSimilarityMetric *me
  *
  * Copies @metric into a newly allocated #GgitDiffSimilarityMetric.
  *
- * Returns: (transfer full): a newly allocated #GgitDiffSimilarityMetric.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitDiffSimilarityMetric or %NULL.
  */
 GgitDiffSimilarityMetric *
 ggit_diff_similarity_metric_copy (GgitDiffSimilarityMetric *metric)
