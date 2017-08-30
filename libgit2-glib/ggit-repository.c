@@ -540,7 +540,7 @@ _ggit_repository_get_repository (GgitRepository *repository)
  *	The method will automatically detect if @path is a normal
  *	or bare repository or fail if it is neither.
  *
- * Returns: (transfer full): a newly created #GgitRepository.
+ * Returns: (transfer full) (allow-none): a newly created #GgitRepository.
  */
 GgitRepository *
 ggit_repository_open (GFile   *location,
@@ -564,7 +564,7 @@ ggit_repository_open (GFile   *location,
  *
  * Creates a new git repository in the given folder.
  *
- * Returns: (transfer full): a newly created #GgitRepository.
+ * Returns: (transfer full) (allow-none): a newly created #GgitRepository.
  */
 GgitRepository *
 ggit_repository_init_repository (GFile     *location,
@@ -590,7 +590,7 @@ ggit_repository_init_repository (GFile     *location,
  *
  * Clones a new git repository in the given folder.
  *
- * Returns: (transfer full): a newly created #GgitRepository.
+ * Returns: (transfer full) (allow-none): a newly created #GgitRepository.
  */
 GgitRepository *
 ggit_repository_clone (const gchar       *url,
@@ -625,7 +625,7 @@ ggit_repository_clone (const gchar       *url,
  * The special value %G_TYPE_NONE may be passed to let
  * the method guess the object's type.
  *
- * Returns: (transfer full): the found #GgitObject, or %NULL on error.
+ * Returns: (transfer full) (allow-none): the found #GgitObject, or %NULL on error.
  */
 GgitObject *
 ggit_repository_lookup (GgitRepository  *repository,
@@ -671,7 +671,7 @@ ggit_repository_lookup (GgitRepository  *repository,
  * or the documentation for `git rev-parse` for information on the syntax
  * accepted.
  *
- * Returns: (transfer full): a #GgitObject or %NULL if the revision could not be found.
+ * Returns: (transfer full) (allow-none): a #GgitObject or %NULL if the revision could not be found.
  *
  **/
 GgitObject *
@@ -709,7 +709,7 @@ ggit_repository_revparse (GgitRepository  *repository,
  * Lookups a reference by its name in @repository. The returned #GgitRef must
  * be freed with g_object_unref().
  *
- * Returns: (transfer full): the searched reference.
+ * Returns: (transfer full) (allow-none): the searched reference.
  */
 GgitRef *
 ggit_repository_lookup_reference (GgitRepository  *repository,
@@ -748,7 +748,7 @@ ggit_repository_lookup_reference (GgitRepository  *repository,
  * rules to the given shorthand to determine which reference the user is referring to.
  * The returned #GgitRef must be freed with g_object_unref().
  *
- * Returns: (transfer full): the searched reference.
+ * Returns: (transfer full) (allow-none): the searched reference.
  */
 GgitRef *
 ggit_repository_lookup_reference_dwim (GgitRepository  *repository,
@@ -790,7 +790,7 @@ ggit_repository_lookup_reference_dwim (GgitRepository  *repository,
  * The reference will be created in the repository and written
  * to the disk. The returned value must be freed with g_object_unref().
  *
- * Returns: (transfer full): the newly created reference.
+ * Returns: (transfer full) (allow-none): the newly created reference.
  */
 GgitRef *
 ggit_repository_create_reference (GgitRepository  *repository,
@@ -838,7 +838,7 @@ ggit_repository_create_reference (GgitRepository  *repository,
  * The reference will be created in the repository and written
  * to the disk. The returned value must be freed with g_object_unref().
  *
- * Returns: (transfer full): the newly created reference.
+ * Returns: (transfer full) (allow-none): the newly created reference.
  */
 GgitRef *
 ggit_repository_create_symbolic_reference (GgitRepository  *repository,
@@ -883,7 +883,7 @@ ggit_repository_create_symbolic_reference (GgitRepository  *repository,
  * retrieve the symbolic ref called HEAD, then use #ggit_repository_lookup_reference
  * instead.
  *
- * Returns: (transfer full): a #GgitRef
+ * Returns: (transfer full) (allow-none): a #GgitRef
  *
  **/
 GgitRef *
@@ -952,7 +952,7 @@ ggit_repository_set_head (GgitRepository   *repository,
  * The lookup starts from @path and walks up the parent directories
  * and stops when a repository is found.
  *
- * Returns: (transfer full): the repository location.
+ * Returns: (transfer full) (allow-none): the repository location.
  */
 GFile *
 ggit_repository_discover (GFile   *location,
@@ -977,7 +977,7 @@ ggit_repository_discover (GFile   *location,
  * The lookup starts from @path and walks up the parent directories
  * and stops when a repository is found.
  *
- * Returns: (transfer full): the repository location.
+ * Returns: (transfer full) (allow-none): the repository location.
  */
 GFile *
 ggit_repository_discover_full (GFile        *location,
@@ -1122,7 +1122,7 @@ ggit_repository_is_empty (GgitRepository  *repository,
  *
  * Get the gitdir location of the repository.
  *
- * Returns: (transfer full): the location of the gitdir of the repository.
+ * Returns: (transfer full) (allow-none): the location of the gitdir of the repository.
  */
 GFile *
 ggit_repository_get_location (GgitRepository *repository)
@@ -1142,7 +1142,7 @@ ggit_repository_get_location (GgitRepository *repository)
  *
  * Gets the working directory of the repository.
  *
- * Returns: (transfer full): the location of the working directory of the repository.
+ * Returns: (transfer full) (allow-none): the location of the working directory of the repository.
  */
 GFile *
 ggit_repository_get_workdir (GgitRepository *repository)
@@ -1391,7 +1391,7 @@ ggit_repository_references_foreach_name (GgitRepository             *repository,
  *
  * Get the config for a specific repository.
  *
- * Returns: (transfer full): a #GgitConfig.
+ * Returns: (transfer full) (allow-none): a #GgitConfig.
  *
  **/
 GgitConfig *
@@ -1423,7 +1423,7 @@ ggit_repository_get_config (GgitRepository  *repository,
  *
  * Get the index for a specific repository.
  *
- * Returns: (transfer full): a #GgitIndex.
+ * Returns: (transfer full) (allow-none): a #GgitIndex.
  *
  **/
 GgitIndex *
@@ -1874,7 +1874,7 @@ ggit_repository_create_branch (GgitRepository   *repository,
  * Get a branch enumerator to enumerate over all branches of the specified
  * @list_type in @repository.
  *
- * Returns: (transfer full): a branch enumerator.
+ * Returns: (transfer full) (allow-none): a branch enumerator.
  **/
 GgitBranchEnumerator *
 ggit_repository_enumerate_branches (GgitRepository  *repository,
@@ -2632,7 +2632,7 @@ ggit_repository_reset_default (GgitRepository       *repository,
  * It returns the commit containing the stashed state.
  * This commit is also the target of the direct reference refs/stash.
  *
- * Returns: (transfer full): a new object id of the commit containing the stashed state.
+ * Returns: (transfer full) (allow-none): a new object id of the commit containing the stashed state.
  */
 GgitOId *
 ggit_repository_save_stash (GgitRepository  *repository,
@@ -2855,7 +2855,7 @@ ggit_repository_get_descendant_of (GgitRepository  *repository,
  * blob id can be obtained from the blob output stream using
  * #ggit_blob_output_stream_get_id, after you close the stream.
  *
- * Returns: (transfer full): a #GgitBlobOutputStream.
+ * Returns: (transfer full) (allow-none): a #GgitBlobOutputStream.
  *
  **/
 GgitBlobOutputStream *
@@ -2874,8 +2874,8 @@ ggit_repository_create_blob (GgitRepository *repository)
  *
  * Write an in-memory buffer to the object database as a blob.
  *
- * Returns: the new #GgitOid of the written blob, or %NULL if writing the blob
- * failed.
+ * Returns: (transfer full) (allow-none): the new #GgitOid of the written blob,
+ * or %NULL if writing the blob failed.
  */
 GgitOId *
 ggit_repository_create_blob_from_buffer (GgitRepository  *repository,
@@ -2912,8 +2912,8 @@ ggit_repository_create_blob_from_buffer (GgitRepository  *repository,
  *
  * Write a file to the object database as a blob.
  *
- * Returns: the new #GgitOid of the written blob, or %NULL if writing the blob
- * failed.
+ * Returns (transfer full) (allow-none): the new #GgitOid of the written blob,
+ * or %NULL if writing the blob failed.
  */
 GgitOId *
 ggit_repository_create_blob_from_file (GgitRepository  *repository,
@@ -2954,8 +2954,8 @@ ggit_repository_create_blob_from_file (GgitRepository  *repository,
  * Write a path relative to the repository working directory to the object
  * database as a blob.
  *
- * Returns: the new #GgitOid of the written blob, or %NULL if writing the blob
- * failed.
+ * Returns: (transfer full) (allow-none): the new #GgitOid of the written blob,
+ * or %NULL if writing the blob failed.
  */
 GgitOId *
 ggit_repository_create_blob_from_path (GgitRepository  *repository,
@@ -3003,7 +3003,8 @@ ggit_repository_create_blob_from_path (GgitRepository  *repository,
  * provided @message. Note that @message will not be cleaned up automatically.
  * You can use #ggit_message_prettify to do this yourself if needed.
  *
- * Returns: the #GgitOId of the created commit object, or %NULL in case of an error.
+ * Returns: (transfer full) (allow-none): the #GgitOId of the created commit object,
+ * or %NULL in case of an error.
  *
  */
 GgitOId *
@@ -3073,7 +3074,8 @@ ggit_repository_create_commit (GgitRepository  *repository,
  * provided @message. Note that @message will not be cleaned up automatically.
  * You can use #ggit_message_prettify to do this yourself if needed.
  *
- * Returns: the #GgitOId of the created commit object, or %NULL in case of an error.
+ * Returns: (transfer full) (allow-none): the #GgitOId of the created commit object,
+ * or %NULL in case of an error.
  *
  */
 GgitOId *
@@ -3129,7 +3131,8 @@ ggit_repository_create_commit_from_ids (GgitRepository  *repository,
  *
  * Create a new tree builder.
  *
- * Returns: (transfer full): a new #GgitTreeBuilder, or %NULL if there was an error.
+ * Returns: (transfer full) (allow-none): a new #GgitTreeBuilder,
+ * or %NULL if there was an error.
  **/
 GgitTreeBuilder *
 ggit_repository_create_tree_builder (GgitRepository  *repository,
@@ -3161,7 +3164,8 @@ ggit_repository_create_tree_builder (GgitRepository  *repository,
  * Create a tree builder for initialized with @tree. To create an empty
  * tree builder, use #ggit_repository_create_tree_builder instead.
  *
- * Returns: (transfer full): a new #GgitTreeBuilder object, or %NULL if there was an error.
+ * Returns: (transfer full) (allow-none): a new #GgitTreeBuilder object,
+ * or %NULL if there was an error.
  **/
 GgitTreeBuilder *
 ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
@@ -3205,7 +3209,7 @@ ggit_repository_create_tree_builder_from_tree (GgitRepository  *repository,
  * (see #ggit_index_entry_get_id) which could point to a blob (for a file)
  * or a tree (for a directory).
  *
- * Returns: a #GgitIndexEntry or %NULL when an error occurred.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntry or %NULL when an error occurred.
  *
  **/
 GgitIndexEntry *
@@ -3268,7 +3272,7 @@ ggit_repository_create_index_entry_for_file (GgitRepository  *repository,
  * (see #ggit_index_entry_get_id) which could point to a blob (for a file)
  * or a tree (for a directory).
  *
- * Returns: a #GgitIndexEntry or %NULL when an error occurred.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntry or %NULL when an error occurred.
  *
  **/
 GgitIndexEntry *
@@ -3321,7 +3325,7 @@ ggit_repository_create_index_entry_for_path (GgitRepository  *repository,
  *
  * Get a blame for a single file.
  *
- * Returns: (transfer full): a #GgitBlame.
+ * Returns: (transfer full) (allow-none): a #GgitBlame.
  *
  **/
 GgitBlame *
@@ -3369,7 +3373,7 @@ ggit_repository_blame_file (GgitRepository    *repository,
  *
  * Get the attribute value of the specified attribute for the given file.
  *
- * Returns: the attribute value, or %NULL.
+ * Returns: (transfer none) (allow-none): the attribute value, or %NULL.
  *
  **/
 const gchar *
@@ -3611,7 +3615,7 @@ ggit_repository_cherry_pick (GgitRepository         *repository,
  * Cherry-picks the given @commit against the provided @our_commit, producing
  * and index that reflects the result of the cherry-pick.
  *
- * Returns: (transfer full): a #GgitIndex.
+ * Returns: (transfer full) (allow-none): a #GgitIndex.
  *
  **/
 GgitIndex *
@@ -3654,7 +3658,7 @@ ggit_repository_cherry_pick_commit (GgitRepository    *repository,
  * Gets the default notes reference for @repository. It defaults to
  * "refs/notes/commits".
  *
- * Returns: (transfer full): the default notes reference for @repository.
+ * Returns: (transfer full) (allow-none): the default notes reference for @repository.
  */
 gchar *
 ggit_repository_get_default_notes_ref (GgitRepository  *repository,
@@ -3694,7 +3698,7 @@ ggit_repository_get_default_notes_ref (GgitRepository  *repository,
  *
  * Adds a note for an object.
  *
- * Returns: (transfer full): the OID for the note or %NULL in case of error.
+ * Returns: (transfer full) (allow-none): the OID for the note or %NULL in case of error.
  */
 GgitOId *
 ggit_repository_create_note (GgitRepository  *repository,
@@ -3900,7 +3904,7 @@ ggit_repository_note_foreach (GgitRepository    *repository,
  *
  * Merge two trees creating a #GgitIndex reflecting the result of the merge.
  *
- * Returns: (transfer full): a new #GgitIndex or %NULL if an error occurred.
+ * Returns: (transfer full) (allow-none): a new #GgitIndex or %NULL if an error occurred.
  *
  **/
 GgitIndex *
@@ -3946,7 +3950,7 @@ ggit_repository_merge_trees (GgitRepository    *repository,
  *
  * Merge two commits creating a #GgitIndex reflecting the result of the merge.
  *
- * Returns: (transfer full): a new #GgitIndex or %NULL if an error occurred.
+ * Returns: (transfer full) (allow-none): a new #GgitIndex or %NULL if an error occurred.
  *
  **/
 GgitIndex *
@@ -3996,7 +4000,7 @@ ggit_repository_merge_commits (GgitRepository    *repository,
  * process, call git_rebase_next(). When you have finished with this
  * object, call g_object_unref().
  *
- * Returns: (transfer full): a newly allocated #GgitRebase.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitRebase.
  */
 GgitRebase *
 ggit_repository_rebase_init (GgitRepository       *repository,
@@ -4037,7 +4041,7 @@ ggit_repository_rebase_init (GgitRepository       *repository,
  * Opens an existing rebase that was previously started by either an
  * invocation of ggit_rebase_init() or by another client.
  *
- * Returns: (transfer full): a newly allocated #GgitRebase.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitRebase.
  */
 GgitRebase *
 ggit_repository_rebase_open (GgitRepository     *repository,
