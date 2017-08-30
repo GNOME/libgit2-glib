@@ -74,7 +74,7 @@ _ggit_blob_wrap (git_blob *blob,
  * not be free'd. The pointer may be invalidated at a later
  * time.
  *
- * Returns: (array length=length) (element-type guchar): the blob content or
+ * Returns: (array length=length) (element-type guchar) (nullable): the blob content or
  *          %NULL if the blob does not have any content.
  *
  **/
