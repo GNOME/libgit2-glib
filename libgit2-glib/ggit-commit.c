@@ -98,7 +98,7 @@ _ggit_commit_wrap (git_commit *commit,
  * The encoding may be %NULL if the 'encoding' header
  * in the commit is missing; in that case UTF-8 is assumed.
  *
- * Returns: the encoding of the commit message or %NULL.
+ * Returns: (transfer none) (nullable): the encoding of the commit message or %NULL.
  */
 const gchar *
 ggit_commit_get_message_encoding (GgitCommit *commit)
@@ -164,7 +164,7 @@ ensure_message_utf8 (GgitCommit *commit)
  * Gets the full message of @commit. The resulting message is always encoded
  * in UTF-8.
  *
- * Returns: the message of the commit.
+ * Returns: (transfer none) (nullable): the message of the commit.
  */
 const gchar *
 ggit_commit_get_message (GgitCommit *commit)
@@ -188,7 +188,7 @@ ggit_commit_get_message (GgitCommit *commit)
  * the commit message (as per convention). The resulting subject is always
  * encoded in UTF-8.
  *
- * Returns: the subject of the commit.
+ * Returns: (transfer none) (nullable): the subject of the commit.
  */
 const gchar *
 ggit_commit_get_subject (GgitCommit *commit)
@@ -218,7 +218,7 @@ ggit_commit_get_subject (GgitCommit *commit)
  * Gets the committer of @commit. The returned value must be free'd with
  * g_object_unref().
  *
- * Returns: (transfer full): the committer of the commit.
+ * Returns: (transfer full) (nullable): the committer of the commit.
  */
 GgitSignature *
 ggit_commit_get_committer (GgitCommit *commit)
@@ -245,7 +245,7 @@ ggit_commit_get_committer (GgitCommit *commit)
  * Gets the author of @commit. The returned value must be free'd with
  * g_object_unref().
  *
- * Returns: (transfer full): the author of the commit.
+ * Returns: (transfer full) (nullable): the author of the commit.
  */
 GgitSignature *
 ggit_commit_get_author (GgitCommit *commit)
@@ -271,7 +271,7 @@ ggit_commit_get_author (GgitCommit *commit)
  *
  * Gets the parents collection for @commit.
  *
- * Returns: (transfer full): the parents collection of the commit.
+ * Returns: (transfer full) (nullable): the parents collection of the commit.
  */
 GgitCommitParents *
 ggit_commit_get_parents (GgitCommit *commit)
@@ -287,7 +287,7 @@ ggit_commit_get_parents (GgitCommit *commit)
  *
  * Get the tree object for @commit.
  *
- * Returns: (transfer full): a #GgitTree.
+ * Returns: (transfer full) (nullable): a #GgitTree.
  *
  **/
 GgitTree *
@@ -318,7 +318,7 @@ ggit_commit_get_tree (GgitCommit *commit)
  * than getting the tree object with ggit_commit_get_tree() because no additional
  * files need to be read from disk.
  *
- * Returns: (transfer full): a #GgitOId.
+ * Returns: (transfer full) (nullable): a #GgitOId.
  *
  **/
 GgitOId *
@@ -346,7 +346,7 @@ ggit_commit_get_tree_id (GgitCommit *commit)
  * of the named commit object, following only the first parents.
  * Passing %0 to the @n parameter returns another instance of @commit.
  *
- * Returns: (transfer full): the @n ancestor commit.
+ * Returns: (transfer full) (nullable): the @n ancestor commit.
  */
 GgitCommit *
 ggit_commit_get_nth_ancestor (GgitCommit  *commit,
@@ -389,7 +389,8 @@ ggit_commit_get_nth_ancestor (GgitCommit  *commit,
  * provided @message. Note that @message will not be cleaned up automatically.
  * You can use #ggit_message_prettify to do this yourself if needed.
  *
- * Returns: the #GgitOId of the created commit object, or %NULL in case of an error.
+ * Returns: (transfer full) (nullable): the #GgitOId of the created commit object,
+ * or %NULL in case of an error.
  *
  */
 GgitOId *
