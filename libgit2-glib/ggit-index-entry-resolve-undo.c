@@ -75,7 +75,7 @@ _ggit_index_entries_resolve_undo_wrap (GgitIndex *owner)
  * Atomically increments the reference count of @entry by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitIndexEntryResolveUndo.
+ * Returns: (transfer none) (allow-none): a #GgitIndexEntryResolveUndo or %NULL.
  **/
 GgitIndexEntryResolveUndo *
 ggit_index_entry_resolve_undo_ref (GgitIndexEntryResolveUndo *entry)
@@ -112,7 +112,7 @@ ggit_index_entry_resolve_undo_unref (GgitIndexEntryResolveUndo *entry)
  * Atomically increments the reference count of @entries by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitIndexEntriesResolveUndo.
+ * Returns: (transfer none) (allow-none): a #GgitIndexEntriesResolveUndo or %NULL.
  *
  **/
 GgitIndexEntriesResolveUndo *
@@ -156,7 +156,7 @@ ggit_index_entries_resolve_undo_unref (GgitIndexEntriesResolveUndo *entries)
  * 2) The entry has not been removed (see ggit_index_remove())
  * 3) The index has not been refreshed (see ggit_index_read())
  *
- * Returns: (transfer full): a #GgitIndexEntryResolveUndo.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntryResolveUndo or %NULL.
  *
  **/
 GgitIndexEntryResolveUndo *
@@ -204,7 +204,7 @@ ggit_index_entries_resolve_undo_size (GgitIndexEntriesResolveUndo *entries)
  * only and should not be modified by the caller. If the entry could not be
  * found, %NULL is returned.
  *
- * Returns: (transfer full): a #GgitIndexEntryResolveUndo or %NULL.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntryResolveUndo or %NULL.
  *
  **/
 GgitIndexEntryResolveUndo *
@@ -264,7 +264,7 @@ ggit_index_entry_resolve_undo_get_mode (GgitIndexEntryResolveUndo *entry,
  *
  * Get the oid of the index entry.
  *
- * Returns: the oid.
+ * Returns: (transfer full) (allow-none): the oid or %NULL.
  *
  **/
 GgitOId *
@@ -283,7 +283,7 @@ ggit_index_entry_resolve_undo_get_id (GgitIndexEntryResolveUndo *entry,
  *
  * Get the file of the index entry.
  *
- * Returns: (transfer full): a #GFile.
+ * Returns: (transfer full) (allow-none): a #GFile or %NULL.
  *
  **/
 GFile *
