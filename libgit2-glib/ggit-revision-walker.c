@@ -178,7 +178,7 @@ ggit_revision_walker_initable_iface_init (GInitableIface *iface)
  * it is possible to have several revision walkers in
  * several different threads walking the same repository.
  *
- * Returns: (transfer full): a new #GgitRevisionWalker.
+ * Returns: (transfer full) (allow-none): a new #GgitRevisionWalker or %NULL.
  */
 GgitRevisionWalker *
 ggit_revision_walker_new (GgitRepository  *repository,
@@ -503,7 +503,7 @@ ggit_revision_walker_hide_head (GgitRevisionWalker  *walker,
  *
  * The revision walker is reset when the walk is over.
  *
- * Returns: (transfer full): the next commit from the revision walk.
+ * Returns: (transfer full) (allow-none): the next commit from the revision walk or %NULL.
  */
 GgitOId *
 ggit_revision_walker_next (GgitRevisionWalker  *walker,
@@ -555,7 +555,7 @@ ggit_revision_walker_set_sort_mode (GgitRevisionWalker *walker,
  *
  * Gets the repository on which this walker is operating.
  *
- * Returns: (transfer none): the repository on which this walker is operating.
+ * Returns: (transfer none) (allow-none): the repository on which this walker is operating or %NULL.
  */
 GgitRepository *
 ggit_revision_walker_get_repository (GgitRevisionWalker *walker)
