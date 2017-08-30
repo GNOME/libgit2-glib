@@ -101,7 +101,7 @@ _ggit_index_entry_new (const gchar *path,
  * Atomically increments the reference count of @entry by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitIndexEntry.
+ * Returns: (transfer none) (allow-none): a #GgitIndexEntry or %NULL.
  **/
 GgitIndexEntry *
 ggit_index_entry_ref (GgitIndexEntry *entry)
@@ -144,7 +144,7 @@ ggit_index_entry_unref (GgitIndexEntry *entry)
  * Atomically increments the reference count of @entries by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitIndexEntries.
+ * Returns: (transfer none) (allow-none): a #GgitIndexEntries or %NULL.
  **/
 GgitIndexEntries *
 ggit_index_entries_ref (GgitIndexEntries *entries)
@@ -190,7 +190,7 @@ ggit_index_entries_unref (GgitIndexEntries *entries)
  * Changes to the #GgitIndexEntry will be reflected in the index once written
  * back to disk using ggit_index_write().
  *
- * Returns: (transfer full): a #GgitIndexEntry or %NULL if out of bounds.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntry or %NULL if out of bounds.
  *
  **/
 GgitIndexEntry *
@@ -238,7 +238,7 @@ ggit_index_entries_get_by_index (GgitIndexEntries *entries,
  * file in a merge conflict. The special value -1 can be used to match the first
  * file encountered in any stage.
  *
- * Returns: (transfer full): a #GgitIndexEntry or %NULL if it was not found.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntry or %NULL if it was not found.
  *
  **/
 GgitIndexEntry *
@@ -517,7 +517,7 @@ ggit_index_entry_set_file_size (GgitIndexEntry *entry,
  *
  * Get the oid of the index entry.
  *
- * Returns: the oid.
+ * Returns: (transfer full) (allow-none): the oid or %NULL.
  *
  **/
 GgitOId *
