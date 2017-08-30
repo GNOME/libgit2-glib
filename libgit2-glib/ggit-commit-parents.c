@@ -165,7 +165,7 @@ ggit_commit_parents_get_size (GgitCommitParents *parents)
  *
  * Get the #GgitCommit of a parent.
  *
- * Returns: (transfer full): a #GgitCommit.
+ * Returns: (transfer full) (nullable): a #GgitCommit.
  *
  **/
 GgitCommit *
@@ -194,7 +194,7 @@ ggit_commit_parents_get (GgitCommitParents *parents,
  *
  * Get the #GgitOId of a parent.
  *
- * Returns: (transfer full): a #GgitOId.
+ * Returns: (transfer full) (nullable): a #GgitOId.
  *
  **/
 GgitOId *
