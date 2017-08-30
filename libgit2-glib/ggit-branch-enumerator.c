@@ -27,11 +27,13 @@ _ggit_branch_enumerator_wrap (git_branch_iterator *iter)
  * ggit_branch_enumerator_ref:
  * @enumerator: a #GgitBranchEnumerator.
  *
- * Returns: (transfer full): @enumerator
+ * Returns: (transfer full) (allow-none): @enumerator or %NULL
  */
 GgitBranchEnumerator *
 ggit_branch_enumerator_ref (GgitBranchEnumerator *enumerator)
 {
+	g_return_val_if_fail (enumerator != NULL, NULL);
+
 	g_atomic_int_inc (&enumerator->ref_count);
 	return enumerator;
 }
@@ -58,7 +60,7 @@ ggit_branch_enumerator_unref (GgitBranchEnumerator *enumerator)
  *
  * Get an iterator for the enumerator.
  *
- * Returns: (transfer none) (allow-none): a #GgitBranchEnumerator.
+ * Returns: (transfer none) (allow-none): a #GgitBranchEnumerator or %NULL.
  *
  **/
 GgitBranchEnumerator *
@@ -112,7 +114,7 @@ ggit_branch_enumerator_next (GgitBranchEnumerator *enumerator)
  * returned GgitRef will be of type GgitBranch if the ref represents a local
  * branch.
  *
- * Returns: (transfer full) (allow-none): the branch ref.
+ * Returns: (transfer full) (allow-none): the branch ref or %NULL.
  */
 GgitRef *
 ggit_branch_enumerator_get (GgitBranchEnumerator *enumerator)
