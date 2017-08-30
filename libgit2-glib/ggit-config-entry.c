@@ -50,7 +50,7 @@ _ggit_config_entry_wrap (const git_config_entry *entry)
  * Atomically increments the reference count of @entry by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitConfigEntry.
+ * Returns: (transfer none) (allow-none): a #GgitConfigEntry or %NULL.
  **/
 GgitConfigEntry *
 ggit_config_entry_ref (GgitConfigEntry *entry)
@@ -86,7 +86,7 @@ ggit_config_entry_unref (GgitConfigEntry *entry)
  *
  * Gets the name of @entry.
  *
- * Returns: the name of @entry:
+ * Returns: (transfer none) (allow-none): the name of @entry or %NULL.
  */
 const gchar *
 ggit_config_entry_get_name (GgitConfigEntry *entry)
@@ -102,7 +102,7 @@ ggit_config_entry_get_name (GgitConfigEntry *entry)
  *
  * Gets the value of @entry.
  *
- * Returns: the value of @entry.
+ * Returns: (transfer none) (allow-none): the value of @entry or %NULL.
  */
 const gchar *
 ggit_config_entry_get_value (GgitConfigEntry *entry)
