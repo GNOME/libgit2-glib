@@ -73,7 +73,7 @@ _ggit_tag_wrap (git_tag  *tag,
  * This method performs a repository lookup for the
  * given object and returns it.
  *
- * Returns: (transfer full): the target #GgitObject of the tag.
+ * Returns: (transfer full) (nullable): the target #GgitObject of the tag or %NULL.
  */
 GgitObject *
 ggit_tag_get_target (GgitTag  *tag,
@@ -108,7 +108,7 @@ ggit_tag_get_target (GgitTag  *tag,
  *
  * Gets the target #GgitOId of @tag.
  *
- * Returns: (transfer full): the target #GgitOId of the tag.
+ * Returns: (transfer full) (nullable): the target #GgitOId of the tag or %NULL.
  */
 GgitOId *
 ggit_tag_get_target_id (GgitTag *tag)
@@ -130,7 +130,7 @@ ggit_tag_get_target_id (GgitTag *tag)
  *
  * Gets the name of @tag.
  *
- * Returns: the name of the tag.
+ * Returns: (transfer none) (nullable): the name of the tag or %NULL.
  */
 const gchar *
 ggit_tag_get_name (GgitTag *tag)
@@ -151,7 +151,7 @@ ggit_tag_get_name (GgitTag *tag)
  * Get the tagger (author) of @tag. The returned value must be free with
  * g_object_unref().
  *
- * Returns: (transfer full): the tagger (author) of the tag.
+ * Returns: (transfer full) (nullable): the tagger (author) of the tag or %NULL.
  */
 GgitSignature *
 ggit_tag_get_tagger (GgitTag *tag)
@@ -178,7 +178,7 @@ ggit_tag_get_tagger (GgitTag *tag)
  *
  * Gets the message of @tag.
  *
- * Returns: the message of the tag.
+ * Returns: (transfer none) (nullable): the message of the tag or %NULL.
  */
 const gchar *
 ggit_tag_get_message (GgitTag *tag)
@@ -215,7 +215,7 @@ ggit_tag_get_target_type (GgitTag *tag)
  *
  * Recursively peel a tag until a non tag object is found.
  *
- * Returns: (transfer full): a #GgitObject.
+ * Returns: (transfer full) (nullable): a #GgitObject or %NULL.
  *
  **/
 GgitObject *
