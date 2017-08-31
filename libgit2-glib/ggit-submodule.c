@@ -62,7 +62,7 @@ _ggit_submodule_invalidate (GgitSubmodule *submodule)
  * Atomically increments the reference count of @submodule by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): the passed in #GgitSubmodule.
+ * Returns: (transfer none) (allow-none): the passed in #GgitSubmodule or %NULL.
  */
 GgitSubmodule *
 ggit_submodule_ref (GgitSubmodule *submodule)
@@ -102,7 +102,7 @@ ggit_submodule_unref (GgitSubmodule *submodule)
  * will return distinct #GgitRepository objects. Only submodules which are
  * checked out in the working directory can be opened.
  *
- * Returns: (transfer full): the opened #GgitRepository or %NULL in case of an
+ * Returns: (transfer full) (allow-none): the opened #GgitRepository or %NULL in case of an
  *                           error.
  */
 GgitRepository *
@@ -133,7 +133,7 @@ ggit_submodule_open (GgitSubmodule  *submodule,
  *
  * Gets the containing repository for a submodule.
  *
- * Returns: (transfer full): the containing repository for a submodule.
+ * Returns: (transfer full) (allow-none): the containing repository for a submodule or %NULL.
  */
 GgitRepository *
 ggit_submodule_get_owner (GgitSubmodule *submodule)
@@ -151,7 +151,7 @@ ggit_submodule_get_owner (GgitSubmodule *submodule)
  *
  * Gets the name of the submodule from .gitmodules.
  *
- * Returns: the name of the submodule from .gitmodules.
+ * Returns: (transfer none) (allow-none): the name of the submodule from .gitmodules or %NULL.
  */
 const gchar *
 ggit_submodule_get_name (GgitSubmodule *submodule)
@@ -170,7 +170,8 @@ ggit_submodule_get_name (GgitSubmodule *submodule)
  * It is almost always the same as the name.
  * See ggit_submodule_get_name().
  *
- * Returns: the path to the submodule from the repo working directory.
+ * Returns: (transfer none) (allow-none): the path to the submodule from
+ * the repo working directory or %NULL.
  */
 const gchar *
 ggit_submodule_get_path (GgitSubmodule *submodule)
@@ -188,7 +189,7 @@ ggit_submodule_get_path (GgitSubmodule *submodule)
  * Gets the url for the submodule or %NULL if the submodule has been deleted
  * but not yet committed.
  *
- * Returns: the url for the submodule.
+ * Returns: (transfer none) (allow-none): the url for the submodule or %NULL.
  */
 const gchar *
 ggit_submodule_get_url (GgitSubmodule *submodule)
