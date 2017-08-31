@@ -47,7 +47,7 @@ ggit_object_init (GgitObject *object)
  *
  * Gets the #GgitOId of @object.
  *
- * Returns: (transfer full): the #GgitOId of the object.
+ * Returns: (transfer full) (allow-none): the #GgitOId of the object or %NULL.
  */
 GgitOId *
 ggit_object_get_id (GgitObject *object)
@@ -67,7 +67,7 @@ ggit_object_get_id (GgitObject *object)
  *
  * Gets the #GgitRepository that owns @object.
  *
- * Returns: (transfer full): the #GgitRepository that owns this object.
+ * Returns: (transfer full) (allow-none): the #GgitRepository that owns this object or %NULL.
  * The returned value must be free'd calling g_object_unref().
  */
 GgitRepository *
