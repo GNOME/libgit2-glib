@@ -53,7 +53,7 @@ _ggit_patch_wrap (git_patch *patch)
  * Atomically increments the reference count of @patch by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitPatch.
+ * Returns: (transfer none) (allow-none): a #GgitPatch or %NULL.
  */
 GgitPatch *
 ggit_patch_ref (GgitPatch *patch)
@@ -95,7 +95,7 @@ ggit_patch_unref (GgitPatch *patch)
  * done with it.  You can use the patch object to loop over all the hunks
  * and lines in the diff of the one delta.
  *
- * Returns: (transfer full): a newly created #GgitPatch.
+ * Returns: (transfer full) (allow-none): a newly created #GgitPatch or %NULL.
  */
 GgitPatch *
 ggit_patch_new_from_diff (GgitDiff  *diff,
@@ -134,6 +134,8 @@ ggit_patch_new_from_diff (GgitDiff  *diff,
  * for the difference instead of directly making callbacks.  You can use the
  * standard ggit_patch accessor functions to read the patch data, and
  * you must call ggit_patch_unref on the patch when done.
+ *
+ * Returns: (transfer full) (allow-none): a newly created #GgitPatch or %NULL.
  */
 GgitPatch *
 ggit_patch_new_from_blobs (GgitBlob         *old_blob,
@@ -174,7 +176,7 @@ ggit_patch_new_from_blobs (GgitBlob         *old_blob,
  *
  * Gets the content of a patch as a single diff text.
  *
- * Returns: the content of a patch as a single diff text.
+ * Returns: (transfer full) (allow-none): the content of a patch as a single diff text or %NULL.
  */
 gchar *
 ggit_patch_to_string (GgitPatch  *patch,
@@ -370,7 +372,7 @@ ggit_patch_get_num_lines_in_hunk (GgitPatch *patch,
  *
  * Get the diff delta corresponding to the patch.
  *
- * Returns: (transfer full): the #GgitDiffDelta of the patch.
+ * Returns: (transfer full) (allow-none): the #GgitDiffDelta of the patch or %NULL.
  */
 GgitDiffDelta *
 ggit_patch_get_delta (GgitPatch *patch)
@@ -388,7 +390,7 @@ ggit_patch_get_delta (GgitPatch *patch)
  *
  * Get the @idx'th hunk in the patch.
  *
- * Returns: (transfer full): a new #GgitDiffHunk or %NULL on error.
+ * Returns: (transfer full) (allow-none): a new #GgitDiffHunk or %NULL on error.
  */
 GgitDiffHunk *
 ggit_patch_get_hunk (GgitPatch  *patch,
