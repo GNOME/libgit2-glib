@@ -56,7 +56,7 @@ _ggit_reflog_wrap (GgitRef    *ref,
  * Atomically increments the reference count of @reflog by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): the passed in #GgitReflog.
+ * Returns: (transfer none) (nullable): the passed in #GgitReflog or %NULL.
  */
 GgitReflog *
 ggit_reflog_ref (GgitReflog *reflog)
@@ -142,7 +142,7 @@ ggit_reflog_get_entry_count (GgitReflog *reflog)
  *
  * Gets the #GgitReflogEntry at @idx in @reflog, or %NULL if not found.
  *
- * Returns: the reflog entry at the index, or %NULL if not found.
+ * Returns: (transfer full) (nullable): the reflog entry at the index, or %NULL if not found.
  */
 GgitReflogEntry *
 ggit_reflog_get_entry_from_index (GgitReflog *reflog,
