@@ -90,7 +90,7 @@ ggit_proxy_options_init (GgitProxyOptions *options)
  *
  * Create a new proxy options object.
  *
- * Returns: a #GgitProxyOptions.
+ * Returns: (transfer full) (nullable): a #GgitProxyOptions.
  *
  **/
 GgitProxyOptions *

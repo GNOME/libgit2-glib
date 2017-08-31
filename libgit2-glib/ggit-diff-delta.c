@@ -63,7 +63,7 @@ _ggit_diff_delta_wrap (const git_diff_delta *delta)
  * Atomically increments the reference count of @delta by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitDiffDelta.
+ * Returns: (transfer none) (nullable): a #GgitDiffDelta or %NULL.
  **/
 GgitDiffDelta *
 ggit_diff_delta_ref (GgitDiffDelta *delta)
@@ -101,7 +101,7 @@ ggit_diff_delta_unref (GgitDiffDelta *delta)
  *
  * Gets the old file for @delta.
  *
- * Returns: (transfer none): the delta's old file.
+ * Returns: (transfer none) (nullable): the delta's old file or %NULL.
  */
 GgitDiffFile *
 ggit_diff_delta_get_old_file (GgitDiffDelta *delta)
@@ -117,7 +117,7 @@ ggit_diff_delta_get_old_file (GgitDiffDelta *delta)
  *
  * Gets the new file for @delta.
  *
- * Returns: (transfer none): the delta's new file.
+ * Returns: (transfer none) (nullable): the delta's new file or %NULL.
  */
 GgitDiffFile *
 ggit_diff_delta_get_new_file (GgitDiffDelta *delta)

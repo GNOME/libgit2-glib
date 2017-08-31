@@ -106,7 +106,7 @@ ggit_rebase_get_operation_index (GgitRebase *rebase)
  *
  * Gets the rebase operation specified by @idx.
  *
- * Returns: The rebase operation or %NULL if @idx was out of bounds.
+ * Returns: (transfer full) (nullable): The rebase operation or %NULL if @idx was out of bounds.
  */
 GgitRebaseOperation *
 ggit_rebase_get_operation_by_index (GgitRebase *rebase,
@@ -132,7 +132,7 @@ ggit_rebase_get_operation_by_index (GgitRebase *rebase,
  * working directory will be updated with the changes. If there are conflicts,
  * you will need to address those before committing the changes.
  *
- * Returns: (transfer full): the rebase operation that is to be performed next.
+ * Returns: (transfer full) (nullable): the rebase operation that is to be performed next or %NULL.
  */
 GgitRebaseOperation *
 ggit_rebase_next (GgitRebase  *rebase,
@@ -170,7 +170,7 @@ ggit_rebase_next (GgitRebase  *rebase,
  * were introduced during the patch application from the ggit_rebase_next()
  * invocation.
  *
- * Returns: (transfer full): a #GgitOId of the newly created commit.
+ * Returns: (transfer full) (nullable): a #GgitOId of the newly created commit or %NULL.
  */
 GgitOId *
 ggit_rebase_commit (GgitRebase     *rebase,

@@ -405,7 +405,7 @@ ggit_checkout_options_init (GgitCheckoutOptions *options)
  *
  * Create a new checkout options object.
  *
- * Returns: a #GgitCheckoutOptions.
+ * Returns: (transfer full) (nullable): a #GgitCheckoutOptions or %NULL.
  *
  **/
 GgitCheckoutOptions *
@@ -690,7 +690,7 @@ ggit_checkout_options_set_notify_flags (GgitCheckoutOptions     *options,
  *
  * Get the list of file paths to checkout.
  *
- * Returns: (array zero-terminated=1) (allow-none): a %NULL terminated list of file paths, or %NULL.
+ * Returns: (array zero-terminated=1) (nullable): a %NULL terminated list of file paths, or %NULL.
  *
  **/
 const gchar * const *
@@ -739,7 +739,7 @@ ggit_checkout_options_set_paths (GgitCheckoutOptions *options,
  *
  * Get the baseline, i.e. the expected content of workdir. Defaults to HEAD.
  *
- * Returns: (transfer none): a #GgitTree.
+ * Returns: (transfer none) (nullable): a #GgitTree or %NULL.
  *
  **/
 GgitTree *
@@ -799,7 +799,7 @@ ggit_checkout_options_set_baseline (GgitCheckoutOptions *options,
  *
  * Get the checkout target directory.
  *
- * Returns: (allow-none): the checkout target directory.
+ * Returns: (transfer none) (nullable): the checkout target directory or %NULL.
  *
  **/
 const gchar *
@@ -846,7 +846,7 @@ ggit_checkout_options_set_target_directory (GgitCheckoutOptions *options,
  *
  * Get the checkout ancestor label.
  *
- * Returns: (allow-none): the checkout ancestor label.
+ * Returns: (transfer none) (nullable): the checkout ancestor label or %NULL.
  *
  **/
 const gchar *
@@ -893,7 +893,7 @@ ggit_checkout_options_set_ancestor_label (GgitCheckoutOptions *options,
  *
  * Get the checkout our label.
  *
- * Returns: (allow-none): the checkout our label.
+ * Returns: (transfer none) (nullable): the checkout our label or %NULL.
  *
  **/
 const gchar *
@@ -940,7 +940,7 @@ ggit_checkout_options_set_our_label (GgitCheckoutOptions *options,
  *
  * Get the checkout their label.
  *
- * Returns: (allow-none): the checkout their label.
+ * Returns: (transfer none) (nullable): the checkout their label or %NULL.
  *
  **/
 const gchar *

@@ -132,7 +132,7 @@ ggit_tree_builder_remove (GgitTreeBuilder  *builder,
  *
  * Get an entry by path.
  *
- * Returns: the #GGitTreeEntry or %NULL if no such entry exists.
+ * Returns: (transfer full) (nullable): the #GGitTreeEntry or %NULL if no such entry exists.
  *
  */
 GgitTreeEntry *
@@ -179,7 +179,7 @@ ggit_tree_builder_clear (GgitTreeBuilder *builder)
  *
  * Write the contents of the tree builder as a tree object.
  *
- * Returns: the #GgitOId of the created tree object.
+ * Returns: (transfer full) (nullable): the #GgitOId of the created tree object or %NULL.
  *
  **/
 GgitOId *
@@ -219,7 +219,7 @@ ggit_tree_builder_write (GgitTreeBuilder  *builder,
  * Note that the returned #GgitTreeEntry is bound to the lifetime of the tree
  * builder and cannot be used after the tree builder has been freed.
  *
- * Returns: (transfer full): a #GgitTreeEntry.
+ * Returns: (transfer full) (nullable): a #GgitTreeEntry or %NULL.
  *
  **/
 GgitTreeEntry *

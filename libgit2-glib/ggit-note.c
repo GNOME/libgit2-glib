@@ -54,7 +54,7 @@ _ggit_note_wrap (git_note *note)
  * Atomically increments the reference count of @note by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitNote.
+ * Returns: (transfer none) (nullable): a #GgitNote or %NULL.
  **/
 GgitNote *
 ggit_note_ref (GgitNote *note)
@@ -92,7 +92,7 @@ ggit_note_unref (GgitNote *note)
  *
  * Gets the note message.
  *
- * Returns: the note message.
+ * Returns: (transfer none) (nullable): the note message or %NULL.
  */
 const gchar *
 ggit_note_get_message (GgitNote *note)
@@ -108,7 +108,7 @@ ggit_note_get_message (GgitNote *note)
  *
  * Gets the note object's id.
  *
- * Returns: (transfer none): the object's id.
+ * Returns: (transfer none) (nullable): the object's id or %NULL.
  */
 GgitOId *
 ggit_note_get_id (GgitNote *note)

@@ -380,7 +380,8 @@ _ggit_diff_wrap (GgitRepository *repository,
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitDiff if
+ * there was no error, %NULL otherwise.
  */
 GgitDiff *
 ggit_diff_new_tree_to_tree (GgitRepository   *repository,
@@ -427,7 +428,8 @@ ggit_diff_new_tree_to_tree (GgitRepository   *repository,
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitDiff if
+ * there was no error, %NULL otherwise.
  */
 GgitDiff *
 ggit_diff_new_tree_to_index (GgitRepository   *repository,
@@ -472,7 +474,8 @@ ggit_diff_new_tree_to_index (GgitRepository   *repository,
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitDiff if
+ * there was no error, %NULL otherwise.
  */
 GgitDiff *
 ggit_diff_new_index_to_workdir (GgitRepository   *repository,
@@ -513,7 +516,8 @@ ggit_diff_new_index_to_workdir (GgitRepository   *repository,
  * If @diff_options is %NULL then the defaults specified in
  * ggit_diff_options_new() are used.
  *
- * Returns: a newly allocated #GgitDiff if there was no error, %NULL otherwise.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitDiff if
+ * there was no error, %NULL otherwise.
  */
 GgitDiff *
 ggit_diff_new_tree_to_workdir (GgitRepository   *repository,
@@ -703,7 +707,7 @@ ggit_diff_print (GgitDiff              *diff,
  *
  * Create an e-mail ready patch from a diff.
  *
- * Returns: (transfer full): the patch or %NULL if an error occurred.
+ * Returns: (transfer full) (nullable): the patch or %NULL if an error occurred.
  *
  **/
 gchar *
@@ -760,7 +764,7 @@ ggit_diff_get_num_deltas (GgitDiff *diff)
  *
  * Get the delta at the specified index.
  *
- * Returns: (transfer full): a #GgitDiffDelta.
+ * Returns: (transfer full) (nullable): a #GgitDiffDelta or %NULL.
  *
  **/
 GgitDiffDelta *

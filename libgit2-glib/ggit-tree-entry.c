@@ -56,7 +56,7 @@ _ggit_tree_entry_wrap (git_tree_entry *entry,
  * Atomically increments the reference count of @entry by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitTreeEntry.
+ * Returns: (transfer none) (nullable): a #GgitTreeEntry or %NULL.
  **/
 GgitTreeEntry *
 ggit_tree_entry_ref (GgitTreeEntry *entry)
@@ -113,7 +113,7 @@ ggit_tree_entry_get_file_mode (GgitTreeEntry *entry)
  *
  * Get the #GgitOId of the entry.
  *
- * Returns: (transfer full): a #GgitOId.
+ * Returns: (transfer full) (nullable): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
@@ -130,7 +130,7 @@ ggit_tree_entry_get_id (GgitTreeEntry *entry)
  *
  * Get the name of the tree entry.
  *
- * Returns: the name of the tree entry.
+ * Returns: (transfer none) (nullable): the name of the tree entry or %NULL.
  *
  **/
 const gchar *

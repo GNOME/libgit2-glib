@@ -62,7 +62,7 @@ _ggit_diff_file_wrap (const git_diff_file *file)
  * Atomically increments the reference count of @file by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitDiffFile.
+ * Returns: (transfer none) (nullable): a #GgitDiffFile or %NULL.
  **/
 GgitDiffFile *
 ggit_diff_file_ref (GgitDiffFile *file)
@@ -100,7 +100,7 @@ ggit_diff_file_unref (GgitDiffFile *file)
  *
  * Gets the #GgitOId for @file.
  *
- * Returns: (transfer none): the file's #GgitOId.
+ * Returns: (transfer none) (nullable): the file's #GgitOId or %NULL.
  */
 GgitOId *
 ggit_diff_file_get_oid (GgitDiffFile *file)
@@ -116,7 +116,7 @@ ggit_diff_file_get_oid (GgitDiffFile *file)
  *
  * Gets the path of @file or %NULL if it is unknown.
  *
- * Returns: (allow-none): the file's path, or %NULL.
+ * Returns: (transfer none) (nullable): the file's path, or %NULL.
  */
 const gchar *
 ggit_diff_file_get_path (GgitDiffFile *file)

@@ -215,7 +215,7 @@ convert_to_gparameter (GObjectConstructParam *params,
  *
  * Construct a new object.
  *
- * Returns: (transfer full): a #GObject.
+ * Returns: (transfer full) (nullable): a #GObject or %NULL.
  *
  **/
 GObject *

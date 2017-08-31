@@ -101,7 +101,7 @@ ggit_ref_is_valid_name (const gchar *name)
  * Only available if the reference is direct (i.e. an object id reference,
  * not a symbolic one).
  *
- * Returns: (transfer full): a new oid if available, %NULL otherwise.
+ * Returns: (transfer full) (nullable): a new oid if available, %NULL otherwise.
  */
 GgitOId *
 ggit_ref_get_target (GgitRef *ref)
@@ -128,7 +128,7 @@ ggit_ref_get_target (GgitRef *ref)
  * Get full name to the reference pointed to by a symbolic reference.
  * Only available if the reference is symbolic.
  *
- * Returns: the name if available, %NULL otherwise.
+ * Returns: (transfer none) (nullable): the name if available, %NULL otherwise.
  */
 const gchar *
 ggit_ref_get_symbolic_target (GgitRef *ref)
@@ -161,7 +161,7 @@ ggit_ref_get_reference_type (GgitRef *ref)
  *
  * Gets the full name of @ref.
  *
- * Returns: the full name of a reference.
+ * Returns: (transfer none) (nullable): the full name of a reference or %NULL.
  */
 const gchar *
 ggit_ref_get_name (GgitRef *ref)
@@ -177,7 +177,7 @@ ggit_ref_get_name (GgitRef *ref)
  *
  * Gets the shorthand name of @ref.
  *
- * Returns: the shorthand name of a reference.
+ * Returns: (transfer none) (nullable): the shorthand name of a reference or %NULL.
  */
 const gchar *
 ggit_ref_get_shorthand (GgitRef *ref)
@@ -193,7 +193,7 @@ ggit_ref_get_shorthand (GgitRef *ref)
  *
  * Get a string representation of the ref.
  *
- * Returns: a string representation of the ref.
+ * Returns: (transfer none) (nullable): a string representation of the ref or %NULL.
  *
  **/
 const gchar *
@@ -215,7 +215,7 @@ ggit_ref_to_string (GgitRef *ref)
  * If a direct reference is passed as an argument,
  * that reference is returned immediately.
  *
- * Returns: (transfer full): the resolved reference to the peeled one.
+ * Returns: (transfer full) (nullable): the resolved reference to the peeled one or %NULL.
  */
 GgitRef *
 ggit_ref_resolve (GgitRef  *ref,
@@ -248,7 +248,7 @@ ggit_ref_resolve (GgitRef  *ref,
  *
  * Gets the repository where @ref resides.
  *
- * Returns: (transfer full): the repository where a reference resides.
+ * Returns: (transfer full) (nullable): the repository where a reference resides or %NULL.
  */
 GgitRepository *
 ggit_ref_get_owner (GgitRef *ref)
@@ -275,7 +275,7 @@ ggit_ref_get_owner (GgitRef *ref)
  * The target name will be checked for validity.
  * See `ggit_ref_create_symbolic()` for rules about valid names.
  *
- * Returns: (transfer full): the newly created #GgitRef.
+ * Returns: (transfer full) (nullable): the newly created #GgitRef or %NULL.
  */
 GgitRef *
 ggit_ref_set_symbolic_target (GgitRef       *ref,
@@ -317,7 +317,7 @@ ggit_ref_set_symbolic_target (GgitRef       *ref,
  *
  * The new reference will be written to disk, overwriting the given reference.
  *
- * Returns: (transfer full): the newly created #GgitRef.
+ * Returns: (transfer full) (nullable): the newly created #GgitRef or %NULL.
  */
 GgitRef *
 ggit_ref_set_target (GgitRef       *ref,
@@ -374,7 +374,7 @@ ggit_ref_set_target (GgitRef       *ref,
  * reflog is enabled for the repository. We only rename
  * the reflog if it exists.
  *
- * Returns: (transfer full): a newly created #GgitRef.
+ * Returns: (transfer full) (nullable): a newly created #GgitRef or %NULL.
  */
 GgitRef *
 ggit_ref_rename (GgitRef       *ref,
@@ -443,7 +443,7 @@ ggit_ref_delete (GgitRef  *ref,
  *
  * Convenient method to resolve a reference to an object.
  *
- * Returns: (transfer full): a #GgitObject.
+ * Returns: (transfer full) (nullable): a #GgitObject or %NULL.
  *
  **/
 GgitObject *
@@ -513,7 +513,7 @@ ggit_ref_has_log (GgitRef *ref)
  * Gets the #GgitReflog for @ref. The reflog will be created if it doesn't exist
  * yet.
  *
- * Returns: (transfer full): the reflog.
+ * Returns: (transfer full) (nullable): the reflog or %NULL.
  */
 GgitReflog *
 ggit_ref_get_log (GgitRef  *ref,

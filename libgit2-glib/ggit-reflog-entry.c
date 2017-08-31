@@ -51,7 +51,7 @@ _ggit_reflog_entry_wrap (const git_reflog_entry *reflog_entry)
  * Atomically increments the reference count of @reflog_entry by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): the passed in #GgitReflogEntry.
+ * Returns: (transfer none) (nullable): the passed in #GgitReflogEntry or %NULL.
  */
 GgitReflogEntry *
 ggit_reflog_entry_ref (GgitReflogEntry *reflog_entry)
@@ -87,7 +87,7 @@ ggit_reflog_entry_unref (GgitReflogEntry *reflog_entry)
  *
  * Gets the old #GgitOId.
  *
- * Returns: the old oid.
+ * Returns: (transfer full) (nullable): the old oid or %NULL.
  */
 GgitOId *
 ggit_reflog_entry_get_old_id (GgitReflogEntry *reflog_entry)
@@ -107,7 +107,7 @@ ggit_reflog_entry_get_old_id (GgitReflogEntry *reflog_entry)
  *
  * Gets the new #GgitOId.
  *
- * Returns: the new oid.
+ * Returns: (transfer full) (nullable): the new oid or %NULL.
  */
 GgitOId *
 ggit_reflog_entry_get_new_id (GgitReflogEntry *reflog_entry)
@@ -127,7 +127,7 @@ ggit_reflog_entry_get_new_id (GgitReflogEntry *reflog_entry)
  *
  * Gets the committer as a #GgitSignature.
  *
- * Returns: (transfer none): the committer.
+ * Returns: (transfer none) (nullable): the committer or %NULL.
  */
 GgitSignature *
 ggit_reflog_entry_get_committer (GgitReflogEntry *reflog_entry)
@@ -147,7 +147,7 @@ ggit_reflog_entry_get_committer (GgitReflogEntry *reflog_entry)
  *
  * Gets the message.
  *
- * Returns: the message.
+ * Returns: (transfer none) (nullable): the message or %NULL.
  */
 const gchar *
 ggit_reflog_entry_get_message (GgitReflogEntry *reflog_entry)

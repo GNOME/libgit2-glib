@@ -50,7 +50,7 @@ _ggit_merge_options_get_merge_options (GgitMergeOptions *merge_options)
  *
  * Copies @merge_options into a newly allocated #GgitMergeOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitMergeOptions.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitMergeOptions or %NULL.
  */
 GgitMergeOptions *
 ggit_merge_options_copy (GgitMergeOptions *merge_options)
@@ -242,7 +242,7 @@ ggit_merge_options_set_similarity_metric (GgitMergeOptions         *merge_option
  *
  * Get the similarity metric.
  *
- * Returns: (transfer none): the similarity metric, or %NULL.
+ * Returns: (transfer none) (nullable): the similarity metric, or %NULL.
  *
  **/
 GgitDiffSimilarityMetric *

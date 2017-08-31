@@ -173,7 +173,7 @@ ggit_cred_ssh_key_from_agent_initable_iface_init (GInitableIface *iface)
  *
  * Creates a new #GgitCredSshKeyFromAgent.
  *
- * Returns: (transfer full): a new #GgitCredSshKeyFromAgent or %NULL if there was an error.
+ * Returns: (transfer full) (nullable): a new #GgitCredSshKeyFromAgent or %NULL if there was an error.
  */
 GgitCredSshKeyFromAgent *
 ggit_cred_ssh_key_from_agent_new (const gchar  *username,
@@ -191,7 +191,7 @@ ggit_cred_ssh_key_from_agent_new (const gchar  *username,
  *
  * Gets the username for the credential.
  *
- * Returns: the username.
+ * Returns: (transfer none) (nullable): the username or %NULL.
  */
 const gchar *
 ggit_cred_ssh_key_from_agent_get_username (GgitCredSshKeyFromAgent *cred)
