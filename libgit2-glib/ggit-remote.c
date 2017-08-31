@@ -84,7 +84,7 @@ ggit_remote_head_unref (GgitRemoteHead *remote_head)
  *
  * Get the remote oid of the remote head.
  *
- * Returns: (transfer none): the remote oid.
+ * Returns: (transfer none) (nullable): the remote oid or %NULL.
  */
 GgitOId *
 ggit_remote_head_get_oid (GgitRemoteHead *remote_head)
@@ -99,7 +99,7 @@ ggit_remote_head_get_oid (GgitRemoteHead *remote_head)
  *
  * Get the local oid of the remote head.
  *
- * Returns: (transfer none): the local oid.
+ * Returns: (transfer none) (nullable): the local oid or %NULL.
  */
 GgitOId *
 ggit_remote_head_get_local_oid (GgitRemoteHead *remote_head)
@@ -129,7 +129,7 @@ ggit_remote_head_is_local (GgitRemoteHead *remote_head)
  *
  * Get the remote head name.
  *
- * Returns: the remote head name.
+ * Returns: (transfer none) (nullable): the remote head name or %NULL.
  */
 const gchar *
 ggit_remote_head_get_name (GgitRemoteHead *remote_head)
@@ -178,7 +178,7 @@ ggit_remote_init (GgitRemote *remote)
  * Creates a remote with the default refspecs in memory. You can use
  * this when you have a URL instead of a remote's name.
  *
- * Returns: (transfer full): a newly allocated #GgitRemote.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitRemote or %NULL.
  */
 GgitRemote *
 ggit_remote_new (GgitRepository   *repository,
@@ -214,7 +214,7 @@ ggit_remote_new (GgitRepository   *repository,
  * Creates a remote with the specified refspec in memory. You can use
  * this when you have a URL instead of a remote's name.
  *
- * Returns: (transfer full): a newly allocated #GgitRemote.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitRemote or %NULL.
  */
 GgitRemote *
 ggit_remote_new_anonymous (GgitRepository  *repository,
@@ -246,7 +246,7 @@ ggit_remote_new_anonymous (GgitRepository  *repository,
  *
  * Gets the repository where @remote resides.
  *
- * Returns: (transfer full): the repository where the remote resides.
+ * Returns: (transfer full) (nullable): the repository where the remote resides or %NULL.
  */
 GgitRepository *
 ggit_remote_get_owner (GgitRemote *remote)
@@ -263,7 +263,7 @@ ggit_remote_get_owner (GgitRemote *remote)
  *
  * Gets the remote's name.
  *
- * Returns: the name of @remote.
+ * Returns: (transfer none) (nullable): the name of @remote or %NULL.
  */
 const gchar *
 ggit_remote_get_name (GgitRemote *remote)
@@ -279,7 +279,7 @@ ggit_remote_get_name (GgitRemote *remote)
  *
  * Gets the remote's url.
  *
- * Returns: the url of @remote.
+ * Returns: (transfer none) (nullable): the url of @remote or %NULL.
  */
 const gchar *
 ggit_remote_get_url (GgitRemote *remote)
@@ -454,7 +454,7 @@ ggit_remote_update_tips (GgitRemote                  *remote,
  *
  * Get the list of fetch refspecs for the given remote.
  *
- * Returns: (transfer full) (allow-none): a list of fetch refspecs.
+ * Returns: (transfer full) (nullable): a list of fetch refspecs or %NULL.
  */
 gchar **
 ggit_remote_get_fetch_specs (GgitRemote  *remote,
@@ -464,7 +464,7 @@ ggit_remote_get_fetch_specs (GgitRemote  *remote,
 	git_strarray specs;
 
 	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_remote_get_fetch_refspecs (&specs, _ggit_native_get (remote));
 
@@ -484,7 +484,7 @@ ggit_remote_get_fetch_specs (GgitRemote  *remote,
  *
  * Get the list of push refspecs for the given remote.
  *
- * Returns: (transfer full) (allow-none): a list of push refspecs.
+ * Returns: (transfer full) (nullable): a list of push refspecs or %NULL.
  */
 gchar **
 ggit_remote_get_push_specs (GgitRemote  *remote,
@@ -494,7 +494,7 @@ ggit_remote_get_push_specs (GgitRemote  *remote,
 	git_strarray specs;
 
 	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
 	ret = git_remote_get_push_refspecs (&specs, _ggit_native_get (remote));
 
@@ -514,7 +514,7 @@ ggit_remote_get_push_specs (GgitRemote  *remote,
  *
  * Get a list of refs at the remote.
  *
- * Returns: (array zero-terminated=1): the remote heads.
+ * Returns: (array zero-terminated=1) (nullable): the remote heads or %NULL.
  */
 GgitRemoteHead **
 ggit_remote_list (GgitRemote              *remote,
