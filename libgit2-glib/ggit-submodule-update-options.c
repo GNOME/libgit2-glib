@@ -152,7 +152,7 @@ ggit_submodule_update_options_init (GgitSubmoduleUpdateOptions *options)
  *
  * Creates a new submodule options object.
  *
- * Returns: a #GgitSubmoduleUpdateOptions.
+ * Returns: (transfer full) (allow-none): a #GgitSubmoduleUpdateOptions or %NULL.
  *
  **/
 GgitSubmoduleUpdateOptions *
@@ -192,7 +192,7 @@ _ggit_submodule_update_options_get_submodule_update_options (GgitSubmoduleUpdate
  *
  * Get the checkout options.
  *
- * Returns: (transfer none): a #GgitCheckoutOptions.
+ * Returns: (transfer none) (allow-none): a #GgitCheckoutOptions or %NULL.
  *
  **/
 GgitCheckoutOptions *
@@ -249,7 +249,7 @@ ggit_submodule_update_options_set_checkout_options (GgitSubmoduleUpdateOptions *
  *
  * Gets the fetch options.
  *
- * Returns: (transfer none): a #GgitFetchOptions.
+ * Returns: (transfer none) (allow-none): a #GgitFetchOptions or %NULL.
  *
  **/
 GgitFetchOptions *
