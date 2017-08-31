@@ -54,7 +54,7 @@ _ggit_ref_spec_wrap (const git_refspec *refspec)
  * Atomically increments the reference count of @refspec by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: a #GgitRefSpec.
+ * Returns: (transfer none) (allow-none): a #GgitRefSpec or %NULL.
  **/
 GgitRefSpec *
 ggit_ref_spec_ref (GgitRefSpec *refspec)
@@ -90,7 +90,7 @@ ggit_ref_spec_unref (GgitRefSpec *refspec)
  *
  * Gets the @refspec's source.
  *
- * Returns: the refspec's source.
+ * Returns: (transfer none) (allow-none): the refspec's source or %NULL.
  */
 const gchar *
 ggit_ref_spec_get_source (GgitRefSpec *refspec)
@@ -106,7 +106,7 @@ ggit_ref_spec_get_source (GgitRefSpec *refspec)
  *
  * Gets the @refspec's destination.
  *
- * Returns: the refspec's destination.
+ * Returns: (transfer none) (allow-none): the refspec's destination or %NULL.
  */
 const gchar *
 ggit_ref_spec_get_destination (GgitRefSpec *refspec)
