@@ -157,7 +157,7 @@ _ggit_signature_wrap (const git_signature *signature,
  *
  * Creates a new #GgitSignature. Name and e-mail are assumed to be in UTF-8.
  *
- * Returns: (transfer full): a newly allocated #GgitSignature.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitSignature or %NULL.
  */
 GgitSignature *
 ggit_signature_new (const gchar  *name,
@@ -208,7 +208,7 @@ ggit_signature_new (const gchar  *name,
  * Creates a new #GgitSignature with a timestamp of 'now'. Name and e-mail are
  * assumed to be in UTF-8.
  *
- * Returns: (transfer full): a newly allocated #GgitSignature.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitSignature or %NULL.
  */
 GgitSignature *
 ggit_signature_new_now (const gchar  *name,
@@ -243,7 +243,7 @@ ggit_signature_new_now (const gchar  *name,
  *
  * Create a copy of the signature.
  *
- * Returns: (transfer full): a #GgitSignature.
+ * Returns: (transfer full) (nullable): a #GgitSignature or %NULL.
  *
  **/
 GgitSignature *
@@ -276,7 +276,7 @@ ensure_utf8 (gchar       *utf8,
  *
  * Gets the name of the person.
  *
- * Returns: the name of the person.
+ * Returns: (transfer none) (nullable): the name of the person or %NULL.
  */
 const gchar *
 ggit_signature_get_name (GgitSignature *signature)
@@ -300,7 +300,7 @@ ggit_signature_get_name (GgitSignature *signature)
  *
  * Gets the email of the person.
  *
- * Returns: the email of the person.
+ * Returns: (transfer none) (nullable): the email of the person or %NULL.
  */
 const gchar *
 ggit_signature_get_email (GgitSignature *signature)
@@ -325,7 +325,7 @@ ggit_signature_get_email (GgitSignature *signature)
  * Gets the time when the action happened. Note that the time is returned in
  * the timezone of the commit (see #ggit_signature_get_time_zone).
  *
- * Returns: (transfer full): the time when the action happened.
+ * Returns: (transfer full) (nullable): the time when the action happened or %NULL.
  */
 GDateTime *
 ggit_signature_get_time (GgitSignature *signature)
@@ -358,7 +358,7 @@ ggit_signature_get_time (GgitSignature *signature)
  *
  * Gets the timezone in which the action happened.
  *
- * Returns: (transfer full): the timezone in which the action happened.
+ * Returns: (transfer full) (nullable): the timezone in which the action happened or %NULL.
  */
 GTimeZone *
 ggit_signature_get_time_zone (GgitSignature *signature)
