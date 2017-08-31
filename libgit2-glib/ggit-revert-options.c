@@ -53,7 +53,7 @@ _ggit_revert_options_get_revert_options (GgitRevertOptions *revert_options)
  *
  * Copies @revert_options into a newly allocated #GgitRevertOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitRevertOptions.
+ * Returns: (transfer full) (nullable): a newly allocated #GgitRevertOptions or %NULL.
  */
 GgitRevertOptions *
 ggit_revert_options_copy (GgitRevertOptions *revert_options)
@@ -99,7 +99,7 @@ ggit_revert_options_free (GgitRevertOptions *revert_options)
  * The @mainline indicates which parent to use for the revert when reverting
  * a merge commit.
  *
- * Returns: (transfer full): a #GgitRevertOptions.
+ * Returns: (transfer full) (nullable): a #GgitRevertOptions or %NULL.
  *
  **/
 GgitRevertOptions *
