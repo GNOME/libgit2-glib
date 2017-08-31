@@ -50,7 +50,7 @@ _ggit_transfer_progress_wrap (const git_transfer_progress *progress)
  *
  * Copies @progress into a newly allocated #GgitTransferProgress.
  *
- * Returns: (transfer full): a newly allocated #GgitTransferProgress.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitTransferProgress or %NULL.
  */
 GgitTransferProgress *
 ggit_transfer_progress_copy (GgitTransferProgress *progress)
