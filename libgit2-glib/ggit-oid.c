@@ -52,7 +52,7 @@ _ggit_oid_get_oid (GgitOId *oid)
  *
  * Copies @oid into a newly allocated #GgitOId.
  *
- * Returns: (transfer full): a newly allocated #GgitOId.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitOId.
  */
 GgitOId *
 ggit_oid_copy (GgitOId *oid)
@@ -84,7 +84,7 @@ ggit_oid_free (GgitOId *oid)
  *
  * Parses a hex formatted object id into a #GgitOId.
  *
- * Returns: (transfer full): a newly allocated #GgitOId or %NULL on error.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitOId or %NULL on error.
  */
 GgitOId *
 ggit_oid_new_from_string (const gchar *str)
@@ -108,7 +108,7 @@ ggit_oid_new_from_string (const gchar *str)
  *
  * Creates a new #GgitOId from a raw oid.
  *
- * Returns: (transfer full): a newly allocated #GgitOId.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitOId or %NULL on error.
  */
 GgitOId *
 ggit_oid_new_from_raw (const guchar *raw)
@@ -147,7 +147,7 @@ ggit_oid_compare (GgitOId *a,
  *
  * Converts @oid into a readable string.
  *
- * Returns: (transfer full): a newly allocated string representing @oid.
+ * Returns: (transfer full) (allow-none): a newly allocated string representing @oid or %NULL.
  */
 gchar *
 ggit_oid_to_string (GgitOId *oid)

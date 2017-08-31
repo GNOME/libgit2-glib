@@ -63,7 +63,7 @@ G_DEFINE_BOXED_TYPE (GgitBlameHunk, ggit_blame_hunk,
  * Atomically increments the reference count of @blame_hunk by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a #GgitBlameHunk.
+ * Returns: (transfer none) (allow-none): a #GgitBlameHunk or %NULL.
  */
 GgitBlameHunk *
 ggit_blame_hunk_ref (GgitBlameHunk *blame_hunk)
@@ -168,7 +168,7 @@ ggit_blame_hunk_get_lines_in_hunk (GgitBlameHunk *blame_hunk)
  *
  * Get the id of the commit where this hunk was last changed.
  *
- * Returns: (transfer none): a #GgitOId.
+ * Returns: (transfer none) (allow-none): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
@@ -203,7 +203,7 @@ ggit_blame_hunk_get_final_start_line_number (GgitBlameHunk *blame_hunk)
  *
  * Get the signature of the final version of the hunk.
  *
- * Returns: (transfer none): a #GgitSignature.
+ * Returns: (transfer none) (allow-none): a #GgitSignature or %NULL.
  *
  **/
 GgitSignature *
@@ -221,7 +221,7 @@ ggit_blame_hunk_get_final_signature (GgitBlameHunk *blame_hunk)
  * Get the id of the commit where the hunk was found. This is usually the same
  * the final commit id, except when #GGIT_BLAME_TRACK_COPIES_ANY_COMMIT was used.
  *
- * Returns: (transfer none): a #GgitOId.
+ * Returns: (transfer none) (allow-none): a #GgitOId or %NULL.
  *
  **/
 GgitOId *
@@ -257,7 +257,7 @@ ggit_blame_hunk_get_orig_start_line_number (GgitBlameHunk *blame_hunk)
  *
  * Get the signature of the commit specified by #ggit_blame_hunk_get_orig_commit_id.
  *
- * Returns: (transfer none): a #GgitSignature.
+ * Returns: (transfer none) (allow-none): a #GgitSignature or %NULL.
  *
  **/
 GgitSignature *
@@ -275,7 +275,7 @@ ggit_blame_hunk_get_orig_signature (GgitBlameHunk *blame_hunk)
  * Get the path of the file where this hunk originated, as of the commit
  * specified by #ggit_blame_hunk_get_orig_commit_id.
  *
- * Returns: the path.
+ * Returns: (transfer none) (allow-none): the path or %NULL.
  */
 const gchar *
 ggit_blame_hunk_get_orig_path (GgitBlameHunk *blame_hunk)
@@ -366,7 +366,7 @@ ggit_blame_get_hunk_by_index (GgitBlame *blame,
  * Lines that differ between the buffer and the committed version are marked as
  * having a zero id for their #ggit_blame_hunk_get_final_commit_id.
  *
- * Returns: (transfer full): a #GgitBlame.
+ * Returns: (transfer full) (allow-none): a #GgitBlame or %NULL.
  *
  **/
 GgitBlame *

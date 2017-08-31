@@ -50,7 +50,7 @@ _ggit_status_options_get_status_options (GgitStatusOptions *status_options)
  *
  * Copies @status_options into a newly allocated #GgitStatusOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitStatusOptions.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitStatusOptions or %NULL.
  */
 GgitStatusOptions *
 ggit_status_options_copy (GgitStatusOptions *status_options)

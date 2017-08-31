@@ -253,7 +253,7 @@ _ggit_diff_find_options_get_diff_find_options (GgitDiffFindOptions *diff_find_op
  *
  * Creates a new #GgitDiffFindOptions.
  *
- * Returns: a newly allocated #GgitDiffFindOptions.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitDiffFindOptions or %NULL.
  */
 GgitDiffFindOptions *
 ggit_diff_find_options_new (void)
@@ -482,7 +482,7 @@ ggit_diff_find_options_set_rename_limit (GgitDiffFindOptions *options,
  *
  * Get the find options metric.
  *
- * Returns: (transfer none): a #GgitDiffSimilarityMetric or %NULL.
+ * Returns: (transfer none) (allow-none): a #GgitDiffSimilarityMetric or %NULL.
  *
  **/
 GgitDiffSimilarityMetric *

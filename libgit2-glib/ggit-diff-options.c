@@ -241,7 +241,7 @@ ggit_diff_options_init (GgitDiffOptions *options)
  *
  * Create a new diff options object.
  *
- * Returns: a #GgitDiffOptions.
+ * Returns: (transfer full) (allow-none): a #GgitDiffOptions or %NULL.
  *
  **/
 GgitDiffOptions *
@@ -403,7 +403,7 @@ ggit_diff_options_set_n_interhunk_lines (GgitDiffOptions *options,
  *
  * Get the diff old-prefix string.
  *
- * Returns: the old-prefix string.
+ * Returns: (transfer full) (allow-none): the old-prefix string or %NULL.
  *
  **/
 const gchar *
@@ -449,7 +449,7 @@ ggit_diff_options_set_old_prefix (GgitDiffOptions *options,
  *
  * Get the diff new-prefix string.
  *
- * Returns: the new-prefix string.
+ * Returns: (transfer none) (allow-none): the new-prefix string or %NULL.
  *
  **/
 const gchar *
@@ -495,7 +495,7 @@ ggit_diff_options_set_new_prefix (GgitDiffOptions *options,
  *
  * Get the pathspec.
  *
- * Returns: (transfer none) (array zero-terminated=1): the pathspec.
+ * Returns: (transfer none) (array zero-terminated=1) (allow-none): the pathspec or %NULL.
  *
  **/
 const gchar **

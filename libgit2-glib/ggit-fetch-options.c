@@ -53,7 +53,7 @@ _ggit_fetch_options_get_fetch_options (GgitFetchOptions *fetch_options)
  *
  * Copies @fetch_options into a newly allocated #GgitFetchOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitFetchOptions.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitFetchOptions or %NULL.
  */
 GgitFetchOptions *
 ggit_fetch_options_copy (GgitFetchOptions *fetch_options)
@@ -123,7 +123,7 @@ ggit_fetch_options_new (void)
  *
  * Get the remote callbacks object or %NULL if not set.
  *
- * Returns: (transfer none): the remote callbacks or %NULL.
+ * Returns: (transfer none) (allow-none): the remote callbacks or %NULL.
  */
 GgitRemoteCallbacks *
 ggit_fetch_options_get_remote_callbacks (GgitFetchOptions *options)

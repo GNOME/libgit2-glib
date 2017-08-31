@@ -117,7 +117,7 @@ ggit_push_options_init (GgitPushOptions *options)
  *
  * Create a new push options object.
  *
- * Returns: a #GgitPushOptions.
+ * Returns: (transfer full) (allow-none): a #GgitPushOptions or %NULL.
  *
  **/
 GgitPushOptions *

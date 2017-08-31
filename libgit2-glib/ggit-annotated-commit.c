@@ -58,7 +58,7 @@ _ggit_annotated_commit_get_annotated_commit (GgitAnnotatedCommit *annotated_comm
  * Atomically increments the reference count of @annotated_commit by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a newly allocated #GgitAnnotatedCommit.
+ * Returns: (transfer none) (allow-none): a newly allocated #GgitAnnotatedCommit or %NULL.
  */
 GgitAnnotatedCommit *
 ggit_annotated_commit_ref (GgitAnnotatedCommit *annotated_commit)
@@ -95,7 +95,7 @@ ggit_annotated_commit_unref (GgitAnnotatedCommit *annotated_commit)
  *
  * Gets the commit ID that the given @annotated_commit refs to.
  *
- * Returns: (transfer full): the commit ID that the given @annotated_commit refs to.
+ * Returns: (transfer full) (allow-none): the commit ID that the given @annotated_commit refs to or %NULL.
  */
 GgitOId *
 ggit_annotated_commit_get_id (GgitAnnotatedCommit *annotated_commit)

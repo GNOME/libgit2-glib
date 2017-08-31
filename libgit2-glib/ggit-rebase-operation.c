@@ -58,7 +58,7 @@ _ggit_rebase_operation_get_rebase_operation (GgitRebaseOperation *rebase_operati
  * Atomically increments the reference count of @rebase_operation by one.
  * This function is MT-safe and may be called from any thread.
  *
- * Returns: (transfer none): a newly allocated #GgitRebaseOperation.
+ * Returns: (transfer none) (allow-none): a newly allocated #GgitRebaseOperation or %NULL.
  */
 GgitRebaseOperation *
 ggit_rebase_operation_ref (GgitRebaseOperation *rebase_operation)
@@ -111,7 +111,7 @@ ggit_rebase_operation_get_operation_type (GgitRebaseOperation  *rebase_operation
  * Gets the commit ID being cherry-picked. This will be populated for
  * all operations except those of type @GGIT_REBASE_OPERATION_EXEC.
  *
- * Returns: (transfer full): the commit ID being cherry-picked.
+ * Returns: (transfer full) (allow-none): the commit ID being cherry-picked or %NULL.
  */
 GgitOId *
 ggit_rebase_operation_get_id (GgitRebaseOperation *rebase_operation)
@@ -128,7 +128,7 @@ ggit_rebase_operation_get_id (GgitRebaseOperation *rebase_operation)
  * Gets the executable the user has requested be run.  This will only
  * be populated for operations of type @GGIT_REBASE_OPERATION_EXEC.
  *
- * Returns: the executable the user has requested be run.
+ * Returns: (transfer none) (allow-none): the executable the user has requested be run or %NULL.
  */
 const gchar *
 ggit_rebase_operation_get_exec (GgitRebaseOperation  *rebase_operation)

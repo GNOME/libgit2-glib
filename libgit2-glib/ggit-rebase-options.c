@@ -50,7 +50,7 @@ _ggit_rebase_options_get_rebase_options (GgitRebaseOptions *rebase_options)
  *
  * Copies @rebase_options into a newly allocated #GgitRebaseOptions.
  *
- * Returns: (transfer full): a newly allocated #GgitRebaseOptions.
+ * Returns: (transfer full) (allow-none): a newly allocated #GgitRebaseOptions or %NULL.
  */
 GgitRebaseOptions *
 ggit_rebase_options_copy (GgitRebaseOptions *rebase_options)
@@ -150,7 +150,7 @@ ggit_rebase_options_set_quiet (GgitRebaseOptions *rebase_options,
  * Gets the the name of the notes reference used to rewrite notes for rebased
  * commits when finishing the rebase or %NULL if not set.
  *
- * Returns: the name of the notes reference or %NULL.
+ * Returns: (transfer none) (allow-none): the name of the notes reference or %NULL.
  */
 const gchar *
 ggit_rebase_options_get_rewrite_notes_ref (GgitRebaseOptions *rebase_options)
@@ -189,7 +189,7 @@ ggit_rebase_options_set_rewrite_notes_ref (GgitRebaseOptions *rebase_options,
  *
  * Get the checkout options object or %NULL if not set.
  *
- * Returns: (transfer none): the checkout options or %NULL.
+ * Returns: (transfer none) (allow-none): the checkout options or %NULL.
  */
 GgitCheckoutOptions *
 ggit_rebase_options_get_checkout_options (GgitRebaseOptions *rebase_options)

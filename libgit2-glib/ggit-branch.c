@@ -85,7 +85,7 @@ ggit_branch_delete (GgitBranch  *branch,
  *
  * Moves/renames an existing branch reference.
  *
- * Returns: (transfer full): the new branch.
+ * Returns: (transfer full) (allow-none): the new branch or %NULL.
  **/
 GgitBranch *
 ggit_branch_move (GgitBranch       *branch,
@@ -124,7 +124,7 @@ ggit_branch_move (GgitBranch       *branch,
  *
  * Gets the name of the given local or remote branch.
  *
- * Returns: the name of the given local or remote branch.
+ * Returns: (transfer none) (allow-none): the name of the given local or remote branch or %NULL.
  */
 const gchar *
 ggit_branch_get_name (GgitBranch  *branch,
@@ -156,7 +156,7 @@ ggit_branch_get_name (GgitBranch  *branch,
  * Gets the reference supporting the remote tracking branch,
  * given a local branch reference.
  *
- * Returns: (transfer full) (allow-none): the reference supporting the remote tracking branch.
+ * Returns: (transfer full) (allow-none): the reference supporting the remote tracking branch or %NULL.
  */
 GgitRef *
 ggit_branch_get_upstream (GgitBranch  *branch,

@@ -219,7 +219,7 @@ _ggit_index_get_index (GgitIndex *idx)
  * Create a new bare Git index object as a memory representation of the Git
  * index file in @file, without a repository to back it.
  *
- * Returns: (transfer full): a #GgitIndex or %NULL if an error occurred.
+ * Returns: (transfer full) (allow-none): a #GgitIndex or %NULL if an error occurred.
  *
  **/
 GgitIndex *
@@ -397,7 +397,7 @@ ggit_index_add (GgitIndex       *idx,
  *
  * Get the index entries enumerator.
  *
- * Returns: (transfer full): a #GgitIndexEntries.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntries or %NULL.
  *
  **/
 GgitIndexEntries *
@@ -414,7 +414,7 @@ ggit_index_get_entries (GgitIndex *idx)
  *
  * Get the resolve undo entries enumerator.
  *
- * Returns: (transfer full): a #GgitIndexEntriesResolveUndo.
+ * Returns: (transfer full) (allow-none): a #GgitIndexEntriesResolveUndo or %NULL.
  *
  **/
 GgitIndexEntriesResolveUndo *
@@ -531,7 +531,7 @@ ggit_index_add_path (GgitIndex    *idx,
  *
  * Get the #GgitRepository that owns the index.
  *
- * Returns: (transfer full): the #GgitRepository that owns this index.
+ * Returns: (transfer full) (allow-none): the #GgitRepository that owns this index or %NULL.
  *
  **/
 GgitRepository *
@@ -572,7 +572,7 @@ ggit_index_has_conflicts (GgitIndex *idx)
  * and must not contain any files in conflict. You can use the resulting tree
  * to for instance create a commit.
  *
- * Returns: a #GgitOId or %NULL in case of an error.
+ * Returns: (transfer full) (allow-none): a #GgitOId or %NULL in case of an error.
  *
  **/
 GgitOId *
@@ -606,7 +606,7 @@ ggit_index_write_tree (GgitIndex  *idx,
  * state of the index. The index must not contain any files in conflict. You can use
  * the resulting tree to for instance create a commit.
  *
- * Returns: a #GgitOId or %NULL in case of an error.
+ * Returns: (transfer full) (allow-none): a #GgitOId or %NULL in case of an error.
  *
  **/
 GgitOId *
@@ -635,4 +635,3 @@ ggit_index_write_tree_to (GgitIndex       *idx,
 }
 
 /* ex:set ts=8 noet: */
-
