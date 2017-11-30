@@ -2,7 +2,7 @@ AC_PREREQ([2.63])
 
 m4_define(libgit2_glib_major_version, 0)
 m4_define(libgit2_glib_minor_version, 26)
-m4_define(libgit2_glib_micro_version, 1)
+m4_define(libgit2_glib_micro_version, 2)
 m4_define(libgit2_glib_version, libgit2_glib_major_version.libgit2_glib_minor_version.libgit2_glib_micro_version)
 
 AC_INIT([libgit2-glib],

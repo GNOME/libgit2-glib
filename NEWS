@@ -1,3 +1,8 @@
+News in 0.26.2
+--------------
+* Several fixes on the annotations
+* Misc bug fixes
+
 News in 0.26.0
 --------------
 * Port to libgit2 0.26.x
