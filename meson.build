@@ -100,7 +100,7 @@ endforeach
 have_termios = cc.has_header('termios.h')
 
 # Debugging
-enable_debug = get_option('enable-debug')
+enable_debug = get_option('debug')
 if enable_debug == 'auto'
   if libgit2_glib_minor_version.is_odd()
     enable_debug = 'yes'
@@ -148,7 +148,7 @@ build_gobject = gobject.found()
 libgit2 = dependency('libgit2', version: '>=' + git2_req)
 
 build_gir = build_gobject
-if get_option('enable-introspection')
+if get_option('introspection')
   # XXX: Not nice, but probably our best option
   gir = find_program('g-ir-scanner', required: false)
   build_gir = gir.found() and not meson.is_cross_build()
@@ -158,7 +158,7 @@ ggit_h_data = configuration_data()
 ggit_h_data.set('GGIT_SSH_INCLUDES', '')
 
 # Check for libgit2 ssh support
-enable_ssh_opt = get_option('enable-ssh')
+enable_ssh_opt = get_option('ssh')
 enable_ssh = false
 if enable_ssh_opt != 'no'
   have_libgit2_ssh = cc.compiles('''
@@ -200,6 +200,6 @@ subdir('libgit2-glib')
 subdir('examples')
 subdir('tests')
 
-if get_option('enable-gtk-doc')
+if get_option('gtk-doc')
   subdir('docs')
 endif
