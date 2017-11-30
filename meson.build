@@ -55,31 +55,10 @@ conf.set('VERSION', libgit2_glib_version)
 
 # Compiler flags
 if cc.get_id() == 'msvc'
-  # Make MSVC more pedantic, this is a recommended pragma list
-  # from _Win32_Programming_ by Rector and Newcomer.  Taken from
-  # glib's msvc_recommended_pragmas.h--please see that file for
-  # the meaning of the warning codes used here
-  test_cflags = [
-    '-W3',
-    '-we4002',
-    '-we4003',
-    '-w14010',
-    '-we4013',
-    '-w14016',
-    '-we4020',
-    '-we4021',
-    '-we4027',
-    '-we4029',
-    '-we4033',
-    '-we4035',
-    '-we4045',
-    '-we4047',
-    '-we4049',
-    '-we4053',
-    '-we4071',
-    '-we4150',
-    '-we4819'
-  ]
+  # Compiler options taken from msvc_recommended_pragmas.h
+  # in GLib, based on _Win32_Programming_ by Rector and Newcomer
+  test_cflags = []
+  add_project_arguments('-FImsvc_recommended_pragmas.h', language: 'c')
 else
   test_cflags = [
     '-ffast-math',
