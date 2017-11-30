@@ -1,5 +1,5 @@
 project('libgit2-glib', 'c',
-        version: '0.25.0',
+        version: '0.26.2',
         default_options: [
           'buildtype=debugoptimized'
         ],
