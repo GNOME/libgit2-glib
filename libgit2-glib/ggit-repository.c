@@ -3570,7 +3570,7 @@ ggit_repository_checkout_head (GgitRepository       *repository,
 	gint ret;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
-	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
+	g_return_val_if_fail (options == NULL || GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_checkout_head (_ggit_native_get (repository),
@@ -3611,7 +3611,7 @@ ggit_repository_checkout_index (GgitRepository       *repository,
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (index == NULL || GGIT_IS_INDEX (index), FALSE);
-	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
+	g_return_val_if_fail (options == NULL || GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_checkout_index (_ggit_native_get (repository),
@@ -3653,7 +3653,7 @@ ggit_repository_checkout_tree (GgitRepository       *repository,
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
 	g_return_val_if_fail (tree == NULL || GGIT_IS_OBJECT (tree), FALSE);
-	g_return_val_if_fail (GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
+	g_return_val_if_fail (options == NULL || GGIT_IS_CHECKOUT_OPTIONS (options), FALSE);
 	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
 	ret = git_checkout_tree (_ggit_native_get (repository),
