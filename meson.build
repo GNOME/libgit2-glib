@@ -13,6 +13,7 @@ libgit2_glib_minor_version = version_array[1].to_int()
 libgit2_glib_micro_version = version_array[2].to_int()
 
 libgit2_glib_api_version = '1.0'
+libgit2_glib_api_name = '@0@-@1@'.format(meson.project_name(), libgit2_glib_api_version)
 
 # The interface age is reset every time we add new API; this
 # should only happen during development cycles, otherwise the
@@ -34,10 +35,9 @@ libversion = '@0@.@1@.@2@'.format(soversion, current, revision)
 libgit2_glib_prefix = get_option('prefix')
 libgit2_glib_libdir = join_paths(libgit2_glib_prefix, get_option('libdir'))
 libgit2_glib_includedir = join_paths(libgit2_glib_prefix, get_option('includedir'))
-libgit2_glib_includedir_real = join_paths(libgit2_glib_includedir,
-                                          'libgit2-glib-@0@'.format(libgit2_glib_api_version),
-                                          'libgit2-glib')
 libgit2_glib_datadir = join_paths(libgit2_glib_prefix, get_option('datadir'))
+
+libgit2_glib_pkgincludedir = join_paths(libgit2_glib_includedir, libgit2_glib_api_name, meson.project_name())
 
 cc = meson.get_compiler('c')
 host_system = host_machine.system()
