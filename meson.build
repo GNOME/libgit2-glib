@@ -42,17 +42,6 @@ libgit2_glib_pkgincludedir = join_paths(libgit2_glib_includedir, libgit2_glib_ap
 cc = meson.get_compiler('c')
 host_system = host_machine.system()
 
-conf = configuration_data()
-
-# Compat variables for pkgconfig
-conf.set('prefix', libgit2_glib_prefix)
-conf.set('exec_prefix', libgit2_glib_prefix)
-conf.set('libdir', libgit2_glib_libdir)
-conf.set('includedir', libgit2_glib_includedir)
-
-# Version macros
-conf.set('VERSION', libgit2_glib_version)
-
 # Compiler flags
 if cc.get_id() == 'msvc'
   # Compiler options taken from msvc_recommended_pragmas.h
@@ -138,8 +127,7 @@ core_inc = include_directories('.')
 # Required dependencies
 git2_req = '0.25.0'
 glib_req = '2.44.0'
-conf.set('GIT2_REQUIRED', git2_req)
-conf.set('GLIB_REQUIRED', glib_req)
+
 glib = dependency('glib-2.0', version: '>=' + glib_req)
 gobject = dependency('gobject-2.0', version: '>=' + glib_req)
 gio = dependency('gio-2.0', version: '>=' + glib_req)
@@ -188,13 +176,7 @@ if enable_ssh_opt != 'no'
 endif
 
 gnome = import('gnome')
-
-# Generate the pkg-config files
-configure_file(input: 'libgit2-glib-@0@.pc.in'.format(libgit2_glib_api_version),
-               output: 'libgit2-glib-@0@.pc'.format(libgit2_glib_api_version),
-               configuration: conf,
-               install: true,
-               install_dir: join_paths(libgit2_glib_libdir, 'pkgconfig'))
+pkg = import('pkgconfig')
 
 subdir('libgit2-glib')
 subdir('examples')

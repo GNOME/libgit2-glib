@@ -168,7 +168,6 @@ enum_types = gnome.mkenums('ggit-enum-types',
 
 install_headers(headers, subdir: join_paths(libgit2_glib_api_name, meson.project_name()))
 
-pkgconfig_files = [ 'libgit2-glib-@0@'.format(libgit2_glib_api_version) ]
 platform_deps = [ glib, gobject, gio, libgit2 ]
 
 if cc.get_id() == 'msvc'
@@ -187,6 +186,18 @@ libgit2_glib = shared_library('git2-glib-@0@'.format(libgit2_glib_api_version),
   c_args: extra_args + common_flags + debug_flags + [
             '-DG_LOG_DOMAIN="Ggit"' ],
   link_args: libgit2_glib_link_args)
+
+pkg.generate(
+  libraries: libgit2_glib,
+  version: meson.project_version(),
+  name: meson.project_name(),
+  description: 'libgit2-glib, a a glib wrapper library around the libgit2 git access library.',
+  filebase: libgit2_glib_api_name,
+  subdirs: join_paths(libgit2_glib_api_name, meson.project_name()),
+  requires: 'libgit2 >= @0@, glib-2.0 >= @1@, gobject-2.0 >= @1@, gio-2.0 >= @1@'.format(git2_req, glib_req),
+  variables: 'exec_prefix=${prefix}',
+  extra_cflags: extra_args
+)
 
 # Internal dependency, for tests and benchmarks
 libgit2_glib_inc = include_directories([ '.', '..' ])
