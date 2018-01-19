@@ -230,10 +230,6 @@ libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
                                       sources: enum_types[1])
 
 if enable_gir
-  gir_extra_args = [
-    '--identifier-prefix=Ggit',
-    '--c-include=ggit.h'
-  ]
   gnome.generate_gir(libgit2_glib,
                      sources: headers + sources,
                      namespace: 'Ggit',
@@ -241,6 +237,6 @@ if enable_gir
                      identifier_prefix: 'Ggit',
                      symbol_prefix: 'ggit',
                      includes: [ 'GObject-2.0', 'GLib-2.0', 'Gio-2.0' ],
-                     install: true,
-                     extra_args: gir_extra_args)
+                     header: ggit_h,
+                     install: true)
 endif
