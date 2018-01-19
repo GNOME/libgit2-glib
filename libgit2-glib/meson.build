@@ -229,6 +229,10 @@ libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
                                       # Everything that uses libgit2-glib needs this built to compile
                                       sources: enum_types[1])
 
+if enable_python
+  install_data('Ggit.py', install_dir: join_paths(python.sysconfig_path('purelib'), 'gi', 'overrides'))
+endif
+
 if enable_gir
   libgit2_glib_gir = gnome.generate_gir(libgit2_glib,
                                         sources: headers + sources,
