@@ -1,4 +1,5 @@
 option('gtk_doc', type: 'boolean', value: false, description: 'Enable generating the API reference (depends on GTK-Doc)')
 option('introspection', type: 'boolean', value: true, description: 'Enable GObject Introspection')
+option('python', type: 'boolean', value: true, description: 'Build with python support')
 option('ssh', type: 'boolean', value: true, description: 'Build with libgit2 ssh support')
 option('vapi', type: 'boolean', value: true, description: 'Build Vala bindings')

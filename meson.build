@@ -148,6 +148,19 @@ if enable_ssh
   assert(cc.compiles(libgit2_ssh_src, name: 'libgit2 supports SSH'), 'libgit2 ssh support was requested, but not found. Use -Dssh=false to build without it.')
 endif
 
+# Check for python
+enable_python = get_option('python')
+if enable_python
+  python = import('python3')
+
+  python_req = '3.2.3'
+
+  dependency('pygobject-3.0', version: '>= 3.0.0')
+  assert(python.language_version().version_compare('>= ' + python_req), 'python support was requested, but version >= ' + python_req + ' not found.')
+
+  meson.add_install_script('meson_post_install.py', libgit2_glib_libdir)
+endif
+
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
