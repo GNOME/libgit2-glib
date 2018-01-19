@@ -207,7 +207,7 @@ libgit2_glib = shared_library('git2-glib-@0@'.format(libgit2_glib_api_version),
   soversion: soversion,
   install: true,
   dependencies: platform_deps,
-  c_args: extra_args + [ '-DG_LOG_DOMAIN="Ggit"' ],
+  c_args: extra_args + [ '-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns) ],
   link_args: libgit2_glib_link_args)
 
 pkg.generate(
@@ -232,10 +232,10 @@ libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
 if enable_gir
   gnome.generate_gir(libgit2_glib,
                      sources: headers + sources,
-                     namespace: 'Ggit',
+                     namespace: libgit2_glib_ns,
                      nsversion: libgit2_glib_api_version,
-                     identifier_prefix: 'Ggit',
-                     symbol_prefix: 'ggit',
+                     identifier_prefix: libgit2_glib_ns,
+                     symbol_prefix: libgit2_glib_ns.to_lower(),
                      includes: [ 'GObject-2.0', 'GLib-2.0', 'Gio-2.0' ],
                      header: ggit_h,
                      install: true)
