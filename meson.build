@@ -140,14 +140,10 @@ if enable_gir
   enable_gir = find_program('g-ir-scanner', required: false).found() and not meson.is_cross_build()
 endif
 
-ggit_h_data = configuration_data()
-ggit_h_data.set('GGIT_SSH_INCLUDES', '')
-
 # Check for libgit2 ssh support
-enable_ssh_opt = get_option('ssh')
-enable_ssh = false
-if enable_ssh_opt != 'no'
-  have_libgit2_ssh = cc.compiles('''
+enable_ssh = get_option('ssh')
+if enable_ssh
+  libgit2_ssh_src = '''
     #include <git2.h>
     int
     main(int argc, const char *argv[])
@@ -155,22 +151,9 @@ if enable_ssh_opt != 'no'
             git_libgit2_init ();
             return ((git_libgit2_features() & GIT_FEATURE_SSH) != 0) ? 0 : 1;
     }
-  ''',
-  name: 'libgit2 supports SSH')
+  '''
 
-  if enable_ssh_opt == 'yes' and not have_libgit2_ssh
-    error('libgit2 ssh support was requested, but not found')
-  endif
-
-  if have_libgit2_ssh
-    ssh_includes = '''
-#include <libgit2-glib/ggit-cred-ssh-key-from-agent.h>
-#include <libgit2-glib/ggit-cred-ssh-interactive.h>
-'''
-    ggit_h_data.set('GGIT_SSH_INCLUDES', ssh_includes)
-    extra_args += [ '-DGIT_SSH=1' ]
-    enable_ssh = true
-  endif
+  assert(cc.compiles(libgit2_ssh_src, name: 'libgit2 supports SSH'), 'libgit2 ssh support was requested, but not found. Use -Dssh=false to build without it.')
 endif
 
 gnome = import('gnome')

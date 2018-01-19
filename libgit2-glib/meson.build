@@ -154,10 +154,27 @@ if enable_ssh
   ]
 endif
 
-configure_file(input : 'ggit.h.in',
-               output : 'ggit.h',
-               configuration : ggit_h_data,
-               install_dir: libgit2_glib_pkgincludedir)
+if enable_ssh
+  ssh_includes = '''
+#include <libgit2-glib/ggit-cred-ssh-key-from-agent.h>
+#include <libgit2-glib/ggit-cred-ssh-interactive.h>
+'''
+
+  extra_args += [ '-DGIT_SSH=1' ]
+else
+  ssh_includes = ''
+endif
+
+ggit_h_conf = configuration_data()
+ggit_h_conf.set('GGIT_SSH_INCLUDES', ssh_includes)
+
+ggit_h = 'ggit.h'
+
+sources += configure_file(
+  input: ggit_h + '.in',
+  output: ggit_h,
+  configuration: ggit_h_conf,
+  install_dir: libgit2_glib_pkgincludedir)
 
 enum_types = gnome.mkenums('ggit-enum-types',
   sources : headers,
