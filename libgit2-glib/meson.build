@@ -230,13 +230,20 @@ libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
                                       sources: enum_types[1])
 
 if enable_gir
-  gnome.generate_gir(libgit2_glib,
-                     sources: headers + sources,
-                     namespace: libgit2_glib_ns,
-                     nsversion: libgit2_glib_api_version,
-                     identifier_prefix: libgit2_glib_ns,
-                     symbol_prefix: libgit2_glib_ns.to_lower(),
-                     includes: [ 'GObject-2.0', 'GLib-2.0', 'Gio-2.0' ],
-                     header: ggit_h,
-                     install: true)
+  libgit2_glib_gir = gnome.generate_gir(libgit2_glib,
+                                        sources: headers + sources,
+                                        namespace: libgit2_glib_ns,
+                                        nsversion: libgit2_glib_api_version,
+                                        identifier_prefix: libgit2_glib_ns,
+                                        symbol_prefix: libgit2_glib_ns.to_lower(),
+                                        includes: [ 'GObject-2.0', 'GLib-2.0', 'Gio-2.0' ],
+                                        header: ggit_h,
+                                        install: true)
+
+  if enable_vapi
+    gnome.generate_vapi(libgit2_glib_vapi_name,
+                        sources: libgit2_glib_gir[0],
+                        packages: 'gio-2.0',
+                        install: true)
+  endif
 endif
