@@ -185,7 +185,12 @@ enum_types = gnome.mkenums('ggit-enum-types',
 
 install_headers(headers, subdir: join_paths(libgit2_glib_api_name, meson.project_name()))
 
-platform_deps = [ glib, gobject, gio, libgit2 ]
+platform_deps = [
+  gio_dep,
+  glib_dep,
+  gobject_dep,
+  libgit2_dep
+]
 
 if cc.get_id() == 'msvc'
   libgit2_glib_link_args = []

@@ -7,7 +7,7 @@ configure_file(input: name + '.in',
                output: name,
                configuration: docs_conf)
 
-glib_prefix = glib.get_pkgconfig_variable('prefix')
+glib_prefix = glib_dep.get_pkgconfig_variable('prefix')
 glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
 
 gnome.gtkdoc(libgit2_glib_api_name,

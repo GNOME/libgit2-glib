@@ -113,11 +113,11 @@ core_inc = include_directories('.')
 git2_req = '0.25.0'
 glib_req = '2.44.0'
 
-glib = dependency('glib-2.0', version: '>=' + glib_req)
-gobject = dependency('gobject-2.0', version: '>=' + glib_req)
-gio = dependency('gio-2.0', version: '>=' + glib_req)
+glib_dep = dependency('glib-2.0', version: '>=' + glib_req)
+gobject_dep = dependency('gobject-2.0', version: '>=' + glib_req)
+gio_dep = dependency('gio-2.0', version: '>=' + glib_req)
 
-libgit2 = dependency('libgit2', version: '>=' + git2_req)
+libgit2_dep = dependency('libgit2', version: '>=' + git2_req)
 
 enable_gir = get_option('introspection')
 if enable_gir
