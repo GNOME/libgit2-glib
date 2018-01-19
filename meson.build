@@ -131,15 +131,13 @@ glib_req = '2.44.0'
 glib = dependency('glib-2.0', version: '>=' + glib_req)
 gobject = dependency('gobject-2.0', version: '>=' + glib_req)
 gio = dependency('gio-2.0', version: '>=' + glib_req)
-build_gobject = gobject.found()
 
 libgit2 = dependency('libgit2', version: '>=' + git2_req)
 
-build_gir = build_gobject
-if get_option('introspection')
+enable_gir = get_option('introspection')
+if enable_gir
   # XXX: Not nice, but probably our best option
-  gir = find_program('g-ir-scanner', required: false)
-  build_gir = gir.found() and not meson.is_cross_build()
+  enable_gir = find_program('g-ir-scanner', required: false).found() and not meson.is_cross_build()
 endif
 
 ggit_h_data = configuration_data()

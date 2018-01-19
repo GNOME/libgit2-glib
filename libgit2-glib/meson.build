@@ -207,7 +207,7 @@ libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
                                       # Everything that uses libgit2-glib needs this built to compile
                                       sources: enum_types[1])
 
-if build_gir
+if enable_gir
   gir_extra_args = [
     '--identifier-prefix=Ggit',
     '--c-include=ggit.h'
