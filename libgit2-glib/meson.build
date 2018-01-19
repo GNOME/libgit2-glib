@@ -200,8 +200,7 @@ libgit2_glib = shared_library('git2-glib-@0@'.format(libgit2_glib_api_version),
   soversion: soversion,
   install: true,
   dependencies: platform_deps,
-  c_args: extra_args + common_flags + debug_flags + [
-            '-DG_LOG_DOMAIN="Ggit"' ],
+  c_args: extra_args + [ '-DG_LOG_DOMAIN="Ggit"' ],
   link_args: libgit2_glib_link_args)
 
 pkg.generate(
