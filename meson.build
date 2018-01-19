@@ -4,7 +4,7 @@ project('libgit2-glib', 'c',
           'buildtype=debugoptimized'
         ],
         license: 'LGPL2+',
-        meson_version: '>= 0.36.0')
+        meson_version: '>= 0.43.0')
 
 libgit2_glib_version = meson.project_version()
 version_array = libgit2_glib_version.split('.')
@@ -14,6 +14,8 @@ libgit2_glib_micro_version = version_array[2].to_int()
 
 libgit2_glib_api_version = '1.0'
 libgit2_glib_api_name = '@0@-@1@'.format(meson.project_name(), libgit2_glib_api_version)
+
+libgit2_glib_buildtype = get_option('buildtype')
 
 # The interface age is reset every time we add new API; this
 # should only happen during development cycles, otherwise the
@@ -41,12 +43,11 @@ libgit2_glib_pkgincludedir = join_paths(libgit2_glib_includedir, libgit2_glib_ap
 
 cc = meson.get_compiler('c')
 
-# Compiler flags
+# Compiler and Debugging flags
 if cc.get_id() == 'msvc'
   # Compiler options taken from msvc_recommended_pragmas.h
   # in GLib, based on _Win32_Programming_ by Rector and Newcomer
-  test_cflags = []
-  add_project_arguments('-FImsvc_recommended_pragmas.h', language: 'c')
+  common_flags = ['-FImsvc_recommended_pragmas.h']
 else
   test_cflags = [
     '-ffast-math',
@@ -76,48 +77,31 @@ else
     '-Werror=array-bounds',
     '-Werror=write-strings'
   ]
+
+  common_flags = cc.get_supported_arguments(test_cflags)
 endif
-common_flags = []
-foreach cflag: test_cflags
-  if cc.has_argument(cflag)
-    common_flags += [ cflag ]
+
+if libgit2_glib_buildtype.contains('debug')
+  common_flags += [ '-DLIBGIT2_GLIB_ENABLE_DEBUG' ]
+
+  if libgit2_glib_buildtype.contains('optimized')
+    common_flags += [ '-DG_DISABLE_CAST_CHECKS' ]
   endif
-endforeach
+else
+  common_flags += [
+    '-DG_DISABLE_CAST_CHECKS',
+    '-DG_DISABLE_CHECKS'
+  ]
+endif
+
+if get_option('b_ndebug')
+  common_flags += [ '-DG_DISABLE_ASSERT' ]
+endif
+
+add_project_arguments(common_flags, language: 'c')
 
 # Termios
 have_termios = cc.has_header('termios.h')
-
-# Debugging
-enable_debug = get_option('debug')
-if enable_debug == 'auto'
-  if libgit2_glib_minor_version.is_odd()
-    enable_debug = 'yes'
-  else
-    enable_debug = 'minimum'
-  endif
-endif
-
-debug_flags = []
-if enable_debug == 'yes'
-  debug_flags += [
-    '-DLIBGIT2_GLIB_ENABLE_DEBUG'
-  ]
-endif
-
-if enable_debug == 'minimum'
-  debug_flags += [
-    '-DLIBGIT2_GLIB_ENABLE_DEBUG',
-    '-DG_DISABLE_CAST_CHECKS'
-  ]
-endif
-
-if enable_debug == 'no'
-  debug_flags += [
-    '-DG_DISABLE_CAST_CHECKS',
-    '-DG_DISABLE_CHECKS',
-    '-DG_DISABLE_ASSERT'
-  ]
-endif
 
 extra_args= []
 
