@@ -16,6 +16,7 @@ libgit2_glib_api_version = '1.0'
 libgit2_glib_api_name = '@0@-@1@'.format(meson.project_name(), libgit2_glib_api_version)
 
 libgit2_glib_ns = 'Ggit'
+libgit2_glib_vapi_name = '@0@-@1@'.format(libgit2_glib_ns.to_lower(), libgit2_glib_api_version)
 
 libgit2_glib_buildtype = get_option('buildtype')
 
@@ -123,6 +124,12 @@ enable_gir = get_option('introspection')
 if enable_gir
   # XXX: Not nice, but probably our best option
   enable_gir = find_program('g-ir-scanner', required: false).found() and not meson.is_cross_build()
+endif
+
+enable_vapi = get_option('vapi')
+if enable_vapi
+  assert(enable_gir, 'vapi support was requested, but introspection support is mandatory.')
+  assert(add_languages('vala', required: false), 'vapi support was requested, but vala not found.')
 endif
 
 # Check for libgit2 ssh support
