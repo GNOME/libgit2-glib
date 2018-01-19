@@ -40,7 +40,6 @@ libgit2_glib_datadir = join_paths(libgit2_glib_prefix, get_option('datadir'))
 libgit2_glib_pkgincludedir = join_paths(libgit2_glib_includedir, libgit2_glib_api_name, meson.project_name())
 
 cc = meson.get_compiler('c')
-host_system = host_machine.system()
 
 # Compiler flags
 if cc.get_id() == 'msvc'
