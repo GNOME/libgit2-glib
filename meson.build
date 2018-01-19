@@ -163,6 +163,6 @@ subdir('libgit2-glib')
 subdir('examples')
 subdir('tests')
 
-if get_option('gtk-doc')
-  subdir('docs')
+if get_option('gtk_doc')
+  subdir('docs/reference')
 endif
