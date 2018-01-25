@@ -245,7 +245,7 @@ if enable_gir
                                         install: true)
 
   if enable_vapi
-    gnome.generate_vapi(libgit2_glib_vapi_name,
+    gnome.generate_vapi(libgit2_glib_api_name,
                         sources: libgit2_glib_gir[0],
                         packages: 'gio-2.0',
                         install: true)
