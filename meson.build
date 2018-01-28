@@ -131,6 +131,8 @@ enable_vapi = get_option('vapi')
 if enable_vapi
   assert(enable_gir, 'vapi support was requested, but introspection support is mandatory.')
   assert(add_languages('vala', required: false), 'vapi support was requested, but vala not found.')
+
+  meson.add_install_script('meson_vapi_link.py', libgit2_glib_datadir)
 endif
 
 # Check for libgit2 ssh support
@@ -159,7 +161,7 @@ if enable_python
   dependency('pygobject-3.0', version: '>= 3.0.0')
   assert(python.language_version().version_compare('>= ' + python_req), 'python support was requested, but version >= ' + python_req + ' not found.')
 
-  meson.add_install_script('meson_post_install.py', libgit2_glib_libdir)
+  meson.add_install_script('meson_python_compile.py', libgit2_glib_libdir)
 endif
 
 gnome = import('gnome')
