@@ -216,7 +216,7 @@ pkg.generate(
   name: meson.project_name(),
   description: 'libgit2-glib, a a glib wrapper library around the libgit2 git access library.',
   filebase: libgit2_glib_api_name,
-  subdirs: join_paths(libgit2_glib_api_name, meson.project_name()),
+  subdirs: libgit2_glib_api_name,
   requires: 'libgit2 >= @0@, glib-2.0 >= @1@, gobject-2.0 >= @1@, gio-2.0 >= @1@'.format(git2_req, glib_req),
   variables: 'exec_prefix=${prefix}',
   extra_cflags: extra_args
