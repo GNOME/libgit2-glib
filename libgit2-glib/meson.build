@@ -74,6 +74,11 @@ private_headers = [
   'ggit-utils.h',
 ]
 
+ssh_headers = [
+  'ggit-cred-ssh-interactive.h',
+  'ggit-cred-ssh-key-from-agent.h',
+]
+
 sources = [
   'ggit-annotated-commit.c',
   'ggit-blame.c',
@@ -146,17 +151,13 @@ sources = [
 ]
 
 if enable_ssh
-  headers += [
-    'ggit-cred-ssh-interactive.h',
-    'ggit-cred-ssh-key-from-agent.h',
-  ]
+  headers += ssh_headers
+
   sources += [
     'ggit-cred-ssh-interactive.c',
     'ggit-cred-ssh-key-from-agent.c',
   ]
-endif
 
-if enable_ssh
   ssh_includes = '''
 #include <libgit2-glib/ggit-cred-ssh-key-from-agent.h>
 #include <libgit2-glib/ggit-cred-ssh-interactive.h>
@@ -164,6 +165,8 @@ if enable_ssh
 
   extra_args += [ '-DGIT_SSH=1' ]
 else
+  private_headers += ssh_headers
+
   ssh_includes = ''
 endif
 
