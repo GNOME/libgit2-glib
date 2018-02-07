@@ -235,13 +235,14 @@ endif
 
 if enable_gir
   libgit2_glib_gir = gnome.generate_gir(libgit2_glib,
-                                        sources: headers + sources,
+                                        sources: headers + sources + enum_types,
                                         namespace: libgit2_glib_ns,
                                         nsversion: libgit2_glib_api_version,
                                         identifier_prefix: libgit2_glib_ns,
                                         symbol_prefix: libgit2_glib_ns.to_lower(),
+                                        export_packages: libgit2_glib_api_name,
                                         includes: [ 'GObject-2.0', 'GLib-2.0', 'Gio-2.0' ],
-                                        header: ggit_h,
+                                        header: join_paths(meson.project_name(), ggit_h),
                                         install: true)
 
   if enable_vapi
