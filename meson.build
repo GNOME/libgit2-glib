@@ -16,7 +16,6 @@ libgit2_glib_api_version = '1.0'
 libgit2_glib_api_name = '@0@-@1@'.format(meson.project_name(), libgit2_glib_api_version)
 
 libgit2_glib_ns = 'Ggit'
-libgit2_glib_vapi_name = '@0@-@1@'.format(libgit2_glib_ns.to_lower(), libgit2_glib_api_version)
 
 libgit2_glib_buildtype = get_option('buildtype')
 
