@@ -88,12 +88,25 @@ ggit_revision_walker_set_property (GObject      *object,
 	switch (prop_id)
 	{
 		case PROP_REPOSITORY:
-			priv->repository = g_value_get_object (value);
+			priv->repository = g_value_dup_object (value);
 			break;
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 			break;
 	}
+}
+
+static void
+ggit_revision_walker_dispose (GObject *object)
+{
+	GgitRevisionWalker *walker = GGIT_REVISION_WALKER (object);
+	GgitRevisionWalkerPrivate *priv;
+
+	priv = ggit_revision_walker_get_instance_private (walker);
+
+	g_clear_object (&priv->repository);
+
+	G_OBJECT_CLASS (ggit_revision_walker_parent_class)->dispose (object);
 }
 
 static void
@@ -103,6 +116,7 @@ ggit_revision_walker_class_init (GgitRevisionWalkerClass *klass)
 
 	object_class->get_property = ggit_revision_walker_get_property;
 	object_class->set_property = ggit_revision_walker_set_property;
+	object_class->dispose = ggit_revision_walker_dispose;
 
 	g_object_class_install_property (object_class,
 	                                 PROP_REPOSITORY,
