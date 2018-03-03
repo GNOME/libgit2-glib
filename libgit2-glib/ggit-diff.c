@@ -71,6 +71,25 @@ enum
 	PROP_REPOSITORY
 };
 
+static void
+wrapper_data_init (CallbackWrapperData *data)
+{
+	if (data != NULL)
+	{
+		data->cached_deltas =
+			g_hash_table_new_full (g_str_hash,
+			                       g_str_equal,
+			                       g_free,
+			                       (GDestroyNotify) ggit_diff_delta_unref);
+
+		data->cached_hunks =
+			g_hash_table_new_full (g_str_hash,
+			                       g_str_equal,
+			                       g_free,
+			                       (GDestroyNotify) ggit_diff_hunk_unref);
+	}
+}
+
 static GgitDiffDelta *
 wrap_diff_delta_cached (CallbackWrapperData  *data,
                         const git_diff_delta *delta)
@@ -622,11 +641,11 @@ ggit_diff_foreach (GgitDiff              *diff,
 	g_return_if_fail (file_cb != NULL && binary_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 	wrapper_data.diff = diff;
 
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	if (file_cb != NULL)
 	{
@@ -690,13 +709,12 @@ ggit_diff_print (GgitDiff              *diff,
 	g_return_if_fail (print_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 	wrapper_data.diff = diff;
 
 	wrapper_data.line_cb = print_cb;
-
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	ret = git_diff_print (_ggit_native_get (diff), (git_diff_format_t)type,
 	                      ggit_diff_line_callback_wrapper,
@@ -843,6 +861,8 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 
 	if (file_cb != NULL)
@@ -868,9 +888,6 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 		real_line_cb = ggit_diff_line_callback_wrapper;
 		wrapper_data.line_cb = line_cb;
 	}
-
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	ret = git_diff_blobs (old_blob ? _ggit_native_get (old_blob) : NULL,
 	                      old_as_path,
@@ -937,6 +954,8 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 
 	if (buffer_len == -1)
@@ -967,9 +986,6 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 		real_line_cb = ggit_diff_line_callback_wrapper;
 		wrapper_data.line_cb = line_cb;
 	}
-
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	ret = git_diff_blob_to_buffer (old_blob ? _ggit_native_get (old_blob) : NULL,
 	                               old_as_path,
