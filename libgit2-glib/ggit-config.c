@@ -295,6 +295,9 @@ ggit_config_add_file (GgitConfig      *config,
 	ret = git_config_add_file_ondisk (_ggit_native_get (config),
 	                                  path,
 	                                  (git_config_level_t)level,
+#if LIBGIT2_SOVERSION >= 27
+	                                  NULL,
+#endif
 	                                  force);
 	g_free (path);
 
