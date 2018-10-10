@@ -11,7 +11,7 @@ providing making it easier to develop manage git repositories in a
 GObject oriented application.</description>
 
   <download-page rdf:resource="http://download.gnome.org/sources/libgit2-glib/" />
-  <bug-database rdf:resource="http://bugzilla.gnome.org/browse.cgi?product=gitg" />
+  <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/libgit2-glib/issues" />
 
   <maintainer>
     <foaf:Person>
