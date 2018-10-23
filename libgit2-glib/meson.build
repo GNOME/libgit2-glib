@@ -163,7 +163,7 @@ if enable_ssh
 #include <libgit2-glib/ggit-cred-ssh-interactive.h>
 '''
 
-  extra_args += [ '-DGIT_SSH=1' ]
+  extra_args += ['-DGIT_SSH=1']
 else
   private_headers += ssh_headers
 
@@ -179,16 +179,22 @@ sources += configure_file(
   input: ggit_h + '.in',
   output: ggit_h,
   configuration: ggit_h_conf,
-  install_dir: libgit2_glib_pkgincludedir)
+  install_dir: libgit2_glib_pkgincludedir,
+)
 
-enum_types = gnome.mkenums('ggit-enum-types',
-  sources : headers,
-  h_template : 'ggit-enum-types.h.template',
-  c_template : 'ggit-enum-types.c.template',
-  install_header : true,
-  install_dir: libgit2_glib_pkgincludedir)
+enum_types = gnome.mkenums(
+  'ggit-enum-types',
+  sources: headers,
+  h_template: 'ggit-enum-types.h.template',
+  c_template: 'ggit-enum-types.c.template',
+  install_header: true,
+  install_dir: libgit2_glib_pkgincludedir,
+)
 
-install_headers(headers, subdir: join_paths(libgit2_glib_api_name, meson.project_name()))
+install_headers(
+  headers,
+  subdir: join_paths(libgit2_glib_api_name, meson.project_name())
+)
 
 platform_deps = [
   gio_dep,
@@ -200,18 +206,20 @@ platform_deps = [
 if cc.get_id() == 'msvc'
   libgit2_glib_link_args = []
 else
-  libgit2_glib_link_args = [ '-Wl,-Bsymbolic-functions' ]
+  libgit2_glib_link_args = ['-Wl,-Bsymbolic-functions']
 endif
 
-libgit2_glib = shared_library('git2-glib-@0@'.format(libgit2_glib_api_version),
+libgit2_glib = shared_library(
+  'git2-glib-@0@'.format(libgit2_glib_api_version),
   include_directories: core_inc,
   sources: sources + enum_types + private_headers,
   version: libversion,
   soversion: soversion,
   install: true,
   dependencies: platform_deps,
-  c_args: extra_args + [ '-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns) ],
-  link_args: libgit2_glib_link_args)
+  c_args: extra_args + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
+  link_args: libgit2_glib_link_args,
+)
 
 pkg.generate(
   libraries: libgit2_glib,
@@ -226,32 +234,41 @@ pkg.generate(
 )
 
 # Internal dependency, for tests and benchmarks
-libgit2_glib_dep = declare_dependency(link_with: libgit2_glib,
-                                      include_directories: [ core_inc, libgit2_glib_inc ],
-                                      dependencies: platform_deps,
-                                      # Everything that uses libgit2-glib needs this built to compile
-                                      sources: enum_types[1])
+libgit2_glib_dep = declare_dependency(
+  link_with: libgit2_glib,
+  include_directories: [core_inc, libgit2_glib_inc],
+  dependencies: platform_deps,
+  # Everything that uses libgit2-glib needs this built to compile
+  sources: enum_types[1],
+)
 
 if enable_python
-  install_data('Ggit.py', install_dir: join_paths(python.sysconfig_path('purelib'), 'gi', 'overrides'))
+  install_data(
+    'Ggit.py',
+    install_dir: join_paths(python.sysconfig_path('purelib'), 'gi', 'overrides'),
+  )
 endif
 
 if enable_gir
-  libgit2_glib_gir = gnome.generate_gir(libgit2_glib,
-                                        sources: headers + sources + enum_types,
-                                        namespace: libgit2_glib_ns,
-                                        nsversion: libgit2_glib_api_version,
-                                        identifier_prefix: libgit2_glib_ns,
-                                        symbol_prefix: libgit2_glib_ns.to_lower(),
-                                        export_packages: libgit2_glib_api_name,
-                                        includes: [ 'GObject-2.0', 'GLib-2.0', 'Gio-2.0' ],
-                                        header: join_paths(meson.project_name(), ggit_h),
-                                        install: true)
+  libgit2_glib_gir = gnome.generate_gir(
+    libgit2_glib,
+    sources: headers + sources + enum_types,
+    namespace: libgit2_glib_ns,
+    nsversion: libgit2_glib_api_version,
+    identifier_prefix: libgit2_glib_ns,
+    symbol_prefix: libgit2_glib_ns.to_lower(),
+    export_packages: libgit2_glib_api_name,
+    includes: ['GObject-2.0', 'GLib-2.0', 'Gio-2.0'],
+    header: join_paths(meson.project_name(), ggit_h),
+    install: true,
+  )
 
   if enable_vapi
-    gnome.generate_vapi(libgit2_glib_api_name,
-                        sources: libgit2_glib_gir[0],
-                        packages: 'gio-2.0',
-                        install: true)
+    gnome.generate_vapi(
+      libgit2_glib_api_name,
+      sources: libgit2_glib_gir[0],
+      packages: 'gio-2.0',
+      install: true,
+    )
   endif
 endif

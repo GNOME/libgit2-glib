@@ -1,8 +1,10 @@
-project('libgit2-glib', 'c',
-        version: '0.27.7',
-        default_options: 'buildtype=debugoptimized',
-        license: 'LGPL2+',
-        meson_version: '>= 0.48.0')
+project(
+  'libgit2-glib', 'c',
+  version: '0.27.7',
+  default_options: 'buildtype=debugoptimized',
+  license: 'LGPL2+',
+  meson_version: '>= 0.48.0',
+)
 
 libgit2_glib_version = meson.project_version()
 version_array = libgit2_glib_version.split('.')
@@ -80,10 +82,10 @@ else
 endif
 
 if libgit2_glib_buildtype.contains('debug')
-  common_flags += [ '-DLIBGIT2_GLIB_ENABLE_DEBUG' ]
+  common_flags += ['-DLIBGIT2_GLIB_ENABLE_DEBUG']
 
   if libgit2_glib_buildtype.contains('optimized')
-    common_flags += [ '-DG_DISABLE_CAST_CHECKS' ]
+    common_flags += ['-DG_DISABLE_CAST_CHECKS']
   endif
 else
   common_flags += [
@@ -95,7 +97,7 @@ endif
 # Workaround for meson's bug
 # https://github.com/mesonbuild/meson/pull/1896
 if get_option('b_ndebug') == true
-  common_flags += [ '-DG_DISABLE_ASSERT' ]
+  common_flags += ['-DG_DISABLE_ASSERT']
 endif
 
 add_project_arguments(common_flags, language: 'c')
