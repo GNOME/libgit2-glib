@@ -49,7 +49,7 @@ if cc.get_id() == 'msvc'
   # in GLib, based on _Win32_Programming_ by Rector and Newcomer
   common_flags = ['-FImsvc_recommended_pragmas.h']
 else
-  test_cflags = [
+  common_flags = cc.get_supported_arguments([
     '-ffast-math',
     '-fstrict-aliasing',
     '-Wpointer-arith',
@@ -76,9 +76,7 @@ else
     '-Werror=return-type',
     '-Werror=array-bounds',
     '-Werror=write-strings'
-  ]
-
-  common_flags = cc.get_supported_arguments(test_cflags)
+  ])
 endif
 
 if libgit2_glib_buildtype.contains('debug')
