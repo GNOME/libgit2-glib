@@ -104,7 +104,7 @@ wrap_diff_hunk_cached (CallbackWrapperData *data,
 		return NULL;
 	}
 
-	ghunk = g_hash_table_lookup (data->cached_hunks, hunk);
+	//ghunk = g_hash_table_lookup (data->cached_hunks, hunk);
 
 	if (!ghunk)
 	{
