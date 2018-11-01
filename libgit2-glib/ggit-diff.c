@@ -71,23 +71,60 @@ enum
 	PROP_REPOSITORY
 };
 
+static void
+wrapper_data_init (CallbackWrapperData *data)
+{
+	if (data != NULL)
+	{
+		data->cached_deltas =
+			g_hash_table_new_full (g_str_hash,
+			                       g_str_equal,
+			                       g_free,
+			                       (GDestroyNotify) ggit_diff_delta_unref);
+
+		data->cached_hunks =
+			g_hash_table_new_full (g_str_hash,
+			                       g_str_equal,
+			                       g_free,
+			                       (GDestroyNotify) ggit_diff_hunk_unref);
+	}
+}
+
 static GgitDiffDelta *
 wrap_diff_delta_cached (CallbackWrapperData  *data,
                         const git_diff_delta *delta)
 {
 	GgitDiffDelta *gdelta;
+	gchar *key;
 
 	if (!delta)
 	{
 		return NULL;
 	}
 
-	gdelta = g_hash_table_lookup (data->cached_deltas, delta);
+	if (delta->old_file.path != NULL)
+	{
+		key = g_strdup_printf ("%s%s",
+		                       delta->old_file.path,
+		                       git_oid_tostr_s (&delta->old_file.id));
+	}
+	else
+	{
+		key = g_strdup_printf ("%s%s",
+		                       delta->new_file.path,
+		                       git_oid_tostr_s (&delta->new_file.id));
+	}
+
+	gdelta = g_hash_table_lookup (data->cached_deltas, key);
 
 	if (!gdelta)
 	{
 		gdelta = _ggit_diff_delta_wrap (delta);
-		g_hash_table_insert (data->cached_deltas, (gpointer) delta, gdelta);
+		g_hash_table_insert (data->cached_deltas, key, gdelta);
+	}
+	else
+	{
+		g_free (key);
 	}
 
 	return gdelta;
@@ -95,21 +132,42 @@ wrap_diff_delta_cached (CallbackWrapperData  *data,
 
 static GgitDiffHunk *
 wrap_diff_hunk_cached (CallbackWrapperData *data,
+                       const git_diff_delta *delta,
                        const git_diff_hunk *hunk)
 {
 	GgitDiffHunk *ghunk;
+	gchar *key;
 
-	if (!hunk)
+	if (!delta || !hunk)
 	{
 		return NULL;
 	}
 
-	ghunk = g_hash_table_lookup (data->cached_hunks, hunk);
+	if (delta->old_file.path != NULL)
+	{
+		key = g_strdup_printf ("%s%s%s",
+		                       delta->old_file.path,
+		                       git_oid_tostr_s (&delta->old_file.id),
+		                       hunk->header);
+	}
+	else
+	{
+		key = g_strdup_printf ("%s%s%s",
+		                       delta->new_file.path,
+		                       git_oid_tostr_s (&delta->new_file.id),
+		                       hunk->header);
+	}
+
+	ghunk = g_hash_table_lookup (data->cached_hunks, key);
 
 	if (!ghunk)
 	{
 		ghunk = _ggit_diff_hunk_wrap (hunk);
-		g_hash_table_insert (data->cached_hunks, (gpointer) hunk, ghunk);
+		g_hash_table_insert (data->cached_hunks, g_strdup (key), ghunk);
+	}
+	else
+	{
+		g_free (key);
 	}
 
 	return ghunk;
@@ -195,7 +253,7 @@ ggit_diff_hunk_callback_wrapper (const git_diff_delta *delta,
 	gint ret;
 
 	gdelta = wrap_diff_delta_cached (data, delta);
-	ghunk = wrap_diff_hunk_cached (data, hunk);
+	ghunk = wrap_diff_hunk_cached (data, delta, hunk);
 
 	ret = data->hunk_cb (gdelta, ghunk, data->user_data);
 
@@ -228,7 +286,7 @@ ggit_diff_line_callback_wrapper (const git_diff_delta *delta,
 	}
 
 	gdelta = wrap_diff_delta_cached (data, delta);
-	ghunk = wrap_diff_hunk_cached (data, hunk);
+	ghunk = wrap_diff_hunk_cached (data, delta, hunk);
 
 	gline = line == NULL ? NULL : _ggit_diff_line_wrap (line, encoding);
 
@@ -610,11 +668,11 @@ ggit_diff_foreach (GgitDiff              *diff,
 	g_return_if_fail (file_cb != NULL && binary_cb != NULL && hunk_cb != NULL && line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 	wrapper_data.diff = diff;
 
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	if (file_cb != NULL)
 	{
@@ -678,13 +736,12 @@ ggit_diff_print (GgitDiff              *diff,
 	g_return_if_fail (print_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 	wrapper_data.diff = diff;
 
 	wrapper_data.line_cb = print_cb;
-
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	ret = git_diff_print (_ggit_native_get (diff), (git_diff_format_t)type,
 	                      ggit_diff_line_callback_wrapper,
@@ -831,6 +888,8 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 
 	if (file_cb != NULL)
@@ -856,9 +915,6 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 		real_line_cb = ggit_diff_line_callback_wrapper;
 		wrapper_data.line_cb = line_cb;
 	}
-
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	ret = git_diff_blobs (old_blob ? _ggit_native_get (old_blob) : NULL,
 	                      old_as_path,
@@ -925,6 +981,8 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 
 	gdiff_options = _ggit_diff_options_get_diff_options (diff_options);
 
+	wrapper_data_init (&wrapper_data);
+
 	wrapper_data.user_data = user_data;
 
 	if (buffer_len == -1)
@@ -955,9 +1013,6 @@ ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
 		real_line_cb = ggit_diff_line_callback_wrapper;
 		wrapper_data.line_cb = line_cb;
 	}
-
-	wrapper_data.cached_deltas = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_delta_unref);
-	wrapper_data.cached_hunks = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, (GDestroyNotify) ggit_diff_hunk_unref);
 
 	ret = git_diff_blob_to_buffer (old_blob ? _ggit_native_get (old_blob) : NULL,
 	                               old_as_path,
