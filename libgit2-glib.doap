@@ -15,6 +15,13 @@ GObject oriented application.</description>
 
   <maintainer>
     <foaf:Person>
+      <foaf:name>Alberto Fanjul Alonso</foaf:name>
+      <foaf:mbox rdf:resource="mailto:albfan@gnome.org" />
+      <gnome:userid>icq</gnome:userid>
+    </foaf:Person>
+  </maintainer>
+  <maintainer>
+    <foaf:Person>
       <foaf:name>Ignacio Casal Quinteiro</foaf:name>
       <foaf:mbox rdf:resource="mailto:icq@gnome.org" />
       <gnome:userid>icq</gnome:userid>
