@@ -1,5 +1,5 @@
 unit_tests = [
-  'repository'
+  'repository',
 ]
 
 foreach unit: unit_tests

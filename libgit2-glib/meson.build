@@ -66,7 +66,7 @@ headers = [
   'ggit-tree.h',
   'ggit-tree-builder.h',
   'ggit-tree-entry.h',
-  'ggit-types.h'
+  'ggit-types.h',
 ]
 
 private_headers = [
@@ -194,7 +194,7 @@ platform_deps = [
   gio_dep,
   glib_dep,
   gobject_dep,
-  libgit2_dep
+  libgit2_dep,
 ]
 
 if cc.get_id() == 'msvc'
@@ -222,7 +222,7 @@ pkg.generate(
   subdirs: libgit2_glib_api_name,
   requires: ['libgit2 >= ' + git2_req, 'glib-2.0 >= ' + glib_req, 'gobject-2.0 >= ' + glib_req, 'gio-2.0 >= ' + glib_req],
   variables: 'exec_prefix=${prefix}',
-  extra_cflags: extra_args
+  extra_cflags: extra_args,
 )
 
 # Internal dependency, for tests and benchmarks
