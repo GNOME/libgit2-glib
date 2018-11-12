@@ -105,9 +105,7 @@ add_project_arguments(common_flags, language: 'c')
 # Termios
 have_termios = cc.has_header('termios.h')
 
-extra_args= []
-
-core_inc = include_directories('.')
+top_inc = include_directories('.')
 
 # Required dependencies
 git2_req = '0.25.0'
