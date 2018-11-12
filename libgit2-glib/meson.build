@@ -184,11 +184,13 @@ sources += configure_file(
   install_dir: libgit2_glib_pkgincludedir,
 )
 
-enum_types = gnome.mkenums(
-  'ggit-enum-types',
+enum_types = 'ggit-enum-types'
+
+enum_sources = gnome.mkenums(
+  enum_types,
   sources: headers,
-  h_template: 'ggit-enum-types.h.template',
-  c_template: 'ggit-enum-types.c.template',
+  h_template: enum_types + '.h.template',
+  c_template: enum_types + '.c.template',
   install_header: true,
   install_dir: libgit2_glib_pkgincludedir,
 )
@@ -214,7 +216,7 @@ endif
 libgit2_glib = shared_library(
   'git2-glib-@0@'.format(libgit2_glib_api_version),
   include_directories: top_inc,
-  sources: sources + enum_types + private_headers,
+  sources: sources + enum_sources + private_headers,
   version: libversion,
   soversion: soversion,
   install: true,
@@ -241,7 +243,7 @@ libgit2_glib_dep = declare_dependency(
   include_directories: [top_inc, libgit2_glib_inc],
   dependencies: platform_deps,
   # Everything that uses libgit2-glib needs this built to compile
-  sources: enum_types[1],
+  sources: enum_sources[1],
 )
 
 if enable_python
@@ -254,7 +256,7 @@ endif
 if enable_gir
   libgit2_glib_gir = gnome.generate_gir(
     libgit2_glib,
-    sources: headers + sources + enum_types,
+    sources: headers + sources + enum_sources,
     namespace: libgit2_glib_ns,
     nsversion: libgit2_glib_api_version,
     identifier_prefix: libgit2_glib_ns,
