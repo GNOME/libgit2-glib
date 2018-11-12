@@ -217,7 +217,7 @@ libgit2_glib = shared_library(
   'git2-glib-' + libgit2_glib_api_version,
   version: libversion,
   soversion: soversion,
-  sources: sources + enum_sources + private_headers,
+  sources: sources + enum_sources,
   include_directories: top_inc,
   dependencies: platform_deps,
   c_args: cflags + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
