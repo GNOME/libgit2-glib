@@ -150,6 +150,8 @@ sources = [
   'ggit-utils.c',
 ]
 
+cflags = []
+
 if enable_ssh
   headers += ssh_headers
 
@@ -163,7 +165,7 @@ if enable_ssh
 #include <libgit2-glib/ggit-cred-ssh-interactive.h>
 '''
 
-  extra_args += ['-DGIT_SSH=1']
+  cflags += ['-DGIT_SSH=1']
 else
   private_headers += ssh_headers
 
@@ -211,13 +213,13 @@ endif
 
 libgit2_glib = shared_library(
   'git2-glib-@0@'.format(libgit2_glib_api_version),
-  include_directories: core_inc,
+  include_directories: top_inc,
   sources: sources + enum_types + private_headers,
   version: libversion,
   soversion: soversion,
   install: true,
   dependencies: platform_deps,
-  c_args: extra_args + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
+  c_args: cflags + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
   link_args: libgit2_glib_link_args,
 )
 
@@ -230,13 +232,13 @@ pkg.generate(
   subdirs: libgit2_glib_api_name,
   requires: ['libgit2 >= ' + git2_req, 'glib-2.0 >= ' + glib_req, 'gobject-2.0 >= ' + glib_req, 'gio-2.0 >= ' + glib_req],
   variables: 'exec_prefix=${prefix}',
-  extra_cflags: extra_args,
+  extra_cflags: cflags,
 )
 
 # Internal dependency, for tests and benchmarks
 libgit2_glib_dep = declare_dependency(
   link_with: libgit2_glib,
-  include_directories: [core_inc, libgit2_glib_inc],
+  include_directories: [top_inc, libgit2_glib_inc],
   dependencies: platform_deps,
   # Everything that uses libgit2-glib needs this built to compile
   sources: enum_types[1],
