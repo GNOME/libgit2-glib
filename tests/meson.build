@@ -1,16 +1,14 @@
-unit_tests = ['repository']
+unit_test = 'repository'
 
-foreach unit: unit_tests
-  exe = executable(
-    unit,
-    unit + '.c',
-    dependencies: libgit2_glib_dep,
-    include_directories: top_inc,
-  )
+exe = executable(
+  unit_test,
+  unit_test + '.c',
+  include_directories: top_inc,
+  dependencies: libgit2_glib_dep,
+)
 
-  test(
-    unit,
-    exe,
-    args: ['--tap', '-k'],
-  )
-endforeach
+test(
+  unit_test,
+  exe,
+  args: ['--tap', '-k'],
+)
