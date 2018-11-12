@@ -1,6 +1,6 @@
 examples = [
   'general',
-  'walk'
+  'walk',
 ]
 
 if have_termios
