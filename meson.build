@@ -75,7 +75,7 @@ else
     '-Werror=missing-braces',
     '-Werror=return-type',
     '-Werror=array-bounds',
-    '-Werror=write-strings'
+    '-Werror=write-strings',
   ])
 endif
 
@@ -88,7 +88,7 @@ if libgit2_glib_buildtype.contains('debug')
 else
   common_flags += [
     '-DG_DISABLE_CAST_CHECKS',
-    '-DG_DISABLE_CHECKS'
+    '-DG_DISABLE_CHECKS',
   ]
 endif
 
