@@ -43,6 +43,11 @@ libgit2_glib_datadir = join_paths(libgit2_glib_prefix, get_option('datadir'))
 
 libgit2_glib_pkgincludedir = join_paths(libgit2_glib_includedir, libgit2_glib_api_name, meson.project_name())
 
+gnome = import('gnome')
+pkg = import('pkgconfig')
+
+top_inc = include_directories('.')
+
 cc = meson.get_compiler('c')
 
 # Compiler and Debugging flags
@@ -105,8 +110,6 @@ add_project_arguments(common_flags, language: 'c')
 # Termios
 have_termios = cc.has_header('termios.h')
 
-top_inc = include_directories('.')
-
 # Required dependencies
 git2_req = '0.25.0'
 glib_req = '2.44.0'
@@ -159,9 +162,6 @@ if enable_python
 
   meson.add_install_script('meson_python_compile.py', libgit2_glib_libdir)
 endif
-
-gnome = import('gnome')
-pkg = import('pkgconfig')
 
 subdir('libgit2-glib')
 subdir('examples')
