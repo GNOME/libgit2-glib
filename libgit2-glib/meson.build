@@ -214,15 +214,15 @@ else
 endif
 
 libgit2_glib = shared_library(
-  'git2-glib-@0@'.format(libgit2_glib_api_version),
-  include_directories: top_inc,
-  sources: sources + enum_sources + private_headers,
+  'git2-glib-' + libgit2_glib_api_version,
   version: libversion,
   soversion: soversion,
-  install: true,
+  sources: sources + enum_sources + private_headers,
+  include_directories: top_inc,
   dependencies: platform_deps,
   c_args: cflags + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
   link_args: libgit2_glib_link_args,
+  install: true,
 )
 
 pkg.generate(
