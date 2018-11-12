@@ -1,5 +1,3 @@
-libgit2_glib_inc = include_directories('.')
-
 headers = [
   'ggit-annotated-commit.h',
   'ggit-blame.h',
@@ -239,11 +237,11 @@ pkg.generate(
 
 # Internal dependency, for tests and benchmarks
 libgit2_glib_dep = declare_dependency(
-  link_with: libgit2_glib,
-  include_directories: [top_inc, libgit2_glib_inc],
-  dependencies: platform_deps,
   # Everything that uses libgit2-glib needs this built to compile
   sources: enum_sources[1],
+  include_directories: include_directories('.'),
+  dependencies: platform_deps,
+  link_with: libgit2_glib,
 )
 
 if enable_python

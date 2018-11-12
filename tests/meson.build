@@ -5,7 +5,7 @@ foreach unit: unit_tests
     unit,
     unit + '.c',
     dependencies: libgit2_glib_dep,
-    include_directories: libgit2_glib_inc,
+    include_directories: top_inc,
   )
 
   test(
