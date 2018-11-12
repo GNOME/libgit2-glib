@@ -232,7 +232,7 @@ pkg.generate(
   description: 'libgit2-glib, a a glib wrapper library around the libgit2 git access library.',
   filebase: libgit2_glib_api_name,
   subdirs: libgit2_glib_api_name,
-  requires: ['libgit2 >= ' + git2_req, 'glib-2.0 >= ' + glib_req, 'gobject-2.0 >= ' + glib_req, 'gio-2.0 >= ' + glib_req],
+  requires: platform_deps,
   variables: 'exec_prefix=${prefix}',
   extra_cflags: cflags,
 )
