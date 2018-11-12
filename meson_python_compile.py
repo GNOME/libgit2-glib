@@ -5,7 +5,9 @@ import subprocess
 import sys
 
 if not os.environ.get('DESTDIR'):
-  libdir = sys.argv[1]
+  prefix = os.environ['MESON_INSTALL_PREFIX']
+
+  libdir = os.path.join(prefix, sys.argv[1])
 
   print('Byte-compiling python modules...')
   subprocess.call(['python', '-m', 'compileall', '-f', '-q', libdir])
