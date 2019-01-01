@@ -4,7 +4,7 @@ project('libgit2-glib', 'c',
           'buildtype=debugoptimized'
         ],
         license: 'LGPL2+',
-        meson_version: '>= 0.43.0')
+        meson_version: '>= 0.48.0')
 
 libgit2_glib_version = meson.project_version()
 version_array = libgit2_glib_version.split('.')
