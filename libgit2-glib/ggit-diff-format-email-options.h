@@ -75,6 +75,12 @@ void           ggit_diff_format_email_options_set_summary (
                                          GgitDiffFormatEmailOptions  *options,
                                          const gchar                 *summary);
 
+const gchar   *ggit_diff_format_email_options_get_body (
+                                         GgitDiffFormatEmailOptions  *options);
+void           ggit_diff_format_email_options_set_body (
+                                         GgitDiffFormatEmailOptions  *options,
+                                         const gchar                 *body);
+
 GgitSignature *ggit_diff_format_email_options_get_author (
                                          GgitDiffFormatEmailOptions  *options);
 void           ggit_diff_format_email_options_set_author (

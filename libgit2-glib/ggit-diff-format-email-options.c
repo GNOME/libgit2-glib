@@ -35,6 +35,7 @@ typedef struct _GgitDiffFormatEmailOptionsPrivate
 
 	GgitOId *id;
 	gchar *summary;
+	gchar *body;
 	GgitSignature *author;
 } GgitDiffFormatEmailOptionsPrivate;
 
@@ -48,6 +49,7 @@ enum
 	PROP_TOTAL_PATCHES,
 	PROP_ID,
 	PROP_SUMMARY,
+	PROP_BODY,
 	PROP_AUTHOR
 };
 
@@ -65,6 +67,7 @@ ggit_diff_format_email_options_finalize (GObject *object)
 	}
 
 	g_free (priv->summary);
+	g_free (priv->body);
 	g_clear_object (&priv->author);
 
 	G_OBJECT_CLASS (ggit_diff_format_email_options_parent_class)->finalize (object);
@@ -97,6 +100,9 @@ ggit_diff_format_email_options_set_property (GObject      *object,
 		break;
 	case PROP_SUMMARY:
 		ggit_diff_format_email_options_set_summary (options, g_value_get_string (value));
+		break;
+	case PROP_BODY:
+		ggit_diff_format_email_options_set_body (options, g_value_get_string (value));
 		break;
 	case PROP_AUTHOR:
 		ggit_diff_format_email_options_set_author (options, g_value_get_object (value));
@@ -134,6 +140,9 @@ ggit_diff_format_email_options_get_property (GObject    *object,
 		break;
 	case PROP_SUMMARY:
 		g_value_set_string (value, priv->summary);
+		break;
+	case PROP_BODY:
+		g_value_set_string (value, priv->body);
 		break;
 	case PROP_AUTHOR:
 		g_value_set_object (value, priv->author);
@@ -200,6 +209,15 @@ ggit_diff_format_email_options_class_init (GgitDiffFormatEmailOptionsClass *klas
 	                                 g_param_spec_string ("summary",
 	                                                      "Summary",
 	                                                      "Summary",
+	                                                      NULL,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_BODY,
+	                                 g_param_spec_string ("body",
+	                                                      "Body",
+	                                                      "Body",
 	                                                      NULL,
 	                                                      G_PARAM_READWRITE |
 	                                                      G_PARAM_STATIC_STRINGS));
@@ -484,6 +502,52 @@ ggit_diff_format_email_options_set_summary (GgitDiffFormatEmailOptions *options,
 
 	priv->options.summary = priv->summary;
 	g_object_notify (G_OBJECT (options), "summary");
+}
+
+/**
+ * ggit_diff_format_email_options_get_body:
+ * @options: a #GgitDiffFormatEmailOptions.
+ *
+ * Get the body.
+ *
+ * Returns: (transfer none) (nullable): the body.
+ *
+ **/
+const gchar *
+ggit_diff_format_email_options_get_body (GgitDiffFormatEmailOptions *options)
+{
+	GgitDiffFormatEmailOptionsPrivate *priv;
+
+	g_return_val_if_fail (GGIT_IS_DIFF_FORMAT_EMAIL_OPTIONS (options), NULL);
+
+	priv = ggit_diff_format_email_options_get_instance_private (options);
+
+	return priv->body;
+}
+
+/**
+ * ggit_diff_format_email_options_set_body:
+ * @options: a #GgitDiffFormatEmailOptions.
+ * @body: (allow-none): the body.
+ *
+ * Set the body.
+ *
+ **/
+void
+ggit_diff_format_email_options_set_body (GgitDiffFormatEmailOptions *options,
+                                                        const gchar *body)
+{
+	GgitDiffFormatEmailOptionsPrivate *priv;
+
+	g_return_if_fail (GGIT_IS_DIFF_FORMAT_EMAIL_OPTIONS (options));
+
+	priv = ggit_diff_format_email_options_get_instance_private (options);
+
+	g_free (priv->body);
+	priv->body = g_strdup (body);
+
+	priv->options.body = priv->body;
+	g_object_notify (G_OBJECT (options), "body");
 }
 
 /**
