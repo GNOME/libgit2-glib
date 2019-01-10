@@ -413,4 +413,41 @@ ggit_submodule_reload (GgitSubmodule  *submodule,
 	}
 }
 
+/**
+ * ggit_submodule_update:
+ * @submodule: a #GgitSubmodule.
+ * @init: If the submodule is not initialized, setting this flag to true
+ *        will initialize the submodule before updating. Otherwise, this
+ *        will return an error if attempting to update an uninitialzed
+ *        repository. but setting this to true forces them to be updated.
+ * @options: a #GgitSubmoduleUpdateOptions object.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Update a submodule. This will clone a missing submodule and checkout
+ * the subrepository to the commit specified in the index of the containing
+ * repository. If the submodule repository doesn't contain the target commit
+ * (e.g. because fetchRecurseSubmodules isn't set), then the submodule is
+ * fetched using the fetch options supplied in options.
+ */
+void
+ggit_submodule_update (GgitSubmodule               *submodule,
+                       gboolean                     init,
+                       GgitSubmoduleUpdateOptions  *options,
+                       GError                     **error)
+{
+	gint ret;
+
+	g_return_if_fail (submodule != NULL);
+	g_return_if_fail (submodule->valid);
+	g_return_val_if_fail (options == NULL || GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), NULL);
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_submodule_update (submodule->submodule, init, options ? _ggit_submodule_update_options_get_submodule_update_options (options) : NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
 /* ex:set ts=8 noet: */

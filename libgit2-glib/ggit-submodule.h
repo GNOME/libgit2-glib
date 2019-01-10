@@ -25,6 +25,7 @@
 #include <git2.h>
 
 #include "ggit-types.h"
+#include "ggit-submodule-update-options.h"
 
 G_BEGIN_DECLS
 
@@ -73,6 +74,10 @@ void                    ggit_submodule_reload                (GgitSubmodule     
                                                               gboolean                     force,
                                                               GError                     **error);
 
+void                    ggit_submodule_update                (GgitSubmodule               *submodule,
+                                                              gboolean                     init,
+                                                              GgitSubmoduleUpdateOptions  *options,
+                                                              GError                     **error);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSubmodule, ggit_submodule_unref)
 
 G_END_DECLS
