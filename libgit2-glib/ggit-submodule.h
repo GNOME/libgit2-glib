@@ -33,45 +33,45 @@ G_BEGIN_DECLS
 
 GType                   ggit_submodule_get_type              (void) G_GNUC_CONST;
 
-GgitSubmodule         *_ggit_submodule_wrap                  (const git_submodule *submodule);
-void                   _ggit_submodule_invalidate            (GgitSubmodule       *submodule);
+GgitSubmodule         *_ggit_submodule_wrap                  (const git_submodule         *submodule);
+void                   _ggit_submodule_invalidate            (GgitSubmodule               *submodule);
 
-GgitSubmodule          *ggit_submodule_ref                   (GgitSubmodule       *submodule);
-void                    ggit_submodule_unref                 (GgitSubmodule       *submodule);
+GgitSubmodule          *ggit_submodule_ref                   (GgitSubmodule               *submodule);
+void                    ggit_submodule_unref                 (GgitSubmodule               *submodule);
 
-GgitRepository         *ggit_submodule_open                  (GgitSubmodule       *submodule,
-                                                              GError             **error);
+GgitRepository         *ggit_submodule_open                  (GgitSubmodule               *submodule,
+                                                              GError                     **error);
 
-GgitRepository         *ggit_submodule_get_owner             (GgitSubmodule       *submodule);
+GgitRepository         *ggit_submodule_get_owner             (GgitSubmodule               *submodule);
 
-const gchar            *ggit_submodule_get_name              (GgitSubmodule       *submodule);
+const gchar            *ggit_submodule_get_name              (GgitSubmodule               *submodule);
 
-const gchar            *ggit_submodule_get_path              (GgitSubmodule       *submodule);
+const gchar            *ggit_submodule_get_path              (GgitSubmodule               *submodule);
 
-const gchar            *ggit_submodule_get_url               (GgitSubmodule       *submodule);
+const gchar            *ggit_submodule_get_url               (GgitSubmodule               *submodule);
 
-GgitOId                *ggit_submodule_get_index_id          (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_index_id          (GgitSubmodule               *submodule);
 
-GgitOId                *ggit_submodule_get_head_id           (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_head_id           (GgitSubmodule               *submodule);
 
-GgitOId                *ggit_submodule_get_workdir_id        (GgitSubmodule       *submodule);
+GgitOId                *ggit_submodule_get_workdir_id        (GgitSubmodule               *submodule);
 
-GgitSubmoduleIgnore     ggit_submodule_get_ignore            (GgitSubmodule       *submodule);
+GgitSubmoduleIgnore     ggit_submodule_get_ignore            (GgitSubmodule               *submodule);
 
-GgitSubmoduleUpdate     ggit_submodule_get_update            (GgitSubmodule       *submodule);
+GgitSubmoduleUpdate     ggit_submodule_get_update            (GgitSubmodule               *submodule);
 
-gboolean                ggit_submodule_get_fetch_recurse     (GgitSubmodule       *submodule);
+gboolean                ggit_submodule_get_fetch_recurse     (GgitSubmodule               *submodule);
 
-void                    ggit_submodule_init                  (GgitSubmodule       *submodule,
-                                                              gboolean             overwrite,
-                                                              GError             **error);
+void                    ggit_submodule_init                  (GgitSubmodule               *submodule,
+                                                              gboolean                     overwrite,
+                                                              GError                     **error);
 
-void                    ggit_submodule_sync                  (GgitSubmodule       *submodule,
-                                                              GError             **error);
+void                    ggit_submodule_sync                  (GgitSubmodule               *submodule,
+                                                              GError                     **error);
 
-void                    ggit_submodule_reload                (GgitSubmodule       *submodule,
-                                                              gboolean             force,
-                                                              GError             **error);
+void                    ggit_submodule_reload                (GgitSubmodule               *submodule,
+                                                              gboolean                     force,
+                                                              GError                     **error);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitSubmodule, ggit_submodule_unref)
 
