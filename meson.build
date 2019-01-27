@@ -154,7 +154,7 @@ endif
 # Check for python
 enable_python = get_option('python')
 if enable_python
-  python = import('python3')
+  python = import('python').find_installation('python3')
 
   python_req = '3.2.3'
 
