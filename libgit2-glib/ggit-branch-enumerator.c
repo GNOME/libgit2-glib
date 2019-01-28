@@ -19,6 +19,7 @@ _ggit_branch_enumerator_wrap (git_branch_iterator *iter)
 	ret = g_slice_new (GgitBranchEnumerator);
 	ret->ref_count = 1;
 	ret->iterator = iter;
+	ret->ref = NULL;
 
 	return ret;
 }
