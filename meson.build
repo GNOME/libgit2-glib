@@ -121,7 +121,7 @@ libgit2_dep = dependency('libgit2', version: '>= 0.25.0')
 enable_gir = get_option('introspection')
 if enable_gir
   # XXX: Not nice, but probably our best option
-  enable_gir = find_program('g-ir-scanner', required: false).found() and not meson.is_cross_build()
+  enable_gir = find_program('g-ir-scanner', required: false).found()
 endif
 
 enable_vapi = get_option('vapi')
