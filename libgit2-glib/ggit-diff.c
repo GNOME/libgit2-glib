@@ -786,13 +786,13 @@ ggit_diff_format_email (GgitDiff                    *diff,
 
 	if (ret != GIT_OK)
 	{
-		git_buf_free (&buf);
+		git_buf_dispose (&buf);
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
 
 	retval = g_strndup (buf.ptr, buf.size);
-	git_buf_free (&buf);
+	git_buf_dispose (&buf);
 
 	return retval;
 }

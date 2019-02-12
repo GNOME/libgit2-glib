@@ -1013,7 +1013,7 @@ ggit_repository_discover_full (GFile        *location,
 	if (ret == GIT_OK)
 	{
 		rep = g_file_new_for_path (buf.ptr);
-		git_buf_free (&buf);
+		git_buf_dispose (&buf);
 	}
 	else
 	{
@@ -3680,7 +3680,7 @@ ggit_repository_get_default_notes_ref (GgitRepository  *repository,
 	}
 
 	ref = g_strdup (buf.ptr);
-	git_buf_free (&buf);
+	git_buf_dispose (&buf);
 
 	return ref;
 }
