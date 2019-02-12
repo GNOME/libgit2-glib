@@ -149,7 +149,7 @@ create_repository_wrapper (git_repository **out,
 
 	if (error != NULL)
 	{
-		giterr_set_str (GIT_ERROR, error->message);
+		git_error_set_str (GIT_ERROR, error->message);
 		g_error_free (error);
 
 		if (repository != NULL)
@@ -187,7 +187,7 @@ create_remote_wrapper (git_remote     **out,
 
 	if (error)
 	{
-		giterr_set_str (GIT_ERROR, error->message);
+		git_error_set_str (GIT_ERROR, error->message);
 		g_error_free (error);
 
 		if (remote != NULL)

@@ -46,7 +46,7 @@ ggit_message_prettify (const gchar *message,
 	git_message_prettify (&buf, message, strip_comments, comment_char);
 
 	d = g_strdup (buf.ptr);
-	git_buf_free (&buf);
+	git_buf_dispose (&buf);
 
 	return d;
 }

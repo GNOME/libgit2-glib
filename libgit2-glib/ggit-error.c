@@ -51,7 +51,7 @@ _ggit_error_set (GError **error,
 	g_return_if_fail (err < 0);
 
 	/* TODO: add more kind of errors, see git_error_t */
-	git2_err = giterr_last ();
+	git2_err = git_error_last ();
 	g_set_error_literal (error, GGIT_ERROR,
 	                     err,
 	                     git2_err == NULL ? "" : git2_err->message);

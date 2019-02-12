@@ -194,7 +194,7 @@ ggit_patch_to_string (GgitPatch  *patch,
 	if (ret == GIT_OK)
 	{
 		result = g_strdup (buf.ptr);
-		git_buf_free (&buf);
+		git_buf_dispose (&buf);
 	}
 
 	return result;
