@@ -1013,7 +1013,11 @@ ggit_repository_discover_full (GFile        *location,
 	if (ret == GIT_OK)
 	{
 		rep = g_file_new_for_path (buf.ptr);
+#if LIBGIT2_SOVERSION >= 28
+		git_buf_dispose (&buf);
+#else
 		git_buf_free (&buf);
+#endif
 	}
 	else
 	{
@@ -3680,7 +3684,11 @@ ggit_repository_get_default_notes_ref (GgitRepository  *repository,
 	}
 
 	ref = g_strdup (buf.ptr);
+#if LIBGIT2_SOVERSION >= 28
+	git_buf_dispose (&buf);
+#else
 	git_buf_free (&buf);
+#endif
 
 	return ref;
 }

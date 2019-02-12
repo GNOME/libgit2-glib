@@ -149,7 +149,11 @@ create_repository_wrapper (git_repository **out,
 
 	if (error != NULL)
 	{
+#if LIBGIT2_SOVERSION >= 28
+		git_error_set_str (GIT_ERROR, error->message);
+#else
 		giterr_set_str (GIT_ERROR, error->message);
+#endif
 		g_error_free (error);
 
 		if (repository != NULL)
@@ -187,7 +191,11 @@ create_remote_wrapper (git_remote     **out,
 
 	if (error)
 	{
+#if LIBGIT2_SOVERSION >= 28
+		git_error_set_str (GIT_ERROR, error->message);
+#else
 		giterr_set_str (GIT_ERROR, error->message);
+#endif
 		g_error_free (error);
 
 		if (remote != NULL)

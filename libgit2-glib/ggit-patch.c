@@ -194,7 +194,11 @@ ggit_patch_to_string (GgitPatch  *patch,
 	if (ret == GIT_OK)
 	{
 		result = g_strdup (buf.ptr);
+#if LIBGIT2_SOVERSION >= 28
+		git_buf_dispose (&buf);
+#else
 		git_buf_free (&buf);
+#endif
 	}
 
 	return result;
