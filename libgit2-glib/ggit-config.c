@@ -191,7 +191,7 @@ ggit_config_find_global (void)
 	if (git_config_find_global (&buf) == GIT_OK)
 	{
 		path = g_file_new_for_path (buf.ptr);
-		git_buf_free (&buf);
+		git_buf_dispose (&buf);
 	}
 
 	return path;
@@ -220,7 +220,7 @@ ggit_config_find_system (void)
 	if (git_config_find_system (&buf) == GIT_OK)
 	{
 		path = g_file_new_for_path (buf.ptr);
-		git_buf_free (&buf);
+		git_buf_dispose (&buf);
 	}
 
 	return path;

@@ -160,7 +160,7 @@ credentials_wrap (git_cred     **cred,
 		{
 			if (error)
 			{
-				giterr_set_str (GIT_ERROR, error->message);
+				git_error_set_str (GIT_ERROR, error->message);
 				g_error_free (error);
 
 				return GIT_ERROR;
