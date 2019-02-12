@@ -786,13 +786,21 @@ ggit_diff_format_email (GgitDiff                    *diff,
 
 	if (ret != GIT_OK)
 	{
+#if LIBGIT2_SOVERSION >= 28
+		git_buf_dispose (&buf);
+#else
 		git_buf_free (&buf);
+#endif
 		_ggit_error_set (error, ret);
 		return NULL;
 	}
 
 	retval = g_strndup (buf.ptr, buf.size);
+#if LIBGIT2_SOVERSION >= 28
+	git_buf_dispose (&buf);
+#else
 	git_buf_free (&buf);
+#endif
 
 	return retval;
 }

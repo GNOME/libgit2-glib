@@ -51,7 +51,11 @@ _ggit_error_set (GError **error,
 	g_return_if_fail (err < 0);
 
 	/* TODO: add more kind of errors, see git_error_t */
+#if LIBGIT2_SOVERSION >= 28
+	git2_err = git_error_last ();
+#else
 	git2_err = giterr_last ();
+#endif
 	g_set_error_literal (error, GGIT_ERROR,
 	                     err,
 	                     git2_err == NULL ? "" : git2_err->message);
