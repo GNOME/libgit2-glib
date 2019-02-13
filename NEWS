@@ -1,3 +1,11 @@
+News in 0.27.8
+--------------
+* Add body property to DiffFormatEmailOptions
+* Add submodule update
+* Fix missing struct field init in branch enumerator
+* Fix cross compilation builds
+* Several meson improvements
+
 News in 0.27.7
 --------------
 * pkg-config pc file generation fixed
