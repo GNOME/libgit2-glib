@@ -116,7 +116,7 @@ glib_dep = dependency('glib-2.0', version: '>=' + glib_req)
 gobject_dep = dependency('gobject-2.0', version: '>=' + glib_req)
 gio_dep = dependency('gio-2.0', version: '>=' + glib_req)
 
-libgit2_dep = dependency('libgit2', version: '>= 0.25.0')
+libgit2_dep = dependency('libgit2', version: '>= 0.28.0')
 
 enable_gir = get_option('introspection')
 if enable_gir
