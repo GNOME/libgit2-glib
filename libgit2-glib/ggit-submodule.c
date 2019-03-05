@@ -439,7 +439,7 @@ ggit_submodule_update (GgitSubmodule               *submodule,
 
 	g_return_if_fail (submodule != NULL);
 	g_return_if_fail (submodule->valid);
-	g_return_val_if_fail (options == NULL || GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options), NULL);
+	g_return_if_fail (options == NULL || GGIT_IS_SUBMODULE_UPDATE_OPTIONS (options));
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	ret = git_submodule_update (submodule->submodule, init, options ? _ggit_submodule_update_options_get_submodule_update_options (options) : NULL);
