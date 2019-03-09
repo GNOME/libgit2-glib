@@ -105,10 +105,14 @@ gchar            **ggit_remote_get_push_specs           (GgitRemote       *remot
 GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);
 
-gboolean 	   ggit_remote_upload 			(GgitRemote      *remote,
-							 const gchar * const     *specs,
-							 GgitPushOptions         *push_options,
-							 GError                 **error);
+gboolean 	      ggit_remote_upload 			        (GgitRemote      *remote,
+														 const gchar * const     *specs,
+														 GgitPushOptions         *push_options,
+														 GError                 **error);
+
+gboolean 		   ggit_remote_add_push 					(GgitRemote              *remote,
+														 const gchar     		*refspecs,
+														 GError                 **error);
 
 G_END_DECLS
 

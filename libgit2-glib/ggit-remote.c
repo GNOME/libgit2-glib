@@ -589,4 +589,36 @@ ggit_remote_upload (GgitRemote              *remote,
 }
 
 
+/**
+ * ggit_remote_add_push:
+ * @remote: a #GgitRemote.
+ * @refspecs: the refspecs to use for this negotiation and upload. Use NULL or an empty array to use the base refspecs
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a packfile and send it to the server
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ */
+gboolean
+ggit_remote_add_push (GgitRemote              *remote,
+					  const gchar       	  *refspecs,
+		              GError                 **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ret = git_remote_add_push (_ggit_native_get (remote), refspecs);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
 /* ex:set ts=8 noet: */
