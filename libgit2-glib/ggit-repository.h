@@ -271,7 +271,7 @@ gchar             **ggit_repository_list_remotes      (GgitRepository        *re
                                                        GError               **error);
 
 void                ggit_repository_add_remote_push   (GgitRepository        *repository,
-                                                       GgitRemote            *remote,
+                                                       const gchar            *remote,
                                                        const gchar           *refspec,
                                                        GError               **error);
 

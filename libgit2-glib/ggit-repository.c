@@ -2198,7 +2198,7 @@ ggit_repository_list_remotes (GgitRepository  *repository,
 /**
  * ggit_repository_add_remote_push:
  * @repository: a #GgitRepository.
- * @remote: a #GgitRemote.
+ * @remote: the remote name.
  * @refspec: the push refspec.
  * @error: a #GError for error reporting, or %NULL.
  *
@@ -2208,18 +2208,18 @@ ggit_repository_list_remotes (GgitRepository  *repository,
  */
 void
 ggit_repository_add_remote_push (GgitRepository  *repository,
-                                 GgitRemote      *remote,
+                                 const gchar     *remote,
                                  const gchar     *refspec,
                                  GError         **error)
 {
 	gint ret;
 
-	g_return_if_fail (GGIT_IS_REMOTE (remote));
+	g_return_if_fail (remote != NULL && remote[0] != '\0');
 	g_return_if_fail (refspec != NULL && refspec[0] != '\0');
-	g_return_if_fail (error == NULL || *error == NULL);
+	g_return_if_fail (error == NULL || *error == NULL); 
 
 	ret = git_remote_add_push (_ggit_native_get (repository),
-	                           _ggit_native_get (remote),
+	                           remote,
 	                           refspec);
 
 	if (ret != GIT_OK)
