@@ -23,6 +23,7 @@
 
 #include <glib-object.h>
 #include <git2.h>
+#include <libgit2-glib/ggit-remote-callbacks.h>
 
 #include "ggit-types.h"
 
@@ -46,7 +47,9 @@ gint                   ggit_push_options_get_parallelism (GgitPushOptions *optio
 void                   ggit_push_options_set_parallelism (GgitPushOptions *options,
                                                           gint             parallelism);
 
-
+GgitRemoteCallbacks *  ggit_push_options_get_callbacks   (GgitPushOptions     *options);
+void                   ggit_push_options_set_callbacks   (GgitPushOptions     *options,
+                                                          GgitRemoteCallbacks *callbacks);
 G_END_DECLS
 
 #endif /* __GGIT_PUSH_OPTIONS_H__ */
