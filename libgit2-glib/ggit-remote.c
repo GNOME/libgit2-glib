@@ -29,6 +29,7 @@
 #include "ggit-signature.h"
 #include "ggit-transfer-progress.h"
 #include "ggit-fetch-options.h"
+#include "ggit-push-options.h"
 
 struct _GgitRemoteHead
 {
@@ -545,6 +546,43 @@ ggit_remote_list (GgitRemote              *remote,
 	}
 
 	return retval;
+}
+
+/**
+ * ggit_remote_upload:
+ * @remote: a #GgitRemote.
+ * @specs: (array zero-terminated=1) (allow-none): the ref specs.
+ * @push_options: a #GgitPushOptions
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a packfile and send it to the server
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ */
+gboolean
+ggit_remote_upload (GgitRemote              *remote,
+                    const gchar * const     *specs,
+                    GgitPushOptions         *push_options,
+                    GError                 **error)
+{
+	gint ret;
+	git_strarray gspecs;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
+
+	ret = git_remote_upload (_ggit_native_get (remote), &gspecs,
+	                           _ggit_push_options_get_push_options(push_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 /* ex:set ts=8 noet: */
