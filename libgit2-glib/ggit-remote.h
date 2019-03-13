@@ -28,6 +28,7 @@
 #include <libgit2-glib/ggit-native.h>
 #include <libgit2-glib/ggit-remote-callbacks.h>
 #include <libgit2-glib/ggit-proxy-options.h>
+#include <libgit2-glib/ggit-push-options.h>
 
 G_BEGIN_DECLS
 
@@ -103,6 +104,11 @@ gchar            **ggit_remote_get_push_specs           (GgitRemote       *remot
 
 GgitRemoteHead   **ggit_remote_list                     (GgitRemote       *remote,
                                                          GError          **error);
+
+gboolean           ggit_remote_upload                   (GgitRemote              *remote,
+                                                         const gchar * const     *specs,
+                                                         GgitPushOptions         *push_options,
+                                                         GError                 **error);
 
 G_END_DECLS
 
