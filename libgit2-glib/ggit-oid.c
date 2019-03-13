@@ -104,7 +104,7 @@ ggit_oid_new_from_string (const gchar *str)
 
 /**
  * ggit_oid_new_from_raw:
- * @raw: the raw input bytes to be copied.
+ * @raw: (array zero-terminated=1) (element-type guchar): the raw input bytes to be copied.
  *
  * Creates a new #GgitOId from a raw oid.
  *
