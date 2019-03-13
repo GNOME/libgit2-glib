@@ -28,7 +28,8 @@
 
 typedef struct _GgitPushOptionsPrivate
 {
-	git_push_options options;
+	git_push_options      options;
+	GgitRemoteCallbacks  *callbacks;
 } GgitPushOptionsPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GgitPushOptions, ggit_push_options, G_TYPE_OBJECT)
@@ -36,7 +37,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (GgitPushOptions, ggit_push_options, G_TYPE_OBJECT)
 enum
 {
 	PROP_0,
-	PROP_PARALLELISM
+	PROP_PARALLELISM,
+	PROP_CALLBACKS
 };
 
 static void
@@ -54,6 +56,10 @@ ggit_push_options_set_property (GObject      *object,
 	{
 	case PROP_PARALLELISM:
 		priv->options.pb_parallelism = g_value_get_int (value);
+		break;
+	case PROP_CALLBACKS:
+		ggit_push_options_set_callbacks(options,
+		                                g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -76,6 +82,9 @@ ggit_push_options_get_property (GObject    *object,
 	{
 	case PROP_PARALLELISM:
 		g_value_set_int (value, priv->options.pb_parallelism);
+		break;
+	case PROP_CALLBACKS:
+		g_value_set_object (value, priv->callbacks);
 		break;
 	}
 }
@@ -100,6 +109,15 @@ ggit_push_options_class_init (GgitPushOptionsClass *klass)
 	                                                    G_PARAM_READWRITE |
 	                                                    G_PARAM_CONSTRUCT |
 	                                                    G_PARAM_STATIC_STRINGS));
+
+	g_object_class_install_property (object_class,
+	                                 PROP_CALLBACKS,
+	                                 g_param_spec_object ("callbacks",
+	                                                      "Callbacks",
+	                                                      "Callbacks",
+	                                                      GGIT_TYPE_REMOTE_CALLBACKS,
+	                                                      G_PARAM_READWRITE |
+	                                                      G_PARAM_STATIC_STRINGS));
 }
 
 static void
@@ -189,6 +207,53 @@ ggit_push_options_set_parallelism (GgitPushOptions *options,
 
 	priv->options.pb_parallelism = parallelism;
 	g_object_notify (G_OBJECT (options), "parallelism");
+}
+
+/**
+ * ggit_push_options_set_callbacks:
+ * @options: a #GgitPushOptions.
+ * @callbacks: the #GgitRemoteCallbacks
+ *
+ * Set the remote callbacks for the push options
+ *
+ **/
+void
+ggit_push_options_set_callbacks (GgitPushOptions      *options,
+                                 GgitRemoteCallbacks  *callbacks)
+{
+	GgitPushOptionsPrivate *priv;
+
+	g_return_if_fail (GGIT_IS_PUSH_OPTIONS (options));
+	g_return_if_fail (callbacks != NULL || GGIT_IS_REMOTE_CALLBACKS (callbacks));
+
+
+	priv = ggit_push_options_get_instance_private (options);
+
+	priv->callbacks = g_object_ref (callbacks);
+	priv->options.callbacks = *_ggit_remote_callbacks_get_native (priv->callbacks);
+
+	g_object_notify (G_OBJECT (options), "callbacks");
+}
+
+/**
+ * ggit_push_options_get_callbacks:
+ * @options: a #GgitPushOptions.
+ *
+ * gets the remote callbacks object
+ *
+ * Returns: (transfer none) (nullable): the object's id or %NULL.
+ *
+ **/
+GgitRemoteCallbacks*
+ggit_push_options_get_callbacks (GgitPushOptions *options)
+{
+	GgitPushOptionsPrivate *priv;
+
+	g_return_val_if_fail (GGIT_IS_PUSH_OPTIONS (options), 0);
+
+	priv = ggit_push_options_get_instance_private (options);
+
+	return priv->callbacks;
 }
 
 /* ex:set ts=8 noet: */
