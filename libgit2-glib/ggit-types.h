@@ -1140,7 +1140,7 @@ typedef gint (* GgitDiffHunkCallback) (GgitDiffDelta *delta,
 /**
  * GgitDiffLineCallback:
  * @delta: a #GgitDiffDelta.
- * @hunk: a #GgitDiffHunk.
+ * @hunk: (nullable): a #GgitDiffHunk.
  * @line: a #GgitDiffLine.
  * @user_data: (closure): user-supplied data.
  *
