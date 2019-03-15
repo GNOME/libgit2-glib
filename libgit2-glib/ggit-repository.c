@@ -3934,7 +3934,7 @@ ggit_repository_merge_trees (GgitRepository    *repository,
 
 	ret = git_merge_trees (&out,
 	                       _ggit_native_get (repository),
-	                       _ggit_native_get (ancestor_tree),
+	                       ancestor_tree == NULL ? NULL : _ggit_native_get (ancestor_tree),
 	                       _ggit_native_get (our_tree),
 	                       _ggit_native_get (their_tree),
 	                       _ggit_merge_options_get_merge_options (merge_options));
