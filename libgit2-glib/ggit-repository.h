@@ -491,6 +491,13 @@ gboolean            ggit_repository_path_is_ignored    (GgitRepository          
                                                         const gchar             *path,
                                                         GError                 **error);
 
+void                ggit_repository_merge              (GgitRepository          *repository,
+                                                        GgitAnnotatedCommit    **their_heads,
+                                                        gsize                   *their_heads_length,
+                                                        GgitMergeOptions        *merge_opts,
+                                                        GgitCheckoutOptions     *checkout_opts,
+                                                        GError                 **error);
+
 GgitOId            *ggit_repository_merge_base         (GgitRepository          *repository,
                                                         GgitOId                 *oid_one,
                                                         GgitOId                 *oid_two,
