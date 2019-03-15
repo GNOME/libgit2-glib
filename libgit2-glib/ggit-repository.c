@@ -3902,6 +3902,56 @@ ggit_repository_note_foreach (GgitRepository    *repository,
 }
 
 /**
+ * ggit_repository_merge:
+ * @repository: a #GgitRepository.
+ * @their_heads: (array length=their_heads_length): the heads to merge into
+ * @their_heads_length: the length of their_heads
+ * @merge_opts: merge options
+ * @checkout_opts: checkout options
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Merges the given commit(s) into HEAD, writing the results into the working directory.
+ * Any changes are staged for commit and any conflicts are written to the index.
+ *
+ * Callers should inspect the repository's index after this completes, resolve any conflicts and prepare a commit.
+ */
+void
+ggit_repository_merge (GgitRepository       *repository,
+                       GgitAnnotatedCommit **their_heads,
+                       gsize                *their_heads_length,
+                       GgitMergeOptions     *merge_opts,
+                       GgitCheckoutOptions  *checkout_opts,
+                       GError              **error)
+{
+	gint ret, i;
+	git_annotated_commit **their_heads_native;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (their_heads != NULL);
+	g_return_if_fail (their_heads_length > 0);
+	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (checkout_opts));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	their_heads_native = g_new0 (git_annotated_commit *, their_heads_length);
+
+	for (i = 0; i < their_heads_length; ++i)
+	{
+		their_heads_native[i] = _ggit_annotated_commit_get_annotated_commit (their_heads[i]);
+	}
+
+	ret = git_merge (_ggit_native_get (repository),
+	                 their_heads_native,
+	                 their_heads_length,
+	                 _ggit_merge_options_get_merge_options(merge_opts),
+	                 _ggit_checkout_options_get_checkout_options(checkout_opts));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_merge_base:
  * @repository: a #GgitRepository.
  * @oid_one: the oid of one of the commits.

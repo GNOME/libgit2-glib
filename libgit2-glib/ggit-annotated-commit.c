@@ -109,4 +109,39 @@ ggit_annotated_commit_get_id (GgitAnnotatedCommit *annotated_commit)
 	return _ggit_oid_wrap ((git_oid *)oid);
 }
 
+
+/**
+ * ggit_annotated_commit_new_from_ref:
+ * @repository: the repository
+ * @repository: the reference to use to lookup the git_annotated_commit
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a GgitAnnotatedCommit from the given reference
+ *
+ * Returns: (transfer full): a #GgitAnnotatedCommit.
+ *
+ */
+GgitAnnotatedCommit *
+ggit_annotated_commit_new_from_ref (GgitRepository  *repository,
+                                    GgitRef         *ref,
+                                    GError         **error)
+{
+	gint ret;
+	git_annotated_commit *commit;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (ref != NULL, NULL);
+
+	ret = git_annotated_commit_from_ref(&commit,
+	                                    _ggit_native_get (repository),
+	                                    _ggit_native_get (ref));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	return _ggit_annotated_commit_wrap (commit);
+}
+
 /* ex:set ts=8 noet: */

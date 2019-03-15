@@ -26,6 +26,8 @@
 #include <git2.h>
 
 #include "ggit-types.h"
+#include "ggit-repository.h"
+#include "ggit-error.h"
 
 G_BEGIN_DECLS
 
@@ -42,6 +44,10 @@ GgitAnnotatedCommit         *ggit_annotated_commit_ref                         (
 void                         ggit_annotated_commit_unref                       (GgitAnnotatedCommit  *annotated_commit);
 
 GgitOId                     *ggit_annotated_commit_get_id                      (GgitAnnotatedCommit  *annotated_commit);
+
+GgitAnnotatedCommit         *ggit_annotated_commit_new_from_ref                (GgitRepository       *repository,
+                                                                                GgitRef              *ref,
+                                                                                GError               **error);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GgitAnnotatedCommit, ggit_annotated_commit_unref)
 
