@@ -3902,6 +3902,46 @@ ggit_repository_note_foreach (GgitRepository    *repository,
 }
 
 /**
+ * ggit_repository_merge_base:
+ * @repository: a #GgitRepository.
+ * @oid_one: the oid of one of the commits.
+ * @oid_two: the oid of the second of the commits
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Find the merge base between two commits
+ *
+ * Returns: (transfer full) (nullable): a new #GgitOId or %NULL if an error occurred.
+ *
+ */
+GgitOId *
+ggit_repository_merge_base (GgitRepository  *repository,
+                            GgitOId         *oid_one,
+                            GgitOId         *oid_two,
+                            GError         **error)
+{
+	git_oid oid;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (oid_one != NULL, NULL);
+	g_return_val_if_fail (oid_two != NULL, NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_merge_base (&oid,
+	                      _ggit_native_get (repository),
+	                      _ggit_oid_get_oid (oid_one),
+	                      _ggit_oid_get_oid (oid_two));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&oid);
+}
+
+/**
  * ggit_repository_merge_trees:
  * @repository: a #GgitRepository.
  * @ancestor_tree: the common ancestor between the trees, or %NULL.
