@@ -205,12 +205,6 @@ platform_deps = [
   libgit2_dep,
 ]
 
-if cc.get_id() == 'msvc'
-  libgit2_glib_link_args = []
-else
-  libgit2_glib_link_args = ['-Wl,-Bsymbolic-functions']
-endif
-
 libgit2_glib = shared_library(
   'git2-glib-' + libgit2_glib_api_version,
   version: libversion,
@@ -219,7 +213,6 @@ libgit2_glib = shared_library(
   include_directories: top_inc,
   dependencies: platform_deps,
   c_args: cflags + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
-  link_args: libgit2_glib_link_args,
   install: true,
 )
 
