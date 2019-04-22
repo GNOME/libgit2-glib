@@ -209,6 +209,7 @@ libgit2_glib = shared_library(
   'git2-glib-' + libgit2_glib_api_version,
   version: libversion,
   soversion: soversion,
+  darwin_versions: darwin_versions,
   sources: sources + enum_sources,
   include_directories: top_inc,
   dependencies: platform_deps,

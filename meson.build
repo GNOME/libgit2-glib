@@ -35,6 +35,7 @@ soversion = 0
 current = libgit2_glib_minor_version * 100 + libgit2_glib_micro_version - libgit2_glib_interface_age
 revision = libgit2_glib_interface_age
 libversion = '@0@.@1@.@2@'.format(soversion, current, revision)
+darwin_versions = [current + 1, '@0@.@1@'.format(current + 1, revision)]
 
 libgit2_glib_prefix = get_option('prefix')
 libgit2_glib_libdir = get_option('libdir')
