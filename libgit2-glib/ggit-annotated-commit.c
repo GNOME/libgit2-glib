@@ -113,7 +113,7 @@ ggit_annotated_commit_get_id (GgitAnnotatedCommit *annotated_commit)
 /**
  * ggit_annotated_commit_new_from_ref:
  * @repository: the repository
- * @repository: the reference to use to lookup the git_annotated_commit
+ * @ref: the reference to use to lookup the git_annotated_commit
  * @error: a #GError for error reporting, or %NULL.
  *
  * Create a GgitAnnotatedCommit from the given reference
