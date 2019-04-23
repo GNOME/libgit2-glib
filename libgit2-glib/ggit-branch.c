@@ -181,6 +181,32 @@ ggit_branch_get_upstream (GgitBranch  *branch,
 }
 
 /**
+ * ggit_branch_set_upstream:
+ * @branch: a #GgitBranch.
+ * @upstream_branch_name: name of the upstream branch; if %NULL unsets it.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Sets the upstream branch, for a given local branch reference
+ */
+void
+ggit_branch_set_upstream (GgitBranch   *branch,
+                          const gchar  *upstream_branch_name,
+                          GError      **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_BRANCH (branch));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_branch_set_upstream (_ggit_native_get (branch), upstream_branch_name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_branch_is_head:
  * @branch: a #GgitBranch.
  * @error: a #GError for error reporting, or %NULL.

@@ -50,6 +50,10 @@ const gchar        *ggit_branch_get_name           (GgitBranch       *branch,
 GgitRef            *ggit_branch_get_upstream       (GgitBranch       *branch,
                                                     GError          **error);
 
+void                ggit_branch_set_upstream       (GgitBranch       *branch,
+                                                    const gchar      *upstream_branch_name,
+                                                    GError          **error);
+
 gboolean            ggit_branch_is_head            (GgitBranch       *branch,
                                                     GError          **error);
 
