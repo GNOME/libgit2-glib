@@ -363,6 +363,46 @@ ggit_remote_disconnect (GgitRemote *remote)
 	git_remote_disconnect (_ggit_native_get (remote));
 }
 
+
+/**
+ * ggit_remote_push:
+ * @remote: a #GgitRemote.
+ * @specs: (array zero-terminated=1) (allow-none): the ref specs.
+ * @push_options: a #GgitPushOptions.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Connect to the remote if not yet connected, negotiate with the remote
+ * about which objects are missing, create a packfile with the missing
+ * objects and send it.
+ *
+ * Returns: %TRUE if successful, %FALSE otherwise.
+ */
+gboolean
+ggit_remote_push (GgitRemote          *remote,
+                  const gchar * const *specs,
+                  GgitPushOptions     *push_options,
+                  GError             **error)
+{
+	gint ret;
+	git_strarray gspecs;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE (remote), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	ggit_utils_get_git_strarray_from_str_array (specs, &gspecs);
+
+	ret = git_remote_push (_ggit_native_get (remote), &gspecs,
+	                       _ggit_push_options_get_push_options (push_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 /**
  * ggit_remote_download:
  * @remote: a #GgitRemote.
