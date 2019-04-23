@@ -58,7 +58,7 @@ ggit_push_options_set_property (GObject      *object,
 		priv->options.pb_parallelism = g_value_get_int (value);
 		break;
 	case PROP_CALLBACKS:
-		ggit_push_options_set_callbacks(options,
+		ggit_push_options_set_remote_callbacks(options,
 		                                g_value_get_object (value));
 		break;
 	default:
@@ -210,7 +210,7 @@ ggit_push_options_set_parallelism (GgitPushOptions *options,
 }
 
 /**
- * ggit_push_options_set_callbacks:
+ * ggit_push_options_set_remote_callbacks:
  * @options: a #GgitPushOptions.
  * @callbacks: the #GgitRemoteCallbacks
  *
@@ -218,8 +218,8 @@ ggit_push_options_set_parallelism (GgitPushOptions *options,
  *
  **/
 void
-ggit_push_options_set_callbacks (GgitPushOptions      *options,
-                                 GgitRemoteCallbacks  *callbacks)
+ggit_push_options_set_remote_callbacks (GgitPushOptions      *options,
+                                        GgitRemoteCallbacks  *callbacks)
 {
 	GgitPushOptionsPrivate *priv;
 
@@ -236,7 +236,7 @@ ggit_push_options_set_callbacks (GgitPushOptions      *options,
 }
 
 /**
- * ggit_push_options_get_callbacks:
+ * ggit_push_options_get_remote_callbacks:
  * @options: a #GgitPushOptions.
  *
  * gets the remote callbacks object
@@ -245,7 +245,7 @@ ggit_push_options_set_callbacks (GgitPushOptions      *options,
  *
  **/
 GgitRemoteCallbacks*
-ggit_push_options_get_callbacks (GgitPushOptions *options)
+ggit_push_options_get_remote_callbacks (GgitPushOptions *options)
 {
 	GgitPushOptionsPrivate *priv;
 

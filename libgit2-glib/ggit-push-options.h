@@ -38,18 +38,17 @@ struct _GgitPushOptionsClass
 };
 
 const git_push_options *
-                      _ggit_push_options_get_push_options (
-                                                          GgitPushOptions *options);
+                      _ggit_push_options_get_push_options     (GgitPushOptions     *options);
 
-GgitPushOptions       *ggit_push_options_new              (void);
+GgitPushOptions       *ggit_push_options_new                  (void);
 
-gint                   ggit_push_options_get_parallelism (GgitPushOptions *options);
-void                   ggit_push_options_set_parallelism (GgitPushOptions *options,
-                                                          gint             parallelism);
+gint                   ggit_push_options_get_parallelism      (GgitPushOptions     *options);
+void                   ggit_push_options_set_parallelism      (GgitPushOptions     *options,
+                                                               gint                 parallelism);
 
-GgitRemoteCallbacks *  ggit_push_options_get_callbacks   (GgitPushOptions     *options);
-void                   ggit_push_options_set_callbacks   (GgitPushOptions     *options,
-                                                          GgitRemoteCallbacks *callbacks);
+GgitRemoteCallbacks *  ggit_push_options_get_remote_callbacks (GgitPushOptions     *options);
+void                   ggit_push_options_set_remote_callbacks (GgitPushOptions     *options,
+                                                               GgitRemoteCallbacks *callbacks);
 
 G_END_DECLS
 
