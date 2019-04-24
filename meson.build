@@ -1,6 +1,6 @@
 project(
   'libgit2-glib', 'c',
-  version: '0.27.9',
+  version: '0.28.0',
   default_options: 'buildtype=debugoptimized',
   license: 'LGPL2+',
   meson_version: '>= 0.49.0',
