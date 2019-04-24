@@ -1,3 +1,13 @@
+News in 0.28.0
+--------------
+* Added·push·support
+* Add merge support
+* Fix macOS support
+* Add push operation
+* Compatibility with libgit2 0.28
+* Several meson improvements
+* Misc bug fixes
+
 News in 0.27.8
 --------------
 * Add body property to DiffFormatEmailOptions
