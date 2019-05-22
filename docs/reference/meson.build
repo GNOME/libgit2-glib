@@ -10,11 +10,9 @@ fixxref_args = [
 docs_conf = configuration_data()
 docs_conf.set('PACKAGE_VERSION', libgit2_glib_version)
 
-name = 'version.xml'
-
 content_files = configure_file(
-  input: name + '.in',
-  output: name,
+  input: 'version.xml.in',
+  output: '@BASENAME@',
   configuration: docs_conf,
 )
 

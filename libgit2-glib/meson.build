@@ -177,7 +177,7 @@ ggit_h = 'ggit.h'
 
 sources += configure_file(
   input: ggit_h + '.in',
-  output: ggit_h,
+  output: '@BASENAME@',
   configuration: ggit_h_conf,
   install_dir: libgit2_glib_includedir / libgit2_glib_include_subdir,
 )
