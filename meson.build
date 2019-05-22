@@ -3,7 +3,7 @@ project(
   version: '0.28.0.1',
   default_options: 'buildtype=debugoptimized',
   license: 'LGPL2+',
-  meson_version: '>= 0.49.0',
+  meson_version: '>= 0.50.0',
 )
 
 libgit2_glib_version = meson.project_version()

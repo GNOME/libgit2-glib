@@ -226,7 +226,7 @@ pkg.generate(
 libgit2_glib_dep = declare_dependency(
   # Everything that uses libgit2-glib needs this built to compile
   sources: enum_sources[1],
-  include_directories: include_directories('.'),
+  include_directories: '.',
   dependencies: platform_deps,
   link_with: libgit2_glib,
 )
