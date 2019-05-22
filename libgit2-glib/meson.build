@@ -181,19 +181,19 @@ sources += configure_file(
   input: ggit_h + '.in',
   output: ggit_h,
   configuration: ggit_h_conf,
-  install_dir: libgit2_glib_pkgincludedir,
+  install_dir: libgit2_glib_includedir / libgit2_glib_include_subdir,
 )
 
 enum_sources = gnome.mkenums_simple(
   'ggit-enum-types',
   sources: headers,
   install_header: true,
-  install_dir: libgit2_glib_pkgincludedir,
+  install_dir: libgit2_glib_includedir / libgit2_glib_include_subdir,
 )
 
 install_headers(
   headers,
-  subdir: libgit2_glib_api_name / meson.project_name(),
+  subdir: libgit2_glib_include_subdir,
 )
 
 platform_deps = [

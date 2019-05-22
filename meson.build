@@ -40,8 +40,9 @@ darwin_versions = [current + 1, '@0@.@1@'.format(current + 1, revision)]
 libgit2_glib_prefix = get_option('prefix')
 libgit2_glib_libdir = get_option('libdir')
 libgit2_glib_datadir = get_option('datadir')
+libgit2_glib_includedir = get_option('includedir')
 
-libgit2_glib_pkgincludedir = get_option('includedir') / libgit2_glib_api_name / meson.project_name()
+libgit2_glib_include_subdir = libgit2_glib_api_name / meson.project_name()
 
 gnome = import('gnome')
 pkg = import('pkgconfig')
