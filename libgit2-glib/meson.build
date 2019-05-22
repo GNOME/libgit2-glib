@@ -172,15 +172,12 @@ else
   ssh_includes = ''
 endif
 
-ggit_h_conf = configuration_data()
-ggit_h_conf.set('GGIT_SSH_INCLUDES', ssh_includes)
-
 ggit_h = 'ggit.h'
 
 sources += configure_file(
   input: ggit_h + '.in',
   output: '@BASENAME@',
-  configuration: ggit_h_conf,
+  configuration: {'GGIT_SSH_INCLUDES': ssh_includes},
   install_dir: libgit2_glib_includedir / libgit2_glib_include_subdir,
 )
 
