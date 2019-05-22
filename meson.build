@@ -124,11 +124,8 @@ gio_dep = dependency('gio-2.0', version: '>=' + glib_req)
 
 libgit2_dep = dependency('libgit2', version: '>= 0.25.0')
 
-enable_gir = get_option('introspection')
-if enable_gir
-  # XXX: Not nice, but probably our best option
-  enable_gir = find_program('g-ir-scanner', required: false).found()
-endif
+# XXX: Not nice, but probably our best option
+enable_gir = get_option('introspection') and find_program('g-ir-scanner', required: false).found()
 
 enable_vapi = get_option('vapi')
 if enable_vapi
