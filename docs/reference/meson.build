@@ -1,10 +1,10 @@
 glib_prefix = glib_dep.get_pkgconfig_variable('prefix')
 
 fixxref_args = [
-  '--extra-dir=' + join_paths(glib_prefix, gnome.gtkdoc_html_dir('glib')),
-  '--extra-dir=' + join_paths(glib_prefix, gnome.gtkdoc_html_dir('gobject')),
-  '--extra-dir=' + join_paths(glib_prefix, gnome.gtkdoc_html_dir('gio')),
-  '--html-dir=' + join_paths(libgit2_glib_prefix, gnome.gtkdoc_html_dir(libgit2_glib_api_name)),
+  '--extra-dir=' + (glib_prefix / gnome.gtkdoc_html_dir('glib')),
+  '--extra-dir=' + (glib_prefix / gnome.gtkdoc_html_dir('gobject')),
+  '--extra-dir=' + (glib_prefix / gnome.gtkdoc_html_dir('gio')),
+  '--html-dir=' + (libgit2_glib_prefix / gnome.gtkdoc_html_dir(libgit2_glib_api_name)),
 ]
 
 docs_conf = configuration_data()
@@ -21,7 +21,7 @@ content_files = configure_file(
 gnome.gtkdoc(
   libgit2_glib_api_name,
   main_sgml: libgit2_glib_api_name + '-docs.sgml',
-  src_dir: join_paths(meson.source_root(), 'libgit2-glib'),
+  src_dir: meson.source_root() / 'libgit2-glib',
   dependencies: libgit2_glib_dep,
   ignore_headers: private_headers,
   gobject_typesfile: libgit2_glib_api_name + '.types',
