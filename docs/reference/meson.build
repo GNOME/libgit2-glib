@@ -24,7 +24,6 @@ gnome.gtkdoc(
   src_dir: meson.source_root() / 'libgit2-glib',
   dependencies: libgit2_glib_dep,
   ignore_headers: private_headers,
-  gobject_typesfile: libgit2_glib_api_name + '.types',
   scan_args: '--rebuild-types',
   fixxref_args: fixxref_args,
   content_files: content_files,
