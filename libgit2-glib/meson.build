@@ -193,7 +193,7 @@ enum_sources = gnome.mkenums_simple(
 
 install_headers(
   headers,
-  subdir: join_paths(libgit2_glib_api_name, meson.project_name())
+  subdir: libgit2_glib_api_name / meson.project_name(),
 )
 
 platform_deps = [
@@ -239,7 +239,7 @@ libgit2_glib_dep = declare_dependency(
 if enable_python
   install_data(
     'Ggit.py',
-    install_dir: join_paths(python.sysconfig_path('purelib'), 'gi', 'overrides'),
+    install_dir: python.sysconfig_path('purelib') / 'gi/overrides',
   )
 endif
 
@@ -253,7 +253,7 @@ if enable_gir
     symbol_prefix: libgit2_glib_ns.to_lower(),
     export_packages: libgit2_glib_api_name,
     includes: ['GObject-2.0', 'GLib-2.0', 'Gio-2.0'],
-    header: join_paths(meson.project_name(), ggit_h),
+    header: meson.project_name() / ggit_h,
     install: true,
   )
 

@@ -23,7 +23,7 @@ custom_target(
     'generate',
     '--quiet',
     '--no-namespace-dir',
-    '--add-include-path=@0@'.format(join_paths(source_root, 'libgit2-glib')),
+    '--add-include-path=@0@'.format(source_root / 'libgit2-glib'),
     '--config=@INPUT0@',
     '--output-dir=@OUTPUT@',
     '--content-dir=@0@'.format(meson.current_source_dir()),
