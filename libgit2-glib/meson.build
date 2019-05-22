@@ -182,13 +182,9 @@ sources += configure_file(
   install_dir: libgit2_glib_pkgincludedir,
 )
 
-enum_types = 'ggit-enum-types'
-
-enum_sources = gnome.mkenums(
-  enum_types,
+enum_sources = gnome.mkenums_simple(
+  'ggit-enum-types',
   sources: headers,
-  h_template: enum_types + '.h.template',
-  c_template: enum_types + '.c.template',
   install_header: true,
   install_dir: libgit2_glib_pkgincludedir,
 )
