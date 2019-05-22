@@ -47,6 +47,8 @@ libgit2_glib_include_subdir = libgit2_glib_api_name / meson.project_name()
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
+libgit2_glib_dir = meson.current_source_dir() / 'libgit2-glib'
+
 top_inc = include_directories('.')
 
 cc = meson.get_compiler('c')

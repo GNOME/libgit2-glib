@@ -16,7 +16,7 @@ content_files = configure_file(
 gnome.gtkdoc(
   libgit2_glib_api_name,
   main_sgml: libgit2_glib_api_name + '-docs.sgml',
-  src_dir: meson.source_root() / 'libgit2-glib',
+  src_dir: libgit2_glib_dir,
   dependencies: libgit2_glib_dep,
   ignore_headers: private_headers,
   scan_args: '--rebuild-types',
