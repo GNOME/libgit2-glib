@@ -7,13 +7,10 @@ fixxref_args = [
   '--html-dir=' + (libgit2_glib_prefix / gnome.gtkdoc_html_dir(libgit2_glib_api_name)),
 ]
 
-docs_conf = configuration_data()
-docs_conf.set('PACKAGE_VERSION', libgit2_glib_version)
-
 content_files = configure_file(
   input: 'version.xml.in',
   output: '@BASENAME@',
-  configuration: docs_conf,
+  configuration: {'PACKAGE_VERSION': libgit2_glib_version},
 )
 
 gnome.gtkdoc(
