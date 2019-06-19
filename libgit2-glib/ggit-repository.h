@@ -267,6 +267,10 @@ GgitRemote         *ggit_repository_create_remote     (GgitRepository        *re
                                                        const gchar           *url,
                                                        GError               **error);
 
+gboolean            ggit_repository_remove_remote     (GgitRepository        *repository,
+                                                       const gchar           *name,
+                                                       GError               **error);
+
 gchar             **ggit_repository_list_remotes      (GgitRepository        *repository,
                                                        GError               **error);
 
