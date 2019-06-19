@@ -2160,6 +2160,38 @@ ggit_repository_create_remote (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_remove_remote:
+ * @repository: a #GgitRepository.
+ * @name: the remote's name.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Removes @remote from the @repository.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ */
+gboolean
+ggit_repository_remove_remote (GgitRepository   *repository,
+                               const gchar      *name,
+                               GError          **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (name != NULL, FALSE);
+
+	ret = git_remote_delete (_ggit_native_get (repository),
+	                         name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
  * ggit_repository_list_remotes:
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
