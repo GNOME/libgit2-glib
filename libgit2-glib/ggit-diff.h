@@ -66,6 +66,14 @@ GgitDiff      *ggit_diff_new_tree_to_workdir       (GgitRepository        *repos
                                                     GgitTree              *old_tree,
                                                     GgitDiffOptions       *diff_options,
                                                     GError               **error);
+GgitDiff      *ggit_diff_buffers                   (const guint8          *buffer1,
+                                                    gssize                 buffer1_len,
+                                                    const gchar           *buffer1_as_path,
+                                                    const guint8          *buffer2,
+                                                    gssize                 buffer2_len,
+                                                    const gchar           *buffer2_as_path,
+                                                    GgitDiffOptions       *diff_options,
+                                                    GError               **error);
 
 void           ggit_diff_merge                     (GgitDiff              *onto,
                                                     GgitDiff              *from,

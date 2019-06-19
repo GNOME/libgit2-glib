@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <git2.h>
+#include <git2/buffer.h>
 
 #include "ggit-diff.h"
 #include "ggit-diff-binary.h"
@@ -942,6 +943,84 @@ ggit_diff_blobs (GgitBlob              *old_blob,
 	}
 }
 
+/**
+ * ggit_diff_buffers:
+ * @buffer1: (allow-none) (array length=buffer1_len): a buffer to diff from.
+ * @buffer1_len: length of @buffer1.
+ * @buffer1_as_path: (allow-none): treat @buffer1 as if it had this filename, or %NULL,
+ * @buffer2: (allow-none) (array length=buffer2_len): a buffer to diff to.
+ * @buffer2_len: length of @buffer2.
+ * @buffer2_as_path: (allow-none): treat @buffer2 as if it had this filename, or %NULL,
+ * @diff_options: (allow-none): a #GgitDiffOptions, or %NULL.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Same as ggit_diff_blobs() but using a buffers.
+ * Creates a #GgitDiff which compares @buffer1 and @buffer2.
+ *
+ * If @diff_options is %NULL then the defaults specified in
+ * ggit_diff_options_new() are used.
+ *
+ * Returns: (transfer full) (nullable): a newly allocated #GgitDiff if
+ * there was no error, %NULL otherwise.
+ */
+GgitDiff *
+ggit_diff_buffers (const guint8          *buffer1,
+                   gssize                 buffer1_len,
+                   const gchar           *buffer1_as_path,
+                   const guint8          *buffer2,
+                   gssize                 buffer2_len,
+                   const gchar           *buffer2_as_path,
+                   GgitDiffOptions       *diff_options,
+                   GError               **error)
+{
+
+
+	git_diff *diff;
+	git_patch *patch = NULL;
+	git_buf buf = { NULL, 0, 0 };
+	gint ret;
+
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	if (buffer1_len == -1)
+	{
+		buffer1_len = strlen ((const gchar *) buffer1);
+	}
+
+	if (buffer2_len == -1)
+	{
+		buffer2_len = strlen ((const gchar *) buffer2);
+	}
+
+	ret = git_patch_from_buffers (&patch, buffer1, buffer1_len, buffer1_as_path,
+		buffer2, buffer2_len, buffer2_as_path, _ggit_diff_options_get_diff_options (diff_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+	ret = git_patch_to_buf(&buf, patch);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	ret = git_diff_from_buffer (&diff, buf.ptr, buf.size);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	git_patch_free(patch);
+	git_buf_free (&buf);
+
+	return _ggit_diff_wrap (NULL, diff);
+}
 /**
  * ggit_diff_blob_to_buffer:
  * @old_blob: (allow-none): a #GgitBlob to diff from.
