@@ -2192,6 +2192,42 @@ ggit_repository_remove_remote (GgitRepository   *repository,
 }
 
 /**
+ * ggit_repository_set_remote_url:
+ * @repository: a #GgitRepository.
+ * @remote: the remote name who's url is to be set.
+ * @url: url of the remote.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Sets url for the @remote from the @repository.
+ *
+ * Returns: %TRUE if there was no error, %FALSE otherwise
+ */
+gboolean
+ggit_repository_set_remote_url (GgitRepository   *repository,
+                                const gchar      *remote,
+                                const gchar      *url,
+                                GError          **error)
+{
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), FALSE);
+	g_return_val_if_fail (remote != NULL, FALSE);
+	g_return_val_if_fail (url != NULL, FALSE);
+
+	ret = git_remote_set_url(_ggit_native_get (repository),
+	                                           remote,
+	                                           url);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+/**
  * ggit_repository_list_remotes:
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
