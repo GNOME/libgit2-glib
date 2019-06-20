@@ -2228,6 +2228,45 @@ ggit_repository_set_remote_url (GgitRepository   *repository,
 }
 
 /**
+ * ggit_repository_rename_remote:
+ * @repository: a #GgitRepository.
+ * @name: the remote name to be renamed.
+ * @new_name: new name of the remote.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Rename the remote of @repository from @name to @new_name.
+ *
+ * Returns: (transfer full) (nullable): non-default refspecs that
+ * cannot be renamed.
+ */
+gchar **
+ggit_repository_rename_remote (GgitRepository   *repository,
+                               const gchar      *name,
+                               const gchar      *new_name,
+                               GError          **error)
+{
+	gint ret;
+	git_strarray problems;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (name != NULL, NULL);
+	g_return_val_if_fail (new_name != NULL, NULL);
+
+	ret = git_remote_rename (&problems,
+	                         _ggit_native_get (repository),
+	                         name,
+	                         new_name);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return ggit_utils_get_str_array_from_git_strarray (&problems);
+}
+
+/**
  * ggit_repository_list_remotes:
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.
