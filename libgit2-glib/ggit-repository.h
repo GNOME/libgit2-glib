@@ -271,6 +271,11 @@ gboolean            ggit_repository_remove_remote     (GgitRepository        *re
                                                        const gchar           *name,
                                                        GError               **error);
 
+gboolean            ggit_repository_set_remote_url    (GgitRepository        *repository,
+                                                       const gchar           *remote,
+                                                       const gchar           *url,
+                                                       GError               **error);
+
 gchar             **ggit_repository_list_remotes      (GgitRepository        *repository,
                                                        GError               **error);
 
