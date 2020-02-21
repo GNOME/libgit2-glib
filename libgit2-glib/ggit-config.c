@@ -191,7 +191,7 @@ ggit_config_find_global (void)
 	if (git_config_find_global (&buf) == GIT_OK)
 	{
 		path = g_file_new_for_path (buf.ptr);
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 		git_buf_dispose (&buf);
 #else
 		git_buf_free (&buf);
@@ -224,7 +224,7 @@ ggit_config_find_system (void)
 	if (git_config_find_system (&buf) == GIT_OK)
 	{
 		path = g_file_new_for_path (buf.ptr);
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 		git_buf_dispose (&buf);
 #else
 		git_buf_free (&buf);
@@ -303,7 +303,7 @@ ggit_config_add_file (GgitConfig      *config,
 	ret = git_config_add_file_ondisk (_ggit_native_get (config),
 	                                  path,
 	                                  (git_config_level_t)level,
-#if LIBGIT2_SOVERSION >= 27
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 27)
 	                                  NULL,
 #endif
 	                                  force);

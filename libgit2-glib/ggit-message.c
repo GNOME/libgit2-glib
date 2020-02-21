@@ -46,7 +46,7 @@ ggit_message_prettify (const gchar *message,
 	git_message_prettify (&buf, message, strip_comments, comment_char);
 
 	d = g_strdup (buf.ptr);
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 	git_buf_dispose (&buf);
 #else
 	git_buf_free (&buf);

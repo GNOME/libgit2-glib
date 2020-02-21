@@ -786,7 +786,7 @@ ggit_diff_format_email (GgitDiff                    *diff,
 
 	if (ret != GIT_OK)
 	{
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 		git_buf_dispose (&buf);
 #else
 		git_buf_free (&buf);
@@ -796,7 +796,7 @@ ggit_diff_format_email (GgitDiff                    *diff,
 	}
 
 	retval = g_strndup (buf.ptr, buf.size);
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 	git_buf_dispose (&buf);
 #else
 	git_buf_free (&buf);
@@ -1016,7 +1016,7 @@ ggit_diff_new_buffers (const guint8          *buffer1,
 	}
 
 	git_patch_free(patch);
-#if LIBGIT2_SOVERSION >= 28
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 	git_buf_dispose (&buf);
 #else
 	git_buf_free (&buf);
