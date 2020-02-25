@@ -1,3 +1,12 @@
+News in 0.99.0
+--------------
+* Detect libgit2 version
+* Added ggit_repository_rename_remote
+* Added ggit_repository_set_remote_url
+* Added ggit_repository_remove_remote
+* Use python3
+* Added ggit_diff_new_buffers
+
 News in 0.28.0.1
 --------------
 * Added·push·support
