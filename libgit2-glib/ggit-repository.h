@@ -507,7 +507,7 @@ gboolean            ggit_repository_path_is_ignored    (GgitRepository          
 
 void                ggit_repository_merge              (GgitRepository          *repository,
                                                         GgitAnnotatedCommit    **their_heads,
-                                                        gsize                   *their_heads_length,
+                                                        gsize                    their_heads_length,
                                                         GgitMergeOptions        *merge_opts,
                                                         GgitCheckoutOptions     *checkout_opts,
                                                         GError                 **error);

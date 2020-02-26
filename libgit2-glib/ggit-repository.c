@@ -4025,7 +4025,7 @@ ggit_repository_note_foreach (GgitRepository    *repository,
 void
 ggit_repository_merge (GgitRepository       *repository,
                        GgitAnnotatedCommit **their_heads,
-                       gsize                *their_heads_length,
+                       gsize                 their_heads_length,
                        GgitMergeOptions     *merge_opts,
                        GgitCheckoutOptions  *checkout_opts,
                        GError              **error)
