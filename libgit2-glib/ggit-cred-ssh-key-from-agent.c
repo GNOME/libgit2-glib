@@ -155,7 +155,11 @@ ggit_cred_ssh_key_from_agent_initable_init (GInitable     *initable,
 
 	_ggit_native_set (initable,
 	                  cred,
-	                  (GDestroyNotify)cred->free);
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 99)
+	                  (GDestroyNotify)git_credential_free (cred));
+#else
+	                  (GDestroyNotify)git_cred_free (cred));
+#endif
 
 	return TRUE;
 }
