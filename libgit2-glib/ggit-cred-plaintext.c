@@ -180,9 +180,9 @@ ggit_cred_plaintext_initable_init (GInitable    *initable,
 	_ggit_native_set (initable,
 	                  cred,
 #if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 99)
-	                  (GDestroyNotify)git_credential_free (cred));
+	                  (GDestroyNotify)git_credential_free);
 #else
-	                  (GDestroyNotify)git_cred_free (cred));
+	                  (GDestroyNotify)git_cred_free);
 #endif
 
 	return TRUE;
