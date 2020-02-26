@@ -1,3 +1,9 @@
+News in 0.99.0.1
+----------------
+* git_merge: fix their_heads_length parameter
+* Use correct free functions
+* detect libgit2 version
+
 News in 0.99.0
 --------------
 * Detect libgit2 version
