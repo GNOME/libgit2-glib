@@ -16,7 +16,7 @@ typedef struct
 	GgitRemoteCallbacks parent;
 } Cloner;
 
-static void cloner_class_init (ClonerClass *klass);
+GType cloner_get_type (void);
 
 G_DEFINE_TYPE (Cloner, cloner, GGIT_TYPE_REMOTE_CALLBACKS)
 
@@ -29,17 +29,16 @@ static void
 cloner_transfer_progress (GgitRemoteCallbacks   *callbacks,
                           GgitTransferProgress  *stats)
 {
-	guint recvobjs;
-	guint totobjs;
-	guint indexobjs;
+	guint recvobjs, totobjs, indexobjs;
+	guint network_percent, index_percent, kbytes;
 
 	recvobjs = ggit_transfer_progress_get_received_objects (stats);
 	totobjs = ggit_transfer_progress_get_total_objects (stats);
 	indexobjs = ggit_transfer_progress_get_indexed_objects (stats);
 
-	guint network_percent = totobjs > 0 ? recvobjs * 100 / totobjs : 0;
-	guint index_percent = totobjs > 0 ? indexobjs * 100 / totobjs : 0;
-	guint kbytes = ggit_transfer_progress_get_received_bytes (stats) / 1024;
+	network_percent = totobjs > 0 ? recvobjs * 100 / totobjs : 0;
+	index_percent = totobjs > 0 ? indexobjs * 100 / totobjs : 0;
+	kbytes = ggit_transfer_progress_get_received_bytes (stats) / 1024;
 
 	g_printf ("\rnet %3d%% (%4d kb, %5d/%5d)  /  idx %3d%% (%5d/%5d)",
 	          network_percent, kbytes,
