@@ -185,26 +185,6 @@ ggit_object_factory_unregister (GgitObjectFactory *factory,
 	}
 }
 
-static GParameter *
-convert_to_gparameter (GObjectConstructParam *params,
-                       guint                  num)
-{
-	GParameter *ret;
-	guint i;
-
-	ret = g_new0 (GParameter, num);
-
-	for (i = 0; i < num; ++i)
-	{
-		ret[i].name = params[i].pspec->name;
-
-		g_value_init (&ret[i].value, G_VALUE_TYPE (params[i].value));
-		g_value_copy (params[i].value, &ret[i].value);
-	}
-
-	return ret;
-}
-
 /**
  * ggit_object_factory_construct:
  * @factory: a #GgitObjectFactory.
@@ -235,21 +215,36 @@ ggit_object_factory_construct (GgitObjectFactory     *factory,
 
 	if (val)
 	{
-		/* convert construct properties to gparameter and call newv */
-		GParameter *params;
+		/* convert construct properties and call new_with_properties */
+		const char **names;
+		GValue *values;
 		guint i;
 
-		params = convert_to_gparameter (construct_properties,
-		                                n_construct_properties);
-
-		ret = g_object_newv (val->type, n_construct_properties, params);
+		names = g_new (const char *, n_construct_properties);
+		values = g_new0 (GValue, n_construct_properties);
 
 		for (i = 0; i < n_construct_properties; ++i)
 		{
-			g_value_unset (&params[i].value);
+			const GValue *value;
+
+			names[i] = construct_properties[i].pspec->name;
+			value = construct_properties[i].value;
+
+			g_value_init (&values[i], G_VALUE_TYPE (value));
+			g_value_copy (value, &values[i]);
 		}
 
-		g_free (params);
+		ret = g_object_new_with_properties (val->type,
+		                                    n_construct_properties,
+		                                    names, values);
+
+		for (i = 0; i < n_construct_properties; ++i)
+		{
+			g_value_unset (&values[i]);
+		}
+
+		g_free (names);
+		g_free (values);
 	}
 	else
 	{
