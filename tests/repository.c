@@ -73,7 +73,7 @@ _g_mkdtemp (gchar *tmpl)
 	static const int NLETTERS = sizeof (letters) - 1;
 	static int counter = 0;
 	char *XXXXXX;
-	GTimeVal tv;
+	gint64 time;
 	glong value;
 	int count;
 
@@ -87,8 +87,8 @@ _g_mkdtemp (gchar *tmpl)
 	}
 
 	/* Get some more or less random data.  */
-	g_get_current_time (&tv);
-	value = (tv.tv_usec ^ tv.tv_sec) + counter++;
+	time = g_get_real_time ();
+	value = ((time % G_USEC_PER_SEC) ^ (time / G_USEC_PER_SEC)) + counter++;
 
 	for (count = 0; count < 100; value += 7777, ++count)
 	{
