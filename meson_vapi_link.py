@@ -13,6 +13,6 @@ old = 'ggit-1.0'
 new = 'libgit2-glib-1.0'
 
 for ext in ['vapi', 'deps']:
-  src = os.path.join('{}.{}'.format(new, ext))
-  dest = os.path.join('{}.{}'.format(old, ext))
+  src = '{}.{}'.format(new, ext)
+  dest = '{}.{}'.format(old, ext)
   subprocess.call(['ln', '-s', '-f', src, dest])
