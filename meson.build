@@ -135,7 +135,7 @@ if enable_vapi
   assert(enable_gir, 'vapi support was requested, but introspection support is mandatory.')
   assert(add_languages('vala', required: false), 'vapi support was requested, but vala not found.')
 
-  meson.add_install_script('meson_vapi_link.py', get_option('datadir'))
+  meson.add_install_script('meson_vapi_link.py', libgit2_glib_datadir)
 endif
 
 # Check for libgit2 ssh support

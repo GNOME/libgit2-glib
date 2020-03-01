@@ -4,7 +4,14 @@ import os
 import subprocess
 import sys
 
-vapidir = os.path.join(os.environ['MESON_INSTALL_DESTDIR_PREFIX'], sys.argv[1], 'vala', 'vapi')
+datadir = sys.argv[1]
+
+destdir = os.environ.get('DESTDIR')
+if destdir:
+    datadir = os.path.splitdrive(datadir)[1].lstrip(os.path.sep)
+    datadir = os.path.join(destdir, datadir)
+
+vapidir = os.path.join(datadir, 'vala', 'vapi')
 os.chdir(vapidir)
 
 # FIXME: meson will not track the creation of these files
