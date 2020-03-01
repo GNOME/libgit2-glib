@@ -81,7 +81,7 @@ ggit_object_factory_constructor (GType                  type,
 
 	if (the_instance)
 	{
-		return g_object_ref (the_instance);
+		return G_OBJECT (g_object_ref (the_instance));
 	}
 
 	ret = G_OBJECT_CLASS (ggit_object_factory_parent_class)->constructor (type,
