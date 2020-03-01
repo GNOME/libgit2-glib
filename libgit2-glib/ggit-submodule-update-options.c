@@ -161,7 +161,7 @@ ggit_submodule_update_options_new (void)
 	return g_object_new (GGIT_TYPE_SUBMODULE_UPDATE_OPTIONS, NULL);
 }
 
-const git_submodule_update_options *
+git_submodule_update_options *
 _ggit_submodule_update_options_get_submodule_update_options (GgitSubmoduleUpdateOptions *options)
 {
 	if (options != NULL)

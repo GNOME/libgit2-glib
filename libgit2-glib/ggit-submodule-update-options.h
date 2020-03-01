@@ -37,7 +37,7 @@ struct _GgitSubmoduleUpdateOptionsClass
 	GObjectClass parent_class;
 };
 
-const git_submodule_update_options *
+git_submodule_update_options *
                       _ggit_submodule_update_options_get_submodule_update_options (GgitSubmoduleUpdateOptions  *options);
 
 GgitSubmoduleUpdateOptions  *ggit_submodule_update_options_new             (void);
