@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-import subprocess
+import shutil
 import sys
 
 datadir = sys.argv[1]
@@ -22,4 +22,7 @@ new = 'libgit2-glib-1.0'
 for ext in ['vapi', 'deps']:
   src = '{}.{}'.format(new, ext)
   dest = '{}.{}'.format(old, ext)
-  subprocess.call(['ln', '-s', '-f', src, dest])
+  try:
+      os.symlink(src, dest)
+  except OSError:
+      shutil.copy(src, dest)
