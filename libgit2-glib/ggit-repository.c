@@ -4030,8 +4030,9 @@ ggit_repository_merge (GgitRepository       *repository,
                        GgitCheckoutOptions  *checkout_opts,
                        GError              **error)
 {
-	gint ret, i;
-	git_annotated_commit **their_heads_native;
+	gint ret;
+	gsize i;
+	const git_annotated_commit **their_heads_native;
 
 	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
 	g_return_if_fail (their_heads != NULL);
@@ -4039,7 +4040,7 @@ ggit_repository_merge (GgitRepository       *repository,
 	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (checkout_opts));
 	g_return_if_fail (error == NULL || *error == NULL);
 
-	their_heads_native = g_new0 (git_annotated_commit *, their_heads_length);
+	their_heads_native = g_new0 (const git_annotated_commit *, their_heads_length);
 
 	for (i = 0; i < their_heads_length; ++i)
 	{
