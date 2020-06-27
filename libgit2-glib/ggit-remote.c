@@ -625,4 +625,31 @@ ggit_remote_upload (GgitRemote              *remote,
 	return TRUE;
 }
 
+/**
+ * ggit_remote_prune:
+ * @remote: a #GgitRemote.
+ * @callbacks: the callbacks to use for this connection.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Prune tracking refs that are no longer present on remote.
+ */
+void
+ggit_remote_prune (GgitRemote           *remote,
+                   GgitRemoteCallbacks  *callbacks,
+                   GError              **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REMOTE (remote));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_remote_prune (_ggit_native_get (remote),
+	                        _ggit_remote_callbacks_get_native (callbacks));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
 /* ex:set ts=8 noet: */

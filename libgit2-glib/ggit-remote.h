@@ -115,6 +115,10 @@ gboolean           ggit_remote_upload                   (GgitRemote             
                                                          GgitPushOptions         *push_options,
                                                          GError                 **error);
 
+void               ggit_remote_prune                    (GgitRemote           *remote,
+                                                         GgitRemoteCallbacks  *callbacks,
+                                                         GError              **error);
+
 G_END_DECLS
 
 #endif /* __GGIT_REMOTE_H__ */
