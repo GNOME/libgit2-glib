@@ -301,6 +301,10 @@ gboolean            ggit_repository_set_head          (GgitRepository        *re
                                                        const gchar           *ref_name,
                                                        GError               **error);
 
+gboolean            ggit_repository_set_head_detached (GgitRepository        *repository,
+                                                       GgitOId               *oid,
+                                                       GError               **error);
+
 GFile              *ggit_repository_discover          (GFile                 *location,
                                                        GError               **error);
 
