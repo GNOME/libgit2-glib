@@ -1,0 +1,12 @@
+image: fedora:33
+stages:
+  - build
+before_script:
+  - dnf install -y gcc meson ninja-build gettext gtk-doc glib2-devel libgit2-devel gobject-introspection-devel vala libssh2-devel
+build-libgit2-glib:
+  stage: build
+  script:
+  - meson _build .
+  - ninja -C _build
+  - ninja -C _build install
+
