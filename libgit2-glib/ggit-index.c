@@ -330,6 +330,7 @@ ggit_index_remove (GgitIndex  *idx,
 	gchar *path;
 	GgitRepository *repo;
 	GFile *wd;
+	GString *gs_path;
 
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
@@ -341,6 +342,11 @@ ggit_index_remove (GgitIndex  *idx,
 	g_object_unref (repo);
 
 	path = g_file_get_relative_path (wd, file);
+#ifdef TRANSLATE_WINDOWS_PATHS
+	gs_path = g_string_new (path);
+	g_string_replace (gs_path, "\\", "/", 0);
+	path = g_string_free (gs_path, FALSE);
+#endif
 	g_object_unref (wd);
 
 	g_return_val_if_fail (path != NULL, FALSE);
@@ -447,6 +453,7 @@ ggit_index_add_file (GgitIndex  *idx,
 	GFile *wd;
 	gchar *path;
 	gint ret;
+	GString *gs_path;
 
 	g_return_val_if_fail (GGIT_IS_INDEX (idx), FALSE);
 	g_return_val_if_fail (G_IS_FILE (file), FALSE);
@@ -456,6 +463,11 @@ ggit_index_add_file (GgitIndex  *idx,
 
 	wd = ggit_repository_get_workdir (repo);
 	path = g_file_get_relative_path (wd, file);
+#ifdef TRANSLATE_WINDOWS_PATHS
+	gs_path = g_string_new (path);
+	g_string_replace (gs_path, "\\", "/", 0);
+	path = g_string_free (gs_path, FALSE);
+#endif
 
 	g_object_unref (wd);
 	g_object_unref (repo);

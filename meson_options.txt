@@ -3,3 +3,4 @@ option('introspection', type: 'boolean', value: true, description: 'Enable GObje
 option('python', type: 'boolean', value: true, description: 'Build with python support')
 option('ssh', type: 'boolean', value: true, description: 'Build with libgit2 ssh support')
 option('vapi', type: 'boolean', value: true, description: 'Build Vala bindings')
+option('translate_windows_paths', type: 'boolean', value: true, description: 'Turn windows paths into Unix paths')

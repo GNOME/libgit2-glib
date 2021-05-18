@@ -105,6 +105,10 @@ if get_option('b_ndebug') == 'true'
   common_flags += ['-DG_DISABLE_ASSERT']
 endif
 
+if get_option('translate_windows_paths')
+  common_flags += ['-DTRANSLATE_WINDOWS_PATHS']
+endif
+
 add_project_arguments(common_flags, language: 'c')
 
 if cc.has_link_argument('-Wl,-Bsymbolic-functions')
