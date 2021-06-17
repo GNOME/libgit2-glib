@@ -38,8 +38,8 @@ libversion = '@0@.@1@.@2@'.format(soversion, current, revision)
 darwin_versions = [current + 1, '@0@.@1@'.format(current + 1, revision)]
 
 libgit2_glib_prefix = get_option('prefix')
-libgit2_glib_libdir = libgit2_glib_prefix / get_option('libdir')
-libgit2_glib_datadir = libgit2_glib_prefix / get_option('datadir')
+libgit2_glib_libdir = get_option('libdir')
+libgit2_glib_datadir = get_option('datadir')
 
 libgit2_glib_pkgincludedir = get_option('includedir') / libgit2_glib_api_name / meson.project_name()
 
@@ -158,9 +158,14 @@ endif
 # Check for python
 enable_python = get_option('python')
 if enable_python
-  python = import('python3')
+  python = import('python').find_installation('python3')
 
-  meson.add_install_script('meson_python_compile.py', libgit2_glib_libdir)
+  python_req = '3.2.3'
+
+  dependency('pygobject-3.0', version: '>= 3.0.0')
+  assert(python.language_version().version_compare('>= ' + python_req), 'python support was requested, but version >= ' + python_req + ' not found.')
+
+  meson.add_install_script('meson_python_compile.py', libgit2_glib_libdir, python.path())
 endif
 
 subdir('libgit2-glib')

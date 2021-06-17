@@ -4,12 +4,9 @@ import os
 import shutil
 import sys
 
-datadir = sys.argv[1]
+prefix = os.environ['MESON_INSTALL_DESTDIR_PREFIX'] if os.environ.get('DESTDIR') else os.environ['MESON_INSTALL_PREFIX']
 
-destdir = os.environ.get('DESTDIR')
-if destdir:
-    datadir = os.path.splitdrive(datadir)[1].lstrip(os.path.sep)
-    datadir = os.path.join(destdir, datadir)
+datadir = os.path.join(prefix, sys.argv[1])
 
 vapidir = os.path.join(datadir, 'vala', 'vapi')
 os.chdir(vapidir)

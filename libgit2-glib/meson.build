@@ -237,9 +237,10 @@ libgit2_glib_dep = declare_dependency(
 )
 
 if enable_python
-  install_data(
+  python.install_sources(
     'Ggit.py',
-    install_dir: python.sysconfig_path('purelib') / 'gi/overrides',
+    pure: false,
+    subdir: 'gi/overrides',
   )
 endif
 
