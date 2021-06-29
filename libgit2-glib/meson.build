@@ -229,6 +229,7 @@ pkg.generate(
   extra_cflags: cflags,
 )
 
+rpath = get_option('prefix') + '/' + get_option('libdir')
 # Internal dependency, for tests and benchmarks
 libgit2_glib_dep = declare_dependency(
   # Everything that uses libgit2-glib needs this built to compile
@@ -236,6 +237,7 @@ libgit2_glib_dep = declare_dependency(
   include_directories: include_directories('.'),
   dependencies: platform_deps,
   link_with: libgit2_glib,
+  link_args : '-Wl,-rpath,' + rpath
 )
 
 if enable_python
