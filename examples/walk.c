@@ -71,6 +71,7 @@ main (int   argc,
 {
 	GFile *file;
 	GgitRepository *repo;
+	GgitMailmap *mailmap;
 	GgitRevisionWalker *revwalker;
 	GgitRef *head;
 	GgitOId *oid;
@@ -112,6 +113,9 @@ main (int   argc,
 	repo = ggit_repository_open (file, &err);
 	g_assert_no_error (err);
 
+	mailmap = ggit_mailmap_new_from_repository (repo, &err);
+	g_assert_no_error (err);
+
 	revwalker = ggit_revision_walker_new (repo, &err);
 	g_assert_no_error (err);
 
@@ -133,8 +137,8 @@ main (int   argc,
 	{
 		GgitCommit *commit;
 		gchar *oid_str;
-		GgitSignature *author;
-		GgitSignature *committer;
+		GgitSignature *author, *real_author;
+		GgitSignature *committer, *real_committer;
 		gchar *author_str;
 		gchar *committer_str;
 		const gchar *subject;
@@ -150,9 +154,13 @@ main (int   argc,
 
 		author = ggit_commit_get_author (commit);
 		committer = ggit_commit_get_committer (commit);
+		real_author = ggit_mailmap_resolve_signature (mailmap, author, &err);
+		g_assert_no_error (err);
+		real_committer = ggit_mailmap_resolve_signature (mailmap, committer, &err);
+		g_assert_no_error (err);
 
-		author_str = signature_to_string (author);
-		committer_str = signature_to_string (committer);
+		author_str = signature_to_string (real_author);
+		committer_str = signature_to_string (real_committer);
 
 		subject = ggit_commit_get_subject (commit);
 		message = ggit_commit_get_message (commit);
@@ -199,6 +207,8 @@ main (int   argc,
 		g_free (author_str);
 		g_object_unref (committer);
 		g_object_unref (author);
+		g_object_unref (real_committer);
+		g_object_unref (real_author);
 		g_free (oid_str);
 		g_object_unref (commit);
 		ggit_oid_free (oid);
