@@ -963,14 +963,14 @@ ggit_diff_blobs (GgitBlob              *old_blob,
  * there was no error, %NULL otherwise.
  */
 GgitDiff *
-ggit_diff_new_buffers (const guint8          *buffer1,
-                   gssize                 buffer1_len,
-                   const gchar           *buffer1_as_path,
-                   const guint8          *buffer2,
-                   gssize                 buffer2_len,
-                   const gchar           *buffer2_as_path,
-                   GgitDiffOptions       *diff_options,
-                   GError               **error)
+ggit_diff_new_buffers (const guint8    *buffer1,
+                       gssize           buffer1_len,
+                       const gchar     *buffer1_as_path,
+                       const guint8    *buffer2,
+                       gssize           buffer2_len,
+                       const gchar     *buffer2_as_path,
+                       GgitDiffOptions *diff_options,
+                       GError          **error)
 {
 
 
@@ -1047,18 +1047,18 @@ ggit_diff_new_buffers (const guint8          *buffer1,
  * Same as ggit_diff_blobs() but using a buffer.
  */
 void
-ggit_diff_blob_to_buffer (GgitBlob              *old_blob,
-                          const gchar           *old_as_path,
-                          const guint8          *buffer,
-                          gssize                 buffer_len,
-                          const gchar           *buffer_as_path,
-                          GgitDiffOptions       *diff_options,
-                          GgitDiffFileCallback   file_cb,
-                          GgitDiffBinaryCallback binary_cb,
-                          GgitDiffHunkCallback   hunk_cb,
-                          GgitDiffLineCallback   line_cb,
-                          gpointer               user_data,
-                          GError               **error)
+ggit_diff_blob_to_buffer (GgitBlob                *old_blob,
+                          const gchar             *old_as_path,
+                          const guint8            *buffer,
+                          gssize                   buffer_len,
+                          const gchar             *buffer_as_path,
+                          GgitDiffOptions         *diff_options,
+                          GgitDiffFileCallback     file_cb,
+                          GgitDiffBinaryCallback   binary_cb,
+                          GgitDiffHunkCallback     hunk_cb,
+                          GgitDiffLineCallback     line_cb,
+                          gpointer                 user_data,
+                          GError                 **error)
 {
 	gint ret;
 	const git_diff_options *gdiff_options;
