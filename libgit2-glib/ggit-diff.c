@@ -208,12 +208,17 @@ ggit_diff_file_callback_wrapper (const git_diff_delta *delta,
 
 			path = ggit_diff_file_get_path (file);
 
-			data->encoding =
-				ggit_repository_get_attribute (priv->repository,
-			                                       path,
-			                                       "encoding",
-			                                       GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX,
-			                                       NULL);
+			if (priv->repository != NULL)
+			{
+				data->encoding =
+					ggit_repository_get_attribute (priv->repository,
+				                                       path,
+				                                       "encoding",
+				                                       GGIT_ATTRIBUTE_CHECK_FILE_THEN_INDEX,
+				                                       NULL);
+			} else {
+				data->encoding = "UTF-8";
+			}
 		}
 	}
 
