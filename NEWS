@@ -1,3 +1,13 @@
+News in 1.0.0
+-------------
+* Allow diff without repository
+* Allow null options on ggit_checkout API
+* Invalid path resolving relative path on windows
+* Add git_repository_set_head_detached to the public API
+* Added a wrapper function for git_remote_prune
+* Several meson improvements
+* Misc bug fixes
+
 News in 0.99.0.1
 ----------------
 * git_merge: fix their_heads_length parameter
