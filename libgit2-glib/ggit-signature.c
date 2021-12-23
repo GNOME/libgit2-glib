@@ -381,7 +381,7 @@ ggit_signature_get_time_zone (GgitSignature *signature)
 	time_zone_id = g_strdup_printf ("%s%02i:%02i",
 	                                s->when.offset >= 0 ? "+" : "-",
 	                                hours, minutes);
-	time_zone = g_time_zone_new (time_zone_id);
+	time_zone = g_time_zone_new_identifier (time_zone_id);
 
 	g_free (time_zone_id);
 
