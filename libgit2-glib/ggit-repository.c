@@ -945,7 +945,7 @@ ggit_repository_set_head (GgitRepository   *repository,
 /**
  * ggit_repository_set_head_detached:
  * @repository: a #GgitRepository.
- * @ref_name: canonical name of the reference HEAD should point to.
+ * @oid: canonical Object id of the Commit the HEAD should point to.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Returns: %TRUE if head was successfully set, %FALSE otherwise.
