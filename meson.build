@@ -46,6 +46,8 @@ libgit2_glib_pkgincludedir = join_paths(get_option('includedir'), libgit2_glib_a
 gnome = import('gnome')
 pkg = import('pkgconfig')
 
+source_root = meson.current_source_dir()
+
 top_inc = include_directories('.')
 
 cc = meson.get_compiler('c')
@@ -169,5 +171,6 @@ subdir('examples')
 subdir('tests')
 
 if get_option('gtk_doc')
+  assert(enable_gir, 'documentation generation support requested but introspection is disabled. Please use -Dgtk_doc=false.')
   subdir('docs/reference')
 endif

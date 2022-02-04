@@ -1,32 +1,35 @@
-glib_prefix = glib_dep.get_pkgconfig_variable('prefix')
+doc_module = meson.project_name()
 
-fixxref_args = [
-  '--extra-dir=' + join_paths(glib_prefix, gnome.gtkdoc_html_dir('glib')),
-  '--extra-dir=' + join_paths(glib_prefix, gnome.gtkdoc_html_dir('gobject')),
-  '--extra-dir=' + join_paths(glib_prefix, gnome.gtkdoc_html_dir('gio')),
-  '--html-dir=' + join_paths(libgit2_glib_prefix, gnome.gtkdoc_html_dir(libgit2_glib_api_name)),
-]
+toml_conf = {
+  'version': libgit2_glib_version,
+  'license': ','.join(meson.project_license()),
+}
 
-docs_conf = configuration_data()
-docs_conf.set('PACKAGE_VERSION', libgit2_glib_version)
-
-name = 'version.xml'
-
-content_files = configure_file(
-  input: name + '.in',
-  output: name,
-  configuration: docs_conf,
+libgit2_glib_toml = configure_file(
+  input: doc_module + '.toml.in',
+  output: '@BASENAME@',
+  configuration: toml_conf,
 )
 
-gnome.gtkdoc(
-  libgit2_glib_api_name,
-  main_sgml: libgit2_glib_api_name + '-docs.sgml',
-  src_dir: join_paths(meson.source_root(), 'libgit2-glib'),
-  dependencies: libgit2_glib_dep,
-  ignore_headers: private_headers,
-  gobject_typesfile: libgit2_glib_api_name + '.types',
-  scan_args: '--rebuild-types',
-  fixxref_args: fixxref_args,
-  content_files: content_files,
+custom_target(
+  doc_module + '-doc',
+  input: [
+    libgit2_glib_toml,
+    libgit2_glib_gir,
+  ],
+  output: libgit2_glib_api_name,
+  command: [
+    find_program('gi-docgen'),
+    'generate',
+    '--quiet',
+    '--no-namespace-dir',
+    '--add-include-path=@0@'.format(join_paths(source_root, 'libgit2-glib')),
+    '--config=@INPUT0@',
+    '--output-dir=@OUTPUT@',
+    '--content-dir=@0@'.format(meson.current_source_dir()),
+    '@INPUT1@',
+  ],
+  build_by_default: true,
   install: true,
+  install_dir: gnome.gtkdoc_html_dir(''),
 )
