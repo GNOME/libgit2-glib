@@ -21,5 +21,7 @@ for ext in ['vapi', 'deps']:
   dest = '{}.{}'.format(old, ext)
   try:
       os.symlink(src, dest)
+  except FileExistsError:
+      pass
   except OSError:
       shutil.copy(src, dest)
