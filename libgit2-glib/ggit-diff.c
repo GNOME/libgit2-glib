@@ -670,7 +670,7 @@ ggit_diff_foreach (GgitDiff              *diff,
 	git_diff_line_cb real_line_cb = NULL;
 
 	g_return_if_fail (GGIT_IS_DIFF (diff));
-	g_return_if_fail (file_cb != NULL && binary_cb != NULL && hunk_cb != NULL && line_cb != NULL);
+	g_return_if_fail (file_cb != NULL || binary_cb != NULL || hunk_cb != NULL || line_cb != NULL);
 	g_return_if_fail (error == NULL || *error == NULL);
 
 	wrapper_data_init (&wrapper_data);
