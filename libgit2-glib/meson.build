@@ -1,3 +1,17 @@
+version_data = configuration_data()
+version_data.set('MAJOR_VERSION', libgit2_glib_major_version)
+version_data.set('MINOR_VERSION', libgit2_glib_minor_version)
+version_data.set('MICRO_VERSION', libgit2_glib_micro_version)
+version_data.set('VERSION', libgit2_glib_version)
+version_data.set_quoted('BUILD_TYPE', libgit2_glib_buildtype)
+
+ggit_version_h = configure_file(
+          input: 'ggit-version.h.in',
+         output: 'ggit-version.h',
+    install_dir: libgit2_glib_includedir / libgit2_glib_include_subdir,
+        install: true,
+  configuration: version_data)
+
 headers = [
   'ggit-annotated-commit.h',
   'ggit-blame.h',
@@ -66,6 +80,7 @@ headers = [
   'ggit-tree-builder.h',
   'ggit-tree-entry.h',
   'ggit-types.h',
+  ggit_version_h,
 ]
 
 private_headers = [

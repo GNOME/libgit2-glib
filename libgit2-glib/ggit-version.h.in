@@ -1,0 +1,76 @@
+#ifndef GGIT_VERSION_H
+#define GGIT_VERSION_H
+
+/**
+ * GGIT_VERSION
+ *
+ * libgit2-glib version.
+ */
+#define GGIT_VERSION (@VERSION@)
+
+/**
+ * GGIT_VERSION_S:
+ *
+ * libgit2-glib version, encoded as a string, useful for printing and
+ * concatenation.
+ */
+#define GGIT_VERSION_S "@VERSION@"
+
+/**
+ * GGIT_MAJOR_VERSION:
+ *
+ * libgit2-glib major version component (e.g. 1 if %GGIT_VERSION is 1.2.3)
+ */
+#define GGIT_MAJOR_VERSION (@MAJOR_VERSION@)
+
+/**
+ * GGIT_MINOR_VERSION:
+ *
+ * libgit2-glib minor version component (e.g. 2 if %GGIT_VERSION is 1.2.3)
+ */
+#define GGIT_MINOR_VERSION (@MINOR_VERSION@)
+
+/**
+ * GGIT_MICRO_VERSION:
+ *
+ * libgit2-glib micro version component (e.g. 3 if %GGIT_VERSION is 1.2.3)
+ */
+#define GGIT_MINOR_VERSION (@MICRO_VERSION@)
+
+#define GGIT_ENCODE_VERSION(major,minor,micro) \
+        ((major) << 24 | (minor) << 16 | (micro) << 8)
+
+/**
+ * GGIT_VERSION_HEX:
+ *
+ * libgit2-glib version, encoded as an hexadecimal number, useful for
+ * integer comparisons.
+ */
+#define GGIT_VERSION_HEX \
+        (GGIT_ENCODE_VERSION (GGIT_MAJOR_VERSION, GGIT_MINOR_VERSION, 0))
+
+/**
+ * GGIT_BUILD_TYPE:
+ *
+ * The build type of the installed build.
+ */
+#define GGIT_BUILD_TYPE @BUILD_TYPE@
+
+/**
+ * GGIT_CHECK_VERSION:
+ * @major: required major version
+ * @minor: required minor version
+ * @micro: required micro version
+ *
+ * Compile-time version checking. Evaluates to %TRUE if the version
+ * of libgit2-glib is greater than the required one.
+ *
+ */
+#define GGIT_CHECK_VERSION(major,minor,micro)   \
+        (GGIT_MAJOR_VERSION > (major) || \
+         (GGIT_MAJOR_VERSION == (major) && GGIT_MINOR_VERSION > (minor)) || \
+         (GGIT_MAJOR_VERSION == (major) && GGIT_MINOR_VERSION == (minor) && \
+          GGIT_MICRO_VERSION >= (micro)) \
+        )
+
+#endif /* GGIT_VERSION_H */
