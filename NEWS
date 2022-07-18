@@ -1,3 +1,11 @@
+News in 1.1.0
+---------------
+* Add macro GGIT_CHECK_VERSION
+* ggit_diff_foreach: Prevent assertions with null callbacks
+* Map flags related to conflicts
+* Several meson improvements
+* Fix documentation
+
 News in 1.0.0.1
 ---------------
 * Fix deprecation
