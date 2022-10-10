@@ -47,6 +47,7 @@ struct _GgitTreeClass
 GgitTree      *_ggit_tree_wrap          (git_tree *tree,
                                          gboolean  owned);
 
+const git_tree *_ggit_tree_get_tree     (GgitTree *tree);
 GgitOId       *ggit_tree_get_id         (GgitTree *tree);
 
 GgitTreeEntry *ggit_tree_get            (GgitTree *tree,

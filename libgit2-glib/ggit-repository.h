@@ -161,6 +161,24 @@ GgitOId            *ggit_repository_create_commit_from_ids (
                                                        gint                   parent_count,
                                                        GError               **error);
 
+gchar                *ggit_repository_create_commit_buffer (
+                                                       GgitRepository        *repository,
+                                                       GgitSignature         *author,
+                                                       GgitSignature         *committer,
+                                                       const gchar           *message_encoding,
+                                                       const gchar           *message,
+                                                       GgitTree              *tree,
+                                                       GgitCommit           **parents,
+                                                       gint                   parent_count,
+                                                       GError               **error);
+
+GgitOId      *ggit_repository_create_commit_with_signature (
+                                                       GgitRepository  *repository,
+                                                       const gchar     *commit_content,
+                                                       const gchar     *signature,
+                                                       const gchar     *signature_field,
+                                                       GError         **error);
+
 GgitOId            *ggit_repository_create_tag        (GgitRepository        *repository,
                                                        const gchar           *tag_name,
                                                        GgitObject            *target,

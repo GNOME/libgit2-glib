@@ -51,6 +51,8 @@ struct _GgitCommitClass
 GgitCommit          *_ggit_commit_wrap                (git_commit        *commit,
                                                        gboolean           owned);
 
+const git_commit    *_ggit_commit_get_commit          (GgitCommit        *commit);
+
 const gchar         *ggit_commit_get_message_encoding (GgitCommit        *commit);
 
 const gchar         *ggit_commit_get_message          (GgitCommit        *commit);

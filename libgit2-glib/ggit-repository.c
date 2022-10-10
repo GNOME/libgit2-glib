@@ -3267,6 +3267,124 @@ ggit_repository_create_commit_from_ids (GgitRepository  *repository,
 }
 
 /**
+ * ggit_repository_create_commit_buffer:
+ * @repository: a #GgitRepository.
+ * @author: author signature.
+ * @committer: committer signature (and time of commit).
+ * @message_encoding: (allow-none): message encoding.
+ * @message: commit message.
+ * @tree: the tree of objects to commit.
+ * @parents: (array length=parent_count): parent commits.
+ * @parent_count: number of parent commits in @parents.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Create a commit as with git_commit_create() but instead of writing it to the objectdb,
+ * write the contents of the object into a buffer.
+ *
+ * Returns: (transfer full) (nullable): the commit object content or %NULL in case of
+ * an error.
+ */
+gchar*
+ggit_repository_create_commit_buffer(GgitRepository *repository,
+                                     GgitSignature  *author,
+                                     GgitSignature  *committer,
+                                     const gchar    *message_encoding,
+                                     const gchar    *message,
+                                     GgitTree       *tree,
+                                     GgitCommit    **parents,
+                                     gint            parent_count,
+                                     GError        **error)
+{
+	gint ret;
+	gchar *retval;
+	git_commit **parents_native;
+	gint i;
+	git_buf buf = {0,};
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	parents_native = g_new0 (git_commit *, parent_count);
+
+	for (i = 0; i < parent_count; ++i)
+	{
+		parents_native[i] = (git_commit *)_ggit_commit_get_commit (parents[i]);
+	}
+
+	ret = git_commit_create_buffer (&buf,
+	                                _ggit_native_get (repository),
+	                                _ggit_native_get (author),
+	                                _ggit_native_get (committer),
+	                                message_encoding,
+	                                message,
+	                                _ggit_tree_get_tree (tree),
+	                                parent_count,
+	                                (git_commit const **)parents_native);
+
+	g_free (parents_native);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+
+	retval = g_strndup (buf.ptr, buf.size);
+#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
+	git_buf_dispose (&buf);
+#else
+	git_buf_free (&buf);
+#endif
+
+	return retval;
+}
+
+/**
+ * ggit_repository_create_commit_with_signature:
+ * @repository: a #GgitRepository.
+ * @commit_content: the content of the unsigned commit.
+ * @signature: (nullable): the signature to add to the commit.
+ * @signature_field: (nullable): which header field should contain this
+ * signature. Leave `NULL` for the default of "gpgsig".
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Given the unsigned commit object's contents, its signature and the header field
+ * in which to store the signature, attach the signature to the commit and write it
+ * into the given repositoryCreate a new commit using the (if not NULL) signature
+ * key and type of key provided.
+ *
+ * Returns: (transfer full) (nullable): the #GgitOId of the created commit object,
+ * or %NULL in case of an error.
+ *
+ */
+GgitOId *
+ggit_repository_create_commit_with_signature (GgitRepository *repository,
+                                              const gchar    *commit_content,
+                                              const gchar    *signature,
+                                              const gchar    *signature_field,
+                                              GError        **error)
+{
+	gint ret;
+	git_oid id;
+
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_commit_create_with_signature (&id,
+	                                        _ggit_native_get (repository),
+	                                        commit_content,
+	                                        signature,
+	                                        signature_field);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_oid_wrap (&id);
+}
+
+/**
  * ggit_repository_create_tree_builder:
  * @repository: a #GgitRepository.
  * @error: a #GError for error reporting, or %NULL.

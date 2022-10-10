@@ -263,7 +263,8 @@ ggit_ref_get_owner (GgitRef *ref)
  * ggit_ref_set_symbolic_target:
  * @ref: a #GgitRef.
  * @target: The new target for the reference.
- * @log_message: The one line long message to be appended to the reflog.
+ * @log_message: (nullable): The one line long message to be appended to the
+ * reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new reference with the same name as the given reference but a
@@ -308,7 +309,8 @@ ggit_ref_set_symbolic_target (GgitRef       *ref,
  * ggit_ref_set_target:
  * @ref: a #GgitRef.
  * @oid: a #GgitOId.
- * @log_message: The one line long message to be appended to the reflog.
+ * @log_message: (nullable): The one line long message to be appended to the
+ * reflog.
  * @error: a #GError for error reporting, or %NULL.
  *
  * Create a new reference with the same name as the given reference but a

@@ -88,6 +88,12 @@ _ggit_commit_wrap (git_commit *commit,
 	return gcommit;
 }
 
+const git_commit *
+_ggit_commit_get_commit (GgitCommit *commit)
+{
+	return _ggit_native_get (commit);
+}
+
 /**
  * ggit_commit_get_message_encoding:
  * @commit: a #GgitCommit.

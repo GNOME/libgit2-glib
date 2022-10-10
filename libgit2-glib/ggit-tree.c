@@ -61,6 +61,12 @@ _ggit_tree_wrap (git_tree *tree,
 	return gtree;
 }
 
+const git_tree *
+_ggit_tree_get_tree (GgitTree *tree)
+{
+	return _ggit_native_get (tree);
+}
+
 /**
  * ggit_tree_get_id:
  * @tree: a #GgitTree.
