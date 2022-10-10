@@ -138,7 +138,8 @@ GgitOId            *ggit_repository_create_blob_from_path (
                                                        const gchar           *path,
                                                        GError               **error);
 
-GgitOId            *ggit_repository_create_commit     (GgitRepository        *repository,
+GgitOId                    *ggit_repository_create_commit (
+                                                       GgitRepository        *repository,
                                                        const gchar           *update_ref,
                                                        GgitSignature         *author,
                                                        GgitSignature         *committer,
@@ -179,7 +180,8 @@ GgitOId      *ggit_repository_create_commit_with_signature (
                                                        const gchar     *signature_field,
                                                        GError         **error);
 
-GgitOId            *ggit_repository_create_tag        (GgitRepository        *repository,
+GgitOId                        *ggit_repository_create_tag (
+                                                       GgitRepository        *repository,
                                                        const gchar           *tag_name,
                                                        GgitObject            *target,
                                                        GgitSignature         *tagger,
