@@ -3237,6 +3237,10 @@ ggit_repository_create_commit_from_ids (GgitRepository  *repository,
 	git_oid **parents_native;
 	gint i;
 
+	g_return_val_if_fail (update_ref != NULL, NULL);
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
 	parents_native = g_new0 (git_oid *, parent_count);
 
 	for (i = 0; i < parent_count; ++i)
