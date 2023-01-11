@@ -659,7 +659,7 @@ ggit_diff_foreach (GgitDiff              *diff,
                    GgitDiffBinaryCallback binary_cb,
                    GgitDiffHunkCallback   hunk_cb,
                    GgitDiffLineCallback   line_cb,
-                   gpointer              *user_data,
+                   gpointer               user_data,
                    GError               **error)
 {
 	gint ret;
@@ -731,7 +731,7 @@ void
 ggit_diff_print (GgitDiff              *diff,
                  GgitDiffFormatType     type,
                  GgitDiffLineCallback   print_cb,
-                 gpointer              *user_data,
+                 gpointer               user_data,
                  GError               **error)
 {
 	gint ret;
@@ -886,7 +886,7 @@ ggit_diff_blobs (GgitBlob              *old_blob,
                  GgitDiffBinaryCallback binary_cb,
                  GgitDiffHunkCallback   hunk_cb,
                  GgitDiffLineCallback   line_cb,
-                 gpointer              *user_data,
+                 gpointer               user_data,
                  GError               **error)
 {
 	gint ret;

@@ -84,12 +84,12 @@ void           ggit_diff_foreach                   (GgitDiff              *diff,
                                                     GgitDiffBinaryCallback binary_cb,
                                                     GgitDiffHunkCallback   hunk_cb,
                                                     GgitDiffLineCallback   line_cb,
-                                                    gpointer              *user_data,
+                                                    gpointer               user_data,
                                                     GError               **error);
 void           ggit_diff_print                     (GgitDiff              *diff,
                                                     GgitDiffFormatType     type,
                                                     GgitDiffLineCallback   print_cb,
-                                                    gpointer              *user_data,
+                                                    gpointer               user_data,
                                                     GError               **error);
 
 gchar         *ggit_diff_format_email              (GgitDiff              *diff,
@@ -110,7 +110,7 @@ void           ggit_diff_blobs                     (GgitBlob              *old_b
                                                     GgitDiffBinaryCallback binary_cb,
                                                     GgitDiffHunkCallback   hunk_cb,
                                                     GgitDiffLineCallback   line_cb,
-                                                    gpointer              *user_data,
+                                                    gpointer               user_data,
                                                     GError               **error);
 
 void           ggit_diff_blob_to_buffer            (GgitBlob              *old_blob,
