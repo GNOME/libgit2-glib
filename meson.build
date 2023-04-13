@@ -3,7 +3,7 @@ project(
   version: '1.1.0',
   default_options: 'buildtype=debugoptimized',
   license: 'LGPL2+',
-  meson_version: '>= 0.50.0',
+  meson_version: '>= 0.61.0',
 )
 
 libgit2_glib_version = meson.project_version()
@@ -136,7 +136,13 @@ if enable_vapi
   assert(enable_gir, 'vapi support was requested, but introspection support is mandatory.')
   assert(add_languages('vala', required: false), 'vapi support was requested, but vala not found.')
 
-  meson.add_install_script('meson_vapi_link.py', libgit2_glib_datadir)
+  foreach ext : ['vapi', 'deps']
+    install_symlink(
+      'ggit-1.0.' + ext,
+      install_dir: libgit2_glib_prefix / libgit2_glib_datadir / 'vala' / 'vapi',
+      pointing_to: 'libgit2-glib-1.0.' + ext,
+    )
+  endforeach
 endif
 
 # Check for libgit2 ssh support
