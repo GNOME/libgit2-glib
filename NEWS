@@ -1,3 +1,25 @@
+News in 1.2.0
+---------------
+* meson: Use install_symlink
+* diff: fix user_data parameter type
+* ggit_repository_create_commit_from_ids: add safe checks
+* Allow to sign commits
+* Add macro GGIT_CHECK_VERSION
+* ggit_diff_foreach: Prevent assertions with null callbacks
+* Map flags related to conflicts
+* meson: Fix vala symlink script
+* meson: Replace calls to include_directories by strings
+* meson: Use dictionaries in configuration_data objects
+* meson: Use generators placeholders
+* meson: Replace the package include dir path
+* meson: Remove the use of join_paths function
+* meson: Simplify introspection detection
+* meson: Simplify enum sources generation
+* doc: migrate to gi-docgen
+* Add mailmap support
+* Fix documentation
+* Misc bug fixes
+
 News in 1.1.0
 ---------------
 * Add macro GGIT_CHECK_VERSION
@@ -243,3 +265,4 @@ News in 0.0.4
 News in 0.0.2
 -------------
 * Initial release
+
