@@ -94,7 +94,7 @@ GgitMailmap *
 _ggit_mailmap_wrap (const git_mailmap *mailmap,
                     gboolean           owned)
 {
-	GgitSignature *ret;
+	GgitMailmap *ret;
 
 	ret = g_object_new (GGIT_TYPE_MAILMAP, NULL);
 
