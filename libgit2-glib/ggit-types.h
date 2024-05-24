@@ -355,7 +355,7 @@ typedef enum
 	GGIT_CONFIG_LEVEL_XDG         = 3,
 	GGIT_CONFIG_LEVEL_GLOBAL      = 4,
 	GGIT_CONFIG_LEVEL_LOCAL       = 5,
-	GGIT_CONFIG_LEVEL_APP         = 6,
+	GGIT_CONFIG_LEVEL_APP         = 7,
 	GGIT_CONFIG_LEVEL_HIGHEST     = -1
 } GgitConfigLevel;
 

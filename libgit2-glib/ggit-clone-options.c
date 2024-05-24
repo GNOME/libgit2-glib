@@ -149,7 +149,7 @@ create_repository_wrapper (git_repository **out,
 
 	if (error != NULL)
 	{
-#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
+#if (LIBGIT2_VER_MAJOR > 0 && LIBGIT2_VER_MINOR < 8) || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 		git_error_set_str (GIT_ERROR, error->message);
 #else
 		giterr_set_str (GIT_ERROR, error->message);
@@ -191,7 +191,7 @@ create_remote_wrapper (git_remote     **out,
 
 	if (error)
 	{
-#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
+#if (LIBGIT2_VER_MAJOR > 0 && LIBGIT2_VER_MINOR < 8) || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 		git_error_set_str (GIT_ERROR, error->message);
 #else
 		giterr_set_str (GIT_ERROR, error->message);
