@@ -26,6 +26,8 @@
 
 G_BEGIN_DECLS
 
+gboolean ggit_set_extensions (const gchar * const *extensions, GError **error);
+
 GgitFeatureFlags ggit_get_features (void);
 
 void ggit_init (void);
