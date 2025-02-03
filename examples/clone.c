@@ -199,6 +199,7 @@ main(int    argc,
 		g_object_unref (cloned_repo);
 	}
 
+	g_object_unref (location);
 	g_object_unref (options);
 	return 0;
 }
