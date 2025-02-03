@@ -18,6 +18,10 @@
  * along with libgit2-glib. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <git2.h>
+#if LIBGIT2_VER_MAJOR > 1 || (LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 8)
+#include <git2/sys/errors.h>
+#endif
 #include "ggit-remote-callbacks.h"
 #include "ggit-cred.h"
 #include "ggit-transfer-progress.h"
@@ -160,7 +164,7 @@ credentials_wrap (git_cred     **cred,
 		{
 			if (error)
 			{
-#if LIBGIT2_VER_MAJOR > 0 || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
+#if (LIBGIT2_VER_MAJOR > 0 && LIBGIT2_VER_MINOR < 8) || (LIBGIT2_VER_MAJOR == 0 && LIBGIT2_VER_MINOR >= 28)
 				git_error_set_str (GIT_ERROR, error->message);
 #else
 				giterr_set_str (GIT_ERROR, error->message);

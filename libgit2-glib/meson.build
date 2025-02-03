@@ -12,6 +12,13 @@ ggit_version_h = configure_file(
         install: true,
   configuration: version_data)
 
+ggit_types_18_h = 'ggit-types-pre18.h'
+if libgit2_version_19_or_more
+  ggit_types_18_h = 'ggit-types-19.h'
+elif libgit2_version_18_or_more
+  ggit_types_18_h = 'ggit-types-18.h'
+endif
+
 headers = [
   'ggit-annotated-commit.h',
   'ggit-blame.h',
@@ -80,6 +87,7 @@ headers = [
   'ggit-tree-builder.h',
   'ggit-tree-entry.h',
   'ggit-types.h',
+  ggit_types_18_h,
   ggit_version_h,
 ]
 

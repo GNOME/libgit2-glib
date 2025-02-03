@@ -191,7 +191,7 @@ callback_wrapper (const char                            *name,
 	{
 		gchar *text;
 
-		text = g_strndup (prompts[i].text, prompts[i].length);
+		text = g_strndup ((const gchar *)prompts[i].text, prompts[i].length);
 
 		wprompts[i] = ggit_cred_ssh_interactive_prompt_new (wname,
 		                                                    winstruction,
