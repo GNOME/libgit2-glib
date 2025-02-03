@@ -316,7 +316,8 @@ typedef enum
 {
 	GGIT_FEATURE_THREADS = 1 << 0,
 	GGIT_FEATURE_HTTPS   = 1 << 1,
-	GGIT_FEATURE_SSH     = (1 << 2)
+	GGIT_FEATURE_SSH     = 1 << 2,
+	GGIT_FEATURE_NSEC    = 1 << 3
 } GgitFeatureFlags;
 
 /**
