@@ -3614,7 +3614,7 @@ ggit_repository_blame_file (GgitRepository    *repository,
 	ret = git_blame_file (&blame,
 	                      _ggit_native_get (repository),
 	                      path,
-	                      _ggit_blame_options_get_blame_options (blame_options));
+	                      _ggit_blame_options_get_native (blame_options));
 
 	g_free (path);
 
