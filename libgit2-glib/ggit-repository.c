@@ -43,6 +43,7 @@
 #include "ggit-index-entry.h"
 #include "ggit-annotated-commit.h"
 #include "ggit-rebase-options.h"
+#include "ggit-stash-apply-options.h"
 #include "ggit-blob.h"
 #include "ggit-tag.h"
 

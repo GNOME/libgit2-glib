@@ -293,6 +293,13 @@ typedef struct _GgitBlameOptions GgitBlameOptions;
 typedef struct _GgitRevertOptions GgitRevertOptions;
 
 /**
+ * GgitStashApplyOptions:
+ *
+ * Represents stash apply options.
+ */
+typedef struct _GgitStashApplyOptions GgitStashApplyOptions;
+
+/**
  * GgitBranchType:
  * @GGIT_BRANCH_LOCAL: specifies a local branch.
  * @GGIT_BRANCH_REMOTE: specifies a remote branch.
@@ -340,6 +347,17 @@ typedef enum
 	GGIT_BLAME_NORMAL                 = 0,
 	GGIT_BLAME_TRACK_COPIES_SAME_FILE = 1 << 0
 } GgitBlameFlags;
+
+/**
+ * GgitStashApplyFlags:
+ * @GGIT_STASH_APPLY_DEFAULT: Normal blame, the default.
+ * @GGIT_STASH_APPLY_REINSTATE_INDEX: Try to reinstate not only the working tree's changes, but also the index's changes.
+ */
+typedef enum
+{
+	GGIT_STASH_APPLY_DEFAULT         = 0,
+	GGIT_STASH_APPLY_REINSTATE_INDEX = 1 << 0
+} GgitStashApplyFlags;
 
 /**
  * GgitCreateFlags:
