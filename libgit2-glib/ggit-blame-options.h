@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 GType              ggit_blame_options_get_type           (void) G_GNUC_CONST;
 
 git_blame_options *
-                  _ggit_blame_options_get_blame_options (GgitBlameOptions *blame_options);
+                  _ggit_blame_options_get_native        (GgitBlameOptions *blame_options);
 
 GgitBlameOptions *ggit_blame_options_copy               (GgitBlameOptions *blame_options);
 void              ggit_blame_options_free               (GgitBlameOptions *blame_options);

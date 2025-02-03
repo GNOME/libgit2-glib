@@ -30,7 +30,7 @@ G_DEFINE_BOXED_TYPE (GgitBlameOptions, ggit_blame_options,
                      ggit_blame_options_copy, ggit_blame_options_free);
 
 git_blame_options *
-_ggit_blame_options_get_blame_options (GgitBlameOptions *blame_options)
+_ggit_blame_options_get_native (GgitBlameOptions *blame_options)
 {
 	/* NULL is common for blame_options as it specifies to use the default
 	 * so handle a NULL blame_options here instead of in every caller.
