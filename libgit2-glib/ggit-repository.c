@@ -2833,6 +2833,35 @@ ggit_repository_drop_stash (GgitRepository  *repository,
 	}
 }
 
+/**
+ * ggit_repository_pop_stash:
+ * @repository: a #GgitRepository.
+ * @index: the position within the stash list. 0 points to the.
+ * most recent stashed state.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Removes a single stashed state from the stash list.
+ */
+void
+ggit_repository_pop_stash (GgitRepository  *repository,
+                           gsize            index,
+                           GError         **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_stash_pop (_ggit_native_get (repository),
+	                     index,
+	                     NULL);
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
 typedef struct
 {
 	gpointer user_data;

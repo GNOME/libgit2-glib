@@ -437,6 +437,10 @@ void                ggit_repository_drop_stash        (GgitRepository        *re
                                                        gsize                  index,
                                                        GError               **error);
 
+void                ggit_repository_pop_stash         (GgitRepository        *repository,
+                                                       gsize                  index,
+                                                       GError               **error);
+
 gboolean            ggit_repository_stash_foreach     (GgitRepository        *repository,
                                                        GgitStashCallback      callback,
                                                        gpointer               user_data,
