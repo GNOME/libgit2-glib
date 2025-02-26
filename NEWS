@@ -1,3 +1,11 @@
+News in 1.2.1
+---------------
+
+* Compatibility changes for libgit2 >=1.8.0
+* Fix definition of GGIT_MICRO_VERSION.
+* examples: free allocated objects
+
+
 News in 1.2.0
 ---------------
 * meson: Use install_symlink
