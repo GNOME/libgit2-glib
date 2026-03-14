@@ -518,6 +518,7 @@ typedef enum {
  * @GGIT_ERROR_BUFS: The buffer is too short.
  * @GGIT_ERROR_PASSTHROUGH: Skip and passthrough the given ODB backend.
  * @GGIT_ERROR_ITEROVER: The iteration has finished.
+ * @GGIT_ERROR_OWNER: Repository owned by another user.
  *
  * Error codes for the %GGIT_ERROR error domain.
  */
@@ -528,7 +529,8 @@ typedef enum {
 	GGIT_ERROR_AMBIGUOUS   = -5,
 	GGIT_ERROR_BUFS        = -6,
 	GGIT_ERROR_PASSTHROUGH = -30,
-	GGIT_ERROR_ITEROVER    = -31
+	GGIT_ERROR_ITEROVER    = -31,
+	GGIT_ERROR_OWNER       = -36
 } GgitError;
 
 /* NOTE: keep in sync with git2/refs.h */
