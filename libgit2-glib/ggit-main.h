@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 GgitFeatureFlags ggit_get_features (void);
 
 void ggit_init (void);
+void ggit_shutdown (void);
 
 G_END_DECLS
 

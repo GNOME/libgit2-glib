@@ -80,6 +80,7 @@ main (int argc, char *argv[])
 	g_free (oid_str);
 	ggit_oid_free (oid);
 	g_object_unref (repository);
+	ggit_shutdown ();
 
 	return 0;
 }

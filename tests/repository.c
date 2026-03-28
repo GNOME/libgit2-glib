@@ -379,6 +379,8 @@ main (int    argc,
 	TEST ("blob-stream", blob_stream);
 	TEST ("encoding", encoding);
 
+	ggit_shutdown ();
+
 	return g_test_run ();
 }
 

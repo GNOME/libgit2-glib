@@ -39,11 +39,27 @@ ggit_get_features (void)
  * ggit_init:
  *
  * Call this function before using any other libgit2-glib function.
+ *
+ * It is safe to call this function as many times as you need it but each call
+ * must be followed by a corresponding call to @ggit_shutdown.
  */
 void
 ggit_init (void)
 {
 	git_libgit2_init ();
 }
+
+/**
+ * ggit_shutdown:
+ *
+ * Call this function to reduce the ref-count incremented by a call to
+ * @ggit_init.  Will free all shared resources when the count returns to zero.
+ */
+void
+ggit_shutdown (void)
+{
+	git_libgit2_shutdown ();
+}
+
 
 /* ex:set ts=8 noet: */

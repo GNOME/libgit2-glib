@@ -224,6 +224,7 @@ main (int   argc,
 	g_object_unref (revwalker);
 	g_object_unref (repo);
 	g_object_unref (file);
+	ggit_shutdown ();
 
 	return 0;
 }

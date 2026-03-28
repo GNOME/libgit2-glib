@@ -201,5 +201,6 @@ main(int    argc,
 
 	g_object_unref (location);
 	g_object_unref (options);
+	ggit_shutdown ();
 	return 0;
 }
