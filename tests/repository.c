@@ -256,6 +256,7 @@ test_repository_blob_stream (const gchar *git_dir)
 
 	ggit_oid_free (oid);
 
+	g_object_unref (blob);
 	g_object_unref (stream);
 	g_object_unref (repo);
 }

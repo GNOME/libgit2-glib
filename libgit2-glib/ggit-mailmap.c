@@ -48,8 +48,6 @@ ggit_mailmap_set_property (GObject      *object,
                            const GValue *value,
                            GParamSpec   *pspec)
 {
-	GgitMailmap *mailmap = GGIT_MAILMAP (object);
-
 	switch (prop_id)
 	{
 		default:
@@ -64,8 +62,6 @@ ggit_mailmap_get_property (GObject    *object,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-	GgitMailmap *mailmap = GGIT_MAILMAP (object);
-
 	switch (prop_id)
 	{
 		default:
