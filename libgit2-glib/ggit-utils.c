@@ -101,7 +101,7 @@ ggit_utils_create_real_object (git_object *obj,
 }
 
 gchar **
-ggit_utils_get_str_array_from_git_strarray (git_strarray *gitarray)
+ggit_utils_new_str_array_from_git_strarray (git_strarray *gitarray)
 {
 	gchar **array;
 	gint i;
@@ -110,7 +110,7 @@ ggit_utils_get_str_array_from_git_strarray (git_strarray *gitarray)
 
 	for (i = 0; i < gitarray->count; i++)
 	{
-		array[i] = gitarray->strings[i];
+		array[i] = g_strdup (gitarray->strings[i]);
 	}
 	array[i] = NULL;
 

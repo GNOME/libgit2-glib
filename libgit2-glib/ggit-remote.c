@@ -503,6 +503,7 @@ ggit_remote_get_fetch_specs (GgitRemote  *remote,
 {
 	gint ret;
 	git_strarray specs;
+	gchar **specs_out;
 
 	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -515,7 +516,9 @@ ggit_remote_get_fetch_specs (GgitRemote  *remote,
 		return NULL;
 	}
 
-	return ggit_utils_get_str_array_from_git_strarray (&specs);
+	specs_out = ggit_utils_new_str_array_from_git_strarray (&specs);
+	git_strarray_dispose (&specs);
+	return specs_out;
 }
 
 /**
@@ -533,6 +536,7 @@ ggit_remote_get_push_specs (GgitRemote  *remote,
 {
 	gint ret;
 	git_strarray specs;
+	gchar **specs_out;
 
 	g_return_val_if_fail (GGIT_IS_REMOTE (remote), NULL);
 	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -545,7 +549,10 @@ ggit_remote_get_push_specs (GgitRemote  *remote,
 		return NULL;
 	}
 
-	return ggit_utils_get_str_array_from_git_strarray (&specs);
+	specs_out = ggit_utils_new_str_array_from_git_strarray (&specs);
+	git_strarray_dispose (&specs);
+
+	return specs_out;
 }
 
 /**
@@ -653,3 +660,4 @@ ggit_remote_prune (GgitRemote           *remote,
 }
 
 /* ex:set ts=8 noet: */
+

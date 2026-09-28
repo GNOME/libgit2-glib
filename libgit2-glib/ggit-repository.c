@@ -1708,7 +1708,8 @@ ggit_repository_list_tags (GgitRepository  *repository,
 	}
 	else
 	{
-		tags = ggit_utils_get_str_array_from_git_strarray (&tag_names);
+		tags = ggit_utils_new_str_array_from_git_strarray (&tag_names);
+		git_strarray_dispose (&tag_names);
 	}
 
 	return tags;
@@ -1748,7 +1749,8 @@ ggit_repository_list_tags_match (GgitRepository  *repository,
 	}
 	else
 	{
-		tags = ggit_utils_get_str_array_from_git_strarray (&tag_names);
+		tags = ggit_utils_new_str_array_from_git_strarray (&tag_names);
+		git_strarray_dispose (&tag_names);
 	}
 
 	return tags;
@@ -2278,6 +2280,7 @@ ggit_repository_rename_remote (GgitRepository   *repository,
 {
 	gint ret;
 	git_strarray problems;
+	gchar **problems_out;
 
 	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), NULL);
 	g_return_val_if_fail (name != NULL, NULL);
@@ -2294,7 +2297,9 @@ ggit_repository_rename_remote (GgitRepository   *repository,
 		return NULL;
 	}
 
-	return ggit_utils_get_str_array_from_git_strarray (&problems);
+	problems_out = ggit_utils_new_str_array_from_git_strarray (&problems);
+	git_strarray_dispose (&problems);
+	return problems_out;
 }
 
 /**
@@ -2327,7 +2332,8 @@ ggit_repository_list_remotes (GgitRepository  *repository,
 	}
 	else
 	{
-		remotes = ggit_utils_get_str_array_from_git_strarray (&remote_names);
+		remotes = ggit_utils_new_str_array_from_git_strarray (&remote_names);
+		git_strarray_dispose (&remote_names);
 	}
 
 	return remotes;
