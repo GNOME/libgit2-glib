@@ -344,6 +344,7 @@ ggit_index_remove (GgitIndex  *idx,
 	path = g_file_get_relative_path (wd, file);
 #ifdef TRANSLATE_WINDOWS_PATHS
 	gs_path = g_string_new (path);
+	g_free (path);
 	g_string_replace (gs_path, "\\", "/", 0);
 	path = g_string_free (gs_path, FALSE);
 #endif
@@ -465,6 +466,7 @@ ggit_index_add_file (GgitIndex  *idx,
 	path = g_file_get_relative_path (wd, file);
 #ifdef TRANSLATE_WINDOWS_PATHS
 	gs_path = g_string_new (path);
+	g_free (path);
 	g_string_replace (gs_path, "\\", "/", 0);
 	path = g_string_free (gs_path, FALSE);
 #endif
