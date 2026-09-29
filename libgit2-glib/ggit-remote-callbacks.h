@@ -23,6 +23,7 @@
 #define __GGIT_REMOTE_CALLBACKS_H__
 
 #include <glib-object.h>
+#include <gio/gio.h>
 #include <git2.h>
 #include <libgit2-glib/ggit-cred.h>
 
@@ -61,6 +62,11 @@ struct _GgitRemoteCallbacksClass
 };
 
 git_remote_callbacks *_ggit_remote_callbacks_get_native (GgitRemoteCallbacks *remote_cbs);
+
+void                  ggit_remote_callbacks_set_cancellable (GgitRemoteCallbacks *callbacks,
+                                                             GCancellable        *cancellable);
+
+GCancellable         *ggit_remote_callbacks_get_cancellable (GgitRemoteCallbacks *callbacks);
 
 G_END_DECLS
 

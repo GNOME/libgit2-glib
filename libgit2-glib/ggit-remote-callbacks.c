@@ -37,6 +37,7 @@
 typedef struct _GgitRemoteCallbacksPrivate
 {
 	git_remote_callbacks native;
+	GCancellable *cancellable;
 } GgitRemoteCallbacksPrivate;
 
 enum
@@ -72,6 +73,8 @@ ggit_remote_callbacks_finalize (GObject *object)
 	priv = ggit_remote_callbacks_get_instance_private (callbacks);
 
 	priv->native.payload = NULL;
+
+	g_clear_object (&priv->cancellable);
 
 	G_OBJECT_CLASS (ggit_remote_callbacks_parent_class)->finalize (object);
 }
@@ -192,7 +195,16 @@ progress_wrap (const char *str,
                void       *data)
 {
 	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksPrivate *priv;
 	gchar *message;
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	if (priv->cancellable != NULL &&
+	    g_cancellable_is_cancelled (priv->cancellable))
+	{
+		return GIT_EUSER;
+	}
 
 	message = g_strndup (str, len);
 
@@ -207,7 +219,16 @@ transfer_progress_wrap (const git_transfer_progress *stats,
                         void                        *data)
 {
 	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksPrivate *priv;
 	GgitTransferProgress *p;
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	if (priv->cancellable != NULL &&
+	    g_cancellable_is_cancelled (priv->cancellable))
+	{
+		return GIT_EUSER;
+	}
 
 	p = _ggit_transfer_progress_wrap (stats);
 
@@ -279,6 +300,53 @@ _ggit_remote_callbacks_get_native (GgitRemoteCallbacks *callbacks)
 	priv = ggit_remote_callbacks_get_instance_private (callbacks);
 
 	return &priv->native;
+}
+
+/**
+ * ggit_remote_callbacks_set_cancellable:
+ * @callbacks: a #GgitRemoteCallbacks.
+ * @cancellable: (allow-none): a #GCancellable or %NULL.
+ *
+ * Sets a #GCancellable to abort ongoing remote operations (e.g. clone, fetch).
+ * When the cancellable is triggered, the transfer and progress callbacks
+ * will return an error, causing libgit2 to abort the operation.
+ */
+void
+ggit_remote_callbacks_set_cancellable (GgitRemoteCallbacks *callbacks,
+                                       GCancellable        *cancellable)
+{
+	GgitRemoteCallbacksPrivate *priv;
+
+	g_return_if_fail (GGIT_IS_REMOTE_CALLBACKS (callbacks));
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	g_clear_object (&priv->cancellable);
+
+	if (cancellable != NULL)
+	{
+		priv->cancellable = g_object_ref (cancellable);
+	}
+}
+
+/**
+ * ggit_remote_callbacks_get_cancellable:
+ * @callbacks: a #GgitRemoteCallbacks.
+ *
+ * Gets the #GCancellable set on this callbacks object.
+ *
+ * Returns: (transfer none) (nullable): the cancellable or %NULL.
+ */
+GCancellable *
+ggit_remote_callbacks_get_cancellable (GgitRemoteCallbacks *callbacks)
+{
+	GgitRemoteCallbacksPrivate *priv;
+
+	g_return_val_if_fail (GGIT_IS_REMOTE_CALLBACKS (callbacks), NULL);
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	return priv->cancellable;
 }
 
 /* ex:set ts=8 noet: */
