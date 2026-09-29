@@ -23,6 +23,7 @@
 #include "ggit-rebase.h"
 #include "ggit-rebase-operation.h"
 #include "ggit-error.h"
+#include "ggit-index.h"
 #include "ggit-oid.h"
 
 G_STATIC_ASSERT (GGIT_REBASE_NO_OPERATION == GIT_REBASE_NO_OPERATION);
@@ -62,6 +63,80 @@ _ggit_rebase_wrap (git_rebase *rebase)
 	                               (GDestroyNotify)git_rebase_free);
 
 	return grebase;
+}
+
+/**
+ * ggit_rebase_get_orig_head_name:
+ * @rebase: a #GgitRebase.
+ *
+ * Gets the name of the branch that was rebased, or %NULL if a
+ * detached HEAD was rebased.
+ *
+ * Returns: (nullable): the name of the original head branch.
+ */
+const gchar *
+ggit_rebase_get_orig_head_name (GgitRebase *rebase)
+{
+	g_return_val_if_fail (GGIT_IS_REBASE (rebase), NULL);
+
+	return git_rebase_orig_head_name (_ggit_native_get (rebase));
+}
+
+/**
+ * ggit_rebase_get_orig_head_id:
+ * @rebase: a #GgitRebase.
+ *
+ * Gets the OID of the original HEAD commit that is being rebased.
+ *
+ * Returns: (transfer full) (nullable): the OID of the original HEAD or %NULL.
+ */
+GgitOId *
+ggit_rebase_get_orig_head_id (GgitRebase *rebase)
+{
+	const git_oid *oid;
+
+	g_return_val_if_fail (GGIT_IS_REBASE (rebase), NULL);
+
+	oid = git_rebase_orig_head_id (_ggit_native_get (rebase));
+
+	return oid != NULL ? _ggit_oid_wrap (oid) : NULL;
+}
+
+/**
+ * ggit_rebase_get_onto_name:
+ * @rebase: a #GgitRebase.
+ *
+ * Gets the name of the branch that is the target of the rebase,
+ * or %NULL if the target is a specific commit.
+ *
+ * Returns: (nullable): the name of the onto branch.
+ */
+const gchar *
+ggit_rebase_get_onto_name (GgitRebase *rebase)
+{
+	g_return_val_if_fail (GGIT_IS_REBASE (rebase), NULL);
+
+	return git_rebase_onto_name (_ggit_native_get (rebase));
+}
+
+/**
+ * ggit_rebase_get_onto_id:
+ * @rebase: a #GgitRebase.
+ *
+ * Gets the OID of the commit that the rebase is targeting (the "onto" commit).
+ *
+ * Returns: (transfer full) (nullable): the OID of the onto commit or %NULL.
+ */
+GgitOId *
+ggit_rebase_get_onto_id (GgitRebase *rebase)
+{
+	const git_oid *oid;
+
+	g_return_val_if_fail (GGIT_IS_REBASE (rebase), NULL);
+
+	oid = git_rebase_onto_id (_ggit_native_get (rebase));
+
+	return oid != NULL ? _ggit_oid_wrap (oid) : NULL;
 }
 
 /**
@@ -201,6 +276,40 @@ ggit_rebase_commit (GgitRebase     *rebase,
 	}
 
 	return _ggit_oid_wrap (&oid);
+}
+
+/**
+ * ggit_rebase_get_inmemory_index:
+ * @rebase: a #GgitRebase.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Gets the index produced by the last operation, which is the result
+ * of ggit_rebase_next() and which will be committed by the next
+ * invocation of ggit_rebase_commit(). This is useful for resolving
+ * conflicts in an in-memory rebase before committing them.
+ *
+ * Returns: (transfer full) (nullable): a #GgitIndex or %NULL.
+ */
+GgitIndex *
+ggit_rebase_get_inmemory_index (GgitRebase  *rebase,
+                                GError     **error)
+{
+	git_index *idx;
+	gint ret;
+
+	g_return_val_if_fail (GGIT_IS_REBASE (rebase), NULL);
+	g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+	ret = git_rebase_inmemory_index (&idx,
+	                                 _ggit_native_get (rebase));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+		return NULL;
+	}
+
+	return _ggit_index_wrap (idx);
 }
 
 /**

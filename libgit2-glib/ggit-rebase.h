@@ -27,6 +27,8 @@
 
 #include "ggit-native.h"
 #include "ggit-types.h"
+#include "ggit-oid.h"
+#include "ggit-index.h"
 #include "ggit-signature.h"
 
 G_BEGIN_DECLS
@@ -38,6 +40,14 @@ G_DECLARE_FINAL_TYPE (GgitRebase, ggit_rebase, GGIT, REBASE, GgitNative)
 #define GGIT_REBASE_NO_OPERATION SIZE_MAX
 
 GgitRebase         *_ggit_rebase_wrap                           (git_rebase     *rebase);
+
+const gchar         *ggit_rebase_get_orig_head_name             (GgitRebase     *rebase);
+
+GgitOId             *ggit_rebase_get_orig_head_id               (GgitRebase     *rebase);
+
+const gchar         *ggit_rebase_get_onto_name                  (GgitRebase     *rebase);
+
+GgitOId             *ggit_rebase_get_onto_id                    (GgitRebase     *rebase);
 
 gsize                ggit_rebase_get_operation_entry_count      (GgitRebase     *rebase);
 
@@ -53,6 +63,9 @@ GgitOId             *ggit_rebase_commit                         (GgitRebase     
                                                                  GgitSignature  *author,
                                                                  GgitSignature  *committer,
                                                                  const gchar    *message,
+                                                                 GError        **error);
+
+GgitIndex           *ggit_rebase_get_inmemory_index             (GgitRebase     *rebase,
                                                                  GError        **error);
 
 void                 ggit_rebase_abort                          (GgitRebase     *rebase,
