@@ -423,6 +423,12 @@ void                ggit_repository_reset_default      (GgitRepository          
                                                         const gchar * const     *pathspecs,
                                                         GError                 **error);
 
+void                ggit_repository_reset_from_annotated (GgitRepository        *repository,
+                                                          GgitAnnotatedCommit   *target,
+                                                          GgitResetType          reset_type,
+                                                          GgitCheckoutOptions   *checkout_options,
+                                                          GError               **error);
+
 GgitObject         *ggit_repository_revparse          (GgitRepository        *repository,
                                                        const gchar           *spec,
                                                        GError               **error);

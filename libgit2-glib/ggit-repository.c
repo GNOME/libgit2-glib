@@ -2769,6 +2769,42 @@ ggit_repository_reset_default (GgitRepository       *repository,
 }
 
 /**
+ * ggit_repository_reset_from_annotated:
+ * @repository: a #GgitRepository.
+ * @target: the target #GgitAnnotatedCommit.
+ * @reset_type: the #GgitResetType to perform.
+ * @checkout_options: the #GgitCheckoutOptions to be used for a HARD reset.
+ * @error: a #GError for error reporting, or %NULL.
+ *
+ * Performs a reset of type @reset_type on @repository to @target,
+ * or @error will be set.
+ */
+void
+ggit_repository_reset_from_annotated (GgitRepository       *repository,
+                                      GgitAnnotatedCommit  *target,
+                                      GgitResetType         reset_type,
+                                      GgitCheckoutOptions  *checkout_options,
+                                      GError              **error)
+{
+	gint ret;
+
+	g_return_if_fail (GGIT_IS_REPOSITORY (repository));
+	g_return_if_fail (target != NULL);
+	g_return_if_fail (GGIT_IS_CHECKOUT_OPTIONS (checkout_options));
+	g_return_if_fail (error == NULL || *error == NULL);
+
+	ret = git_reset_from_annotated (_ggit_native_get (repository),
+	                                _ggit_annotated_commit_get_annotated_commit (target),
+	                                (git_reset_t)reset_type,
+	                                (git_checkout_options *)_ggit_checkout_options_get_checkout_options (checkout_options));
+
+	if (ret != GIT_OK)
+	{
+		_ggit_error_set (error, ret);
+	}
+}
+
+/**
  * ggit_repository_save_stash:
  * @repository: a #GgitRepository.
  * @stasher: a #GgitSignature.
