@@ -1229,6 +1229,26 @@ ggit_repository_is_bare (GgitRepository *repository)
 }
 
 /**
+ * ggit_repository_get_oid_type:
+ * @repository: a #GgitRepository.
+ *
+ * Gets the object id type used by this repository.
+ *
+ * Returns: the object id type.
+ */
+GgitOIdType
+ggit_repository_get_oid_type (GgitRepository *repository)
+{
+	g_return_val_if_fail (GGIT_IS_REPOSITORY (repository), GGIT_OID_TYPE_SHA1);
+
+#if defined(GIT_EXPERIMENTAL_SHA256) || LIBGIT2_VER_MAJOR >= 2
+	return (GgitOIdType)git_repository_oid_type (_ggit_native_get (repository));
+#else
+	return GGIT_OID_TYPE_SHA1;
+#endif
+}
+
+/**
  * ggit_repository_file_status:
  * @repository: a #GgitRepository.
  * @location: the file to retrieve status for, rooted at the repository working dir.

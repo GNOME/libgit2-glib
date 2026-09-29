@@ -22,6 +22,22 @@
 
 #include "ggit-oid.h"
 
+#ifndef GIT_OID_SHA1_SIZE
+#define GIT_OID_SHA1_SIZE      GIT_OID_RAWSZ
+#endif
+
+#ifndef GIT_OID_SHA1_HEXSIZE
+#define GIT_OID_SHA1_HEXSIZE   GIT_OID_HEXSZ
+#endif
+
+#ifndef GIT_OID_MAX_SIZE
+#define GIT_OID_MAX_SIZE       GIT_OID_SHA1_SIZE
+#endif
+
+#ifndef GIT_OID_MAX_HEXSIZE
+#define GIT_OID_MAX_HEXSIZE    GIT_OID_SHA1_HEXSIZE
+#endif
+
 struct _GgitOId
 {
 	git_oid oid;
@@ -80,21 +96,44 @@ ggit_oid_free (GgitOId *oid)
  * ggit_oid_new_from_string:
  * @str: input hex string; must be pointing at the start of
  *       the hex sequence and have at least the number of bytes
- *       needed for an oid encoded in hex (40 bytes).
+ *       needed for an oid encoded in hex (40 bytes for SHA1).
  *
  * Parses a hex formatted object id into a #GgitOId.
+ * Uses SHA1 as the object id type.
  *
  * Returns: (transfer full) (nullable): a newly allocated #GgitOId or %NULL on error.
  */
 GgitOId *
 ggit_oid_new_from_string (const gchar *str)
 {
+	return ggit_oid_new_from_string_for_type (str, GGIT_OID_TYPE_SHA1);
+}
+
+/**
+ * ggit_oid_new_from_string_for_type:
+ * @str: input hex string; must be pointing at the start of
+ *       the hex sequence and have at least the number of bytes
+ *       needed for an oid encoded in hex.
+ * @type: the #GgitOIdType of the object id.
+ *
+ * Parses a hex formatted object id into a #GgitOId.
+ *
+ * Returns: (transfer full) (nullable): a newly allocated #GgitOId or %NULL on error.
+ */
+GgitOId *
+ggit_oid_new_from_string_for_type (const gchar *str,
+                                   GgitOIdType  type)
+{
 	GgitOId *glib_oid = NULL;
 	git_oid oid;
 
 	g_return_val_if_fail (str != NULL, NULL);
 
+#if defined(GIT_EXPERIMENTAL_SHA256) || LIBGIT2_VER_MAJOR >= 2
+	if (git_oid_fromstr (&oid, str, (git_oid_t)type) == GIT_OK)
+#else
 	if (git_oid_fromstr (&oid, str) == GIT_OK)
+#endif
 	{
 		glib_oid = _ggit_oid_wrap (&oid);
 	}
@@ -107,17 +146,38 @@ ggit_oid_new_from_string (const gchar *str)
  * @raw: (array zero-terminated=1) (element-type guchar): the raw input bytes to be copied.
  *
  * Creates a new #GgitOId from a raw oid.
+ * Uses SHA1 as the object id type.
  *
  * Returns: (transfer full) (nullable): a newly allocated #GgitOId or %NULL on error.
  */
 GgitOId *
 ggit_oid_new_from_raw (const guchar *raw)
 {
+	return ggit_oid_new_from_raw_for_type (raw, GGIT_OID_TYPE_SHA1);
+}
+
+/**
+ * ggit_oid_new_from_raw_for_type:
+ * @raw: (array zero-terminated=1) (element-type guchar): the raw input bytes to be copied.
+ * @type: the #GgitOIdType of the object id.
+ *
+ * Creates a new #GgitOId from a raw oid.
+ *
+ * Returns: (transfer full) (nullable): a newly allocated #GgitOId or %NULL on error.
+ */
+GgitOId *
+ggit_oid_new_from_raw_for_type (const guchar *raw,
+                                GgitOIdType   type)
+{
 	git_oid oid;
 
 	g_return_val_if_fail (raw != NULL, NULL);
 
+#if defined(GIT_EXPERIMENTAL_SHA256) || LIBGIT2_VER_MAJOR >= 2
+	git_oid_fromraw (&oid, raw, (git_oid_t)type);
+#else
 	git_oid_fromraw (&oid, raw);
+#endif
 
 	return _ggit_oid_wrap (&oid);
 }
@@ -156,9 +216,9 @@ ggit_oid_to_string (GgitOId *oid)
 
 	g_return_val_if_fail (oid != NULL, NULL);
 
-	hex = g_new (char, GIT_OID_HEXSZ + 1);
+	hex = g_new (char, GIT_OID_MAX_HEXSIZE + 1);
 
-	return git_oid_tostr (hex, GIT_OID_HEXSZ + 1, &oid->oid);
+	return git_oid_tostr (hex, GIT_OID_MAX_HEXSIZE + 1, &oid->oid);
 }
 
 /**
@@ -184,7 +244,7 @@ ggit_oid_hash (GgitOId const *oid)
 	guint32 h = 5381;
 	guint i;
 
-	for (i = 0; i < GIT_OID_RAWSZ; ++i)
+	for (i = 0; i < GIT_OID_MAX_SIZE; ++i)
 	{
 		h = (h << 5) + h + oid->oid.id[i];
 	}
@@ -271,7 +331,7 @@ ggit_oid_has_prefix (GgitOId     *oid,
 {
 	gint i;
 
-	for (i = 0; i < GIT_OID_RAWSZ; ++i)
+	for (i = 0; i < GIT_OID_MAX_SIZE; ++i)
 	{
 		gint v1;
 

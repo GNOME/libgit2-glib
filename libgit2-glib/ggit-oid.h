@@ -43,7 +43,13 @@ void           ggit_oid_free            (GgitOId       *oid);
 
 GgitOId       *ggit_oid_new_from_string (const gchar   *str);
 
+GgitOId       *ggit_oid_new_from_string_for_type (const gchar   *str,
+                                                   GgitOIdType    type);
+
 GgitOId       *ggit_oid_new_from_raw    (const guchar  *raw);
+
+GgitOId       *ggit_oid_new_from_raw_for_type    (const guchar  *raw,
+                                                   GgitOIdType    type);
 
 gint           ggit_oid_compare         (GgitOId       *a,
                                          GgitOId       *b);

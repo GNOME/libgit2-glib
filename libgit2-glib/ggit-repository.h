@@ -351,6 +351,8 @@ void                ggit_repository_set_workdir       (GgitRepository        *re
 
 gboolean            ggit_repository_is_bare           (GgitRepository        *repository);
 
+GgitOIdType         ggit_repository_get_oid_type      (GgitRepository        *repository);
+
 GgitStatusFlags     ggit_repository_file_status       (GgitRepository        *repository,
                                                        GFile                 *location,
                                                        GError               **error);

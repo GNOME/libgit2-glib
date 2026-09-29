@@ -1022,6 +1022,19 @@ typedef enum
 	GGIT_DIRECTION_PUSH  = 1
 } GgitDirection;
 
+/**
+ * GgitOIdType:
+ * @GGIT_OID_TYPE_SHA1: SHA1 object id type.
+ * @GGIT_OID_TYPE_SHA256: SHA256 object id type (experimental).
+ *
+ * The type of object id.
+ */
+typedef enum
+{
+	GGIT_OID_TYPE_SHA1   = 1,
+	GGIT_OID_TYPE_SHA256 = 2
+} GgitOIdType;
+
 typedef enum
 {
 	GGIT_CLONE_LOCAL_AUTO     = 0,
