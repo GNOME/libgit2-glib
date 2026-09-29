@@ -57,7 +57,7 @@ def _override_dyn(base, **kwargs):
         cls = globals()[name]
 
     except KeyError:
-        cls = override(type(name, (base,), {}))
+        cls = override(type(name, (base,), {'__module__': __name__}))
         globals()[name] = cls
         __all__.append(name)
 
