@@ -51,12 +51,36 @@ struct _GgitRemoteCallbacksClass
 	void (*completion)            (GgitRemoteCallbacks        *callbacks,
 	                               GgitRemoteCompletionType    type);
 
+	void (*pack_progress)         (GgitRemoteCallbacks        *callbacks,
+	                               GgitPackbuilderStage        stage,
+	                               guint                       current,
+	                               guint                       total);
+
+	void (*push_transfer_progress)(GgitRemoteCallbacks        *callbacks,
+	                               guint                       current,
+	                               guint                       total,
+	                               guint                       bytes);
+
+	void (*push_update_reference) (GgitRemoteCallbacks        *callbacks,
+	                               const gchar                *refname,
+	                               const gchar                *status);
+
+	void (*push_negotiation)      (GgitRemoteCallbacks        *callbacks);
+
+	void (*remote_ready)          (GgitRemoteCallbacks        *callbacks,
+	                               GgitDirection               direction);
+
 	/* virtual methods */
 	GgitCred *(*credentials)      (GgitRemoteCallbacks        *callbacks,
 	                               const gchar                *url,
 	                               const gchar                *username_from_url,
 	                               GgitCredtype                allowed_types,
 	                               GError                    **error);
+
+	gint (*certificate_check)     (GgitRemoteCallbacks        *callbacks,
+	                               git_cert                   *cert,
+	                               gboolean                    valid,
+	                               const gchar                *host);
 
 
 };

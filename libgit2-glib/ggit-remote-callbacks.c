@@ -26,6 +26,7 @@
 #include "ggit-cred.h"
 #include "ggit-transfer-progress.h"
 #include "ggit-oid.h"
+#include "ggit-remote.h"
 #include "ggit-enum-types.h"
 
 /**
@@ -46,6 +47,11 @@ enum
 	TRANSFER_PROGRESS,
 	UPDATE_TIPS,
 	COMPLETION,
+	PACK_PROGRESS,
+	PUSH_TRANSFER_PROGRESS,
+	PUSH_UPDATE_REFERENCE,
+	PUSH_NEGOTIATION,
+	REMOTE_READY,
 	NUM_SIGNALS
 };
 
@@ -131,6 +137,65 @@ ggit_remote_callbacks_class_init (GgitRemoteCallbacksClass *klass)
 		              G_TYPE_NONE,
 		              1,
 		              GGIT_TYPE_REMOTE_COMPLETION_TYPE);
+
+	signals[PACK_PROGRESS] =
+		g_signal_new ("pack-progress",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, pack_progress),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              3,
+		              GGIT_TYPE_PACKBUILDER_STAGE,
+		              G_TYPE_UINT,
+		              G_TYPE_UINT);
+
+	signals[PUSH_TRANSFER_PROGRESS] =
+		g_signal_new ("push-transfer-progress",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, push_transfer_progress),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              3,
+		              G_TYPE_UINT,
+		              G_TYPE_UINT,
+		              G_TYPE_UINT);
+
+	signals[PUSH_UPDATE_REFERENCE] =
+		g_signal_new ("push-update-reference",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, push_update_reference),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              2,
+		              G_TYPE_STRING,
+		              G_TYPE_STRING);
+
+	signals[PUSH_NEGOTIATION] =
+		g_signal_new ("push-negotiation",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, push_negotiation),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              0);
+
+	signals[REMOTE_READY] =
+		g_signal_new ("remote-ready",
+		              G_TYPE_FROM_CLASS (object_class),
+		              G_SIGNAL_RUN_LAST,
+		              G_STRUCT_OFFSET (GgitRemoteCallbacksClass, remote_ready),
+		              NULL, NULL,
+		              NULL,
+		              G_TYPE_NONE,
+		              1,
+		              GGIT_TYPE_DIRECTION);
 }
 
 static int
@@ -271,6 +336,107 @@ completion_wrap (git_remote_completion_type  type,
 	return GIT_OK;
 }
 
+static int
+pack_progress_wrap (int       stage,
+                    uint32_t  current,
+                    uint32_t  total,
+                    void     *data)
+{
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksPrivate *priv;
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	if (priv->cancellable != NULL &&
+	    g_cancellable_is_cancelled (priv->cancellable))
+	{
+		return GIT_EUSER;
+	}
+
+	g_signal_emit (callbacks, signals[PACK_PROGRESS], 0,
+	               (GgitPackbuilderStage)stage, (guint)current, (guint)total);
+
+	return GIT_OK;
+}
+
+static int
+push_transfer_progress_wrap (unsigned int  current,
+                             unsigned int  total,
+                             size_t        bytes,
+                             void         *data)
+{
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksPrivate *priv;
+
+	priv = ggit_remote_callbacks_get_instance_private (callbacks);
+
+	if (priv->cancellable != NULL &&
+	    g_cancellable_is_cancelled (priv->cancellable))
+	{
+		return GIT_EUSER;
+	}
+
+	g_signal_emit (callbacks, signals[PUSH_TRANSFER_PROGRESS], 0,
+	               (guint)current, (guint)total, (guint)bytes);
+
+	return GIT_OK;
+}
+
+static int
+push_update_reference_wrap (const char *refname,
+                            const char *status,
+                            void       *data)
+{
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+
+	g_signal_emit (callbacks, signals[PUSH_UPDATE_REFERENCE], 0,
+	               refname, status);
+
+	return GIT_OK;
+}
+
+static int
+certificate_check_wrap (git_cert   *cert,
+                        int         valid,
+                        const char *host,
+                        void       *data)
+{
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+	GgitRemoteCallbacksClass *cls = GGIT_REMOTE_CALLBACKS_GET_CLASS (callbacks);
+
+	if (cls->certificate_check != NULL)
+	{
+		return cls->certificate_check (callbacks, cert, valid ? TRUE : FALSE, host);
+	}
+
+	return GIT_PASSTHROUGH;
+}
+
+static int
+push_negotiation_wrap (const git_push_update **updates,
+                       size_t                  len,
+                       void                   *data)
+{
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+
+	g_signal_emit (callbacks, signals[PUSH_NEGOTIATION], 0);
+
+	return GIT_OK;
+}
+
+static int
+remote_ready_wrap (git_remote *remote,
+                   int         direction,
+                   void       *data)
+{
+	GgitRemoteCallbacks *callbacks = GGIT_REMOTE_CALLBACKS (data);
+
+	g_signal_emit (callbacks, signals[REMOTE_READY], 0,
+	               (GgitDirection)direction);
+
+	return GIT_OK;
+}
+
 static void
 ggit_remote_callbacks_init (GgitRemoteCallbacks *callbacks)
 {
@@ -286,6 +452,12 @@ ggit_remote_callbacks_init (GgitRemoteCallbacks *callbacks)
 	priv->native.transfer_progress = transfer_progress_wrap;
 	priv->native.update_tips = update_tips_wrap;
 	priv->native.completion = completion_wrap;
+	priv->native.pack_progress = pack_progress_wrap;
+	priv->native.push_transfer_progress = push_transfer_progress_wrap;
+	priv->native.push_update_reference = push_update_reference_wrap;
+	priv->native.push_negotiation = push_negotiation_wrap;
+	priv->native.certificate_check = certificate_check_wrap;
+	priv->native.remote_ready = remote_ready_wrap;
 
 	priv->native.credentials = credentials_wrap;
 
