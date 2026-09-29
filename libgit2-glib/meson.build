@@ -223,6 +223,8 @@ platform_deps = [
   libgit2_dep,
 ]
 
+symbol_map = meson.current_source_dir() / 'libgit2-glib.map'
+
 libgit2_glib = shared_library(
   'git2-glib-' + libgit2_glib_api_version,
   version: libversion,
@@ -232,6 +234,8 @@ libgit2_glib = shared_library(
   include_directories: top_inc,
   dependencies: platform_deps,
   c_args: cflags + ['-DG_LOG_DOMAIN="@0@"'.format(libgit2_glib_ns)],
+  link_args: '-Wl,--version-script,@0@'.format(symbol_map),
+  link_depends: symbol_map,
   install: true,
 )
 
